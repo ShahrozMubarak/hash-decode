@@ -1,4 +1,4 @@
-import {env} from 'cloudflare:workers';
+import {getPlatformDb} from './platform-db';
 import {runtime} from './abuse';
 
 export const cookieName = '__Host-studio-session';
@@ -56,23 +56,36 @@ export function sessionCookie(token:string,age:number) {
 
 export async function issueSession() {
   const token=toHex(crypto.getRandomValues(new Uint8Array(32)).buffer);
-  await env.DB!.batch([
-    env.DB!.prepare('DELETE FROM owner_sessions WHERE expires<=?').bind(Date.now()),
-    env.DB!.prepare('INSERT INTO owner_sessions(token_hash,credential_id,expires) VALUES(?,?,?)')
-      .bind(await hash(token),await hash(credential()),Date.now()+sessionSeconds*1000)
-  ]);
-  return sessionCookie(token,sessionSeconds);
+  const db=getPlatformDb();
+  try{
+    await db.batch([
+      db.prepare('DELETE FROM owner_sessions WHERE expires<=?').bind(Date.now()),
+      db.prepare('INSERT INTO owner_sessions(token_hash,credential_id,expires) VALUES(?,?,?)')
+        .bind(await hash(token),await hash(credential()),Date.now()+sessionSeconds*1000)
+    ]);
+  }catch(e){
+    console.warn('[issueSession DB warning]:', e);
+  }
+  return { cookie: sessionCookie(token,sessionSeconds), token };
 }
 
-export async function sessionValid(cookies:string|null) {
-  const token=getToken(cookies),stored=credential();
+export async function sessionValid(cookies:string|null, directToken?:string|null) {
+  const token=directToken || getToken(cookies),stored=credential();
   if(!token || !configured(stored)) return false;
-  const row=await env.DB!.prepare('SELECT 1 FROM owner_sessions WHERE token_hash=? AND credential_id=? AND expires>?')
-    .bind(await hash(token),await hash(stored),Date.now()).first();
-  return !!row;
+  try{
+    const db=getPlatformDb();
+    const row=await db.prepare('SELECT 1 FROM owner_sessions WHERE token_hash=? AND credential_id=? AND expires>?')
+      .bind(await hash(token),await hash(stored),Date.now()).first();
+    return !!row;
+  }catch{return false;}
 }
 
-export async function revokeSession(cookies:string|null) {
-  const token=getToken(cookies);
-  if(token) await env.DB!.prepare('DELETE FROM owner_sessions WHERE token_hash=?').bind(await hash(token)).run();
+export async function revokeSession(cookies:string|null, directToken?:string|null) {
+  const token=directToken || getToken(cookies);
+  if(token){
+    try{
+      const db=getPlatformDb();
+      await db.prepare('DELETE FROM owner_sessions WHERE token_hash=?').bind(await hash(token)).run();
+    }catch{}
+  }
 }

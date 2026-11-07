@@ -34,32 +34,28 @@ export default function JourneyControl(){
       let endPt={x:w*.35,y:trailHeight-120};
       if(endBtn){const er=endBtn.getBoundingClientRect();endPt={x:er.left+er.width*.5,y:er.top+y-top};}
 
-      // Continuous, thick, unpredictable path looping through sections and circling 3D objects
-      const totalDy = endPt.y - startPt.y;
-      const hY = hero.y ? hero.y - top : v * 0.45;
-      const hH = hero.height || v * 0.5;
+      // Continuous, thick, unpredictable path starting from Start a project button and descending strictly DOWN
+      const totalDy = Math.max(800, endPt.y - startPt.y);
 
       const rawPoints: {x: number; y: number}[] = [
         { x: startPt.x, y: startPt.y },
-        // Swing towards the Hero 3D specimen and circle around it
-        { x: Math.min(w * 0.68, w - 160), y: startPt.y + (hY - startPt.y) * 0.5 },
-        { x: Math.min(w * 0.86, w - 80),  y: hY + hH * 0.35 },
-        { x: Math.min(w * 0.91, w - 50),  y: hY + hH * 0.75 },
-        { x: Math.min(w * 0.70, w - 140), y: hY + hH * 1.15 },
-        // Deep irregular swing left across to Section 02
-        { x: Math.max(w * 0.12, 60),      y: startPt.y + totalDy * 0.22 },
-        { x: Math.max(w * 0.38, 180),     y: startPt.y + totalDy * 0.30 },
+        // Immediately flow downwards from the button, sweeping towards the right
+        { x: startPt.x + Math.min(w * 0.15, 180), y: startPt.y + 110 },
+        { x: Math.min(w * 0.78, w - 100),         y: startPt.y + totalDy * 0.10 },
+        { x: Math.min(w * 0.88, w - 60),          y: startPt.y + totalDy * 0.19 },
+        // Deep irregular swing left across to Section 02 coder showcase
+        { x: Math.max(w * 0.14, 70),              y: startPt.y + totalDy * 0.29 },
+        { x: Math.max(w * 0.40, 190),             y: startPt.y + totalDy * 0.38 },
         // Broad sweeping arc right around Services
-        { x: Math.min(w * 0.85, w - 90),  y: startPt.y + totalDy * 0.38 },
+        { x: Math.min(w * 0.84, w - 80),          y: startPt.y + totalDy * 0.48 },
         // Organic reverse cut into left gutter
-        { x: Math.max(w * 0.16, 80),      y: startPt.y + totalDy * 0.49 },
+        { x: Math.max(w * 0.16, 80),              y: startPt.y + totalDy * 0.58 },
         // Curving through Security narrative
-        { x: Math.min(w * 0.78, w - 110), y: startPt.y + totalDy * 0.60 },
-        { x: Math.max(w * 0.22, 90),      y: startPt.y + totalDy * 0.71 },
+        { x: Math.min(w * 0.78, w - 100),         y: startPt.y + totalDy * 0.69 },
         // Weaving down through Process and Work
-        { x: Math.min(w * 0.82, w - 90),  y: startPt.y + totalDy * 0.82 },
-        { x: Math.max(w * 0.26, 110),     y: startPt.y + totalDy * 0.91 },
-        { x: Math.min(w * 0.65, w - 140), y: endPt.y - 140 },
+        { x: Math.max(w * 0.22, 90),              y: startPt.y + totalDy * 0.79 },
+        { x: Math.min(w * 0.76, w - 110),         y: startPt.y + totalDy * 0.88 },
+        { x: Math.max(w * 0.28, 120),             y: endPt.y - 130 },
         // Conclude directly on Send project brief button
         { x: endPt.x, y: endPt.y }
       ];

@@ -1,8 +1,8 @@
-import {env} from 'cloudflare:workers';import {bounded,sameOrigin,readSmall,adminAccess} from '@/lib/studio-security';import {quota} from '@/lib/abuse';
+import {getPlatformDb} from '@/lib/platform-db';import {bounded,sameOrigin,readSmall,adminAccess} from '@/lib/studio-security';import {quota} from '@/lib/abuse';
 const json=(x:unknown,n=200)=>Response.json(x,{status:n,headers:{'Cache-Control':'private, no-store'}});
 const digest=async(s:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s))),x=>x.toString(16).padStart(2,'0')).join('');
 export async function POST(req:Request){if(!sameOrigin(req))return json({error:'Untrusted request.'},403);
- try{const x=await readSmall(req),db=env.DB!,action=x.action,now=Date.now();
+ try{const x=await readSmall(req),db=getPlatformDb(),action=x.action,now=Date.now();
  if(action==='start'){if(!await quota(req,'chat-start',4))return json({error:'Please try again later.'},429);
  const name=bounded(x.name,80,2),email=bounded(x.email,254,3),body=bounded(x.body,1200,2);if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return json({error:'Enter a valid email.'},400);
  const thread=crypto.randomUUID(),token=crypto.randomUUID()+crypto.randomUUID();

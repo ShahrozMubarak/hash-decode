@@ -14,11 +14,17 @@ export async function POST(req:Request){
     if(body.action!=='login')return reply(400,'Invalid request.');
     if(!await quota(req,'owner-login',8,15*60*1000))return reply(429,'Please try again in 15 minutes.');
     if(!await verifyPassword(body.password, body.email))return reply(401,'Sign-in failed.');
-    return reply(200,undefined,await issueSession());
+    const session = await issueSession();
+    return Response.json({ok:true,token:session.token},{status:200,headers:{'Cache-Control':'no-store','Set-Cookie':session.cookie}});
   }catch{return reply(503,'Sign-in is temporarily unavailable.');}
 }
 
 export async function GET(req:Request){
- try{const ok=await sessionValid(req.headers.get('cookie'));return Response.json({ok},{status:ok?200:401,headers:{'Cache-Control':'no-store'}});}
+ try{
+   const authHeader = req.headers.get('authorization') || '';
+   const directToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+   const ok=await sessionValid(req.headers.get('cookie'), directToken);
+   return Response.json({ok},{status:ok?200:401,headers:{'Cache-Control':'no-store'}});
+ }
  catch{return Response.json({error:'Session check unavailable.'},{status:503,headers:{'Cache-Control':'no-store'}});}
 }

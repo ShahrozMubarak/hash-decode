@@ -2,7 +2,9 @@ import {headers} from 'next/headers';
 import {sessionValid} from './owner-session';
 export async function adminAccess(request?:Request){
  const source=request?.headers ?? await headers();
- return {allowed:await sessionValid(source.get('cookie'))};
+ const authHeader = source.get('authorization') || '';
+ const directToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+ return {allowed:await sessionValid(source.get('cookie'), directToken)};
 }
 export function bounded(value:unknown,max:number,min=0){
   if(typeof value!=='string'||value.trim().length<min||value.trim().length>max)throw new Error('Check the required fields and their lengths.');

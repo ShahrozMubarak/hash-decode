@@ -9,7 +9,7 @@ interface Props {
 
 function BotFaceCursor() {
   return (
-    <span className="ai-bot-avatar-cursor" aria-hidden="true" title="Eva streaming">
+    <span className="ai-bot-avatar-cursor" aria-hidden="true" title="Hash streaming">
       <svg viewBox="0 0 24 24" width="20" height="20" className="mini-bot-face">
         {/* White glossy rounded head */}
         <rect x="2" y="3" width="20" height="18" rx="7" fill="#ffffff" stroke="#0A2540" strokeWidth="1.6" />
@@ -105,15 +105,17 @@ function FounderCard({
       ? 'anim-perspective-flip'
       : 'anim-zoom-rotate';
 
-  const isEven = index % 2 === 1;
+  const bioWords = founder.bio ? founder.bio.split(' ') : [];
+  // Approximately 3 seconds total typing duration for information text
+  const bioSpeed = Math.max(45, Math.round(3000 / Math.max(1, bioWords.length)));
 
   return (
     <article
       ref={cardRef}
-      className={`founder-row ${isEven ? 'founder-row-reverse' : ''} ${inView ? 'in-view ' + animVariantClass : ''}`}
+      className={`founder-row ${inView ? 'in-view ' + animVariantClass : ''}`}
       id={`founder-${founder.id}`}
     >
-      {/* Photo Frame with Clean White Background Blend */}
+      {/* Photo Frame strictly on LEFT */}
       <div className="founder-media-wrap">
         <div className="founder-white-backdrop">
           <div className="founder-glow-halo" />
@@ -132,11 +134,11 @@ function FounderCard({
         </div>
       </div>
 
-      {/* Info Container on SIDE of Photo (Word-by-word ChatGPT Streaming) */}
+      {/* Info Container strictly on RIGHT SIDE of Photo (Takes ~3s to write, clean justified lines, bold) */}
       <div className={`founder-info-wrap ${infoReady ? 'info-active' : ''}`}>
         <div className="founder-role-strip">
           <span className="founder-role-tag">
-            <ChatGPTWordStream text={founder.role} start={infoReady} speed={35} />
+            <ChatGPTWordStream text={founder.role} start={infoReady} speed={65} />
           </span>
         </div>
 
@@ -153,8 +155,8 @@ function FounderCard({
         )}
 
         <div className="founder-bio">
-          <p>
-            <ChatGPTWordStream text={founder.bio} start={infoReady} speed={28} />
+          <p className="founder-bio-text font-bold">
+            <ChatGPTWordStream text={founder.bio} start={infoReady} speed={bioSpeed} />
           </p>
         </div>
 

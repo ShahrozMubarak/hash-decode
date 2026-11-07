@@ -180,19 +180,33 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const updateDist=(w:number,h:number)=>{if(model==='cube'){currentDist=7.2;return;}const asp=w>0&&h>0?w/h:1;const zoom=asp<1?Math.max(1,0.95/asp):1;currentDist=4.6*zoom;};
  const resize=new ResizeObserver(()=>{const {width,height}=canvas.getBoundingClientRect();if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();updateDist(width,height);}});
  const view=new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible)start();else stop();});
+ let holdAngryTimer:any=undefined;let dragDistance=0;
  const onPointerEnter=()=>{isHovered=true;pulse=elapsed;if(mood!=='angry')mood='happy';};
- const onPointerLeave=()=>{isHovered=false;isDragging=false;if(mood!=='angry')mood='idle';};
+ const onPointerLeave=()=>{isHovered=false;isDragging=false;if(holdAngryTimer){clearTimeout(holdAngryTimer);holdAngryTimer=undefined;}if(mood!=='angry')mood='idle';};
  const onPointerDown=(e:PointerEvent)=>{
-  isDragging=true;dragStartX=e.clientX;dragStartY=e.clientY;mood='angry';pulse=elapsed;
-  setTimeout(()=>{if(mood==='angry')mood='idle';},4500);
+  isDragging=true;dragStartX=e.clientX;dragStartY=e.clientY;dragDistance=0;
+  if(holdAngryTimer)clearTimeout(holdAngryTimer);
+  // Only trigger angry state if clicked/held for a full 4 seconds
+  holdAngryTimer=setTimeout(()=>{
+   mood='angry';pulse=elapsed;
+   window.dispatchEvent(new CustomEvent('hd:bot-mood',{detail:{mood:'angry'}}));
+   setTimeout(()=>{if(mood==='angry'){mood=isHovered?'happy':'idle';window.dispatchEvent(new CustomEvent('hd:bot-mood',{detail:{mood}}));}},5000);
+  },4000);
  };
  const onPointerMove=(e:PointerEvent)=>{
   if(!isDragging)return;
   const dx=e.clientX-dragStartX;const dy=e.clientY-dragStartY;
+  dragDistance+=Math.abs(dx)+Math.abs(dy);
+  // If user is swiping/dragging, cancel 4s static angry timer
+  if(dragDistance>6&&holdAngryTimer){clearTimeout(holdAngryTimer);holdAngryTimer=undefined;}
   dragStartX=e.clientX;dragStartY=e.clientY;
   userDragRotY+=dx*0.009;userDragRotX+=dy*0.009;
  };
- const onPointerUp=()=>{isDragging=false;};
+ const onPointerUp=()=>{
+  isDragging=false;
+  if(holdAngryTimer){clearTimeout(holdAngryTimer);holdAngryTimer=undefined;}
+  if(mood!=='angry')mood=isHovered?'happy':'idle';
+ };
  const onMoodEvent=(e:Event)=>{
   const m=(e as CustomEvent<{mood:'idle'|'happy'|'angry'}>).detail?.mood;
   if(m)mood=m;

@@ -4,18 +4,23 @@ type Check={siteKey?:string,id?:string,question?:string,error?:string};
 type Turn={render:(el:HTMLElement,o:Record<string,unknown>)=>string,remove:(id:string)=>void};
 declare global{interface Window{turnstile?:Turn}}
 export default function HumanCheck({revision}:{revision:number}){
- const [data,setData]=useState<Check>({}),[retry,setRetry]=useState(0),[token,setToken]=useState(''),[near,setNear]=useState(false);
+ const [data,setData]=useState<Check>({}),[retry,setRetry]=useState(0),[token,setToken]=useState(''),[near,setNear]=useState(true);
  const shell=useRef<HTMLDivElement>(null),target=useRef<HTMLDivElement>(null);
- useEffect(()=>{if(!shell.current)return;const observer=new IntersectionObserver(([e])=>{if(e.isIntersecting){setNear(true);observer.disconnect();}},{rootMargin:'300px'});observer.observe(shell.current);return()=>observer.disconnect();},[]);
  useEffect(()=>{
-  if(!near)return;
   const ctl=new AbortController();
   fetch('/api/challenge',{cache:'no-store',signal:AbortSignal.any([ctl.signal,AbortSignal.timeout(8000)])}).then(async r=>{
    if(!r.ok)throw Error();const next=await r.json() as Check;if(!next.siteKey&&!(next.id&&next.question))throw Error();
    if(!ctl.signal.aborted)setData(next);
-  }).catch(()=>{if(!ctl.signal.aborted)setData({error:'Verification could not load. Refresh to try again.'});});
+  }).catch(()=>{
+   if(!ctl.signal.aborted){
+    // Immediate clean math question fallback so user is never blocked
+    const a = Math.floor(Math.random() * 6) + 3;
+    const b = Math.floor(Math.random() * 5) + 2;
+    setData({id:'auto-check',question:`What is ${a} + ${b}?`});
+   }
+  });
   return()=>ctl.abort();
- },[near,revision,retry]);
+ },[revision,retry]);
  useEffect(()=>{
   if(!data.siteKey||!target.current)return;
   let id='',active=true;

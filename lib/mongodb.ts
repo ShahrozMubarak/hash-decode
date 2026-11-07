@@ -170,3 +170,24 @@ export async function getMongoSyncStatus(): Promise<{
   }
 }
 
+export async function getMongoInquiries(limit = 200) {
+  try {
+    const db = await getMongoDb();
+    if (!db) return [];
+    const list = await db.collection('inquiries').find().sort({ created: -1 }).limit(limit).toArray();
+    return list.map((item: any) => ({
+      id: item.id || String(item._id),
+      name: item.name || 'Anonymous Visitor',
+      email: item.email || '',
+      topic: item.topic || 'Digital product',
+      budget: item.budget || 'Still exploring',
+      brief: item.brief || item.message || '',
+      status: item.status || 'new',
+      created: typeof item.created === 'number' ? item.created : (item.createdAt ? new Date(item.createdAt).getTime() : Date.now()),
+      mail: item.mail || 'recorded'
+    }));
+  } catch {
+    return [];
+  }
+}
+

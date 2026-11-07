@@ -13,6 +13,12 @@ export default function OwnerSession({logout=false}:{logout?:boolean}){
   try{
    const response=await fetch('/api/session',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:logout?'logout':'login',email,password}),signal:AbortSignal.timeout(12000)});
    if(!response.ok){setError(response.status===429?'Too many attempts. Try again in 15 minutes.':response.status===503?'Sign-in is temporarily unavailable. Please try again.':'Unable to sign in. Check your email & password and try again.');return;}
+   const data=await response.json().catch(()=>({}));
+   if(!logout&&data?.token){
+     try{localStorage.setItem('hashdecode_owner_session',JSON.stringify({token:data.token,email,time:Date.now()}));}catch{}
+   }else if(logout){
+     try{localStorage.removeItem('hashdecode_owner_session');}catch{}
+   }
    location.replace('/admin');
   }catch{setError('Connection interrupted. Please try again.');}finally{locked.current=false;setBusy(false);}
  }}>

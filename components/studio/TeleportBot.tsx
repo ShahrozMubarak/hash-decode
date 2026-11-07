@@ -8,44 +8,61 @@ interface Props {
 
 export default function TeleportBot({ className = '' }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const holdTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [teleported, setTeleported] = useState(false);
   const [isGlitching, setIsGlitching] = useState(false);
   const [mood, setMood] = useState<'idle' | 'happy' | 'angry' | 'success' | 'error' | 'submitting'>('idle');
-  const [thoughtText, setThoughtText] = useState('Ready to build something remarkable? Drop your brief below!');
+  const [thoughtText, setThoughtText] = useState('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
 
   // Listen to form lifecycle events
   useEffect(() => {
     const onSubmitting = () => {
       setMood('submitting');
-      setThoughtText('Encrypting and sending your project brief to Shahroz...');
+      setThoughtText('Encrypting and transmitting your project brief to Shahroz and the Hash Decode team...');
     };
 
     const onSuccess = (e: Event) => {
       setMood('success');
       const detail = (e as CustomEvent).detail;
-      const ref = detail?.reference ? ` Ref: #${detail.reference}` : '';
-      setThoughtText(`Thank you! 🎉 Brief received.${ref} Shahroz will email you within 24 hours!`);
+      const ref = detail?.reference ? ` Reference #${detail.reference}.` : '';
+      setThoughtText(`Thank you. Your project brief has been received securely.${ref} Shahroz will review your requirements and respond within 24 hours.`);
     };
 
     const onError = (e: Event) => {
       setMood('error');
       const detail = (e as CustomEvent).detail;
-      const msg = detail?.error || 'Please double-check your email and project details!';
-      setThoughtText(`Oops! ${msg}`);
+      const msg = detail?.error || 'Please review your email and project details, then submit again.';
+      setThoughtText(`Notice: ${msg}`);
       setTimeout(() => {
         setMood('idle');
-        setThoughtText('Need help? Just enter your name, email, and project goals below.');
+        setThoughtText('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
       }, 6000);
+    };
+
+    const onBotMood = (e: Event) => {
+      const m = (e as CustomEvent<{ mood: 'idle' | 'happy' | 'angry' }>).detail?.mood;
+      if (m === 'angry') {
+        setMood('angry');
+        setThoughtText('Security boundary engaged. Integrity scan in progress.');
+      } else if (m === 'happy') {
+        setMood('happy');
+        setThoughtText('Ready to build high-availability software or verify system security? Hash Decode engineers are ready to assist.');
+      } else if (m === 'idle') {
+        setMood('idle');
+        setThoughtText('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
+      }
     };
 
     window.addEventListener('hd:form-submitting', onSubmitting);
     window.addEventListener('hd:form-success', onSuccess);
     window.addEventListener('hd:form-error', onError);
+    window.addEventListener('hd:bot-mood', onBotMood);
 
     return () => {
       window.removeEventListener('hd:form-submitting', onSubmitting);
       window.removeEventListener('hd:form-success', onSuccess);
       window.removeEventListener('hd:form-error', onError);
+      window.removeEventListener('hd:bot-mood', onBotMood);
     };
   }, []);
 
@@ -75,26 +92,41 @@ export default function TeleportBot({ className = '' }: Props) {
   const handlePointerEnter = useCallback(() => {
     if (mood === 'success' || mood === 'submitting') return;
     setMood('happy');
-    setThoughtText("Hey! I'm Eva. Our engineers turn complex architectures into clean code ✨");
+    setThoughtText('Ready to build high-availability software or verify system security? Hash Decode engineers are ready to assist.');
     window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'happy' } }));
   }, [mood]);
 
   const handlePointerLeave = useCallback(() => {
     if (mood === 'success' || mood === 'submitting') return;
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
     setMood('idle');
-    setThoughtText('Ready to build something remarkable? Drop your brief below!');
+    setThoughtText('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
     window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'idle' } }));
   }, [mood]);
 
-  const handleClick = useCallback(() => {
-    setMood('angry');
-    setThoughtText('Hey! That tickles! Tell Shahroz what you want to build instead! 🤖💢');
-    window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'angry' } }));
-    setTimeout(() => {
-      setMood('idle');
-      setThoughtText('Ready to build something remarkable? Drop your brief below!');
-      window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'idle' } }));
-    }, 4500);
+  // Hold for 4 full seconds to engage security / angry mode
+  const handlePointerDown = useCallback(() => {
+    if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
+    holdTimerRef.current = setTimeout(() => {
+      setMood('angry');
+      setThoughtText('Security boundary engaged. Integrity scan in progress.');
+      window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'angry' } }));
+      setTimeout(() => {
+        setMood('idle');
+        setThoughtText('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
+        window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'idle' } }));
+      }, 5000);
+    }, 4000);
+  }, []);
+
+  const handlePointerUp = useCallback(() => {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
   }, []);
 
   return (
@@ -103,7 +135,9 @@ export default function TeleportBot({ className = '' }: Props) {
       className={`teleport-bot-stage ${teleported ? 'is-materialized' : ''} ${isGlitching ? 'is-glitching' : ''} mood-${mood} ${className}`}
       onMouseEnter={handlePointerEnter}
       onMouseLeave={handlePointerLeave}
-      onClick={handleClick}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
     >
       {/* Teleportation Scanline Holographic Glitch Flash */}
       <div className="teleport-glitch-overlay" aria-hidden="true">
@@ -160,7 +194,7 @@ export default function TeleportBot({ className = '' }: Props) {
         <div className="bubble-text-content">
           <p>{thoughtText}</p>
           <span className="bubble-tap-hint">
-            {mood === 'angry' ? '⚡ Eva is provoked' : mood === 'happy' ? '✨ Eva is happy' : 'Drag to rotate · Click for mood'}
+            {mood === 'angry' ? '⚡ Security posture engaged' : mood === 'happy' ? '✨ Hash online' : 'Drag to rotate · Hold 4s for security mode'}
           </span>
         </div>
       </div>
@@ -172,3 +206,4 @@ export default function TeleportBot({ className = '' }: Props) {
     </div>
   );
 }
+
