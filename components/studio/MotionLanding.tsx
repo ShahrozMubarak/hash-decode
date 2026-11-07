@@ -3,10 +3,9 @@ import type {Project} from '@/lib/studio-data';
 import {capabilities,faq,processSteps} from '@/lib/landing-content';
 import {WorkCard} from './Work';
 import ContactForm from './ContactForm';
-import DottedPoster from './DottedPoster';
-import ResponsiveStage,{MobileCrystal,MobileDotted} from './ResponsiveStage';
+import ResponsiveStage from './ResponsiveStage';
 import SceneSurface from './SceneSurface';
-import {Gallery,BriefDialog} from './StudioControls';
+import {BriefDialog} from './StudioControls';
 import TypingSecure from './TypingSecure';
 import CodingBackground from './CodingBackground';
 import {ArrowUpRight,ArrowDown,AppWindow,Braces,ShieldCheck,Workflow} from 'lucide-react';
@@ -28,21 +27,35 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
       <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
       <div className="specimen-visual" id="hero-model-anchor">
        <div className="hero-blueprint-lines" aria-hidden="true"/>
+       <SceneSurface model="eva" autoMobile={true}/>
       </div>
-      <figcaption><span>SYSTEM / 01</span><strong><span>Studio Engine</span></strong></figcaption>
+      <figcaption><span>SYSTEM / 01</span><strong><span>Eva Autonomous Agent</span></strong></figcaption>
      </figure>
     </div><div className="wrap hero-baseline"><a href="#showcase"><ArrowDown size={15}/> Explore the studio</a><a href="#showcase">Object study <span className="desktop-model-label">01</span></a></div></div>
    </section>
    <section className="showcase dark-band" id="showcase" data-station="Agent">
     <CodingBackground />
-    <div className="wrap band">{section('02','Eva Autonomous Agent')}<h2>Autonomous agent.</h2><Gallery/></div>
+    <div className="wrap band">
+     {section('02','Eva Autonomous Agent')}
+     <h2>Autonomous agent.</h2>
+     <div className="showcase-robot-stage">
+      <SceneSurface model="eva" autoMobile={true}/>
+     </div>
+    </div>
    </section>
    <section className="band wrap" id="services" data-station="Services">
      <div className="systems-story">{section('03','Architecture & systems')}<h2>Speed,<br/>structured with<br/><em>clarity.</em></h2><p>Custom web platforms, APIs and business tools, designed around the way your team works.</p><a className="text-link" href="/services">Explore services <ArrowUpRight size={16}/></a></div>
      <div className="service-cards">{capabilities.map(([id,name],i)=>{const Icon=serviceIcons[i];return <a className="service-card" key={id} href={'/services#'+id}><Icon size={26} strokeWidth={1.4}/><h3>{name}</h3><ArrowUpRight size={17}/></a>;})}</div>
    </section>
    <section className="wrap band security-section story-security" id="security" data-station="Security">
-    <div className="security-stage"><div className="security-fallback" aria-hidden="true"><DottedPoster/></div><div className="security-narrative">{section('04','Platform resilience')}<h2>Build it. Break it.<br/><span>Secure it.</span></h2><p>Clear boundaries. Practical security testing. Verified fixes.</p><a className="text-link" href="/services#security">Our security approach <ArrowUpRight size={16}/></a></div><div className="mobile-dotted-stage"><MobileDotted/></div></div>
+    <div className="security-stage">
+     <div className="security-narrative">
+      {section('04','Platform resilience')}
+      <h2>Build it. Break it.<br/><span>Secure it.</span></h2>
+      <p>Clear boundaries. Practical security testing. Verified fixes.</p>
+      <a className="text-link" href="/services#security">Our security approach <ArrowUpRight size={16}/></a>
+     </div>
+    </div>
    </section>
    <section className="tint-band" id="work" data-station="Work"><div className="wrap band">
     <div className="craft-story">{section('05','Craft & integrity')}<h2>Rock-solid systems.<br/><em>Fluid experience.</em></h2><p>From database design to the final interaction, reliable foundations and thoughtful details belong together.</p></div><div className="section-head"><h2>Studio concepts.</h2><a className="text-link" href="/portfolio">Project index <ArrowUpRight size={16}/></a></div>
