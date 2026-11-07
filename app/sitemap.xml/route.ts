@@ -7,7 +7,7 @@ const release='2026-11-06';
 export async function GET(){
  if(!origin)return new Response('Site origin is not configured.',{status:503});
  const [posts,projects,edits]=await Promise.all([entries('post'),listProjects(),env.DB!.prepare("SELECT id,value FROM settings WHERE id LIKE 'modified:%'").all<{id:string,value:string}>()]);
- const updates=new Map(edits.results.map(r=>[r.id.slice(9),r.value]));
+ const updates=new Map(edits.results.map((r: {id: string, value: string})=>[r.id.slice(9),r.value]));
  const sectionTime=(path:string)=>updates.get(path)||release;
  const pages=['/','/portfolio','/services','/about','/contact','/blog','/privacy','/tools','/tools/security-check','/tools/estimate'].map(path=>[path,sectionTime(path)]);
  for(const post of posts)pages.push(['/blog/'+encodeURIComponent(post.id),post.updated?new Date(post.updated).toISOString():release]);
