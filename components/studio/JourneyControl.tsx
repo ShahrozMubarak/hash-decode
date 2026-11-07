@@ -22,33 +22,32 @@ export default function JourneyControl(){
     height=root.scrollHeight;offsets=stations.map(el=>el.getBoundingClientRect().top+y);headingTops=headings.map(el=>el.getBoundingClientRect().top+y);heroDistance=Math.max(v*.45,stations[0].offsetHeight-v);processTop=process.getBoundingClientRect().top+y;processHeight=process.offsetHeight;
     hero=measureBox(heroAnchor,y);
     if(!mobile){
-      const top=landing.getBoundingClientRect().top+y,trailHeight=landing.offsetHeight;trail.setAttribute('viewBox',`0 0 ${w} ${trailHeight}`);
-      // Trail starts right where the robot showcase ends:
-      const showcaseEnd = offsets[1] + showcase.offsetHeight - top;
-      // Target CTA button in contact form:
-      const submitBtn = landing.querySelector<HTMLElement>('#brief button[type="submit"], #brief .cta, #brief input[type="submit"]');
-      let endX = w * 0.72;
-      let endY = offsets[stations.length - 1] - top + stations[stations.length - 1].offsetHeight * 0.82;
-      if (submitBtn) {
-        const b = submitBtn.getBoundingClientRect();
-        endX = b.left + b.width * 0.5;
-        endY = b.top + y - top + b.height * 0.5;
-      }
-      // Weave smoothly in open spaces (left, right, left, right):
-      const points = [
-        { x: w * 0.35, y: showcaseEnd },
-        { x: w * 0.14, y: offsets[2] - top + stations[2].offsetHeight * 0.45 },
-        { x: w * 0.82, y: offsets[3] - top + stations[3].offsetHeight * 0.50 },
-        { x: w * 0.16, y: offsets[4] - top + stations[4].offsetHeight * 0.50 },
-        { x: w * 0.85, y: offsets[5] - top + stations[5].offsetHeight * 0.50 },
-        { x: w * 0.20, y: offsets[6] - top + stations[6].offsetHeight * 0.45 },
-        { x: endX, y: endY }
-      ];
+      const top=landing.getBoundingClientRect().top+y,trailHeight=landing.offsetHeight;
+      trail.setAttribute('viewBox',`0 0 ${w} ${trailHeight}`);
+      // Wide, graceful horizontal positions holding sides over distance:
+      // Holds right (0.80) through Overview & Showcase away from hero text and Eva Robot,
+      // takes long distance to transition across Services to left (0.20),
+      // holds left through Security & Work away from forms/cards,
+      // transitions across Process to right margin (0.82) through FAQ & Contact without touching forms:
+      const across = [.80, .80, .22, .18, .20, .80, .82, .85];
+      const points = offsets.map((at, i) => ({
+        x: w * across[i],
+        y: Math.max(18, at - top + Math.min(stations[i].offsetHeight * 0.48, v * 0.65))
+      }));
+      // Start in hero right margin below header
+      points[0].y = Math.max(stations[0].offsetHeight - 40, v * 0.85);
+      points.push({ x: w * 0.5, y: trailHeight });
+
+      // Ultra-smooth S-curve without sharp corners or tight hairpins:
       const d = points.map((p, i) => {
         if (!i) return `M${p.x} ${p.y}`;
-        const a = points[i - 1], mid = (a.y + p.y) / 2;
-        return `C${a.x} ${mid},${p.x} ${mid},${p.x} ${p.y}`;
+        const a = points[i - 1];
+        const dy = p.y - a.y;
+        const cy1 = a.y + dy * 0.5;
+        const cy2 = p.y - dy * 0.5;
+        return `C${a.x} ${cy1},${p.x} ${cy2},${p.x} ${p.y}`;
       }).join(' ');
+
       paths.forEach(p => p.setAttribute('d', d));
       nodes.forEach((node, i) => {
         if (points[i]) {
@@ -56,11 +55,6 @@ export default function JourneyControl(){
           node.setAttribute('cy', String(points[i].y));
         }
       });
-      // Compute trail progress so it only draws past the robot:
-      const trailStart = offsets[1] + showcase.offsetHeight - v * 0.5;
-      const trailEnd = endY + top - v * 0.4;
-      const trailProgress = clampUnit((y - trailStart) / Math.max(1, trailEnd - trailStart));
-      landing.style.setProperty('--trail-progress', String(trailProgress));
     }
     dirty=false;
    }
