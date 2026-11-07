@@ -62,7 +62,10 @@ export default function JourneyControl(){
    landing.style.setProperty('--hero-y','0px');landing.style.setProperty('--hero-scale','1');
    landing.style.setProperty('--process-progress',String(motion?state.process:1));
    landing.style.setProperty('--scene-tint',(mobile?0:Math.sin(state.page*Math.PI*4)**2*100).toFixed(2)+'%');
-   const dark=mobile?0:ease((y+v*.6-offsets[1])/(v*.6))*(1-ease((y+v*.5-offsets[3])/(v*.8)));
+   const showcaseTop=offsets[1],showcaseBottom=offsets[2]||(offsets[1]+showcase.offsetHeight);
+   const enterDark=ease((y+v*.45-showcaseTop)/(v*.45));
+   const exitDark=ease((y+v*.1-showcaseBottom)/(v*.25));
+   const dark=mobile?0:Math.max(0,Math.min(1,enterDark*(1-exitDark)));
    landing.style.setProperty('--story-dark',dark.toFixed(3));
    landing.style.setProperty('--ghost-x',(-state.page*220)+'px');
    track.querySelectorAll('.mobile-checkpoint').forEach((dot,i)=>{dot.classList.toggle('active',i<=state.current);dot.classList.toggle('current',i===state.current);});
