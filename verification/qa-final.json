@@ -1,0 +1,264 @@
+{
+  "state": "done",
+  "widths": [
+    {
+      "width": 360,
+      "body": 360,
+      "status": 200,
+      "h1": "Software,engineered formodern scale.",
+      "headingCount": 1,
+      "canvases": 0,
+      "railVisible": false,
+      "dotted": false,
+      "mobileCrystal": true
+    },
+    {
+      "width": 390,
+      "body": 390,
+      "status": 200,
+      "h1": "Software,engineered formodern scale.",
+      "headingCount": 1,
+      "canvases": 1,
+      "railVisible": false,
+      "dotted": false,
+      "mobileCrystal": true
+    },
+    {
+      "width": 768,
+      "body": 768,
+      "status": 200,
+      "h1": "Software,engineered formodern scale.",
+      "headingCount": 1,
+      "canvases": 0,
+      "railVisible": false,
+      "dotted": false,
+      "mobileCrystal": true
+    },
+    {
+      "width": 1024,
+      "body": 1024,
+      "status": 200,
+      "h1": "Software,engineered formodern scale.",
+      "headingCount": 1,
+      "canvases": 1,
+      "railVisible": true,
+      "dotted": true,
+      "mobileCrystal": false
+    },
+    {
+      "width": 1440,
+      "body": 1440,
+      "status": 200,
+      "h1": "Software,engineered formodern scale.",
+      "headingCount": 1,
+      "canvases": 1,
+      "railVisible": true,
+      "dotted": true,
+      "mobileCrystal": false
+    },
+    {
+      "width": 1920,
+      "body": 1920,
+      "status": 200,
+      "h1": "Software,engineered formodern scale.",
+      "headingCount": 1,
+      "canvases": 1,
+      "railVisible": true,
+      "dotted": true,
+      "mobileCrystal": false
+    }
+  ],
+  "errors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  ],
+  "routes": [
+    {
+      "url": "/services",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Custom Software and Security Services | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/services"
+    },
+    {
+      "url": "/portfolio",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Software Projects and Studio Concepts | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/portfolio"
+    },
+    {
+      "url": "/portfolio/orbit-console",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Orbit Console | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/portfolio/orbit-console"
+    },
+    {
+      "url": "/portfolio/relay-board",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Relay Board | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/portfolio/relay-board"
+    },
+    {
+      "url": "/lab/relay-board",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Relay Board Interactive Study | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/lab/relay-board"
+    },
+    {
+      "url": "/about",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "About the Software Studio | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/about"
+    },
+    {
+      "url": "/blog",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Engineering Notes | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/blog"
+    },
+    {
+      "url": "/blog/permission-tests",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Three permission checks for a new API | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/blog/permission-tests"
+    },
+    {
+      "url": "/contact",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Start a Software Project | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/contact"
+    },
+    {
+      "url": "/tools",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Free Tools | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/tools"
+    },
+    {
+      "url": "/tools/security-check",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Free Website Security Checker | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/tools/security-check"
+    },
+    {
+      "url": "/tools/estimate",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Project Cost Estimator | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/tools/estimate"
+    },
+    {
+      "url": "/privacy",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Privacy | Hash Decode",
+      "canonical": "https://qa.hashdecode.test/privacy"
+    },
+    {
+      "url": "/admin",
+      "status": 200,
+      "overflow": false,
+      "h1": 1,
+      "title": "Studio Admin | Hash Decode"
+    },
+    {
+      "url": "/missing-page",
+      "status": 404,
+      "overflow": false,
+      "h1": 1,
+      "title": "Hash Decode | Software Design & Engineering"
+    }
+  ],
+  "tests": {
+    "mobileStationary": true,
+    "menuOpen": true,
+    "menuClose": true,
+    "noTopBanner": true,
+    "desktopDotsLive": true,
+    "trailWidth": "8px",
+    "keyboard": true,
+    "haloLive": true,
+    "crystalLive": true,
+    "mobileModels": [
+      {
+        "selector": "stationary-mobile-crystal",
+        "live": true,
+        "canvases": 1
+      },
+      {
+        "selector": "mobile-halo-object",
+        "live": true,
+        "canvases": 1
+      },
+      {
+        "selector": "mobile-dotted-stage",
+        "live": true,
+        "canvases": 2
+      }
+    ],
+    "mobileDots": true,
+    "pause": true,
+    "reduced": true,
+    "jsonLd": true,
+    "nonce": true,
+    "robots.txt": 200,
+    "sitemap.xml": 200,
+    ".well-known/security.txt": 200,
+    "studio-og.png": 200
+  },
+  "lighthouse": {
+    "version": "13.6.0",
+    "scores": {
+      "performance": 98,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 92
+    },
+    "metrics": {
+      "largest-contentful-paint": 1860,
+      "cumulative-layout-shift": 0.038706232289532704,
+      "total-blocking-time": 0,
+      "first-contentful-paint": 1860
+    },
+    "problems": [
+      [
+        "valid-source-maps",
+        "",
+        []
+      ],
+      [
+        "unused-css-rules",
+        "Est savings of 23 KiB",
+        []
+      ],
+      [
+        "robots-txt",
+        "",
+        null
+      ]
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+import {Estimator} from '@/components/studio/Tools';import {meta} from '@/lib/meta';export const metadata=meta('Project Cost Estimator','Explore an illustrative software project budget by scope, complexity and features.','/tools/estimate');
+export default function Page(){return <div className="wrap interior"><header className="page-intro"><p className="eyebrow"><i/> Tool / 01</p><h1>Cost <em>estimator.</em></h1><p>Choose a scope to see a planning range. Carry your selections into a free quote request.</p></header><Estimator/></div>;}

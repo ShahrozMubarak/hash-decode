@@ -1,0 +1,12 @@
+$ eslint . --ignore-pattern dist --ignore-pattern .next
+
+/workspace/scratch/0911a44dfc1e/hash-decode-studio/lib/physical-halo.ts
+   5:10  warning  'clamp' is defined but never used  @typescript-eslint/no-unused-vars
+  14:10  warning  'cross' is defined but never used  @typescript-eslint/no-unused-vars
+
+/workspace/scratch/0911a44dfc1e/hash-decode-studio/tests/models-helpers.mjs
+  2:8  warning  'fs' is defined but never used    @typescript-eslint/no-unused-vars
+  3:8  warning  'path' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 4 problems (0 errors, 4 warnings)
+

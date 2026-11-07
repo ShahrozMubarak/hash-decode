@@ -1,0 +1,2 @@
+import {Checker} from '@/components/studio/Tools';import {meta} from '@/lib/meta';export const metadata=meta('Free Website Security Checker','Check a public domain with Mozilla HTTP Observatory and review its security header results.','/tools/security-check');
+export default function Page(){return <div className="wrap interior"><header className="page-intro"><p className="eyebrow"><i/> Tool / 02</p><h1>Security <em>check.</em></h1><p>Get a quick reading of your site’s browser-facing security settings before commissioning a deeper audit.</p></header><Checker/></div>;}

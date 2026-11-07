@@ -1,0 +1,5 @@
+import {services} from '@/lib/studio-data';
+import {meta} from '@/lib/meta';
+export const metadata=meta('Custom Software and Security Services','Explore web development, custom software, internal tools and authorised web security reviews. Choose a service and discuss your requirements.','/services');
+const types:Record<string,string>={products:'Digital product',platforms:'Web platform',tools:'Business system',security:'Security audit'};
+export default function Services(){return <div className="wrap interior"><header className="page-intro"><p className="kicker"><span className="key-line"/>Services</p><h1>What we build.</h1><p>Software for the people who use it, and practical security reviews for the teams who maintain it.</p></header><div className="service-index">{services.map(s=><section key={s.id} id={s.id}><small>{s.n}</small><div><h2>{s.name}</h2><p>{s.detail}</p><div className="tags">{s.tags.map(t=><span key={t}>{t}</span>)}</div></div><a className="text-link" href={'/contact?type='+encodeURIComponent(types[s.id])}>Discuss a project ↗</a></section>)}</div></div>;}

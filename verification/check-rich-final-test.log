@@ -1,0 +1,28 @@
+$ node --import ./tests/register.mjs --experimental-strip-types --test tests/studio.test.mjs tests/showcase.test.mjs
+✔ hash lattice has 26 distinct shell cells and one centre (0.851089ms)
+✔ scene budget caps fill rate across phone, low-memory and desktop hardware (0.960243ms)
+✔ compact crystal has valid glTF geometry and retains its attribution (0.511889ms)
+✔ one scroll position drives section, rail and clamped object progress (0.306791ms)
+✔ structured data matches visible FAQ and services, and escapes HTML (0.809466ms)
+✔ the HTML cache excludes private, query and flight requests (2.017823ms)
+✔ camera poses interpolate continuously and clamp at both ends (0.331258ms)
+✔ dotted motion holds, scatters into the next shape and closes its loop (0.725741ms)
+✔ admin authorization, origin, drafts, publication, duplicate slugs and deletion (38.388279ms)
+✔ editorial entries, published reviews, real photo requirement, contact links (39.209574ms)
+✔ one-time verification, quote storage and honest mail status without credentials (3.75957ms)
+✔ chat secrets isolate visitors; only the owner can reply (17.74377ms)
+✔ scanner rejects internal targets; valid domains go only to Mozilla with no paths (2.639918ms)
+✔ aggregate analytics honours DNT and stores only section and category (1.977833ms)
+✔ owner cookies expire, revoke on logout and resist forged headers and replay after rotation (64.529161ms)
+✔ invalid mail, large JSON and malformed JSON have bounded responses (1.143528ms)
+✔ a retried brief with the same request id returns its original receipt (5.497653ms)
+✔ a public project edit records a real sitemap modification time (19.19501ms)
+✔ session status is private and checks the actual expiring owner cookie (16.520281ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 709.838696

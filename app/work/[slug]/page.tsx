@@ -1,0 +1,1 @@
+import {permanentRedirect} from "next/navigation";export default async function Alias({params}:{params:Promise<{slug:string}>}){permanentRedirect("/portfolio/"+encodeURIComponent((await params).slug));}

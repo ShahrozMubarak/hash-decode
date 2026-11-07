@@ -1,0 +1,1 @@
+export default function Missing(){return <div className="wrap interior"><header className="page-intro"><p className="eyebrow"><i/> 404</p><h1>Page <em>not found.</em></h1><p>This address may have changed or the project is no longer published.</p><a className="cta" href="/portfolio">Explore the work ↗</a></header></div>;}
