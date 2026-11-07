@@ -27,7 +27,7 @@ export default function Services() {
     <div className="wrap interior page-services-content">
       <header className="page-intro">
         <p className="kicker"><span className="key-line" />Services</p>
-        <h1>What we build.<br /><span className="text-coral">How we help.</span></h1>
+        <h1>What we build.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>How we help.</span></h1>
         <p className="lead-text">
           Software designed for the people who use it, and practical security reviews for the teams who maintain it.
           No jargon, no bloated teams—just direct engineering that solves real business problems.

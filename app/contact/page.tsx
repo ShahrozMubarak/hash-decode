@@ -40,7 +40,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
         <aside className="contact-sidebar">
           <header className="page-intro compact">
             <p className="kicker"><span className="key-line" />Direct Inquiry</p>
-            <h1>Start a conversation.<br /><span className="text-coral">Let&apos;s build it.</span></h1>
+            <h1>Start a conversation.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>Let&apos;s build it.</span></h1>
             <p className="lead-text">
               Tell us about the people using your software and the problem you want to solve.
               We reply within 24 hours with practical advice and a clear estimate.
