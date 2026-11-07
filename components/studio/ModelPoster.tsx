@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-export type PosterModel = 'cube' | 'crystal' | 'halo' | 'eva';
+export type PosterModel = 'cube' | 'crystal' | 'halo' | 'eva' | 'fixer';
 
 type PosterProps = {
   model: PosterModel;
@@ -12,6 +12,7 @@ const names: Record<PosterModel, string> = {
   crystal: 'Enchanted Crystal',
   halo: 'Titanium Halo',
   eva: 'Eva Autonomous Robot',
+  fixer: 'Fixer Autonomous Robot',
 };
 
 // Each instance has its own gradients so the hero and the gallery can coexist.
@@ -57,7 +58,7 @@ export default function ModelPoster({ model, className }: PosterProps) {
       {model === 'cube' && <Cube id={id} />}
       {model === 'crystal' && <Crystal paint={paint} />}
       {model === 'halo' && <Halo paint={paint} />}
-      {model === 'eva' && <Eva paint={paint} />}
+      {(model === 'eva' || model === 'fixer') && <Eva paint={paint} />}
     </svg>
   );
 }

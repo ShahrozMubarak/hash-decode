@@ -26,7 +26,7 @@ export default function JourneyControl(){
       trail.setAttribute('viewBox',`0 0 ${w} ${trailHeight}`);
 
       const startBtn=landing.querySelector<HTMLElement>('#overview .cta');
-      const endBtn=landing.querySelector<HTMLElement>('#brief .brief-dialog-btn')||landing.querySelector<HTMLElement>('#brief button[type="submit"]')||landing.querySelector<HTMLElement>('#brief .cta');
+      const endBtn=landing.querySelector<HTMLElement>('#send-brief-btn')||landing.querySelector<HTMLElement>('#brief form button[type="submit"]')||landing.querySelector<HTMLElement>('#brief .cta');
 
       let startPt={x:w*.22,y:v*.75};
       if(startBtn){const sr=startBtn.getBoundingClientRect();startPt={x:sr.left+sr.width*.5,y:sr.top+y-top+sr.height};}
@@ -34,22 +34,49 @@ export default function JourneyControl(){
       let endPt={x:w*.35,y:trailHeight-120};
       if(endBtn){const er=endBtn.getBoundingClientRect();endPt={x:er.left+er.width*.5,y:er.top+y-top};}
 
+      const s0Top = offsets[0] - top;
+      const s1Top = offsets[1] - top;
+      const s2Top = offsets[2] - top;
+      const s3Top = offsets[3] - top;
+      const s4Top = offsets[4] - top;
+      const s5Top = offsets[5] - top;
+      const s6Top = offsets[6] - top;
+      const s7Top = offsets[7] - top;
+
+      const heroSpan = Math.max(180, s1Top - startPt.y);
+
       // Natural organic zigzag trail weaving through open whitespace without harsh turns
-      // Starts at 'Start a project' CTA and ends directly on the 'Project brief' CTA button
+      // Starts zigzagging immediately from 'Start a project' CTA downwards and ends directly on the 'Send project brief' CTA button
       const points = [
         startPt,
-        {x: w * 0.36, y: offsets[0] - top + stations[0].offsetHeight * 0.65},
-        {x: w * 0.76, y: offsets[0] - top + stations[0].offsetHeight * 0.94},
-        {x: w * 0.72, y: offsets[1] - top + stations[1].offsetHeight * 0.40},
-        {x: w * 0.26, y: offsets[1] - top + stations[1].offsetHeight * 0.88},
-        {x: w * 0.20, y: offsets[2] - top + stations[2].offsetHeight * 0.35},
-        {x: w * 0.80, y: offsets[2] - top + stations[2].offsetHeight * 0.82},
-        {x: w * 0.22, y: offsets[3] - top + stations[3].offsetHeight * 0.50},
-        {x: w * 0.78, y: offsets[4] - top + stations[4].offsetHeight * 0.45},
-        {x: w * 0.30, y: offsets[4] - top + stations[4].offsetHeight * 0.88},
-        {x: w * 0.64, y: offsets[5] - top + stations[5].offsetHeight * 0.50},
-        {x: w * 0.22, y: offsets[6] - top + stations[6].offsetHeight * 0.45},
-        {x: w * 0.42, y: offsets[7] - top + stations[7].offsetHeight * 0.25},
+        // Immediate zigzag down-left from start button into hero margin
+        {x: Math.max(w * 0.10, startPt.x - 45), y: startPt.y + heroSpan * 0.35},
+        // Zigzag right across whitespace beneath hero actions, avoiding hero model
+        {x: Math.min(w * 0.36, startPt.x + 85), y: startPt.y + heroSpan * 0.72},
+        // Enters Agent station on left whitespace (clearing Eva model)
+        {x: w * 0.18, y: s1Top + (s2Top - s1Top) * 0.15},
+        {x: w * 0.14, y: s1Top + (s2Top - s1Top) * 0.48},
+        // Sweeps right under Eva model
+        {x: w * 0.72, y: s1Top + (s2Top - s1Top) * 0.88},
+        // Services station: weaves left in column whitespace
+        {x: w * 0.22, y: s2Top + (s3Top - s2Top) * 0.40},
+        // Weaves right below service cards
+        {x: w * 0.78, y: s2Top + (s3Top - s2Top) * 0.85},
+        // Security station: weaves right open space
+        {x: w * 0.76, y: s3Top + (s4Top - s3Top) * 0.45},
+        // Weaves left
+        {x: w * 0.22, y: s3Top + (s4Top - s3Top) * 0.88},
+        // Work station: weaves left gutter
+        {x: w * 0.18, y: s4Top + (s5Top - s4Top) * 0.42},
+        // Weaves right gutter
+        {x: w * 0.80, y: s4Top + (s5Top - s4Top) * 0.84},
+        // Process station: weaves through open whitespace below steps
+        {x: w * 0.34, y: s5Top + (s6Top - s5Top) * 0.60},
+        // FAQ station: weaves down left margin
+        {x: w * 0.20, y: s6Top + (s7Top - s6Top) * 0.55},
+        // Contact station: swoops from left towards the submit button
+        {x: Math.max(w * 0.30, endPt.x - 140), y: s7Top + Math.max(60, (endPt.y - s7Top) * 0.45)},
+        // Anchors directly to top center of "Send project brief" button
         endPt
       ];
 
@@ -130,5 +157,5 @@ export default function JourneyControl(){
   window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',measure);window.addEventListener('hd:measure',measure);window.addEventListener('hd:motion',onMotion);landing.addEventListener('pointermove',move);landing.addEventListener('pointerleave',reset);
   return()=>{cancelAnimationFrame(tick);resize.disconnect();reset();window.removeEventListener('scroll',schedule);window.removeEventListener('resize',measure);window.removeEventListener('hd:measure',measure);window.removeEventListener('hd:motion',onMotion);landing.removeEventListener('pointermove',move);landing.removeEventListener('pointerleave',reset);};
  },[]);
- return <div ref={rail} aria-hidden="true" className="journey-decoration"><svg className="journey-trail" preserveAspectRatio="none"><path className="trail-base"/><path className="trail-ink" pathLength="1"/>{Array.from({length:14},(_,i)=><circle key={i} r="3.5"/>)}</svg><aside className="journey-rail"><svg viewBox="0 0 8 200" preserveAspectRatio="none"><path d="M4 4V196" className="rail-base"/><path pathLength="1" d="M4 4V196" className="rail-ink"/>{Array.from({length:8},(_,i)=><circle key={i} cx="4" cy={4+i*24} r="2.45"/>)}</svg><span className="rail-label">Overview</span></aside><div className="mobile-checkpoints">{Array.from({length:8},(_,i)=><i className="mobile-checkpoint" key={i}/>)}</div></div>;
+ return <div ref={rail} aria-hidden="true" className="journey-decoration"><svg className="journey-trail" preserveAspectRatio="none"><path className="trail-base"/><path className="trail-ink" pathLength="1"/>{Array.from({length:16},(_,i)=><circle key={i} r="3.5"/>)}</svg><aside className="journey-rail"><svg viewBox="0 0 8 200" preserveAspectRatio="none"><path d="M4 4V196" className="rail-base"/><path pathLength="1" d="M4 4V196" className="rail-ink"/>{Array.from({length:8},(_,i)=><circle key={i} cx="4" cy={4+i*24} r="2.45"/>)}</svg><span className="rail-label">Overview</span></aside><div className="mobile-checkpoints">{Array.from({length:8},(_,i)=><i className="mobile-checkpoint" key={i}/>)}</div></div>;
 }

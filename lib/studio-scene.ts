@@ -47,6 +47,10 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const currentLook={x:0,y:0},targetLook={x:0,y:0};
 
  const transforms=new THREE.Object3D(),cells=cubeCells.filter(([x,y,z])=>x||y||z);
+ let robotMeshGroup:THREE.Group|undefined;
+ let cubeInstances:THREE.InstancedMesh|undefined;
+ const CUBE_COUNT=64;
+ const cubeOrigins:{x:number;y:number;z:number;vx:number;vy:number;vz:number;rx:number;ry:number}[]=[];
  const cleanGeometry=()=>{const geometries=new Set<THREE.BufferGeometry>();object.traverse(node=>{if(node instanceof THREE.Mesh)geometries.add(node.geometry);});geometries.forEach(g=>g.dispose());};
  const stop=()=>{cancelAnimationFrame(frame);frame=0;last=0;};
  function frameLoop(now:number){
@@ -115,6 +119,39 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     object.rotation.x=.38+progress*.18;
     object.rotation.z=.025;
    }
+   if(model==='fixer'&&cubeInstances&&robotMeshGroup){
+    const pulseImpact=Math.max(0,1-(elapsed-pulse)/1.4);
+    const scrollImpact=Math.sin(progress*Math.PI*1.5);
+    const idlePulse=Math.pow(Math.max(0,Math.sin(elapsed*0.85)),12);
+    const explode=Math.min(1,Math.max(0,pulseImpact*1.2+Math.abs(scrollImpact)*0.95+idlePulse*0.85));
+    if(explode>0.015){
+     robotMeshGroup.scale.setScalar(Math.max(0.001,1-explode*0.85));
+     robotMeshGroup.visible=explode<0.95;
+     cubeOrigins.forEach((c,i)=>{
+      const dist=explode*2.8;
+      transforms.position.set(
+       c.x+c.vx*dist+Math.sin(elapsed*2.5+i)*explode*0.25,
+       c.y+c.vy*dist+Math.cos(elapsed*2.5+i)*explode*0.25,
+       c.z+c.vz*dist
+      );
+      transforms.rotation.set(
+       c.rx+elapsed*(1.2+(i%3))*explode*3,
+       c.ry+elapsed*(1.5+(i%2))*explode*3,
+       0
+      );
+      const s=Math.max(0.001,explode*(0.85+Math.sin(i+elapsed*3)*0.15));
+      transforms.scale.setScalar(s);
+      transforms.updateMatrix();
+      cubeInstances!.setMatrixAt(i,transforms.matrix);
+     });
+     cubeInstances.instanceMatrix.needsUpdate=true;
+     cubeInstances.visible=true;
+    }else{
+     robotMeshGroup.scale.setScalar(1);
+     robotMeshGroup.visible=true;
+     cubeInstances.visible=false;
+    }
+   }
    if(instances){
     const scatter=Math.pow(1-Math.min(1,elapsed/.88),3);
     const nudge=Math.max(0,1-(elapsed-pulse)/.75);
@@ -135,7 +172,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const resize=new ResizeObserver(()=>{const {width,height}=canvas.getBoundingClientRect();if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();updateDist(width,height);}});
  const view=new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible)start();else stop();});
  const interact=()=>{pulse=elapsed;};
- const onScroll=(e:Event)=>{const detail=(e as CustomEvent<{hero:number,gallery:number,crystal:number,page:number}>).detail;targetProgress=canvas.closest('.stationary-mobile-crystal')?(detail.hero||0):model==='cube'?detail.hero:model==='eva'?(detail.hero||detail.gallery||detail.page||0):detail.gallery;};
+ const onScroll=(e:Event)=>{const detail=(e as CustomEvent<{hero:number,gallery:number,crystal:number,page:number}>).detail;targetProgress=canvas.closest('.stationary-mobile-crystal')?(detail.hero||0):model==='cube'?detail.hero:(model==='fixer'||model==='eva')?(detail.hero||detail.gallery||detail.page||0):detail.gallery;};
  function lost(e:Event){e.preventDefault();suspended=true;stop();failed();}
  function restore(){suspended=false;start();}
  function dispose(){
@@ -143,7 +180,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   document.removeEventListener('visibilitychange',visibility);window.removeEventListener('hd:scroll',onScroll);
   canvas.removeEventListener('pointerenter',interact);canvas.removeEventListener('pointerdown',interact);canvas.removeEventListener('hd:recompute',interact);
   canvas.removeEventListener('webglcontextlost',lost);canvas.removeEventListener('webglcontextrestored',restore);
-  cleanGeometry();instances?.dispose();mixer?.stopAllAction();mixer=undefined;surface.dispose();metal.dispose();core.dispose();environment.dispose();renderer.dispose();renderer.forceContextLoss();
+  cleanGeometry();instances?.dispose();cubeInstances?.dispose();cubeInstances=undefined;robotMeshGroup=undefined;mixer?.stopAllAction();mixer=undefined;surface.dispose();metal.dispose();core.dispose();environment.dispose();renderer.dispose();renderer.forceContextLoss();
   signal.removeEventListener('abort',dispose);
  }
  signal.addEventListener('abort',dispose,{once:true});
@@ -158,11 +195,13 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    object.add(instances,new THREE.Mesh(cell,core));
   }else{
    const deadline=typeof AbortSignal.any==="function"?AbortSignal.any([signal,AbortSignal.timeout(15000)]):signal;
+   const modelUrl=model==='fixer'?'/models/fixer_robot.glb':'/models/eva_robot.glb';
+   const fallbackUrl=model==='fixer'?'/models/fixer_robot.glb':'/models/eva.glb';
    const [reply,{GLTFLoader}]=await Promise.all([
-    fetch('/models/eva_robot.glb',{signal:deadline}).then(r=>r.ok?r:fetch('/models/fixer_robot.glb',{signal:deadline})),
+    fetch(modelUrl,{signal:deadline}).then(r=>r.ok?r:fetch(fallbackUrl,{signal:deadline})),
     import('three/examples/jsm/loaders/GLTFLoader.js')
    ]);
-   if(!reply.ok)throw Error('Eva robot unavailable');
+   if(!reply.ok)throw Error(`${model} unavailable`);
    const gltf=await new GLTFLoader().parseAsync(await reply.arrayBuffer(),'');
    const robot=gltf.scene;
    if(gltf.animations&&gltf.animations.length>0){
@@ -218,10 +257,33 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     }
    });
    if(disposed)return;
-   object.add(robot);
+   if(model==='fixer'){
+    robotMeshGroup=new THREE.Group();
+    robotMeshGroup.add(robot);
+    object.add(robotMeshGroup);
+    const cubeGeom=new RoundedBoxGeometry(0.14,0.14,0.14,lite?1:2,0.02);
+    cubeInstances=new THREE.InstancedMesh(cubeGeom,surface,CUBE_COUNT);
+    cubeInstances.visible=false;
+    object.add(cubeInstances);
+    for(let i=0;i<CUBE_COUNT;i++){
+     const u=(i%4)-1.5,v=(Math.floor(i/4)%4)-1.5,w=Math.floor(i/16)-1.5;
+     const ox=u*0.28,oy=v*0.38,oz=w*0.28;
+     const len=Math.hypot(ox,oy,oz)||1;
+     cubeOrigins.push({
+      x:ox,y:oy,z:oz,
+      vx:(ox/len)*(1.1+Math.random()*0.9),
+      vy:(oy/len)*(1.1+Math.random()*0.9),
+      vz:(oz/len)*(1.1+Math.random()*0.9),
+      rx:Math.random()*Math.PI,
+      ry:Math.random()*Math.PI,
+     });
+    }
+   }else{
+    object.add(robot);
+   }
    if(deadline.aborted)throw Error('Model timed out');
    const bounds=new THREE.Box3().setFromObject(robot),size=bounds.getSize(new THREE.Vector3()),centre=bounds.getCenter(new THREE.Vector3());
-   const scale=2.1/Math.max(size.x,size.y,size.z); // scaled to fit with comfortable breathing room
+   const scale=(model==='fixer'?2.3:2.1)/Math.max(size.x,size.y,size.z);
    robot.scale.multiplyScalar(scale);
    robot.position.sub(centre.multiplyScalar(scale));
   }

@@ -29,5 +29,5 @@ export default function ContactForm({initial='',initialBrief=''}:{initial?:strin
  <label>Budget range<select name="budget" defaultValue="Still exploring" required>{['Under US$2,500','US$2,500–7,500','US$7,500–20,000','US$20,000+','Still exploring'].map(b=><option key={b}>{b}</option>)}</select></label>
  <label>Project details<textarea defaultValue={initialBrief.slice(0,1200)} name="brief" placeholder="Who is it for, and what should it help them do?" minLength={12} maxLength={3000} rows={5} required/></label>
  <label className="honeypot" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off"/></label>
- <HumanCheck key={revision} revision={revision}/><p className="form-note">Your details are used to respond to this project inquiry.</p><div role="status" aria-live="polite">{error|| (busy?"Sending your brief…":"")}</div><button className="cta" disabled={busy}>{busy?'Sending brief…':'Send project brief'} <ArrowUpRight size={17}/></button></form>;
+ <HumanCheck key={revision} revision={revision}/><p className="form-note">Your details are used to respond to this project inquiry.</p><div role="status" aria-live="polite">{error|| (busy?"Sending your brief…":"")}</div><button id="send-brief-btn" className="cta send-brief-btn" disabled={busy}>{busy?'Sending brief…':'Send project brief'} <ArrowUpRight size={17}/></button></form>;
 }

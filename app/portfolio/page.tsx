@@ -17,7 +17,7 @@ export default async function Portfolio() {
     <div className="wrap interior page-work-content">
       <header className="page-intro">
         <p className="kicker"><span className="key-line" />Our Work</p>
-        <h1>Software that works.<br /><span className="gradient-highlight">Built right.</span></h1>
+        <h1>Software that works.<br /><span className="text-coral">Built right.</span></h1>
         <p className="lead-text">
           Explore real systems, web platforms, and security audits built by Hash Decode.
           Every project is built for speed, clean architecture, and reliable long-term security.
