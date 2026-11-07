@@ -15,7 +15,7 @@ export async function POST(req:Request){
  entry={id,name:bounded(d.name,100,2),email,topic,budget,brief:bounded(d.brief,3000,12),status:'new',mail:'pending',created:Date.now()};
  }catch{return Response.json({error:'Check your name, email, project details and field lengths.'},{status:400});}
  try{
- if(!await quota(req,'brief-attempt',30))return Response.json({error:'Please wait before trying again.'},{status:429});
+ if(!await quota(req,'brief-attempt',120))return Response.json({error:'Please wait before trying again.'},{status:429});
  if(d.submissionId){
   try{
    const saved=await getDb().select().from(inquiries).where(eq(inquiries.id,entry.id)).get();
@@ -31,15 +31,16 @@ export async function POST(req:Request){
   if(!result.success || result.hostname!==new URL(req.url).hostname)return Response.json({error:'Complete the verification again.'},{status:422});
  }else{
   const cid=String(d.challenge||'');
+  const ans=String(d.answer||'').trim();
   if(cid.length!==36 && cid!=='auto-check')return Response.json({error:'Complete the human check.'},{status:422});
   if(cid!=='auto-check'){
    const check=await db.prepare('DELETE FROM human_challenges WHERE id=? RETURNING answer,expires').bind(cid).first<{answer:string,expires:number}>();
-   if(!check || check.expires<Date.now()||check.answer!==String(d.answer||'').trim()){
+   if(!check || check.expires<Date.now() || check.answer!==ans){
     return Response.json({error:'The human check expired or was incorrect. Try the new question.'},{status:422});
    }
   }
  }
- if(!await quota(req,'brief',6))return Response.json({error:'Please wait before submitting another brief.'},{status:429});
+ if(!await quota(req,'brief',60))return Response.json({error:'Please wait before submitting another brief.'},{status:429});
  try{ await getDb().insert(inquiries).values(entry); }catch(err){ console.warn('[DB insert error]:', err); }
  await saveInquiryToMongo(entry).catch(err => console.warn('[MongoDB] Inquiry sync note:', err));
  const mail=await mailBrief(entry);await getDb().update(inquiries).set({mail}).where(eq(inquiries.id,entry.id)).catch(()=>{});

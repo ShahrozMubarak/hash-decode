@@ -3,7 +3,7 @@ import {getPlatformDb} from '@/lib/platform-db';
 
 export async function GET(req:Request){
  try{
-  if(!await quota(req,'captcha',100))return Response.json({error:'Too many attempts. Try again later.'},{status:429});
+  if(!await quota(req,'captcha',500))return Response.json({error:'Too many attempts. Try again later.'},{status:429});
   const siteKey=runtime('TURNSTILE_SITE_KEY');
   if(siteKey&&runtime('TURNSTILE_SECRET'))return Response.json({siteKey},{headers:{'Cache-Control':'no-store'}});
   const v=crypto.getRandomValues(new Uint8Array(2)),a=v[0]%9+2,b=v[1]%8+2,id=crypto.randomUUID();

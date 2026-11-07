@@ -34,29 +34,32 @@ export default function JourneyControl(){
       let endPt={x:w*.35,y:trailHeight-120};
       if(endBtn){const er=endBtn.getBoundingClientRect();endPt={x:er.left+er.width*.5,y:er.top+y-top};}
 
-      // Continuous, thick, unpredictable path starting from Start a project button and descending strictly DOWN
+      // Continuous, elegant path starting from Start a project button and descending strictly DOWN
       const totalDy = Math.max(800, endPt.y - startPt.y);
 
+      // Clean waypoints that strictly avoid the robot (left column) and form inputs (center column)
       const rawPoints: {x: number; y: number}[] = [
         { x: startPt.x, y: startPt.y },
         // Immediately flow downwards from the button, sweeping towards the right
-        { x: startPt.x + Math.min(w * 0.15, 180), y: startPt.y + 110 },
+        { x: startPt.x + Math.min(w * 0.12, 140), y: startPt.y + 110 },
         { x: Math.min(w * 0.78, w - 100),         y: startPt.y + totalDy * 0.10 },
         { x: Math.min(w * 0.88, w - 60),          y: startPt.y + totalDy * 0.19 },
-        // Deep irregular swing left across to Section 02 coder showcase
+        // Irregular swing left across Section 02 coder showcase margin
         { x: Math.max(w * 0.14, 70),              y: startPt.y + totalDy * 0.29 },
-        { x: Math.max(w * 0.40, 190),             y: startPt.y + totalDy * 0.38 },
+        { x: Math.max(w * 0.38, 180),             y: startPt.y + totalDy * 0.38 },
         // Broad sweeping arc right around Services
         { x: Math.min(w * 0.84, w - 80),          y: startPt.y + totalDy * 0.48 },
-        // Organic reverse cut into left gutter
+        // Reverse cut into left gutter
         { x: Math.max(w * 0.16, 80),              y: startPt.y + totalDy * 0.58 },
         // Curving through Security narrative
         { x: Math.min(w * 0.78, w - 100),         y: startPt.y + totalDy * 0.69 },
         // Weaving down through Process and Work
         { x: Math.max(w * 0.22, 90),              y: startPt.y + totalDy * 0.79 },
-        { x: Math.min(w * 0.76, w - 110),         y: startPt.y + totalDy * 0.88 },
-        { x: Math.max(w * 0.28, 120),             y: endPt.y - 130 },
-        // Conclude directly on Send project brief button
+        // Approaching Contact/Brief section: stay strictly in the far-right gutter (away from robot on left and form in center)
+        { x: Math.min(w * 0.92, w - 50),          y: startPt.y + totalDy * 0.88 },
+        { x: Math.min(w * 0.94, w - 40),          y: endPt.y - 120 },
+        // Smoothly curve into the Send project brief button from the side, without cutting across form fields or robot
+        { x: Math.min(w * 0.88, endPt.x + 120),   y: endPt.y - 30 },
         { x: endPt.x, y: endPt.y }
       ];
 
@@ -101,8 +104,9 @@ export default function JourneyControl(){
    track.querySelectorAll('.mobile-checkpoint').forEach((dot,i)=>{dot.classList.toggle('active',i<=state.current);dot.classList.toggle('current',i===state.current);});
    const gallery=clampUnit((y-offsets[1])/Math.max(1,showcase.offsetHeight-v*.9));
    landing.style.setProperty('--collection-depth',(mobile?0:gallery*100)+'%');
-   const fastProgress = Math.min(1, Math.pow(state.page, 0.72) * 1.45);
-   track.style.setProperty('--progress', fastProgress.toFixed(4));
+   // Slower, smooth progress that doesn't jump 20% ahead
+   const progressVal = Math.min(1, Math.max(0, Math.pow(state.page, 0.95) * 1.05));
+   track.style.setProperty('--progress', progressVal.toFixed(4));
    label.textContent=stations[state.current].dataset.station+' · '+Math.round(state.page*100)+'%';
    dots.forEach((dot,i)=>{const p=clampUnit((offsets[i]-v*.38)/Math.max(1,height-v));dot.setAttribute('cy',String(4+192*p));dot.classList.toggle('active',i<=state.current);});
    nodes.forEach((node,i)=>node.classList.toggle('active',i<=state.current));

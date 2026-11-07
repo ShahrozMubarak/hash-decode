@@ -12,30 +12,30 @@ export default function TeleportBot({ className = '' }: Props) {
   const [teleported, setTeleported] = useState(false);
   const [isGlitching, setIsGlitching] = useState(false);
   const [mood, setMood] = useState<'idle' | 'happy' | 'angry' | 'success' | 'error' | 'submitting'>('idle');
-  const [thoughtText, setThoughtText] = useState('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
+  const [thoughtText, setThoughtText] = useState('Greetings, I am Hash. We engineer secure software and perform deep audits. Submit your brief below.');
 
   // Listen to form lifecycle events
   useEffect(() => {
     const onSubmitting = () => {
       setMood('submitting');
-      setThoughtText('Encrypting and transmitting your project brief to Shahroz and the Hash Decode team...');
+      setThoughtText('Encrypting and transmitting your brief to Shahroz and the team...');
     };
 
     const onSuccess = (e: Event) => {
       setMood('success');
       const detail = (e as CustomEvent).detail;
-      const ref = detail?.reference ? ` Reference #${detail.reference}.` : '';
-      setThoughtText(`Thank you. Your project brief has been received securely.${ref} Shahroz will review your requirements and respond within 24 hours.`);
+      const ref = detail?.reference ? ` Ref #${detail.reference}.` : '';
+      setThoughtText(`Thank you. Your project brief has been received securely.${ref} Shahroz will respond within 24 hours.`);
     };
 
     const onError = (e: Event) => {
       setMood('error');
       const detail = (e as CustomEvent).detail;
-      const msg = detail?.error || 'Please review your email and project details, then submit again.';
+      const msg = detail?.error || 'Please review your details and send again.';
       setThoughtText(`Notice: ${msg}`);
       setTimeout(() => {
         setMood('idle');
-        setThoughtText('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
+        setThoughtText('Greetings, I am Hash. We engineer secure software and perform deep audits. Submit your brief below.');
       }, 6000);
     };
 
@@ -46,10 +46,10 @@ export default function TeleportBot({ className = '' }: Props) {
         setThoughtText('Security boundary engaged. Integrity scan in progress.');
       } else if (m === 'happy') {
         setMood('happy');
-        setThoughtText('Ready to build high-availability software or verify system security? Hash Decode engineers are ready to assist.');
+        setThoughtText('Ready to build high-availability software? Hash Decode engineers are ready to assist.');
       } else if (m === 'idle') {
         setMood('idle');
-        setThoughtText('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
+        setThoughtText('Greetings, I am Hash. We engineer secure software and perform deep audits. Submit your brief below.');
       }
     };
 
@@ -186,9 +186,9 @@ export default function TeleportBot({ className = '' }: Props) {
           />
 
           {/* Quotation Marks: Opening double quotes top-left */}
-          <text x="65" y="65" className="bubble-quote-glyph">“</text>
+          <text x="45" y="55" className="bubble-quote-glyph">“</text>
           {/* Quotation Marks: Closing double quotes bottom-right */}
-          <text x="245" y="135" className="bubble-quote-glyph">”</text>
+          <text x="270" y="142" className="bubble-quote-glyph">”</text>
         </svg>
 
         <div className="bubble-text-content">
