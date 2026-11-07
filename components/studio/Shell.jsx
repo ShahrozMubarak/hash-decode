@@ -4,7 +4,7 @@ import {usePathname} from 'next/navigation';
 import {ArrowUpRight,Menu,X,Pause,Play} from 'lucide-react';
 import {Chat} from './Chat';
 
-const links=[['Work','/services'],['Portfolio','/portfolio'],['About','/about'],['Contact','/contact']];
+const links=[['Work','/portfolio'],['Services','/services'],['About','/about'],['Contact','/contact']];
 export function Brand(){
  const [word,setWord]=useState('DECODE'),timer=useRef(null);
  useEffect(()=>()=>clearInterval(timer.current),[]);

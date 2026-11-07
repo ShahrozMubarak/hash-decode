@@ -1,6 +1,172 @@
-import {Team} from '@/components/studio/Extras';
-import {studioCopy} from '@/lib/studio-data';
-import {meta} from '@/lib/meta';
-export const dynamic='force-dynamic';
-export const metadata=meta('About the Software Studio','Learn how Hash Decode approaches product design, full-stack development, security review and software handover.','/about');
-export default async function About(){const copy=await studioCopy();return <div className="wrap interior"><header className="page-intro"><p className="kicker"><span className="key-line"/>About Hash Decode</p><h1>Inside the studio.</h1><p>{copy.about}</p></header><section className="principles">{[['Clarity','We start with the workflow. The interface and data model follow what people need to do.'],['Review','We test the main paths and the places where access, input or a connection can fail.'],['Ownership','We agree who owns each account and document how to operate and update the release.']].map(([name,body])=><article key={name}><h2>{name}</h2><p>{body}</p></article>)}</section><Team/></div>;}
+import { Team } from '@/components/studio/Extras';
+import { studioCopy } from '@/lib/studio-data';
+import { meta } from '@/lib/meta';
+import { ArrowUpRight, ShieldCheck, HeartHandshake, Zap, FileCode, CheckCircle, Terminal } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
+export const metadata = meta(
+  'About Hash Decode | Software Design & Security Studio',
+  'Learn about Hash Decode, founded by Shahroz Dogar. Independent software engineering, clean code, and authorized security audits.',
+  '/about'
+);
+
+const principles = [
+  {
+    num: '01',
+    title: 'Clarity Over Complexity',
+    desc: 'We speak plain English, not confusing technical jargon. We start with the actual user workflow so the software is intuitive and easy to use.',
+    icon: Zap,
+  },
+  {
+    num: '02',
+    title: 'Security by Design',
+    desc: 'Security is not an afterthought. Every form, API, and database query is audited against vulnerabilities before it ever goes live.',
+    icon: ShieldCheck,
+  },
+  {
+    num: '03',
+    title: '100% Client Ownership',
+    desc: 'You own every line of code, every repository, and every cloud credential. We never lock you in, and we provide clean documentation so any engineer can continue our work.',
+    icon: HeartHandshake,
+  },
+  {
+    num: '04',
+    title: 'Direct Engineering',
+    desc: 'You work directly with the senior engineers designing and building your product. No account managers, no lost translations, no wasted time.',
+    icon: FileCode,
+  },
+];
+
+const techStack = [
+  'TypeScript', 'Next.js', 'React', 'Node.js', 'Python',
+  'MongoDB Atlas', 'PostgreSQL', 'Cloudflare Workers', 'Three.js / WebGL',
+  'Docker', 'Tailwind CSS', 'Zero Trust TLS'
+];
+
+export default async function About() {
+  const copy = await studioCopy();
+
+  return (
+    <div className="wrap interior page-about-content">
+      <header className="page-intro">
+        <p className="kicker"><span className="key-line" />About the Studio</p>
+        <h1>Inside Hash Decode.<br />Crafted with intent.</h1>
+        <p className="lead-text">
+          {copy.about || 'An independent software studio founded by Shahroz Dogar. We build custom web platforms, digital tools, and secure cloud systems for growing companies.'}
+        </p>
+      </header>
+
+      {/* 4 Core Principles in Simple Words */}
+      <section className="about-principles-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow"><i />01 &nbsp;/&nbsp; Core Values</p>
+            <h2>How We Operate</h2>
+          </div>
+        </div>
+        <div className="principles-grid-4">
+          {principles.map((p) => {
+            const Icon = p.icon;
+            return (
+              <article key={p.title} className="principle-card">
+                <div className="principle-card-head">
+                  <small className="principle-num">{p.num}</small>
+                  <Icon className="icon-azure" size={24} />
+                </div>
+                <h3>{p.title}</h3>
+                <p>{p.desc}</p>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Studio Team & Founder Section */}
+      <section className="about-founder-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow"><i />02 &nbsp;/&nbsp; Leadership &amp; Craft</p>
+            <h2>The Engineering Team</h2>
+          </div>
+        </div>
+        <Team />
+      </section>
+
+      {/* Tech Arsenal & Standards */}
+      <section className="about-tech-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow"><i />03 &nbsp;/&nbsp; Tools of the Craft</p>
+            <h2>Our Technology Stack</h2>
+          </div>
+          <span className="count-pill">Modern &amp; battle-tested</span>
+        </div>
+        <div className="tech-badge-cloud">
+          {techStack.map((tech) => (
+            <span key={tech} className="tech-badge">
+              <Terminal size={14} />
+              {tech}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* The 5 Client Guarantees */}
+      <section className="about-guarantee-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow"><i />04 &nbsp;/&nbsp; Peace of Mind</p>
+            <h2>The Hash Decode Guarantee</h2>
+          </div>
+        </div>
+        <div className="guarantee-grid">
+          <div className="guarantee-item">
+            <CheckCircle className="icon-azure" size={22} />
+            <div>
+              <strong>Mutual NDA Protected</strong>
+              <p>Your ideas, code, and customer data are fully protected before we write a single line of code.</p>
+            </div>
+          </div>
+          <div className="guarantee-item">
+            <CheckCircle className="icon-azure" size={22} />
+            <div>
+              <strong>Transparent Fixed Pricing</strong>
+              <p>Clear, agreed milestones with zero surprise billing or hidden hourly charges.</p>
+            </div>
+          </div>
+          <div className="guarantee-item">
+            <CheckCircle className="icon-azure" size={22} />
+            <div>
+              <strong>30-Day Post-Launch Support</strong>
+              <p>We monitor your production application and fix any warranty bugs free of charge.</p>
+            </div>
+          </div>
+          <div className="guarantee-item">
+            <CheckCircle className="icon-azure" size={22} />
+            <div>
+              <strong>Full Codebase Transfer</strong>
+              <p>Everything is committed to your own private GitHub or cloud account from day one.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA Card */}
+      <section className="work-cta-card">
+        <div className="cta-content">
+          <p className="kicker"><span className="key-line" />Get in touch</p>
+          <h2>Let's build something remarkable.</h2>
+          <p>Whether you need an MVP in weeks or a comprehensive security audit, we are ready.</p>
+        </div>
+        <div className="cta-actions">
+          <a className="cta" href="/contact">
+            Start a project <ArrowUpRight size={18} />
+          </a>
+          <a className="outline" href="/portfolio">
+            See our portfolio
+          </a>
+        </div>
+      </section>
+    </div>
+  );
+}

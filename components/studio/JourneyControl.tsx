@@ -24,19 +24,32 @@ export default function JourneyControl(){
     if(!mobile){
       const top=landing.getBoundingClientRect().top+y,trailHeight=landing.offsetHeight;
       trail.setAttribute('viewBox',`0 0 ${w} ${trailHeight}`);
-      // Wide, graceful horizontal positions holding sides over distance:
-      // Holds right (0.80) through Overview & Showcase away from hero text and Eva Robot,
-      // takes long distance to transition across Services to left (0.20),
-      // holds left through Security & Work away from forms/cards,
-      // transitions across Process to right margin (0.82) through FAQ & Contact without touching forms:
-      const across = [.80, .80, .22, .18, .20, .80, .82, .85];
-      const points = offsets.map((at, i) => ({
-        x: w * across[i],
-        y: Math.max(18, at - top + Math.min(stations[i].offsetHeight * 0.48, v * 0.65))
-      }));
-      // Start in hero right margin below header
-      points[0].y = Math.max(stations[0].offsetHeight - 40, v * 0.85);
-      points.push({ x: w * 0.5, y: trailHeight });
+
+      const startBtn=landing.querySelector<HTMLElement>('#overview .cta');
+      const endBtn=landing.querySelector<HTMLElement>('#brief .brief-dialog-btn')||landing.querySelector<HTMLElement>('#brief button[type="submit"]')||landing.querySelector<HTMLElement>('#brief .cta');
+
+      let startPt={x:w*.22,y:v*.75};
+      if(startBtn){const sr=startBtn.getBoundingClientRect();startPt={x:sr.left+sr.width*.5,y:sr.top+y-top+sr.height};}
+
+      let endPt={x:w*.35,y:trailHeight-120};
+      if(endBtn){const er=endBtn.getBoundingClientRect();endPt={x:er.left+er.width*.5,y:er.top+y-top};}
+
+      // Smooth S-path: Starts at 'Start a project' CTA,
+      // holds on the right side (0.85) for ~3s of scroll through Overview & Showcase,
+      // sweeps smoothly to the outer left gutter (0.14) for ~3s of scroll through Services, Security & Work,
+      // traverses clear margins without touching any buttons or forms,
+      // and terminates directly on the 'Project brief' button:
+      const points = [
+        startPt,
+        {x:w*.85,y:offsets[0]-top+stations[0].offsetHeight*.85},
+        {x:w*.85,y:offsets[1]-top+stations[1].offsetHeight*.5},
+        {x:w*.15,y:offsets[2]-top+stations[2].offsetHeight*.5},
+        {x:w*.14,y:offsets[3]-top+stations[3].offsetHeight*.5},
+        {x:w*.14,y:offsets[4]-top+stations[4].offsetHeight*.5},
+        {x:w*.45,y:offsets[5]-top+stations[5].offsetHeight*.5},
+        {x:w*.55,y:offsets[6]-top+stations[6].offsetHeight*.5},
+        endPt
+      ];
 
       // Ultra-smooth S-curve without sharp corners or tight hairpins:
       const d = points.map((p, i) => {

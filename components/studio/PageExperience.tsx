@@ -61,8 +61,10 @@ export default function PageExperience() {
 
   if (path === '/' || path.startsWith('/admin')) return null;
 
+  const pageClass = 'page-' + (path.replace('/', '').split('/')[0] || 'root');
+
   return (
-    <aside className={`inner-experience ${shifting ? 'robot-tab-shifting' : ''}`} aria-hidden="true">
+    <aside className={`inner-experience ${pageClass} ${shifting ? 'robot-tab-shifting' : ''}`} aria-hidden="true">
       <div className="tab-warp-trail" aria-hidden="true" />
       <span className="inner-ghost">DECODE</span>
       <div className="inner-model-wrapper">
