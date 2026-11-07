@@ -1,6 +1,6 @@
 import JourneyControl from './JourneyControl';
 import type {Project} from '@/lib/studio-data';
-import {capabilities,faq,processSteps,stack} from '@/lib/landing-content';
+import {capabilities,faq,processSteps} from '@/lib/landing-content';
 import {WorkCard} from './Work';
 import ContactForm from './ContactForm';
 import DottedPoster from './DottedPoster';
@@ -51,9 +51,8 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
    <section id="process" data-station="Process" className="wrap band">{section('06','Process')}<h2>From brief to handover.</h2>
     <ol className="process-list">{processSteps.map(([name],i)=><li key={name}><span className="step-dot"/><small>0{i+1}</small><h3>{name}</h3></li>)}</ol>
    </section>
-   <section className="stack-band" id="stack" data-station="Technology"><div className="wrap"><h2 className="kicker"><span className="key-line"/>07 / Technology stack</h2><div className="stack-window"><div className="stack-track">{[0,1].map(copy=><div className="stack-set" key={copy} aria-hidden={copy===1||undefined}>{stack.map(([file,name])=><span key={name}><i aria-hidden="true" style={{maskImage:'url(/stack/'+file+'.svg)'}}/>{name}</span>)}</div>)}</div></div></div></section>
-   <section className="wrap band faq-section" id="faq" data-station="Questions"><div>{section('08','FAQ')}<h2>Before we start.</h2></div><div className="questions">{faq.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}<a className="text-link" href="/tools">Explore project tools <ArrowUpRight size={16}/></a></div></section>
-   <section className="tint-band" id="brief" data-station="Contact"><div className="wrap band contact-grid"><div>{section('09','Contact')}<h2>What are you<br/>working on?</h2><p>Tell us who it’s for, what needs to change and when you need it.</p><div className="contact-links">
+   <section className="wrap band faq-section" id="faq" data-station="Questions"><div>{section('07','FAQ')}<h2>Before we start.</h2></div><div className="questions">{faq.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}<a className="text-link" href="/tools">Explore project tools <ArrowUpRight size={16}/></a></div></section>
+   <section className="tint-band" id="brief" data-station="Contact"><div className="wrap band contact-grid"><div>{section('08','Contact')}<h2>What are you<br/>working on?</h2><p>Tell us who it’s for, what needs to change and when you need it.</p><div className="contact-links">
     {links.whatsapp&&<a className="text-link" href={'https://wa.me/'+links.whatsapp}>WhatsApp the studio ↗</a>}
     {links.booking&&<a className="text-link" href={links.booking}>Book a conversation ↗</a>}
     <a className="text-link" href="/contact">Contact page ↗</a><BriefDialog/>

@@ -34,7 +34,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  }
  const environment=new THREE.DataTexture(pixels,128,64);
  environment.mapping=THREE.EquirectangularReflectionMapping;environment.needsUpdate=true;scene.environment=environment;
- let frame=0,last=0,elapsed=0,pulse=-5,progress=0,targetProgress=0,visible=true,disposed=false,loaded=false,suspended=false;
+ let frame=0,last=0,elapsed=0,pulse=-5,progress=0,targetProgress=0,visible=true,disposed=false,loaded=false,suspended=false,currentDist=4.6;
  let instances:THREE.InstancedMesh|undefined;
  let mixer:THREE.AnimationMixer|undefined;
  
@@ -94,19 +94,18 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    }
 
    if(model==='eva'||model!=='cube'){
-    const floatY=Math.sin(elapsed*1.5)*.12;
-    const floatX=Math.cos(elapsed*1.0)*.05;
-    const floatZ=Math.sin(elapsed*0.8)*.04;
+    const floatY=Math.sin(elapsed*1.5)*.06;
+    const floatX=Math.cos(elapsed*1.0)*.03;
+    const floatZ=Math.sin(elapsed*0.8)*.02;
     object.position.set(floatX,floatY,floatZ);
-    object.rotation.z=Math.sin(elapsed*1.2)*.035;
-    object.rotation.x=Math.cos(elapsed*0.9)*.025;
-    object.rotation.y=-.15+elapsed*(lite?.1:.16);
+    object.rotation.z=Math.sin(elapsed*1.2)*.025;
+    object.rotation.x=Math.cos(elapsed*0.9)*.02;
+    object.rotation.y=-.15+elapsed*(lite?.08:.14);
     const orbitAngle=progress*Math.PI*2;
-    const dist=4.2; // closer to fill screen with prominent presence
-    camera.position.x=Math.sin(orbitAngle)*dist;
-    camera.position.z=Math.cos(orbitAngle)*dist;
-    camera.position.y=0.2+Math.sin(progress*Math.PI)*0.4;
-    camera.lookAt(0,floatY*.3,0);
+    camera.position.x=Math.sin(orbitAngle)*currentDist;
+    camera.position.z=Math.cos(orbitAngle)*currentDist;
+    camera.position.y=0.06+Math.sin(progress*Math.PI)*0.2;
+    camera.lookAt(0,floatY*.2,0);
    }else{
     object.rotation.y=-.55+elapsed*(lite?.12:.18)+progress*1.1;
     const angle=(progress-.5)*.32;
@@ -132,7 +131,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  }
  const start=()=>{if(!frame&&!disposed&&loaded&&visible&&!suspended&&!document.hidden)frame=requestAnimationFrame(frameLoop);};
  const visibility=()=>{if(document.hidden)stop();else start();};
- const resize=new ResizeObserver(()=>{const {width,height}=canvas.getBoundingClientRect();if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();}});
+ const updateDist=(w:number,h:number)=>{if(model==='cube'){currentDist=7.2;return;}const asp=w>0&&h>0?w/h:1;const zoom=asp<1?Math.max(1,0.95/asp):1;currentDist=4.6*zoom;};
+ const resize=new ResizeObserver(()=>{const {width,height}=canvas.getBoundingClientRect();if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();updateDist(width,height);}});
  const view=new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible)start();else stop();});
  const interact=()=>{pulse=elapsed;};
  const onScroll=(e:Event)=>{const detail=(e as CustomEvent<{hero:number,gallery:number,crystal:number,page:number}>).detail;targetProgress=canvas.closest('.stationary-mobile-crystal')?(detail.hero||0):model==='cube'?detail.hero:model==='eva'?(detail.hero||detail.gallery||detail.page||0):detail.gallery;};
@@ -221,13 +221,13 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    object.add(robot);
    if(deadline.aborted)throw Error('Model timed out');
    const bounds=new THREE.Box3().setFromObject(robot),size=bounds.getSize(new THREE.Vector3()),centre=bounds.getCenter(new THREE.Vector3());
-   const scale=3.6/Math.max(size.x,size.y,size.z); // scaled up to fill screen
+   const scale=2.1/Math.max(size.x,size.y,size.z); // scaled to fit with comfortable breathing room
    robot.scale.multiplyScalar(scale);
    robot.position.sub(centre.multiplyScalar(scale));
   }
   loaded=true;
   const {width,height}=canvas.getBoundingClientRect();
-  if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();}
+  if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();updateDist(width,height);}
   try{renderer.render(scene,camera);ready();}catch(e){}
   window.dispatchEvent(new Event('hd:measure'));start();
  }catch(error){dispose();if(!signal.aborted)throw error;}

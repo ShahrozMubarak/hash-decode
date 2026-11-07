@@ -22,14 +22,45 @@ export default function JourneyControl(){
     height=root.scrollHeight;offsets=stations.map(el=>el.getBoundingClientRect().top+y);headingTops=headings.map(el=>el.getBoundingClientRect().top+y);heroDistance=Math.max(v*.45,stations[0].offsetHeight-v);processTop=process.getBoundingClientRect().top+y;processHeight=process.offsetHeight;
     hero=measureBox(heroAnchor,y);
     if(!mobile){
-     const top=landing.getBoundingClientRect().top+y,trailHeight=landing.offsetHeight;trail.setAttribute('viewBox',`0 0 ${w} ${trailHeight}`);
-     const across=[.84,.88,.70,.5,.32,.68,.28,.72,.68];
-     const points=offsets.map((at,i)=>({x:w*across[i],y:Math.max(18,at-top+Math.min(stations[i].offsetHeight*.48,v*.65))}));
-     // Trail line starts below the hero section so the hero start is completely clean
-     points[0].y=Math.max(stations[0].offsetHeight - 40, v * 0.85);
-     points.push({x:w*.5,y:trailHeight});
-     const d=points.map((p,i)=>{if(!i)return `M${p.x} ${p.y}`;const a=points[i-1],mid=(a.y+p.y)/2;return `C${a.x} ${mid},${p.x} ${mid},${p.x} ${p.y}`;}).join(' ');
-     paths.forEach(p=>p.setAttribute('d',d));nodes.forEach((node,i)=>{if(points[i]){node.setAttribute('cx',String(points[i].x));node.setAttribute('cy',String(points[i].y));}});
+      const top=landing.getBoundingClientRect().top+y,trailHeight=landing.offsetHeight;trail.setAttribute('viewBox',`0 0 ${w} ${trailHeight}`);
+      // Trail starts right where the robot showcase ends:
+      const showcaseEnd = offsets[1] + showcase.offsetHeight - top;
+      // Target CTA button in contact form:
+      const submitBtn = landing.querySelector<HTMLElement>('#brief button[type="submit"], #brief .cta, #brief input[type="submit"]');
+      let endX = w * 0.72;
+      let endY = offsets[stations.length - 1] - top + stations[stations.length - 1].offsetHeight * 0.82;
+      if (submitBtn) {
+        const b = submitBtn.getBoundingClientRect();
+        endX = b.left + b.width * 0.5;
+        endY = b.top + y - top + b.height * 0.5;
+      }
+      // Weave smoothly in open spaces (left, right, left, right):
+      const points = [
+        { x: w * 0.35, y: showcaseEnd },
+        { x: w * 0.14, y: offsets[2] - top + stations[2].offsetHeight * 0.45 },
+        { x: w * 0.82, y: offsets[3] - top + stations[3].offsetHeight * 0.50 },
+        { x: w * 0.16, y: offsets[4] - top + stations[4].offsetHeight * 0.50 },
+        { x: w * 0.85, y: offsets[5] - top + stations[5].offsetHeight * 0.50 },
+        { x: w * 0.20, y: offsets[6] - top + stations[6].offsetHeight * 0.45 },
+        { x: endX, y: endY }
+      ];
+      const d = points.map((p, i) => {
+        if (!i) return `M${p.x} ${p.y}`;
+        const a = points[i - 1], mid = (a.y + p.y) / 2;
+        return `C${a.x} ${mid},${p.x} ${mid},${p.x} ${p.y}`;
+      }).join(' ');
+      paths.forEach(p => p.setAttribute('d', d));
+      nodes.forEach((node, i) => {
+        if (points[i]) {
+          node.setAttribute('cx', String(points[i].x));
+          node.setAttribute('cy', String(points[i].y));
+        }
+      });
+      // Compute trail progress so it only draws past the robot:
+      const trailStart = offsets[1] + showcase.offsetHeight - v * 0.5;
+      const trailEnd = endY + top - v * 0.4;
+      const trailProgress = clampUnit((y - trailStart) / Math.max(1, trailEnd - trailStart));
+      landing.style.setProperty('--trail-progress', String(trailProgress));
     }
     dirty=false;
    }
@@ -51,18 +82,17 @@ export default function JourneyControl(){
    const base=(at:number,x:number,cy:number,size:number,phase:number,yaw:number,pitch:number,alpha:number):Pose=>({at,x,y:cy,size,phase,yaw,pitch,distance:3.8-Math.sin(phase*Math.PI/2)*.65,alpha});
    const hsize=Math.min(hero.width*.36,hero.height*.4);
    const stops=[
-    base(0,hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0), // 0 alpha in hero
-    base(offsets[1],hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0), // 0 alpha in showcase so Eva Robot shines cleanly
-    base(offsets[2]-v*.25,w*.7,v*.5,160,1,1.3,-.25,0),
-    base(offsets[2],w*.26,v*.46,Math.min(w*.22,v*.32),1,.8,.5,1),
-    {...base(offsets[3],w*.72,v*.52,v*.48,3,0,0,1),distance:3.4},
-    {...base(offsets[3]+v*.65,w*.6,v*.52,v*.48,3,.15,.08,1),distance:1.1},
-    {...base(offsets[3]+v*1.1,w*.5,v*.52,v*.48,3,.25,.1,.85),distance:-.45},
-    base(offsets[4]-v*.2,w*.28,v*.52,Math.min(w*.2,v*.3),3,2.6,-.3,.8),
-    base(offsets[5]-v*.55,w*.86,v*.26,70,3,3.6,.65,.4),
-    base(offsets[6]-v*.4,w*.8,v*.2,54,3,4.2,-.4,.15),
-    base(offsets[7]-v*.5,w*.88,v*.22,58,3.7,5,.1,.1),
-    base(offsets[8]-v*.5,w*.88,v*.2,55,4,5.5,.3,0)];
+     base(0,hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0),
+     base(offsets[1],hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0),
+     base(offsets[2]-v*.25,w*.7,v*.5,160,1,1.3,-.25,0),
+     base(offsets[2],w*.26,v*.46,Math.min(w*.22,v*.32),1,.8,.5,1),
+     {...base(offsets[3],w*.72,v*.52,v*.48,3,0,0,1),distance:3.4},
+     {...base(offsets[3]+v*.65,w*.6,v*.52,v*.48,3,.15,.08,1),distance:1.1},
+     {...base(offsets[3]+v*1.1,w*.5,v*.52,v*.48,3,.25,.1,.85),distance:-.45},
+     base(offsets[4]-v*.2,w*.28,v*.52,Math.min(w*.2,v*.3),3,2.6,-.3,.8),
+     base(offsets[5]-v*.55,w*.86,v*.26,70,3,3.6,.65,.4),
+     base(offsets[6]-v*.4,w*.8,v*.2,54,3,4.2,-.4,.15),
+     base(offsets[7]-v*.5,w*.88,v*.22,58,3.7,5,.1,0)];
    const desktop=poseAt(y,stops);
    window.dispatchEvent(new CustomEvent('hd:scroll',{detail:{...state,gallery,position:y,desktop}}));
   };
@@ -80,5 +110,5 @@ export default function JourneyControl(){
   window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',measure);window.addEventListener('hd:measure',measure);window.addEventListener('hd:motion',onMotion);landing.addEventListener('pointermove',move);landing.addEventListener('pointerleave',reset);
   return()=>{cancelAnimationFrame(tick);resize.disconnect();reset();window.removeEventListener('scroll',schedule);window.removeEventListener('resize',measure);window.removeEventListener('hd:measure',measure);window.removeEventListener('hd:motion',onMotion);landing.removeEventListener('pointermove',move);landing.removeEventListener('pointerleave',reset);};
  },[]);
- return <div ref={rail} aria-hidden="true" className="journey-decoration"><svg className="journey-trail" preserveAspectRatio="none"><path className="trail-base"/><path className="trail-ink" pathLength="1"/>{Array.from({length:9},(_,i)=><circle key={i} r="3.5"/>)}</svg><aside className="journey-rail"><svg viewBox="0 0 8 200" preserveAspectRatio="none"><path d="M4 4V196" className="rail-base"/><path pathLength="1" d="M4 4V196" className="rail-ink"/>{Array.from({length:9},(_,i)=><circle key={i} cx="4" cy={4+i*24} r="2.45"/>)}</svg><span className="rail-label">Overview</span></aside><div className="mobile-checkpoints">{Array.from({length:9},(_,i)=><i className="mobile-checkpoint" key={i}/>)}</div></div>;
+ return <div ref={rail} aria-hidden="true" className="journey-decoration"><svg className="journey-trail" preserveAspectRatio="none"><path className="trail-base"/><path className="trail-ink" pathLength="1"/>{Array.from({length:8},(_,i)=><circle key={i} r="3.5"/>)}</svg><aside className="journey-rail"><svg viewBox="0 0 8 200" preserveAspectRatio="none"><path d="M4 4V196" className="rail-base"/><path pathLength="1" d="M4 4V196" className="rail-ink"/>{Array.from({length:8},(_,i)=><circle key={i} cx="4" cy={4+i*24} r="2.45"/>)}</svg><span className="rail-label">Overview</span></aside><div className="mobile-checkpoints">{Array.from({length:8},(_,i)=><i className="mobile-checkpoint" key={i}/>)}</div></div>;
 }
