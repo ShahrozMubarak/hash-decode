@@ -65,14 +65,9 @@ export default function PageExperience() {
 
   return (
     <aside className={`inner-experience ${pageClass} ${shifting ? 'robot-tab-shifting' : ''}`} aria-hidden="true">
-      <div className="tab-warp-trail" aria-hidden="true" />
-      <span className="inner-ghost">DECODE</span>
       <div className="inner-model-wrapper">
         <SceneSurface model="eva" autoMobile={true} />
       </div>
-      <span className="inner-caption">
-        {shifting ? `✦ SHIFTING TO ${currentTab}...` : `EVA · ${currentTab}`}
-      </span>
     </aside>
   );
 }

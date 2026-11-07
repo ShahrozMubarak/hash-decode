@@ -30,7 +30,7 @@ export function Gallery(){
 }
 export function BriefDialog(){
  const dialog=useRef<HTMLDialogElement>(null),[open,setOpen]=useState(false);
- return <><button className="text-link" onClick={()=>{setOpen(true);dialog.current?.showModal();}}>Open brief in a dialog ↗</button><dialog ref={dialog} aria-label="Project brief" onClose={()=>setOpen(false)}><button className="outline" onClick={()=>dialog.current?.close()}>Close</button>{open&&<ContactForm/>}</dialog></>;
+ return <><button className="text-link brief-dialog-btn" onClick={()=>{setOpen(true);dialog.current?.showModal();}}>Open brief in a dialog ↗</button><dialog ref={dialog} aria-label="Project brief" onClose={()=>setOpen(false)}><button className="outline" onClick={()=>dialog.current?.close()}>Close</button>{open&&<ContactForm/>}</dialog></>;
 }
 export function IntroDecode(){
  const [label,setLabel]=useState('');

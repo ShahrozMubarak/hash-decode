@@ -50,7 +50,7 @@ export default async function About() {
     <div className="wrap interior page-about-content">
       <header className="page-intro">
         <p className="kicker"><span className="key-line" />About the Studio</p>
-        <h1>Inside Hash Decode.<br />Crafted with intent.</h1>
+        <h1>Inside Hash Decode.<br /><span className="gradient-highlight">Crafted with intent.</span></h1>
         <p className="lead-text">
           {copy.about || 'An independent software studio founded by Shahroz Dogar. We build custom web platforms, digital tools, and secure cloud systems for growing companies.'}
         </p>

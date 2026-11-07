@@ -34,24 +34,26 @@ export default function JourneyControl(){
       let endPt={x:w*.35,y:trailHeight-120};
       if(endBtn){const er=endBtn.getBoundingClientRect();endPt={x:er.left+er.width*.5,y:er.top+y-top};}
 
-      // Smooth S-path: Starts at 'Start a project' CTA,
-      // holds on the right side (0.85) for ~3s of scroll through Overview & Showcase,
-      // sweeps smoothly to the outer left gutter (0.14) for ~3s of scroll through Services, Security & Work,
-      // traverses clear margins without touching any buttons or forms,
-      // and terminates directly on the 'Project brief' button:
+      // Natural organic zigzag trail weaving through open whitespace without harsh turns
+      // Starts at 'Start a project' CTA and ends directly on the 'Project brief' CTA button
       const points = [
         startPt,
-        {x:w*.85,y:offsets[0]-top+stations[0].offsetHeight*.85},
-        {x:w*.85,y:offsets[1]-top+stations[1].offsetHeight*.5},
-        {x:w*.15,y:offsets[2]-top+stations[2].offsetHeight*.5},
-        {x:w*.14,y:offsets[3]-top+stations[3].offsetHeight*.5},
-        {x:w*.14,y:offsets[4]-top+stations[4].offsetHeight*.5},
-        {x:w*.45,y:offsets[5]-top+stations[5].offsetHeight*.5},
-        {x:w*.55,y:offsets[6]-top+stations[6].offsetHeight*.5},
+        {x: w * 0.36, y: offsets[0] - top + stations[0].offsetHeight * 0.65},
+        {x: w * 0.76, y: offsets[0] - top + stations[0].offsetHeight * 0.94},
+        {x: w * 0.72, y: offsets[1] - top + stations[1].offsetHeight * 0.40},
+        {x: w * 0.26, y: offsets[1] - top + stations[1].offsetHeight * 0.88},
+        {x: w * 0.20, y: offsets[2] - top + stations[2].offsetHeight * 0.35},
+        {x: w * 0.80, y: offsets[2] - top + stations[2].offsetHeight * 0.82},
+        {x: w * 0.22, y: offsets[3] - top + stations[3].offsetHeight * 0.50},
+        {x: w * 0.78, y: offsets[4] - top + stations[4].offsetHeight * 0.45},
+        {x: w * 0.30, y: offsets[4] - top + stations[4].offsetHeight * 0.88},
+        {x: w * 0.64, y: offsets[5] - top + stations[5].offsetHeight * 0.50},
+        {x: w * 0.22, y: offsets[6] - top + stations[6].offsetHeight * 0.45},
+        {x: w * 0.42, y: offsets[7] - top + stations[7].offsetHeight * 0.25},
         endPt
       ];
 
-      // Ultra-smooth S-curve without sharp corners or tight hairpins:
+      // Ultra-smooth flowing Bézier curve with vertical tangents:
       const d = points.map((p, i) => {
         if (!i) return `M${p.x} ${p.y}`;
         const a = points[i - 1];
@@ -73,7 +75,15 @@ export default function JourneyControl(){
    }
    const state=journeyAt(y,v,height,offsets,heroDistance,processTop,processHeight);
    landing.style.setProperty('--hero-y','0px');landing.style.setProperty('--hero-scale','1');
-   landing.style.setProperty('--process-progress',String(motion?state.process:1));
+   const pProgress = motion ? state.process : 1;
+   landing.style.setProperty('--process-progress', String(pProgress));
+   const processItems = process.querySelectorAll<HTMLElement>('.process-list li');
+   processItems.forEach((item, idx) => {
+     const threshold = idx / Math.max(1, processItems.length - 1);
+     const isActive = pProgress >= threshold - 0.05;
+     item.classList.toggle('step-active', isActive);
+     item.classList.toggle('step-current', Math.abs(pProgress - threshold) < 0.12);
+   });
    landing.style.setProperty('--scene-tint',(mobile?0:Math.sin(state.page*Math.PI*4)**2*100).toFixed(2)+'%');
    const showcaseTop=offsets[1],showcaseBottom=offsets[2]||(offsets[1]+showcase.offsetHeight);
    const enterDark=ease((y+v*.45-showcaseTop)/(v*.45));
@@ -120,5 +130,5 @@ export default function JourneyControl(){
   window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',measure);window.addEventListener('hd:measure',measure);window.addEventListener('hd:motion',onMotion);landing.addEventListener('pointermove',move);landing.addEventListener('pointerleave',reset);
   return()=>{cancelAnimationFrame(tick);resize.disconnect();reset();window.removeEventListener('scroll',schedule);window.removeEventListener('resize',measure);window.removeEventListener('hd:measure',measure);window.removeEventListener('hd:motion',onMotion);landing.removeEventListener('pointermove',move);landing.removeEventListener('pointerleave',reset);};
  },[]);
- return <div ref={rail} aria-hidden="true" className="journey-decoration"><svg className="journey-trail" preserveAspectRatio="none"><path className="trail-base"/><path className="trail-ink" pathLength="1"/>{Array.from({length:8},(_,i)=><circle key={i} r="3.5"/>)}</svg><aside className="journey-rail"><svg viewBox="0 0 8 200" preserveAspectRatio="none"><path d="M4 4V196" className="rail-base"/><path pathLength="1" d="M4 4V196" className="rail-ink"/>{Array.from({length:8},(_,i)=><circle key={i} cx="4" cy={4+i*24} r="2.45"/>)}</svg><span className="rail-label">Overview</span></aside><div className="mobile-checkpoints">{Array.from({length:8},(_,i)=><i className="mobile-checkpoint" key={i}/>)}</div></div>;
+ return <div ref={rail} aria-hidden="true" className="journey-decoration"><svg className="journey-trail" preserveAspectRatio="none"><path className="trail-base"/><path className="trail-ink" pathLength="1"/>{Array.from({length:14},(_,i)=><circle key={i} r="3.5"/>)}</svg><aside className="journey-rail"><svg viewBox="0 0 8 200" preserveAspectRatio="none"><path d="M4 4V196" className="rail-base"/><path pathLength="1" d="M4 4V196" className="rail-ink"/>{Array.from({length:8},(_,i)=><circle key={i} cx="4" cy={4+i*24} r="2.45"/>)}</svg><span className="rail-label">Overview</span></aside><div className="mobile-checkpoints">{Array.from({length:8},(_,i)=><i className="mobile-checkpoint" key={i}/>)}</div></div>;
 }
