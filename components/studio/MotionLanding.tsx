@@ -7,6 +7,8 @@ import DottedPoster from './DottedPoster';
 import ResponsiveStage,{MobileCrystal,MobileDotted} from './ResponsiveStage';
 import SceneSurface from './SceneSurface';
 import {Gallery,BriefDialog} from './StudioControls';
+import TypingSecure from './TypingSecure';
+import CodingBackground from './CodingBackground';
 import {ArrowUpRight,ArrowDown,AppWindow,Braces,ShieldCheck,Workflow} from 'lucide-react';
 
 const serviceIcons=[AppWindow,Braces,ShieldCheck,Workflow];
@@ -18,26 +20,29 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
     <div className="hero-sheet"><div className="wrap hero-grid">
      <div className="hero-copy">
       <p className="kicker"><span className="key-line"/>Software &amp; web security studio</p>
-      <h1>Build it.<br/>Break it.<br/><span className="kinetic-secure">Secure it<span className="stop">.</span></span></h1>
+      <h1>Build it.<br/>Break it.<br/><TypingSecure /></h1>
       <p className="hero-description">{intro}</p>
-      <div className="actions"><a className="cta" href="#brief">Start a project <ArrowUpRight size={18}/></a><a className="text-link" href="#work">See our work <ArrowDown size={15}/></a></div>
+      <div className="actions"><a className="cta" href="#brief">Start a project <ArrowUpRight size={18}/></a><a className="text-link" href="#showcase">Explore agent <ArrowDown size={15}/></a></div>
      </div>
      <figure className="hero-object">
       <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
-      <div className="specimen-visual" id="hero-model-anchor"><div className="desktop-hero-poster"><SceneSurface model="eva"/></div><div className="mobile-hero-poster"><MobileCrystal/></div></div>
-      <figcaption><span>FIG. 01</span><strong><span className="desktop-model-label">Fixer Robot</span><span className="mobile-model-label">Fixer Robot</span></strong></figcaption>
+      <div className="specimen-visual" id="hero-model-anchor">
+       <div className="hero-blueprint-lines" aria-hidden="true"/>
+      </div>
+      <figcaption><span>SYSTEM / 01</span><strong><span>Studio Engine</span></strong></figcaption>
      </figure>
-    </div><div className="wrap hero-baseline"><a href="#services"><ArrowDown size={15}/> Explore the studio</a><a href="#showcase">Object study <span className="desktop-model-label">01</span></a></div></div>
+    </div><div className="wrap hero-baseline"><a href="#showcase"><ArrowDown size={15}/> Explore the studio</a><a href="#showcase">Object study <span className="desktop-model-label">01</span></a></div></div>
+   </section>
+   <section className="showcase dark-band" id="showcase" data-station="Agent">
+    <CodingBackground />
+    <div className="wrap band">{section('02','Eva Autonomous Agent')}<h2>Autonomous agent.</h2><Gallery/></div>
    </section>
    <section className="band wrap" id="services" data-station="Services">
-     <div className="systems-story">{section('02','Architecture & systems')}<h2>Speed,<br/>structured with<br/><em>clarity.</em></h2><p>Custom web platforms, APIs and business tools, designed around the way your team works.</p><a className="text-link" href="/services">Explore services <ArrowUpRight size={16}/></a></div>
+     <div className="systems-story">{section('03','Architecture & systems')}<h2>Speed,<br/>structured with<br/><em>clarity.</em></h2><p>Custom web platforms, APIs and business tools, designed around the way your team works.</p><a className="text-link" href="/services">Explore services <ArrowUpRight size={16}/></a></div>
      <div className="service-cards">{capabilities.map(([id,name],i)=>{const Icon=serviceIcons[i];return <a className="service-card" key={id} href={'/services#'+id}><Icon size={26} strokeWidth={1.4}/><h3>{name}</h3><ArrowUpRight size={17}/></a>;})}</div>
    </section>
-   <section className="showcase dark-band" id="showcase" data-station="Models">
-    <div className="wrap band"><span className="scene-wordmark" aria-hidden="true">DECODED MATTER</span>{section('03','Model collection')}<h2>Object studies.</h2><Gallery/></div>
-   </section>
    <section className="wrap band security-section story-security" id="security" data-station="Security">
-    <div className="security-stage"><div className="security-fallback" aria-hidden="true"><DottedPoster/></div><span className="scene-wordmark" aria-hidden="true">SECURE SYSTEMS — SECURE SYSTEMS</span><div className="security-narrative">{section('04','Platform resilience')}<h2>Build it. Break it.<br/><span>Secure it.</span></h2><p>Clear boundaries. Practical security testing. Verified fixes.</p><a className="text-link" href="/services#security">Our security approach <ArrowUpRight size={16}/></a></div><div className="mobile-dotted-stage"><MobileDotted/></div></div>
+    <div className="security-stage"><div className="security-fallback" aria-hidden="true"><DottedPoster/></div><div className="security-narrative">{section('04','Platform resilience')}<h2>Build it. Break it.<br/><span>Secure it.</span></h2><p>Clear boundaries. Practical security testing. Verified fixes.</p><a className="text-link" href="/services#security">Our security approach <ArrowUpRight size={16}/></a></div><div className="mobile-dotted-stage"><MobileDotted/></div></div>
    </section>
    <section className="tint-band" id="work" data-station="Work"><div className="wrap band">
     <div className="craft-story">{section('05','Craft & integrity')}<h2>Rock-solid systems.<br/><em>Fluid experience.</em></h2><p>From database design to the final interaction, reliable foundations and thoughtful details belong together.</p></div><div className="section-head"><h2>Studio concepts.</h2><a className="text-link" href="/portfolio">Project index <ArrowUpRight size={16}/></a></div>

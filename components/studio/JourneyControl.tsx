@@ -23,8 +23,10 @@ export default function JourneyControl(){
     hero=measureBox(heroAnchor,y);
     if(!mobile){
      const top=landing.getBoundingClientRect().top+y,trailHeight=landing.offsetHeight;trail.setAttribute('viewBox',`0 0 ${w} ${trailHeight}`);
-     const across=[.88,.28,.70,.5,.32,.68,.28,.72,.68];
-     const points=offsets.map((at,i)=>({x:w*across[i],y:Math.max(18,at-top+Math.min(stations[i].offsetHeight*.48,v*.65))}));points[0].y=20;
+     const across=[.68,.28,.70,.5,.32,.68,.28,.72,.68];
+     const points=offsets.map((at,i)=>({x:w*across[i],y:Math.max(18,at-top+Math.min(stations[i].offsetHeight*.48,v*.65))}));
+     // Trail line starts below the hero section so the hero start is completely clean
+     points[0].y=Math.max(stations[0].offsetHeight - 40, v * 0.85);
      points.push({x:w*.5,y:trailHeight});
      const d=points.map((p,i)=>{if(!i)return `M${p.x} ${p.y}`;const a=points[i-1],mid=(a.y+p.y)/2;return `C${a.x} ${mid},${p.x} ${mid},${p.x} ${p.y}`;}).join(' ');
      paths.forEach(p=>p.setAttribute('d',d));nodes.forEach((node,i)=>{if(points[i]){node.setAttribute('cx',String(points[i].x));node.setAttribute('cy',String(points[i].y));}});
@@ -48,7 +50,9 @@ export default function JourneyControl(){
    headings.forEach((el,i)=>{const on=headingTops[i]<y+v*.94;el.classList.toggle('await-reveal',!on&&motion);if(on)el.classList.add('revealed');});
    const base=(at:number,x:number,cy:number,size:number,phase:number,yaw:number,pitch:number,alpha:number):Pose=>({at,x,y:cy,size,phase,yaw,pitch,distance:3.8-Math.sin(phase*Math.PI/2)*.65,alpha});
    const hsize=Math.min(hero.width*.36,hero.height*.4);
-   const stops=[base(0,hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,1),
+   const stops=[
+    base(0,hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0), // 0 alpha at start to remove # from hero
+    base(offsets[1]*.6,hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0),
     base(offsets[1],w*.26,v*.46,Math.min(w*.22,v*.32),1,.8,.5,1),
     base(offsets[2]-v*.25,w*.7,v*.5,160,1,1.3,-.25,0),
     {...base(offsets[3],w*.72,v*.52,v*.48,3,0,0,1),distance:3.4},

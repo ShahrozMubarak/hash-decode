@@ -4,7 +4,7 @@ import SceneSurface from './SceneSurface';
 import ContactForm from './ContactForm';
 
 const models=[
- {id:'eva',name:'Fixer Robot',note:'Autonomous studio fixer robot. Fully articulated 3D study with 360 camera path, floating physics and electric blue lighting.'}
+ {id:'eva',name:'Eva Autonomous Agent',note:'Autonomous studio agent featuring animated Grok-bot visor eyes, organic floating physics, and 360-degree interactive camera orbit.'}
 ] as const;
 export function Gallery(){
  const [mobile,setMobile]=useState<boolean|null>(null);
@@ -22,10 +22,10 @@ export function Gallery(){
  },[]);
  const choose=(index:number)=>{manual.current=scrollY;setSelected(index);};
  const model=models[0];
- return <><div className="mobile-gallery"><div className="mobile-halo-object"><SceneSurface model="eva" autoMobile/></div><h3>Fixer Robot</h3><p>Autonomous studio robot with dynamic lighting, full 360 motion and floating physics.</p></div><div className="gallery desktop-gallery"><div className="gallery-list" role="tablist" aria-label="Studio models">{models.map((m,i)=>
+ return <><div className="mobile-gallery"><div className="mobile-halo-object"><SceneSurface model="eva" autoMobile/></div><h3>Eva Autonomous Agent</h3><p>Autonomous studio agent with animated Grok-bot visor eyes, dynamic blue lighting, and floating physics.</p></div><div className="gallery desktop-gallery"><div className="gallery-list" role="tablist" aria-label="Studio models">{models.map((m,i)=>
   <button key={m.id} ref={el=>{tabs.current[i]=el;}} id={'tab-'+m.id} type="button" role="tab" aria-selected={i===selected} aria-controls="model-panel" tabIndex={0} onClick={()=>choose(i)}><small>01</small>{m.name}<span aria-hidden="true">↗</span></button>)}</div>
   <div role="tabpanel" id="model-panel" tabIndex={0} aria-labelledby={'tab-'+model.id} className="gallery-panel">
-   <div className="gallery-object"><span className="model-annotation annotation-left" aria-hidden="true">FORM / 01</span><span className="model-annotation annotation-right" aria-hidden="true">AZURE · BLUE</span>{mobile===false&&<SceneSurface key={model.id} model={model.id}/>}</div><p>{model.note}</p>
+   <div className="gallery-object"><span className="model-annotation annotation-left" aria-hidden="true">EVA / 01</span><span className="model-annotation annotation-right" aria-hidden="true">GROK EYES · 360°</span>{mobile===false&&<SceneSurface key={model.id} model={model.id}/>}</div><p>{model.note}</p>
   </div></div></>;
 }
 export function BriefDialog(){

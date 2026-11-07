@@ -12,17 +12,18 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  renderer.setPixelRatio(dpr);
  renderer.setClearColor(navy,0);
  const scene=new THREE.Scene(),object=new THREE.Group();
- const camera=new THREE.PerspectiveCamera(32,1,.1,50);
- camera.position.set(0,model==='eva'?0.2:0,model==='cube'?7.2:5.4);
+ const camera=new THREE.PerspectiveCamera(30,1,.1,50);
+ camera.position.set(0,model==='eva'?0.15:0,model==='cube'?7.2:4.2);
  const surface=new THREE.MeshPhysicalMaterial({color:azure,metalness:.22,roughness:.21,clearcoat:1,transparent:model!=='halo'&&model!=='eva',opacity:model==='cube'?.57:.81,depthWrite:model==='halo'||model==='eva',envMapIntensity:1.3});
  const core=new THREE.MeshStandardMaterial({color:coral,emissive:coral,emissiveIntensity:.38,roughness:.26});
  const metal=new THREE.MeshStandardMaterial({color:snow.clone().lerp(azure,.42),metalness:.83,roughness:.27});
  scene.add(object,new THREE.HemisphereLight(snow,azure,1.45));
  const key=new THREE.DirectionalLight(snow,2.4);key.position.set(-3,4,4);scene.add(key);
  if(model==='eva'||model!=='cube'){
-  const blueRim=new THREE.DirectionalLight(new THREE.Color('#1e60ff'),3.8);blueRim.position.set(3,-1,-4);
-  const blueFill=new THREE.PointLight(new THREE.Color('#0055ff'),3.2,12);blueFill.position.set(0,0,-2);
-  scene.add(blueRim,blueFill);
+  const blueRim=new THREE.DirectionalLight(new THREE.Color('#1e75ff'),4.5);blueRim.position.set(3,-1,-4);
+  const blueFill=new THREE.PointLight(new THREE.Color('#0066ff'),3.6,14);blueFill.position.set(0,0,-2.5);
+  const cyanEyeLight=new THREE.PointLight(new THREE.Color('#00f0ff'),1.8,4);cyanEyeLight.position.set(0,0.4,-0.8);
+  scene.add(blueRim,blueFill,cyanEyeLight);
  }
  const pixels=new Uint8Array(128*64*4);
  const pixel=new THREE.Color();
@@ -36,6 +37,15 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  let frame=0,last=0,elapsed=0,pulse=-5,progress=0,targetProgress=0,visible=false,disposed=false,loaded=false,suspended=false;
  let instances:THREE.InstancedMesh|undefined;
  let mixer:THREE.AnimationMixer|undefined;
+ 
+ // Grok-bot Eye Tracking & Animation State
+ let eyeLeft:THREE.Object3D|undefined;
+ let eyeRight:THREE.Object3D|undefined;
+ let baseLeftEyeX=-0.27,baseRightEyeX=0.27,baseEyeZ=3.08;
+ let blinkTimer=0,nextBlink=3.2,blinkProgress=0;
+ let lookTimer=0,nextLook=2.0;
+ const currentLook={x:0,z:0},targetLook={x:0,z:0};
+
  const transforms=new THREE.Object3D(),cells=cubeCells.filter(([x,y,z])=>x||y||z);
  const cleanGeometry=()=>{const geometries=new Set<THREE.BufferGeometry>();object.traverse(node=>{if(node instanceof THREE.Mesh)geometries.add(node.geometry);});geometries.forEach(g=>g.dispose());};
  const stop=()=>{cancelAnimationFrame(frame);frame=0;last=0;};
@@ -44,6 +54,43 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   if(!last||now-last>=1000/fps){
    const delta=last?Math.min((now-last)/1000,.1):0;elapsed+=delta;last=now;mixer?.update(delta);
    progress+=(targetProgress-progress)*.14;
+
+   // Grok-bot Eye Animations (Blinking & Organic Saccades)
+   if(eyeLeft&&eyeRight){
+    blinkTimer+=delta;
+    if(blinkTimer>nextBlink){
+     blinkProgress+=delta*15;
+     if(blinkProgress>=Math.PI){
+      blinkTimer=0;blinkProgress=0;nextBlink=2.6+Math.random()*3.0;
+     }
+    }
+    const blinkScaleY=blinkProgress>0?Math.max(0.04,Math.abs(Math.cos(blinkProgress))):1.0;
+
+    lookTimer+=delta;
+    if(lookTimer>nextLook){
+     lookTimer=0;nextLook=1.8+Math.random()*2.5;
+     const targets=[
+      {x:0,z:0},
+      {x:-0.045,z:0.02},
+      {x:0.045,z:0.02},
+      {x:0,z:0.035},
+      {x:-0.03,z:-0.02},
+      {x:0.03,z:-0.02}
+     ];
+     const chosen=targets[Math.floor(Math.random()*targets.length)];
+     targetLook.x=chosen.x;targetLook.z=chosen.z;
+    }
+    currentLook.x+=(targetLook.x-currentLook.x)*0.14;
+    currentLook.z+=(targetLook.z-currentLook.z)*0.14;
+
+    eyeLeft.scale.y=blinkScaleY;
+    eyeRight.scale.y=blinkScaleY;
+    eyeLeft.position.x=baseLeftEyeX+currentLook.x;
+    eyeRight.position.x=baseRightEyeX+currentLook.x;
+    eyeLeft.position.z=baseEyeZ+currentLook.z;
+    eyeRight.position.z=baseEyeZ+currentLook.z;
+   }
+
    if(model==='eva'||model!=='cube'){
     const floatY=Math.sin(elapsed*1.5)*.12;
     const floatX=Math.cos(elapsed*1.0)*.05;
@@ -53,11 +100,11 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     object.rotation.x=Math.cos(elapsed*0.9)*.025;
     object.rotation.y=-.15+elapsed*(lite?.1:.16);
     const orbitAngle=progress*Math.PI*2;
-    const dist=5.2;
+    const dist=4.2; // closer to fill screen with prominent presence
     camera.position.x=Math.sin(orbitAngle)*dist;
     camera.position.z=Math.cos(orbitAngle)*dist;
-    camera.position.y=0.2+Math.sin(progress*Math.PI)*0.5;
-    camera.lookAt(0,floatY*.4,0);
+    camera.position.y=0.2+Math.sin(progress*Math.PI)*0.4;
+    camera.lookAt(0,floatY*.3,0);
    }else{
     object.rotation.y=-.55+elapsed*(lite?.12:.18)+progress*1.1;
     const angle=(progress-.5)*.32;
@@ -110,10 +157,10 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   }else{
    const deadline=AbortSignal.any([signal,AbortSignal.timeout(12000)]);
    const [reply,{GLTFLoader}]=await Promise.all([
-    fetch('/models/fixer_robot.glb',{signal:deadline}).then(r=>r.ok?r:fetch('/models/eva.glb',{signal:deadline})),
+    fetch('/models/eva_robot.glb',{signal:deadline}).then(r=>r.ok?r:fetch('/models/fixer_robot.glb',{signal:deadline})),
     import('three/examples/jsm/loaders/GLTFLoader.js')
    ]);
-   if(!reply.ok)throw Error('Fixer robot unavailable');
+   if(!reply.ok)throw Error('Eva robot unavailable');
    const gltf=await new GLTFLoader().parseAsync(await reply.arrayBuffer(),'');
    const robot=gltf.scene;
    if(gltf.animations&&gltf.animations.length>0){
@@ -121,14 +168,50 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     const action=mixer.clipAction(gltf.animations[0]);
     action.play();
    }
+
+   // Identify Grok-bot Eye nodes
+   eyeLeft=robot.getObjectByName('Eye_Left')||undefined;
+   eyeRight=robot.getObjectByName('Eye_Right')||undefined;
+   if(eyeLeft){baseLeftEyeX=eyeLeft.position.x;baseEyeZ=eyeLeft.position.z;}
+   if(eyeRight){baseRightEyeX=eyeRight.position.x;}
+
+   const grokEyeMat=new THREE.MeshStandardMaterial({
+    color:new THREE.Color('#00f0ff'),
+    emissive:new THREE.Color('#00f0ff'),
+    emissiveIntensity:4.5,
+    roughness:0.1,
+    metalness:0.1
+   });
+
    robot.traverse(child=>{
     if(child instanceof THREE.Mesh){
+     if(child.name==='Eye_Left'||child.name==='Eye_Right'){
+      child.material=grokEyeMat;
+      return;
+     }
      const mats=Array.isArray(child.material)?child.material:[child.material];
      mats.forEach(m=>{
       if(!m)return;
-      if(m.name==='Putih'||m.name==='Fixer_A'){m.roughness=.25;m.metalness=.35;}
-      else if(m.name==='Material.002'||m.name==='Fixer_Glass'){m.emissive=new THREE.Color('#0088ff');m.emissiveIntensity=2.4;}
-      else if(m.name==='Fixer_B'){m.roughness=.2;m.metalness=.7;}
+      if(m.name==='GrokEye'){
+       child.material=grokEyeMat;
+      }else if(m.name==='Putih'){
+       m.color=new THREE.Color('#edf2fa');
+       m.roughness=0.18;
+       m.metalness=0.15;
+      }else if(m.name==='Material.006'){
+       // Visor screen - deep glossy black
+       m.color=new THREE.Color('#040711');
+       m.roughness=0.08;
+       m.metalness=0.2;
+      }else if(m.name==='Material.001'){
+       // Visor glass cover
+       m.color=new THREE.Color('#041028');
+       m.roughness=0.06;
+       m.metalness=0.1;
+       m.transparent=true;
+       m.opacity=0.52;
+       m.depthWrite=false;
+      }
      });
     }
    });
@@ -136,7 +219,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    object.add(robot);
    if(deadline.aborted)throw Error('Model timed out');
    const bounds=new THREE.Box3().setFromObject(robot),size=bounds.getSize(new THREE.Vector3()),centre=bounds.getCenter(new THREE.Vector3());
-   const scale=2.9/Math.max(size.x,size.y,size.z);
+   const scale=3.6/Math.max(size.x,size.y,size.z); // scaled up to fill screen
    robot.scale.multiplyScalar(scale);
    robot.position.sub(centre.multiplyScalar(scale));
   }
