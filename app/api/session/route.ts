@@ -13,7 +13,7 @@ export async function POST(req:Request){
     }
     if(body.action!=='login')return reply(400,'Invalid request.');
     if(!await quota(req,'owner-login',8,15*60*1000))return reply(429,'Please try again in 15 minutes.');
-    if(!await verifyPassword(body.password))return reply(401,'Sign-in failed.');
+    if(!await verifyPassword(body.password, body.email))return reply(401,'Sign-in failed.');
     return reply(200,undefined,await issueSession());
   }catch{return reply(503,'Sign-in is temporarily unavailable.');}
 }
