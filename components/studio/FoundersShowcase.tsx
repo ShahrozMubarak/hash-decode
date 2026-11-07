@@ -1,36 +1,59 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import type { Founder } from '@/lib/studio-data';
-import { ArrowUpRight, Check, Code, Shield, Sparkles, Terminal } from 'lucide-react';
+import { ArrowUpRight, Check } from 'lucide-react';
 
 interface Props {
   founders: Founder[];
 }
 
-function TypewriterText({ text, start, speed = 18 }: { text: string; start: boolean; speed?: number }) {
-  const [displayed, setDisplayed] = useState('');
-  const [done, setDone] = useState(false);
+function BotFaceCursor() {
+  return (
+    <span className="ai-bot-avatar-cursor" aria-hidden="true" title="Eva streaming">
+      <svg viewBox="0 0 24 24" width="20" height="20" className="mini-bot-face">
+        {/* White glossy rounded head */}
+        <rect x="2" y="3" width="20" height="18" rx="7" fill="#ffffff" stroke="#0A2540" strokeWidth="1.6" />
+        {/* Dark Visor */}
+        <rect x="5" y="7" width="14" height="8" rx="4" fill="#040914" />
+        {/* Cyan Glowing Eyes */}
+        <circle cx="8.5" cy="11" r="1.6" fill="#00f0ff" className="bot-eye-pulse" />
+        <circle cx="15.5" cy="11" r="1.6" fill="#00f0ff" className="bot-eye-pulse" />
+      </svg>
+    </span>
+  );
+}
+
+function ChatGPTWordStream({
+  text,
+  start,
+  speed = 42,
+}: {
+  text: string;
+  start: boolean;
+  speed?: number;
+}) {
+  const [wordIndex, setWordIndex] = useState(0);
+  const words = text ? text.split(' ') : [];
 
   useEffect(() => {
     if (!start) return;
-    let idx = 0;
-    setDisplayed('');
-    setDone(false);
+    setWordIndex(0);
     const interval = setInterval(() => {
-      idx++;
-      setDisplayed(text.slice(0, idx));
-      if (idx >= text.length) {
+      setWordIndex((prev) => {
+        if (prev < words.length) return prev + 1;
         clearInterval(interval);
-        setDone(true);
-      }
+        return prev;
+      });
     }, speed);
     return () => clearInterval(interval);
   }, [text, start, speed]);
 
+  const isDone = wordIndex >= words.length;
+
   return (
-    <span>
-      {displayed}
-      {start && !done && <span className="typing-cursor" aria-hidden="true">|</span>}
+    <span className="word-stream-span">
+      {words.slice(0, wordIndex).join(' ')}
+      {start && !isDone && <BotFaceCursor />}
     </span>
   );
 }
@@ -56,7 +79,7 @@ function FounderCard({
           setInView(true);
           const timer = setTimeout(() => {
             setInfoReady(true);
-          }, 950);
+          }, 850);
           observer.unobserve(el);
           return () => clearTimeout(timer);
         }
@@ -90,7 +113,7 @@ function FounderCard({
       className={`founder-row ${isEven ? 'founder-row-reverse' : ''} ${inView ? 'in-view ' + animVariantClass : ''}`}
       id={`founder-${founder.id}`}
     >
-      {/* Photo Frame with White Background Blend */}
+      {/* Photo Frame with Clean White Background Blend */}
       <div className="founder-media-wrap">
         <div className="founder-white-backdrop">
           <div className="founder-glow-halo" />
@@ -99,8 +122,8 @@ function FounderCard({
             alt={founder.name}
             className="founder-photo-blend"
             loading="lazy"
-            width={480}
-            height={480}
+            width={440}
+            height={440}
           />
           <div className="founder-badge-pill">
             <span className="founder-dot" />
@@ -109,11 +132,11 @@ function FounderCard({
         </div>
       </div>
 
-      {/* Info Container - Slides in after 1s delay with Typewriter Effect */}
+      {/* Info Container on SIDE of Photo (Word-by-word ChatGPT Streaming) */}
       <div className={`founder-info-wrap ${infoReady ? 'info-active' : ''}`}>
         <div className="founder-role-strip">
           <span className="founder-role-tag">
-            <TypewriterText text={founder.role} start={infoReady} speed={16} />
+            <ChatGPTWordStream text={founder.role} start={infoReady} speed={35} />
           </span>
         </div>
 
@@ -131,7 +154,7 @@ function FounderCard({
 
         <div className="founder-bio">
           <p>
-            <TypewriterText text={founder.bio} start={infoReady} speed={12} />
+            <ChatGPTWordStream text={founder.bio} start={infoReady} speed={28} />
           </p>
         </div>
 
@@ -172,11 +195,10 @@ export default function FoundersShowcase({ founders }: Props) {
       <div className="founders-header-block">
         <span className="eyebrow"><i /> Independent Studio Leadership</span>
         <h2 className="founders-section-heading">
-          <span className="text-azure" style={{ color: 'var(--azure)' }}>The Minds</span> Behind{' '}
-          <span className="text-coral" style={{ color: 'var(--coral)' }}>Hash Decode</span>
+          The Minds Behind <span className="text-coral" style={{ color: 'var(--coral)' }}>Hash Decode</span>
         </h2>
         <p className="founders-lead-subtext">
-          Four founders with deep backgrounds in high-availability systems, product design, penetration testing, and edge infrastructure. We build software engineered for resilience from day one.
+          Four founders with deep backgrounds in distributed systems, product design, penetration testing, and edge infrastructure. We build software engineered for resilience from day one.
         </p>
       </div>
 

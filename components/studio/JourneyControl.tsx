@@ -34,52 +34,51 @@ export default function JourneyControl(){
       let endPt={x:w*.35,y:trailHeight-120};
       if(endBtn){const er=endBtn.getBoundingClientRect();endPt={x:er.left+er.width*.5,y:er.top+y-top};}
 
-      // Symmetric harmonic zigzag pattern flowing down open gutters with 20% lighter stroke
-      // Begins immediately from 'Start a project' button and concludes on 'Send project brief'
-      const totalPoints = 16;
-      const points: {x: number; y: number}[] = [];
+      // Continuous, thick, unpredictable path looping through sections and circling 3D objects
       const totalDy = endPt.y - startPt.y;
+      const hY = hero.y ? hero.y - top : v * 0.45;
+      const hH = hero.height || v * 0.5;
 
-      for (let i = 0; i < totalPoints; i++) {
-        const t = i / (totalPoints - 1);
-        const y = startPt.y + totalDy * t;
-        let x: number;
-        if (i === 0) {
-          x = startPt.x;
-        } else if (i === totalPoints - 1) {
-          x = endPt.x;
-        } else {
-          // Alternating left/right harmonic wave with gentle ease in and out
-          const side = (i % 2 === 1) ? -1 : 1;
-          const amp = Math.min(w * 0.30, 420);
-          const center = w * 0.48;
-          const rawX = center + side * amp;
-          if (i === 1) {
-            x = Math.max(w * 0.12, Math.min(startPt.x - 60, rawX));
-          } else if (i === totalPoints - 2) {
-            x = Math.max(w * 0.20, Math.min(w * 0.80, endPt.x + (side * 80)));
-          } else {
-            x = Math.max(w * 0.14, Math.min(w * 0.82, rawX));
-          }
-        }
-        points.push({ x, y });
-      }
+      const rawPoints: {x: number; y: number}[] = [
+        { x: startPt.x, y: startPt.y },
+        // Swing towards the Hero 3D specimen and circle around it
+        { x: Math.min(w * 0.68, w - 160), y: startPt.y + (hY - startPt.y) * 0.5 },
+        { x: Math.min(w * 0.86, w - 80),  y: hY + hH * 0.35 },
+        { x: Math.min(w * 0.91, w - 50),  y: hY + hH * 0.75 },
+        { x: Math.min(w * 0.70, w - 140), y: hY + hH * 1.15 },
+        // Deep irregular swing left across to Section 02
+        { x: Math.max(w * 0.12, 60),      y: startPt.y + totalDy * 0.22 },
+        { x: Math.max(w * 0.38, 180),     y: startPt.y + totalDy * 0.30 },
+        // Broad sweeping arc right around Services
+        { x: Math.min(w * 0.85, w - 90),  y: startPt.y + totalDy * 0.38 },
+        // Organic reverse cut into left gutter
+        { x: Math.max(w * 0.16, 80),      y: startPt.y + totalDy * 0.49 },
+        // Curving through Security narrative
+        { x: Math.min(w * 0.78, w - 110), y: startPt.y + totalDy * 0.60 },
+        { x: Math.max(w * 0.22, 90),      y: startPt.y + totalDy * 0.71 },
+        // Weaving down through Process and Work
+        { x: Math.min(w * 0.82, w - 90),  y: startPt.y + totalDy * 0.82 },
+        { x: Math.max(w * 0.26, 110),     y: startPt.y + totalDy * 0.91 },
+        { x: Math.min(w * 0.65, w - 140), y: endPt.y - 140 },
+        // Conclude directly on Send project brief button
+        { x: endPt.x, y: endPt.y }
+      ];
 
-      // Ultra-smooth flowing Bézier curve with vertical tangents:
-      const d = points.map((p, i) => {
+      // Smooth organic cubic Bézier curve with natural tangents
+      const d = rawPoints.map((p, i) => {
         if (!i) return `M${p.x} ${p.y}`;
-        const a = points[i - 1];
+        const a = rawPoints[i - 1];
         const dy = p.y - a.y;
-        const cy1 = a.y + dy * 0.5;
-        const cy2 = p.y - dy * 0.5;
+        const cy1 = a.y + dy * 0.45;
+        const cy2 = p.y - dy * 0.45;
         return `C${a.x} ${cy1},${p.x} ${cy2},${p.x} ${p.y}`;
       }).join(' ');
 
       paths.forEach(p => p.setAttribute('d', d));
       nodes.forEach((node, i) => {
-        if (points[i]) {
-          node.setAttribute('cx', String(points[i].x));
-          node.setAttribute('cy', String(points[i].y));
+        if (rawPoints[i]) {
+          node.setAttribute('cx', String(rawPoints[i].x));
+          node.setAttribute('cy', String(rawPoints[i].y));
         }
       });
     }
@@ -106,7 +105,8 @@ export default function JourneyControl(){
    track.querySelectorAll('.mobile-checkpoint').forEach((dot,i)=>{dot.classList.toggle('active',i<=state.current);dot.classList.toggle('current',i===state.current);});
    const gallery=clampUnit((y-offsets[1])/Math.max(1,showcase.offsetHeight-v*.9));
    landing.style.setProperty('--collection-depth',(mobile?0:gallery*100)+'%');
-   track.style.setProperty('--progress',String(state.page));
+   const fastProgress = Math.min(1, Math.pow(state.page, 0.72) * 1.45);
+   track.style.setProperty('--progress', fastProgress.toFixed(4));
    label.textContent=stations[state.current].dataset.station+' · '+Math.round(state.page*100)+'%';
    dots.forEach((dot,i)=>{const p=clampUnit((offsets[i]-v*.38)/Math.max(1,height-v));dot.setAttribute('cy',String(4+192*p));dot.classList.toggle('active',i<=state.current);});
    nodes.forEach((node,i)=>node.classList.toggle('active',i<=state.current));

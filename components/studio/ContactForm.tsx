@@ -14,14 +14,22 @@ export default function ContactForm({initial='',initialBrief=''}:{initial?:strin
   const signature=JSON.stringify([data.name,data.email,data.topic,data.budget,data.brief]);
   if(signature!==last.current.signature)last.current={signature,id:typeof crypto.randomUUID==='function'?crypto.randomUUID():''};
   lock.current=true;setBusy(true);setError('');
+  if (typeof window !== 'undefined') window.dispatchEvent(new Event('hd:form-submitting'));
   try{
    const r=await fetch('/api/inquiries',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...data,...(last.current.id?{submissionId:last.current.id}:{})}),signal:AbortSignal.timeout(18000)});
    if(!r.ok){
-    setError(r.status===429?'Too many attempts. Please try again later.':r.status===422?'Please answer the new verification question and send again.':r.status===400?'Check the required fields and try again.':'Your brief could not be confirmed. Please try again.');
+    const msg = r.status===429?'Too many attempts. Please try again later.':r.status===422?'Please answer the new verification question and send again.':r.status===400?'Check the required fields and try again.':'Your brief could not be confirmed. Please try again.';
+    setError(msg);
+    if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('hd:form-error', { detail: { error: msg } }));
     setRevision(x=>x+1);return;
    }
    const result=await r.json() as {reference?:string};if(!result.reference)throw Error();setReceipt(result.reference);
-  }catch{setRevision(x=>x+1);setError('Your brief could not be confirmed. Your details are still here. Please retry.');}
+   if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('hd:form-success', { detail: { reference: result.reference } }));
+  }catch{
+   const msg = 'Your brief could not be confirmed. Your details are still here. Please retry.';
+   setRevision(x=>x+1);setError(msg);
+   if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('hd:form-error', { detail: { error: msg } }));
+  }
   finally{lock.current=false;setBusy(false);}
  }}>
  <div className="form-row"><label>Your name<input name="name" autoComplete="name" placeholder="Full name" minLength={2} maxLength={100} required/></label><label>Email address<input name="email" type="email" autoComplete="email" placeholder="you@company.com" maxLength={254} required/></label></div>

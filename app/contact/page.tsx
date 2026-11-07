@@ -108,7 +108,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
         <div className="section-head">
           <div>
             <p className="eyebrow"><i />Next Steps</p>
-            <h2><span style={{ color: 'var(--azure)' }}>What Happens</span> <span style={{ color: 'var(--coral)' }}>After You Reach Out?</span></h2>
+            <h2>What Happens <span style={{ color: 'var(--coral)' }}>After You Reach Out?</span></h2>
           </div>
         </div>
         <div className="steps-row-3">
@@ -135,7 +135,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
         <div className="section-head">
           <div>
             <p className="eyebrow"><i />Common Questions</p>
-            <h2><span style={{ color: 'var(--azure)' }}>Frequently Asked</span> <span style={{ color: 'var(--coral)' }}>Questions</span></h2>
+            <h2>Frequently Asked <span style={{ color: 'var(--coral)' }}>Questions</span></h2>
           </div>
         </div>
         <div className="contact-faq-list">

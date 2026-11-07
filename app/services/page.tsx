@@ -39,7 +39,7 @@ export default function Services() {
         <div className="section-head">
           <div>
             <p className="eyebrow"><i />Core Capabilities</p>
-            <h2><span style={{ color: 'var(--azure)' }}>What We</span> <span style={{ color: 'var(--coral)' }}>Specialize In</span></h2>
+            <h2>What We <span style={{ color: 'var(--coral)' }}>Specialize In</span></h2>
           </div>
         </div>
         <div className="service-index">

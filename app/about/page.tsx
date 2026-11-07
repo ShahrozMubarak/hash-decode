@@ -62,7 +62,7 @@ export default async function About() {
         <div className="section-head">
           <div>
             <p className="eyebrow"><i /> Core Values</p>
-            <h2><span style={{ color: 'var(--azure)' }}>How We</span> <span style={{ color: 'var(--coral)' }}>Operate</span></h2>
+            <h2>How We <span style={{ color: 'var(--coral)' }}>Operate</span></h2>
           </div>
         </div>
         <div className="principles-grid-4">
@@ -86,7 +86,7 @@ export default async function About() {
         <div className="section-head">
           <div>
             <p className="eyebrow"><i /> Tools of the Craft</p>
-            <h2><span style={{ color: 'var(--azure)' }}>Our Technology</span> <span style={{ color: 'var(--coral)' }}>Stack</span></h2>
+            <h2>Our Technology <span style={{ color: 'var(--coral)' }}>Stack</span></h2>
           </div>
           <span className="count-pill">Modern &amp; battle-tested</span>
         </div>
@@ -105,7 +105,7 @@ export default async function About() {
         <div className="section-head">
           <div>
             <p className="eyebrow"><i /> Peace of Mind</p>
-            <h2><span style={{ color: 'var(--azure)' }}>The Hash Decode</span> <span style={{ color: 'var(--coral)' }}>Guarantee</span></h2>
+            <h2>The Hash Decode <span style={{ color: 'var(--coral)' }}>Guarantee</span></h2>
           </div>
         </div>
         <div className="guarantee-grid">
@@ -144,7 +144,7 @@ export default async function About() {
       <section className="work-cta-card">
         <div className="cta-content">
           <p className="kicker"><span className="key-line" />Get in touch</p>
-          <h2><span style={{ color: 'var(--azure)' }}>Let&apos;s build something</span> <span style={{ color: 'var(--coral)' }}>remarkable.</span></h2>
+          <h2>Let&apos;s build something <span style={{ color: 'var(--coral)' }}>remarkable.</span></h2>
           <p>Whether you need an MVP in weeks or a comprehensive security audit, we are ready.</p>
         </div>
         <div className="cta-actions">

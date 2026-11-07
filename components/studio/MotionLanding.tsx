@@ -8,6 +8,8 @@ import SceneSurface from './SceneSurface';
 import {BriefDialog} from './StudioControls';
 import TypingSecure from './TypingSecure';
 import CodingBackground from './CodingBackground';
+import HackerCoder from './HackerCoder';
+import TeleportBot from './TeleportBot';
 import {ArrowUpRight,ArrowDown,AppWindow,Braces,ShieldCheck,Workflow} from 'lucide-react';
 
 const serviceIcons=[AppWindow,Braces,ShieldCheck,Workflow];
@@ -34,7 +36,7 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
     <CodingBackground />
     <div className="wrap band">
      <div className="showcase-robot-stage">
-      <SceneSurface model="fixer" autoMobile={true}/>
+      <HackerCoder />
      </div>
     </div>
    </section>
@@ -63,6 +65,6 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
     {links.whatsapp&&<a className="text-link" href={'https://wa.me/'+links.whatsapp}>WhatsApp the studio ↗</a>}
     {links.booking&&<a className="text-link" href={links.booking}>Book a conversation ↗</a>}
     <a className="text-link" href="/contact">Contact page ↗</a><BriefDialog/>
-   </div></div><ContactForm/></div></section>
+   </div><TeleportBot /></div><ContactForm/></div></section>
  </div>;
 }

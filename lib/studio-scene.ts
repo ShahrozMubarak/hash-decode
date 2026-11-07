@@ -48,8 +48,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
  const transforms=new THREE.Object3D(),cells=cubeCells.filter(([x,y,z])=>x||y||z);
  let grokEyeMat:THREE.MeshStandardMaterial|undefined;
- let isHovered=false;
- let angerFactor=0;
+ let isHovered=false,angerFactor=0,happyFactor=0,mood:'idle'|'happy'|'angry'='idle';
+ let isDragging=false,dragStartX=0,dragStartY=0,userDragRotX=0,userDragRotY=0;
  const cleanGeometry=()=>{const geometries=new Set<THREE.BufferGeometry>();object.traverse(node=>{if(node instanceof THREE.Mesh)geometries.add(node.geometry);});geometries.forEach(g=>g.dispose());};
  const stop=()=>{cancelAnimationFrame(frame);frame=0;last=0;};
  function frameLoop(now:number){
@@ -86,24 +86,46 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     currentLook.x+=(targetLook.x-currentLook.x)*0.14;
     currentLook.y+=(targetLook.y-currentLook.y)*0.14;
 
-     const targetAnger=isHovered?1:0;
-     angerFactor+=(targetAnger-angerFactor)*0.14;
+     const targetAnger=mood==='angry'?1:0;
+     const targetHappy=(mood==='happy'||(isHovered&&mood!=='angry'))?1:0;
+     angerFactor+=(targetAnger-angerFactor)*0.16;
+     happyFactor+=(targetHappy-happyFactor)*0.16;
 
      if(grokEyeMat){
-      const r=THREE.MathUtils.lerp(0.0,1.0,angerFactor);
-      const g=THREE.MathUtils.lerp(0.94,0.02,angerFactor);
-      const b=THREE.MathUtils.lerp(1.0,0.12,angerFactor);
-      grokEyeMat.color.setRGB(r,g,b);
-      grokEyeMat.emissive.setRGB(r,g,b);
-      grokEyeMat.emissiveIntensity=4.5+angerFactor*4.0;
+      if(angerFactor>0.08){
+       // Dark Crimson Red (Provoked / Angry)
+       const r=THREE.MathUtils.lerp(0.0,0.85,angerFactor);
+       const g=THREE.MathUtils.lerp(0.94,0.01,angerFactor);
+       const b=THREE.MathUtils.lerp(1.0,0.08,angerFactor);
+       grokEyeMat.color.setRGB(r,g,b);
+       grokEyeMat.emissive.setRGB(r,g,b);
+       grokEyeMat.emissiveIntensity=4.5+angerFactor*5.5;
+      }else if(happyFactor>0.08){
+       // Bright Glowing Cyan / Aqua (Happy / Cheerful)
+       const r=0.0;
+       const g=THREE.MathUtils.lerp(0.94,1.0,happyFactor);
+       const b=THREE.MathUtils.lerp(1.0,0.82,happyFactor);
+       grokEyeMat.color.setRGB(r,g,b);
+       grokEyeMat.emissive.setRGB(r,g,b);
+       grokEyeMat.emissiveIntensity=4.5+happyFactor*3.0;
+      }else{
+       grokEyeMat.color.setRGB(0,0.94,1.0);
+       grokEyeMat.emissive.setRGB(0,0.94,1.0);
+       grokEyeMat.emissiveIntensity=4.5;
+      }
      }
 
-     eyeLeft.scale.y=blinkScaleY*(1-0.45*angerFactor);
-     eyeRight.scale.y=blinkScaleY*(1-0.45*angerFactor);
-     eyeLeft.scale.x=1+0.18*angerFactor;
-     eyeRight.scale.x=1+0.18*angerFactor;
-     eyeLeft.rotation.z=-0.42*angerFactor;
-     eyeRight.rotation.z=0.42*angerFactor;
+     // Eye shape:
+     // Happy: wide & round (scale.x: 1.35, scale.y: 1.35)
+     // Angry: narrowed slant (scale.y: 0.50, rotation.z: ±0.48)
+     const eyeScaleY=blinkScaleY*(1 - 0.50*angerFactor + 0.35*happyFactor);
+     const eyeScaleX=1 + 0.22*angerFactor + 0.35*happyFactor;
+     eyeLeft.scale.y=eyeScaleY;
+     eyeRight.scale.y=eyeScaleY;
+     eyeLeft.scale.x=eyeScaleX;
+     eyeRight.scale.x=eyeScaleX;
+     eyeLeft.rotation.z=-0.48*angerFactor;
+     eyeRight.rotation.z=0.48*angerFactor;
 
      eyeLeft.position.x=baseLeftEyeX+currentLook.x;
      eyeRight.position.x=baseRightEyeX+currentLook.x;
@@ -114,13 +136,17 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     }
 
     if(model==='eva'||model!=='cube'){
-     const floatY=Math.sin(elapsed*1.5)*.06;
-     const floatX=Math.cos(elapsed*1.0)*.03;
+     const floatY=Math.sin(elapsed*1.5)*.06 + (happyFactor*0.04*Math.sin(elapsed*4));
+     const floatX=Math.cos(elapsed*1.0)*.03 + (angerFactor>0.35?Math.sin(elapsed*45)*0.015:0);
      const floatZ=Math.sin(elapsed*0.8)*.02;
      object.position.set(floatX,floatY,floatZ);
      object.rotation.z=Math.sin(elapsed*1.2)*.025;
-     object.rotation.x=Math.cos(elapsed*0.9)*.02;
-     object.rotation.y=-.15+elapsed*(lite?.08:.14);
+     object.rotation.x=Math.cos(elapsed*0.9)*.02 + userDragRotX;
+     object.rotation.y=-.15+elapsed*(lite?.08:.14) + userDragRotY;
+     if(!isDragging){
+      userDragRotX*=0.91;
+      userDragRotY*=0.91;
+     }
      const orbitAngle=progress*Math.PI*2;
      camera.position.x=Math.sin(orbitAngle)*currentDist;
      camera.position.z=Math.cos(orbitAngle)*currentDist;
@@ -154,15 +180,30 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const updateDist=(w:number,h:number)=>{if(model==='cube'){currentDist=7.2;return;}const asp=w>0&&h>0?w/h:1;const zoom=asp<1?Math.max(1,0.95/asp):1;currentDist=4.6*zoom;};
  const resize=new ResizeObserver(()=>{const {width,height}=canvas.getBoundingClientRect();if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();updateDist(width,height);}});
  const view=new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible)start();else stop();});
- const onPointerEnter=()=>{isHovered=true;pulse=elapsed;};
- const onPointerLeave=()=>{isHovered=false;};
+ const onPointerEnter=()=>{isHovered=true;pulse=elapsed;if(mood!=='angry')mood='happy';};
+ const onPointerLeave=()=>{isHovered=false;isDragging=false;if(mood!=='angry')mood='idle';};
+ const onPointerDown=(e:PointerEvent)=>{
+  isDragging=true;dragStartX=e.clientX;dragStartY=e.clientY;mood='angry';pulse=elapsed;
+  setTimeout(()=>{if(mood==='angry')mood='idle';},4500);
+ };
+ const onPointerMove=(e:PointerEvent)=>{
+  if(!isDragging)return;
+  const dx=e.clientX-dragStartX;const dy=e.clientY-dragStartY;
+  dragStartX=e.clientX;dragStartY=e.clientY;
+  userDragRotY+=dx*0.009;userDragRotX+=dy*0.009;
+ };
+ const onPointerUp=()=>{isDragging=false;};
+ const onMoodEvent=(e:Event)=>{
+  const m=(e as CustomEvent<{mood:'idle'|'happy'|'angry'}>).detail?.mood;
+  if(m)mood=m;
+ };
  const onScroll=(e:Event)=>{const detail=(e as CustomEvent<{hero:number,gallery:number,crystal:number,page:number}>).detail;targetProgress=canvas.closest('.stationary-mobile-crystal')?(detail.hero||0):model==='cube'?detail.hero:(model==='fixer'||model==='eva')?(detail.hero||detail.gallery||detail.page||0):detail.gallery;};
  function lost(e:Event){e.preventDefault();suspended=true;stop();failed();}
  function restore(){suspended=false;start();}
  function dispose(){
   if(disposed)return;disposed=true;stop();resize.disconnect();view.disconnect();
-  document.removeEventListener('visibilitychange',visibility);window.removeEventListener('hd:scroll',onScroll);
-  canvas.removeEventListener('pointerenter',onPointerEnter);canvas.removeEventListener('pointerleave',onPointerLeave);canvas.removeEventListener('pointerdown',onPointerEnter);canvas.removeEventListener('hd:recompute',onPointerEnter);
+  document.removeEventListener('visibilitychange',visibility);window.removeEventListener('hd:scroll',onScroll);window.removeEventListener('hd:bot-mood',onMoodEvent);
+  canvas.removeEventListener('pointerenter',onPointerEnter);canvas.removeEventListener('pointerleave',onPointerLeave);canvas.removeEventListener('pointerdown',onPointerDown);canvas.removeEventListener('pointermove',onPointerMove);canvas.removeEventListener('pointerup',onPointerUp);canvas.removeEventListener('pointercancel',onPointerUp);canvas.removeEventListener('hd:recompute',onPointerEnter);
   canvas.removeEventListener('webglcontextlost',lost);canvas.removeEventListener('webglcontextrestored',restore);
   cleanGeometry();instances?.dispose();mixer?.stopAllAction();mixer=undefined;surface.dispose();metal.dispose();core.dispose();environment.dispose();renderer.dispose();renderer.forceContextLoss();
   signal.removeEventListener('abort',dispose);
@@ -170,8 +211,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  signal.addEventListener('abort',dispose,{once:true});
  try{
   if(signal.aborted){dispose();return;}
-  resize.observe(canvas);view.observe(canvas);document.addEventListener('visibilitychange',visibility);window.addEventListener('hd:scroll',onScroll);
-  canvas.addEventListener('pointerenter',onPointerEnter);canvas.addEventListener('pointerleave',onPointerLeave);canvas.addEventListener('pointerdown',onPointerEnter);canvas.addEventListener('hd:recompute',onPointerEnter);
+  resize.observe(canvas);view.observe(canvas);document.addEventListener('visibilitychange',visibility);window.addEventListener('hd:scroll',onScroll);window.addEventListener('hd:bot-mood',onMoodEvent);
+  canvas.addEventListener('pointerenter',onPointerEnter);canvas.addEventListener('pointerleave',onPointerLeave);canvas.addEventListener('pointerdown',onPointerDown);canvas.addEventListener('pointermove',onPointerMove);canvas.addEventListener('pointerup',onPointerUp);canvas.addEventListener('pointercancel',onPointerUp);canvas.addEventListener('hd:recompute',onPointerEnter);
   canvas.addEventListener('webglcontextlost',lost);canvas.addEventListener('webglcontextrestored',restore);
   if(model==='cube'){
    const cell=new RoundedBoxGeometry(.63,.63,.63,lite?1:2,.065);
