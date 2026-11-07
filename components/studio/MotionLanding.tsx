@@ -18,16 +18,16 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
     <div className="hero-sheet"><div className="wrap hero-grid">
      <div className="hero-copy">
       <p className="kicker"><span className="key-line"/>Software &amp; web security studio</p>
-      <h1>Software,<br/>engineered for<br/><span>modern scale<span className="stop">.</span></span></h1>
+      <h1>Build it.<br/>Break it.<br/><span className="kinetic-secure">Secure it<span className="stop">.</span></span></h1>
       <p className="hero-description">{intro}</p>
       <div className="actions"><a className="cta" href="#brief">Start a project <ArrowUpRight size={18}/></a><a className="text-link" href="#work">See our work <ArrowDown size={15}/></a></div>
      </div>
      <figure className="hero-object">
       <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
       <div className="specimen-visual" id="hero-model-anchor"><div className="desktop-hero-poster"><SceneSurface model="eva"/></div><div className="mobile-hero-poster"><MobileCrystal/></div></div>
-      <figcaption><span>FIG. 01</span><strong><span className="desktop-model-label">Eva Robot</span><span className="mobile-model-label">Eva Robot</span></strong></figcaption>
+      <figcaption><span>FIG. 01</span><strong><span className="desktop-model-label">Fixer Robot</span><span className="mobile-model-label">Fixer Robot</span></strong></figcaption>
      </figure>
-    </div><div className="wrap hero-baseline"><a href="#services"><ArrowDown size={15}/> Explore the studio</a><a href="#showcase">Object studies <span className="desktop-model-label">01—02</span></a></div></div>
+    </div><div className="wrap hero-baseline"><a href="#services"><ArrowDown size={15}/> Explore the studio</a><a href="#showcase">Object study <span className="desktop-model-label">01</span></a></div></div>
    </section>
    <section className="band wrap" id="services" data-station="Services">
      <div className="systems-story">{section('02','Architecture & systems')}<h2>Speed,<br/>structured with<br/><em>clarity.</em></h2><p>Custom web platforms, APIs and business tools, designed around the way your team works.</p><a className="text-link" href="/services">Explore services <ArrowUpRight size={16}/></a></div>

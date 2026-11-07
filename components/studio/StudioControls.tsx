@@ -4,8 +4,7 @@ import SceneSurface from './SceneSurface';
 import ContactForm from './ContactForm';
 
 const models=[
- {id:'eva',name:'Eva Robot',note:'Autonomous studio model. Floating multi-mesh robot study with 360 camera path and azure lighting.'},
- {id:'halo',name:'Titanium Halo',note:'A machined ring with a recessed barrel, radial fasteners and a fine luminous inner rim.'}
+ {id:'eva',name:'Fixer Robot',note:'Autonomous studio fixer robot. Fully articulated 3D study with 360 camera path, floating physics and electric blue lighting.'}
 ] as const;
 export function Gallery(){
  const [mobile,setMobile]=useState<boolean|null>(null);
@@ -17,22 +16,16 @@ export function Gallery(){
    if(document.documentElement.dataset.motion!=='on'||!matchMedia('(min-width:981px) and (min-height:700px)').matches)return;
    const {gallery,position}=(event as CustomEvent<{gallery:number,position:number}>).detail;
    if(manual.current!==null&&Math.abs(position-manual.current)<innerHeight*.4)return;
-   manual.current=null;setSelected(Math.min(models.length-1,Math.floor(gallery*models.length)));
+   manual.current=null;setSelected(0);
   };
   window.addEventListener('hd:scroll',scroll);return()=>window.removeEventListener('hd:scroll',scroll);
  },[]);
  const choose=(index:number)=>{manual.current=scrollY;setSelected(index);};
- const model=models[selected];
- return <><div className="mobile-gallery"><div className="mobile-halo-object">{mobile===true&&<SceneSurface model="eva" autoMobile/>}</div><h3>Eva Robot</h3><p>Autonomous studio robot with dynamic lighting and floating physics.</p></div><div className="gallery desktop-gallery"><div className="gallery-list" role="tablist" aria-label="Studio models">{models.map((m,i)=>
-  <button key={m.id} ref={el=>{tabs.current[i]=el;}} id={'tab-'+m.id} type="button" role="tab" aria-selected={i===selected} aria-controls="model-panel" tabIndex={i===selected?0:-1} onClick={()=>choose(i)} onKeyDown={e=>{
-    let next=i;
-    if(['ArrowDown','ArrowRight'].includes(e.key))next=(i+1)%models.length;
-    else if(['ArrowUp','ArrowLeft'].includes(e.key))next=(i+models.length-1)%models.length;
-    else if(e.key==='Home')next=0;else if(e.key==='End')next=models.length-1;else return;
-    e.preventDefault();choose(next);tabs.current[next]?.focus();
-  }}><small>0{i+1}</small>{m.name}<span aria-hidden="true">↗</span></button>)}</div>
+ const model=models[0];
+ return <><div className="mobile-gallery"><div className="mobile-halo-object"><SceneSurface model="eva" autoMobile/></div><h3>Fixer Robot</h3><p>Autonomous studio robot with dynamic lighting, full 360 motion and floating physics.</p></div><div className="gallery desktop-gallery"><div className="gallery-list" role="tablist" aria-label="Studio models">{models.map((m,i)=>
+  <button key={m.id} ref={el=>{tabs.current[i]=el;}} id={'tab-'+m.id} type="button" role="tab" aria-selected={i===selected} aria-controls="model-panel" tabIndex={0} onClick={()=>choose(i)}><small>01</small>{m.name}<span aria-hidden="true">↗</span></button>)}</div>
   <div role="tabpanel" id="model-panel" tabIndex={0} aria-labelledby={'tab-'+model.id} className="gallery-panel">
-   <div className="gallery-object"><span className="model-annotation annotation-left" aria-hidden="true">FORM / {model.id==='eva'?'01':'02'}</span><span className="model-annotation annotation-right" aria-hidden="true">AZURE · BLUE</span>{mobile===false&&<SceneSurface key={model.id} model={model.id}/>}</div><p>{model.note}</p>
+   <div className="gallery-object"><span className="model-annotation annotation-left" aria-hidden="true">FORM / 01</span><span className="model-annotation annotation-right" aria-hidden="true">AZURE · BLUE</span>{mobile===false&&<SceneSurface key={model.id} model={model.id}/>}</div><p>{model.note}</p>
   </div></div></>;
 }
 export function BriefDialog(){

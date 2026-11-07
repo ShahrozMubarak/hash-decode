@@ -4,6 +4,7 @@ import {eq} from 'drizzle-orm';
 import {concepts,listProjects} from '@/lib/studio-data';
 import {manageContent} from '@/lib/cms';
 import {adminAccess,bounded,readSmall,sameOrigin,httpsUrl,imageOrUrl} from '@/lib/studio-security';
+import {saveProjectToMongo} from '@/lib/mongodb';
 export async function POST(req:Request){
   if(!sameOrigin(req))return Response.json({error:'Untrusted request.'},{status:403});
   if(!(await adminAccess(req)).allowed)return Response.json({error:'Sign in to continue.'},{status:401});
@@ -24,11 +25,13 @@ export async function POST(req:Request){
       const row={slug,title,category,summary,challenge,solution,tech:bounded(d.tech||'',300),result:bounded(d.result||'',2000),url,image,art,status,position,kind};
       if(d.isNew){const result=await db.insert(projects).values(row).onConflictDoNothing().returning({slug:projects.slug});if(!result.length)return Response.json({error:'That address is reserved. Choose another.'},{status:409});}
       else await db.insert(projects).values(row).onConflictDoUpdate({target:projects.slug,set:row});
+      saveProjectToMongo(row).catch(err => console.warn('[MongoDB] Project sync note:', err));
     }else if(d.action==='deleteProject'){
       const slug=bounded(d.slug,80,1);const row=(await listProjects(true)).find(p=>p.slug===slug);
       if(!row)return Response.json({error:'Project not found.'},{status:404});
       if(concepts.some(p=>p.slug===slug))await db.insert(projects).values({...row,status:'deleted'}).onConflictDoUpdate({target:projects.slug,set:{status:'deleted'}});
       else await db.delete(projects).where(eq(projects.slug,slug));
+      saveProjectToMongo({...row,status:'deleted'}).catch(err => console.warn('[MongoDB] Project delete sync note:', err));
     }else if(d.action==='inquiryStatus'){
       if(!['new','read','archived'].includes(d.status))throw Error('Invalid inquiry status.');
       await db.update(inquiries).set({status:d.status}).where(eq(inquiries.id,bounded(d.id,80,1)));

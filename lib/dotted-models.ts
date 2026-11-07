@@ -78,30 +78,24 @@ export function geometry(count: number): DottedData {
     z = pts[2];
     forms[0].set([x, y, z], j);
 
-    // Form 1: Torus Knot / Trefoil Ribbon
-    const t = u * tau, p = v * tau, rr = 0.17 + 0.035 * Math.cos(t * 3);
-    const radius = 0.67 + 0.12 * Math.cos(3 * t);
+    // Form 1: Cyber Sphere with surface harmonics (Morph 1: Sphere)
+    const theta1 = u * tau, phi1 = Math.acos(2 * v - 1);
+    const rip1 = 1 + 0.045 * Math.sin(theta1 * 10 + phi1 * 6);
     forms[1].set([
-      (radius + rr * Math.cos(p)) * Math.cos(2 * t),
-      (radius + rr * Math.cos(p)) * Math.sin(2 * t),
-      0.28 * Math.sin(3 * t) + rr * Math.sin(p),
+      0.78 * Math.sin(phi1) * Math.cos(theta1) * rip1,
+      0.78 * Math.cos(phi1) * rip1,
+      0.78 * Math.sin(phi1) * Math.sin(theta1) * rip1,
     ], j);
 
-    // Form 2: Rippled Cyber Sphere with surface harmonics
-    const theta = u * tau, phi = Math.acos(2 * v - 1);
-    const rip = 1 + 0.055 * Math.sin(theta * 12 + phi * 7);
-    forms[2].set([
-      0.78 * Math.sin(phi) * Math.cos(theta) * rip,
-      0.78 * Math.cos(phi) * rip,
-      0.78 * Math.sin(phi) * Math.sin(theta) * rip,
-    ], j);
+    // Form 2: Extruded 3D '#' Hash Symbol (Morph 2: Hash)
+    forms[2].set([x, y, z], j);
 
-    // Form 3: Fluted Torus ring
-    const ct = u * tau, cp = v * tau, cr = 0.7 + 0.2 * Math.cos(cp);
+    // Form 3: Pure Cyber Sphere (Morph 3: Sphere)
+    const theta3 = u * tau, phi3 = Math.acos(2 * v - 1);
     forms[3].set([
-      cr * Math.cos(ct),
-      cr * Math.sin(ct),
-      0.2 * Math.sin(cp),
+      0.82 * Math.sin(phi3) * Math.cos(theta3),
+      0.82 * Math.cos(phi3),
+      0.82 * Math.sin(phi3) * Math.sin(theta3),
     ], j);
   }
 

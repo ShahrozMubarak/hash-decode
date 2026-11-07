@@ -21,3 +21,4 @@ export async function POST(req:Request){
     return Response.json({error:'Could not upload file.'},{status:500});
   }
 }
+

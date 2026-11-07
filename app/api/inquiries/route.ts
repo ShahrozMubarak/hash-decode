@@ -1,5 +1,6 @@
 import {env} from 'cloudflare:workers';import {getDb} from '@/db';import {inquiries} from '@/db/schema';import {eq} from 'drizzle-orm';
 import {bounded,readSmall,sameOrigin} from '@/lib/studio-security';import {quota,runtime} from '@/lib/abuse';import {mailBrief} from '@/lib/notify';
+import {saveInquiryToMongo} from '@/lib/mongodb';
 export async function POST(req:Request){
  if(!sameOrigin(req))return Response.json({error:'Untrusted request.'},{status:403});
  let d; let entry:typeof inquiries.$inferSelect;
@@ -28,6 +29,7 @@ export async function POST(req:Request){
  if(!check || check.expires<Date.now()||check.answer!==String(d.answer||'').trim())return Response.json({error:'The human check expired or was incorrect. Try the new question.'},{status:422});}
  if(!await quota(req,'brief',6))return Response.json({error:'Please wait before submitting another brief.'},{status:429});
  await getDb().insert(inquiries).values(entry);
+ saveInquiryToMongo(entry).catch(err => console.warn('[MongoDB] Inquiry sync note:', err));
  const mail=await mailBrief(entry);await getDb().update(inquiries).set({mail}).where(eq(inquiries.id,entry.id)).catch(()=>{});
  return Response.json({ok:true,reference:entry.id.slice(0,8).toUpperCase()},{status:201});
  }catch{return Response.json({error:'Submission unavailable. Please check your connection and try again.'},{status:503});}

@@ -25,8 +25,9 @@ export default function JourneyControl(){
      const top=landing.getBoundingClientRect().top+y,trailHeight=landing.offsetHeight;trail.setAttribute('viewBox',`0 0 ${w} ${trailHeight}`);
      const across=[.88,.28,.70,.5,.32,.68,.28,.72,.68];
      const points=offsets.map((at,i)=>({x:w*across[i],y:Math.max(18,at-top+Math.min(stations[i].offsetHeight*.48,v*.65))}));points[0].y=20;
+     points.push({x:w*.5,y:trailHeight});
      const d=points.map((p,i)=>{if(!i)return `M${p.x} ${p.y}`;const a=points[i-1],mid=(a.y+p.y)/2;return `C${a.x} ${mid},${p.x} ${mid},${p.x} ${p.y}`;}).join(' ');
-     paths.forEach(p=>p.setAttribute('d',d));nodes.forEach((node,i)=>{node.setAttribute('cx',String(points[i].x));node.setAttribute('cy',String(points[i].y));});
+     paths.forEach(p=>p.setAttribute('d',d));nodes.forEach((node,i)=>{if(points[i]){node.setAttribute('cx',String(points[i].x));node.setAttribute('cy',String(points[i].y));}});
     }
     dirty=false;
    }
