@@ -1,4 +1,4 @@
-import {getDb} from '@/db';import {content,settings} from '@/db/schema';import {eq} from 'drizzle-orm';import {bounded,httpsUrl} from '@/lib/studio-security';
+import {getDb} from '@/db';import {content,settings} from '@/db/schema';import {eq} from 'drizzle-orm';import {bounded,httpsUrl,imageOrUrl} from '@/lib/studio-security';
 export type Entry=typeof content.$inferSelect;
 const notes=[
  ['ownership-before-handover','Before you take ownership of a web app','Delivery','Ask for a fresh install','Run the project from its documentation in a new environment. Confirm database migrations, build commands and backups before the previous team leaves.','Walk through the failure paths','Try a failed submission, a lost connection and an expired login. The product should explain what happened and preserve the work a user can safely retry.','Finish with an access inventory','Record who owns the domain, repository, mail sender and hosting account. Transfer ownership and rotate shared credentials before sign-off.'],
@@ -19,7 +19,7 @@ export async function manageContent(d:Record<string,unknown>){
  const prior=(await entries(undefined,true)).find(x=>x.id===id);
  if(d.action==='contentRemove'){if(!prior)return Response.json({error:'Entry not found.'},{status:404});await db.insert(content).values({...prior,status:'deleted'}).onConflictDoUpdate({target:content.id,set:{status:'deleted'}});
  }else{const kind=String(d.kind);if(!['post','team','review'].includes(kind)||prior&&prior.kind!==kind)throw Error('Invalid content type.');
- const row={id,kind,title:bounded(d.title,100,2),label:bounded(d.label,120,2),body:bounded(d.body,7000,8),url:httpsUrl(d.url),image:httpsUrl(d.image),status:d.status==='published'?'published':'draft',updated:Date.now()};
+ const row={id,kind,title:bounded(d.title,100,2),label:bounded(d.label,120,2),body:bounded(d.body,7000,8),url:httpsUrl(d.url),image:imageOrUrl(d.image),status:d.status==='published'?'published':'draft',updated:Date.now()};
  if(kind==='review'&&row.status==='published'&&!row.url)throw Error('Enter the original review URL before publishing.');
  if(kind==='team'&&row.status==='published'&&!row.image)throw Error('Enter the member’s actual photo URL before publishing.');
  if(d.isNew){if(prior)return Response.json({error:'This address already exists.'},{status:409});const done=await db.insert(content).values(row).onConflictDoNothing().returning({id:content.id});if(!done.length)return Response.json({error:'Address already used.'},{status:409});}

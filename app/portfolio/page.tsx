@@ -28,8 +28,8 @@ export default async function Portfolio() {
       <section className="work-showcase-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />01 &nbsp;/&nbsp; Selected Releases</p>
-            <h2>Featured Projects</h2>
+            <p className="eyebrow"><i />Selected Releases</p>
+            <h2><span style={{ color: 'var(--azure)' }}>Featured</span> <span style={{ color: 'var(--coral)' }}>Projects</span></h2>
           </div>
           <span className="count-pill">{projects.length} Published Case Studies</span>
         </div>
@@ -45,8 +45,8 @@ export default async function Portfolio() {
       <section className="work-outcomes-band">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />02 &nbsp;/&nbsp; Engineering Standards</p>
-            <h2>What every build includes</h2>
+            <p className="eyebrow"><i />Engineering Standards</p>
+            <h2><span style={{ color: 'var(--azure)' }}>What Every Build</span> <span style={{ color: 'var(--coral)' }}>Includes</span></h2>
           </div>
         </div>
         <div className="outcomes-grid">
@@ -77,7 +77,7 @@ export default async function Portfolio() {
       <section className="work-cta-card">
         <div className="cta-content">
           <p className="kicker"><span className="key-line" />Ready to build?</p>
-          <h2>Have a project in mind?</h2>
+          <h2><span style={{ color: 'var(--azure)' }}>Have a project</span> <span style={{ color: 'var(--coral)' }}>in mind?</span></h2>
           <p>Tell us what you want to build. We reply within 24 hours with honest advice and a clear estimate.</p>
         </div>
         <div className="cta-actions">

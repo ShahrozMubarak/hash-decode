@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </radialGradient>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A2540"/>
+      <stop offset="100%" stop-color="#1d70f5"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FD614B"/>
+      <stop offset="100%" stop-color="#ff8d7a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle Architectural Grid Background -->
+  <g stroke="rgba(10,37,64,0.04)" stroke-width="1">
+    <line x1="100" y1="0" x2="100" y2="600"/>
+    <line x1="200" y1="0" x2="200" y2="600"/>
+    <line x1="300" y1="0" x2="300" y2="600"/>
+    <line x1="400" y1="0" x2="400" y2="600"/>
+    <line x1="500" y1="0" x2="500" y2="600"/>
+    <line x1="0" y1="100" x2="600" y2="100"/>
+    <line x1="0" y1="200" x2="600" y2="200"/>
+    <line x1="0" y1="300" x2="600" y2="300"/>
+    <line x1="0" y1="400" x2="600" y2="400"/>
+    <line x1="0" y1="500" x2="600" y2="500"/>
+  </g>
+  
+  <!-- Founder Halo Aura -->
+  <circle cx="300" cy="280" r="170" fill="none" stroke="rgba(29,112,245,0.08)" stroke-width="32"/>
+  <circle cx="300" cy="280" r="140" fill="rgba(253,97,75,0.03)"/>
+  
+  <!-- Geometric Founder Silhouette - Shahroz (Lead Systems Architect) -->
+  <path d="M190 480 C190 400, 240 370, 300 370 C360 370, 410 400, 410 480 Z" fill="url(#bodyGrad)"/>
+  <circle cx="300" cy="260" r="75" fill="#0A2540"/>
+  
+  <!-- Minimalist Glasses & Expression -->
+  <rect x="255" y="245" width="38" height="24" rx="4" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+  <rect x="307" y="245" width="38" height="24" rx="4" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+  <line x1="293" y1="257" x2="307" y2="257" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Architectural System Nodes Indicator -->
+  <circle cx="300" cy="370" r="6" fill="url(#accentGrad)"/>
+  <circle cx="270" cy="390" r="4" fill="#1d70f5"/>
+  <circle cx="330" cy="390" r="4" fill="#1d70f5"/>
+</svg>

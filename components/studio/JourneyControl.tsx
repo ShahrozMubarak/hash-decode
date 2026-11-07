@@ -34,51 +34,36 @@ export default function JourneyControl(){
       let endPt={x:w*.35,y:trailHeight-120};
       if(endBtn){const er=endBtn.getBoundingClientRect();endPt={x:er.left+er.width*.5,y:er.top+y-top};}
 
-      const s0Top = offsets[0] - top;
-      const s1Top = offsets[1] - top;
-      const s2Top = offsets[2] - top;
-      const s3Top = offsets[3] - top;
-      const s4Top = offsets[4] - top;
-      const s5Top = offsets[5] - top;
-      const s6Top = offsets[6] - top;
-      const s7Top = offsets[7] - top;
+      // Symmetric harmonic zigzag pattern flowing down open gutters with 20% lighter stroke
+      // Begins immediately from 'Start a project' button and concludes on 'Send project brief'
+      const totalPoints = 16;
+      const points: {x: number; y: number}[] = [];
+      const totalDy = endPt.y - startPt.y;
 
-      const heroSpan = Math.max(180, s1Top - startPt.y);
-
-      // Natural organic zigzag trail weaving through open whitespace without harsh turns
-      // Starts zigzagging immediately from 'Start a project' CTA downwards and ends directly on the 'Send project brief' CTA button
-      const points = [
-        startPt,
-        // Immediate zigzag down-left from start button into hero margin
-        {x: Math.max(w * 0.10, startPt.x - 45), y: startPt.y + heroSpan * 0.35},
-        // Zigzag right across whitespace beneath hero actions, avoiding hero model
-        {x: Math.min(w * 0.36, startPt.x + 85), y: startPt.y + heroSpan * 0.72},
-        // Enters Agent station on left whitespace (clearing Eva model)
-        {x: w * 0.18, y: s1Top + (s2Top - s1Top) * 0.15},
-        {x: w * 0.14, y: s1Top + (s2Top - s1Top) * 0.48},
-        // Sweeps right under Eva model
-        {x: w * 0.72, y: s1Top + (s2Top - s1Top) * 0.88},
-        // Services station: weaves left in column whitespace
-        {x: w * 0.22, y: s2Top + (s3Top - s2Top) * 0.40},
-        // Weaves right below service cards
-        {x: w * 0.78, y: s2Top + (s3Top - s2Top) * 0.85},
-        // Security station: weaves right open space
-        {x: w * 0.76, y: s3Top + (s4Top - s3Top) * 0.45},
-        // Weaves left
-        {x: w * 0.22, y: s3Top + (s4Top - s3Top) * 0.88},
-        // Work station: weaves left gutter
-        {x: w * 0.18, y: s4Top + (s5Top - s4Top) * 0.42},
-        // Weaves right gutter
-        {x: w * 0.80, y: s4Top + (s5Top - s4Top) * 0.84},
-        // Process station: weaves through open whitespace below steps
-        {x: w * 0.34, y: s5Top + (s6Top - s5Top) * 0.60},
-        // FAQ station: weaves down left margin
-        {x: w * 0.20, y: s6Top + (s7Top - s6Top) * 0.55},
-        // Contact station: swoops from left towards the submit button
-        {x: Math.max(w * 0.30, endPt.x - 140), y: s7Top + Math.max(60, (endPt.y - s7Top) * 0.45)},
-        // Anchors directly to top center of "Send project brief" button
-        endPt
-      ];
+      for (let i = 0; i < totalPoints; i++) {
+        const t = i / (totalPoints - 1);
+        const y = startPt.y + totalDy * t;
+        let x: number;
+        if (i === 0) {
+          x = startPt.x;
+        } else if (i === totalPoints - 1) {
+          x = endPt.x;
+        } else {
+          // Alternating left/right harmonic wave with gentle ease in and out
+          const side = (i % 2 === 1) ? -1 : 1;
+          const amp = Math.min(w * 0.30, 420);
+          const center = w * 0.48;
+          const rawX = center + side * amp;
+          if (i === 1) {
+            x = Math.max(w * 0.12, Math.min(startPt.x - 60, rawX));
+          } else if (i === totalPoints - 2) {
+            x = Math.max(w * 0.20, Math.min(w * 0.80, endPt.x + (side * 80)));
+          } else {
+            x = Math.max(w * 0.14, Math.min(w * 0.82, rawX));
+          }
+        }
+        points.push({ x, y });
+      }
 
       // Ultra-smooth flowing Bézier curve with vertical tangents:
       const d = points.map((p, i) => {

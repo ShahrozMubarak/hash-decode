@@ -20,6 +20,8 @@ function SceneViewport({model,autoMobile=false}:{model:PosterModel,autoMobile?:b
  },[]);
 
  const active=near&&allowed;
+ const isMobile=typeof window!=='undefined'&&window.innerWidth<=850;
+ const targetModel=(isMobile&&model==='fixer')?'eva':model;
 
  useEffect(()=>{
   if(!active||!canvas.current)return;
@@ -29,7 +31,7 @@ function SceneViewport({model,autoMobile=false}:{model:PosterModel,autoMobile?:b
   import('@/lib/studio-scene')
    .then(async({mountScene})=>{
     if(!controller.signal.aborted){
-     await mountScene(node,model,controller.signal,()=>update('live'),()=>update('failed'));
+     await mountScene(node,targetModel,controller.signal,()=>update('live'),()=>update('failed'));
     }
    })
    .catch((err)=>{
@@ -37,12 +39,12 @@ function SceneViewport({model,autoMobile=false}:{model:PosterModel,autoMobile?:b
     update('failed');
    });
   return()=>controller.abort();
- },[active,model]);
+ },[active,targetModel]);
 
  const live=active&&status==='live';
  return <div className={'scene-surface'+(live?' live':'')} ref={mount}>
-  <div className="scene-poster"><ModelPoster model={model}/></div>
-  {active&&<canvas key={model} ref={canvas} aria-hidden="true"/>}
+  <div className="scene-poster"><ModelPoster model={targetModel}/></div>
+  {active&&<canvas key={targetModel} ref={canvas} aria-hidden="true"/>}
  </div>;
 }
 

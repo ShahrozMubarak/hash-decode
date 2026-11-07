@@ -1,5 +1,4 @@
 import PageExperience from '@/components/studio/PageExperience';
-import CursorFollower from '@/components/studio/CursorFollower';
 import Visit from '@/components/studio/Visit';
 import type {Metadata} from 'next';
 import './globals.css';
@@ -7,5 +6,5 @@ import {Header,Footer} from '@/components/studio/Shell';
 import {origin} from '@/lib/meta';
 export const metadata:Metadata={metadataBase:origin?new URL(origin):undefined,title:'Hash Decode | Software Design & Engineering',description:'An independent software studio for web platforms, digital products and business tools.',icons:{icon:'/logo.png'}};
 export default function RootLayout({children}:{children:React.ReactNode}){
- return <html lang="en"><body id="top"><Header/><main id="main" tabIndex={-1}><PageExperience/>{children}</main><Footer/><CursorFollower/><Visit/></body></html>;
+ return <html lang="en"><head><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/></head><body id="top"><Header/><main id="main" tabIndex={-1}><PageExperience/>{children}</main><Footer/><Visit/></body></html>;
 }

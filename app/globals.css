@@ -149,19 +149,6 @@ button:active,.cta:active,.outline:active,.nav-contact:active,.icon-btn:active,a
 
 /* Pure Brand Color Typography Tokens (No Mixed Gradients) */
 
-/* Interactive Precision Magnetic Selection Cursor */
-.custom-cursor-layer{position:fixed;inset:0;pointer-events:none;z-index:99999;overflow:hidden}
-.cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;border-radius:50%;background:var(--coral);box-shadow:0 0 8px var(--coral);pointer-events:none;transition:transform .04s linear,opacity .25s ease;will-change:transform}
-.cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(29,112,245,.55);pointer-events:none;transition:transform .08s ease-out,border-color .25s ease,box-shadow .25s ease,border-radius .25s ease,opacity .25s ease;will-change:transform}
-.cursor-ring.cursor-hovering{border-color:var(--coral);box-shadow:0 0 16px rgba(253,97,75,.35),inset 0 0 10px rgba(29,112,245,.2);border-radius:8px}
-.ring-corner{position:absolute;width:5px;height:5px;border:1px solid var(--azure);opacity:0;transition:opacity .2s ease}
-.cursor-ring.cursor-hovering .ring-corner{opacity:1;border-color:var(--coral)}
-.ring-corner.tl{top:-2px;left:-2px;border-width:1.5px 0 0 1.5px}
-.ring-corner.tr{top:-2px;right:-2px;border-width:1.5px 1.5px 0 0}
-.ring-corner.bl{bottom:-2px;left:-2px;border-width:0 0 1.5px 1.5px}
-.ring-corner.br{bottom:-2px;right:-2px;border-width:0 1.5px 1.5px 0}
-@media (max-width:850px),(pointer:coarse){.custom-cursor-layer{display:none!important}}
-
 /* Tactile Springy Pop-up Arrive Animation */
 @keyframes popArrive{
  0%{opacity:0;transform:translateY(28px) scale(.96)}

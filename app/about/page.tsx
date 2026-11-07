@@ -1,5 +1,5 @@
-import { Team } from '@/components/studio/Extras';
-import { studioCopy } from '@/lib/studio-data';
+import FoundersShowcase from '@/components/studio/FoundersShowcase';
+import { studioCopy, listFounders } from '@/lib/studio-data';
 import { meta } from '@/lib/meta';
 import { ArrowUpRight, ShieldCheck, HeartHandshake, Zap, FileCode, CheckCircle, Terminal } from 'lucide-react';
 
@@ -12,25 +12,21 @@ export const metadata = meta(
 
 const principles = [
   {
-    num: '01',
     title: 'Clarity Over Complexity',
     desc: 'We speak plain English, not confusing technical jargon. We start with the actual user workflow so the software is intuitive and easy to use.',
     icon: Zap,
   },
   {
-    num: '02',
     title: 'Security by Design',
     desc: 'Security is not an afterthought. Every form, API, and database query is audited against vulnerabilities before it ever goes live.',
     icon: ShieldCheck,
   },
   {
-    num: '03',
     title: '100% Client Ownership',
     desc: 'You own every line of code, every repository, and every cloud credential. We never lock you in, and we provide clean documentation so any engineer can continue our work.',
     icon: HeartHandshake,
   },
   {
-    num: '04',
     title: 'Direct Engineering',
     desc: 'You work directly with the senior engineers designing and building your product. No account managers, no lost translations, no wasted time.',
     icon: FileCode,
@@ -44,24 +40,29 @@ const techStack = [
 ];
 
 export default async function About() {
-  const copy = await studioCopy();
+  const [copy, founders] = await Promise.all([studioCopy(), listFounders()]);
 
   return (
     <div className="wrap interior page-about-content">
       <header className="page-intro">
-        <p className="kicker"><span className="key-line" />About the Studio</p>
-        <h1>Inside Hash Decode.<br /><span className="text-azure" style={{ color: 'var(--azure)' }}>Crafted with intent.</span></h1>
+        <p className="kicker"><span className="key-line" />About Hash Decode</p>
+        <h1>Inside Hash Decode.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>Crafted with intent.</span></h1>
         <p className="lead-text">
           {copy.about || 'An independent software studio founded by Shahroz Dogar. We build custom web platforms, digital tools, and secure cloud systems for growing companies.'}
         </p>
       </header>
 
+      {/* 4 Founders Interactive Showcase with Scroll Pop-Up & Side Typing Info */}
+      <section className="about-founder-section">
+        <FoundersShowcase founders={founders} />
+      </section>
+
       {/* 4 Core Principles in Simple Words */}
       <section className="about-principles-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />01 &nbsp;/&nbsp; Core Values</p>
-            <h2>How We Operate</h2>
+            <p className="eyebrow"><i /> Core Values</p>
+            <h2><span style={{ color: 'var(--azure)' }}>How We</span> <span style={{ color: 'var(--coral)' }}>Operate</span></h2>
           </div>
         </div>
         <div className="principles-grid-4">
@@ -70,7 +71,6 @@ export default async function About() {
             return (
               <article key={p.title} className="principle-card">
                 <div className="principle-card-head">
-                  <small className="principle-num">{p.num}</small>
                   <Icon className="icon-azure" size={24} />
                 </div>
                 <h3>{p.title}</h3>
@@ -81,23 +81,12 @@ export default async function About() {
         </div>
       </section>
 
-      {/* Studio Team & Founder Section */}
-      <section className="about-founder-section">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow"><i />02 &nbsp;/&nbsp; Leadership &amp; Craft</p>
-            <h2>The Engineering Team</h2>
-          </div>
-        </div>
-        <Team />
-      </section>
-
       {/* Tech Arsenal & Standards */}
       <section className="about-tech-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />03 &nbsp;/&nbsp; Tools of the Craft</p>
-            <h2>Our Technology Stack</h2>
+            <p className="eyebrow"><i /> Tools of the Craft</p>
+            <h2><span style={{ color: 'var(--azure)' }}>Our Technology</span> <span style={{ color: 'var(--coral)' }}>Stack</span></h2>
           </div>
           <span className="count-pill">Modern &amp; battle-tested</span>
         </div>
@@ -111,12 +100,12 @@ export default async function About() {
         </div>
       </section>
 
-      {/* The 5 Client Guarantees */}
+      {/* The Client Guarantees */}
       <section className="about-guarantee-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />04 &nbsp;/&nbsp; Peace of Mind</p>
-            <h2>The Hash Decode Guarantee</h2>
+            <p className="eyebrow"><i /> Peace of Mind</p>
+            <h2><span style={{ color: 'var(--azure)' }}>The Hash Decode</span> <span style={{ color: 'var(--coral)' }}>Guarantee</span></h2>
           </div>
         </div>
         <div className="guarantee-grid">
@@ -155,7 +144,7 @@ export default async function About() {
       <section className="work-cta-card">
         <div className="cta-content">
           <p className="kicker"><span className="key-line" />Get in touch</p>
-          <h2>Let's build something remarkable.</h2>
+          <h2><span style={{ color: 'var(--azure)' }}>Let&apos;s build something</span> <span style={{ color: 'var(--coral)' }}>remarkable.</span></h2>
           <p>Whether you need an MVP in weeks or a comprehensive security audit, we are ready.</p>
         </div>
         <div className="cta-actions">

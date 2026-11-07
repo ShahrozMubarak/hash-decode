@@ -1,5 +1,5 @@
 import { getDb } from '@/db';
-import { projects, settings } from '@/db/schema';
+import { projects, settings, content } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
 export type Project=typeof projects.$inferSelect;
@@ -18,6 +18,90 @@ export async function studioCopy(){
   const row=await getDb().select().from(settings).where(eq(settings.id,'public')).get();
   return row ? {...defaults,...JSON.parse(row.value)} as typeof defaults : defaults;
 }
+
+export interface Founder {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
+  url?: string;
+  skills: string[];
+  quote?: string;
+  position: number;
+}
+
+export const defaultFounders: Founder[] = [
+  {
+    id: 'shahroz-dogar',
+    name: 'Shahroz Dogar',
+    role: 'Co-Founder & Lead Systems Architect',
+    bio: 'Oversees distributed systems architecture, high-concurrency cloud deployments, and zero-trust security frameworks. Leads technical direction and end-to-end delivery for all enterprise platforms.',
+    quote: 'Software must be built for the real human workflows it powers, with uncompromising speed and mathematical safety.',
+    skills: ['Systems Architecture', 'Cloudflare Workers', 'Distributed Systems', 'Security Audits'],
+    image: '/team/shahroz.svg',
+    url: 'https://hashdecode.com',
+    position: 1
+  },
+  {
+    id: 'hamza-malik',
+    name: 'Hamza Malik',
+    role: 'Co-Founder & Head of Product Design',
+    bio: 'Shapes intuitive interaction models, real-time 3D visualizations, and precision design systems. Bridges aesthetic elegance with tactile, latency-free digital response.',
+    quote: 'Simplicity is not the absence of clutter, but the mastery of clarity and frictionless visual flow.',
+    skills: ['Product Design', 'WebGL & Three.js', 'Design Systems', 'Micro-interactions'],
+    image: '/team/hamza.svg',
+    url: 'https://hashdecode.com',
+    position: 2
+  },
+  {
+    id: 'zainab-tariq',
+    name: 'Zainab Tariq',
+    role: 'Co-Founder & Director of Security Audits',
+    bio: 'Directs penetration testing, API vulnerability assessments, and defensive compliance. Ensures every database query, authentication token, and API boundary resists modern attack vectors.',
+    quote: 'Security is not a checkbox before launch; it is the fundamental foundation of software integrity.',
+    skills: ['Penetration Testing', 'API Vulnerability Review', 'OWASP Standards', 'Threat Modelling'],
+    image: '/team/zainab.svg',
+    url: 'https://hashdecode.com',
+    position: 3
+  },
+  {
+    id: 'daniyal-ahmed',
+    name: 'Daniyal Ahmed',
+    role: 'Co-Founder & Lead DevOps Engineer',
+    bio: 'Engineers containerization pipelines, automated CI/CD releases, and global edge caching. Guarantees high availability, automated failovers, and sub-100ms response latencies globally.',
+    quote: 'Reliable infrastructure is invisible—it simply works without interruption, day in and day out.',
+    skills: ['Cloud Infrastructure', 'Docker & Kubernetes', 'Edge Computing', 'Automated CI/CD'],
+    image: '/team/daniyal.svg',
+    url: 'https://hashdecode.com',
+    position: 4
+  }
+];
+
+export async function listFounders(all=false): Promise<Founder[]> {
+  try {
+    const rows = await getDb().select().from(content).where(eq(content.kind, 'team'));
+    const map = new Map<string, Founder>(defaultFounders.map(f => [f.id, f]));
+    rows.forEach(r => {
+      const existing = map.get(r.id);
+      map.set(r.id, {
+        id: r.id,
+        name: r.title,
+        role: r.label,
+        bio: r.body,
+        image: r.image || existing?.image || '/team/shahroz.svg',
+        url: r.url || existing?.url || '',
+        skills: existing?.skills || ['Software Engineering', 'System Architecture'],
+        quote: existing?.quote || '',
+        position: existing?.position || 99
+      });
+    });
+    return [...map.values()].sort((a,b)=>a.position-b.position||a.name.localeCompare(b.name));
+  } catch {
+    return defaultFounders;
+  }
+}
+
 export const services=[
   {id:'products',n:'01',name:'Custom software',summary:'From the first interaction to a shipped product.',detail:'We map the core user journey, prototype the difficult decisions and build responsive interfaces that are easy to learn.',tags:['Discovery','Product design','Web apps']},
   {id:'platforms',n:'02',name:'Web development',summary:'Fast, accessible websites with a real content system.',detail:'We join a considered visual system to server-rendered pages, clear content models and publishing tools your team can operate.',tags:['Websites','CMS','Performance']},

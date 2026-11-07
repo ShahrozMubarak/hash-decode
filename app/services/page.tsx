@@ -38,8 +38,8 @@ export default function Services() {
       <section className="service-catalog-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />01 &nbsp;/&nbsp; Core Capabilities</p>
-            <h2>What We Specialize In</h2>
+            <p className="eyebrow"><i />Core Capabilities</p>
+            <h2><span style={{ color: 'var(--azure)' }}>What We</span> <span style={{ color: 'var(--coral)' }}>Specialize In</span></h2>
           </div>
         </div>
         <div className="service-index">
@@ -73,8 +73,8 @@ export default function Services() {
       <section className="service-process-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />02 &nbsp;/&nbsp; Transparent Delivery</p>
-            <h2>How We Build Together</h2>
+            <p className="eyebrow"><i />Transparent Delivery</p>
+            <h2><span style={{ color: 'var(--azure)' }}>How We Build</span> <span style={{ color: 'var(--coral)' }}>Together</span></h2>
           </div>
           <span className="count-pill">From brief to live release</span>
         </div>
@@ -106,8 +106,8 @@ export default function Services() {
       <section className="service-comparison-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />03 &nbsp;/&nbsp; The Hash Decode Difference</p>
-            <h2>Why teams work with us</h2>
+            <p className="eyebrow"><i />The Hash Decode Difference</p>
+            <h2><span style={{ color: 'var(--azure)' }}>Why Teams</span> <span style={{ color: 'var(--coral)' }}>Choose Us</span></h2>
           </div>
         </div>
         <div className="comparison-table-wrapper">
@@ -154,7 +154,7 @@ export default function Services() {
       <section className="work-cta-card">
         <div className="cta-content">
           <p className="kicker"><span className="key-line" />Get started</p>
-          <h2>Ready to build your next release?</h2>
+          <h2><span style={{ color: 'var(--azure)' }}>Ready to build</span> <span style={{ color: 'var(--coral)' }}>your next release?</span></h2>
           <p>Book a 15-minute introductory call or send your brief. We reply within 24 hours.</p>
         </div>
         <div className="cta-actions">
