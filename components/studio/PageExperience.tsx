@@ -1,7 +1,7 @@
 'use client';
 import {useEffect} from 'react';
 import {usePathname} from 'next/navigation';
-import InlineDotted from './InlineDotted';
+import SceneSurface from './SceneSurface';
 export default function PageExperience(){
  const path=usePathname();
  useEffect(()=>{
@@ -12,6 +12,5 @@ export default function PageExperience(){
   return()=>{reveal.disconnect();elements.forEach(el=>el.classList.remove('page-reveal','page-visible'));};
  },[path]);
  if(path==='/'||path.startsWith('/admin'))return null;
- const form=path.startsWith('/services')?1:path.startsWith('/portfolio')?3:path.startsWith('/tools')?0:2;
- return <aside className="inner-experience" aria-hidden="true"><span className="inner-ghost">DECODE</span><InlineDotted form={form}/><span className="inner-caption">FORM / 0{form+1}</span></aside>;
+ return <aside className="inner-experience" aria-hidden="true"><span className="inner-ghost">DECODE</span><SceneSurface model="eva" autoMobile={true}/><span className="inner-caption">EVA / 3D STUDIO MODEL</span></aside>;
 }

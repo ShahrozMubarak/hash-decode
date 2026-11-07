@@ -4,7 +4,7 @@ import SceneSurface from './SceneSurface';
 import ContactForm from './ContactForm';
 
 const models=[
- {id:'crystal',name:'Enchanted Crystal',note:'A faceted study in reflection. Angular surfaces catch the studio light around a coral centre.'},
+ {id:'eva',name:'Eva Robot',note:'Autonomous studio model. Floating multi-mesh robot study with 360 camera path and azure lighting.'},
  {id:'halo',name:'Titanium Halo',note:'A machined ring with a recessed barrel, radial fasteners and a fine luminous inner rim.'}
 ] as const;
 export function Gallery(){
@@ -23,7 +23,7 @@ export function Gallery(){
  },[]);
  const choose=(index:number)=>{manual.current=scrollY;setSelected(index);};
  const model=models[selected];
- return <><div className="mobile-gallery"><div className="mobile-halo-object">{mobile===true&&<SceneSurface model="halo" autoMobile/>}</div><h3>Titanium Halo</h3><p>A study in structure and light.</p><small className="credit"><a href="https://sketchfab.com/3d-models/enchanted-crystal-6b01945a041d4ed3b80e14274f0e68c9">Enchanted Crystal by TheTallOne</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Materials adapted.</small></div><div className="gallery desktop-gallery"><div className="gallery-list" role="tablist" aria-label="Studio models">{models.map((m,i)=>
+ return <><div className="mobile-gallery"><div className="mobile-halo-object">{mobile===true&&<SceneSurface model="eva" autoMobile/>}</div><h3>Eva Robot</h3><p>Autonomous studio robot with dynamic lighting and floating physics.</p></div><div className="gallery desktop-gallery"><div className="gallery-list" role="tablist" aria-label="Studio models">{models.map((m,i)=>
   <button key={m.id} ref={el=>{tabs.current[i]=el;}} id={'tab-'+m.id} type="button" role="tab" aria-selected={i===selected} aria-controls="model-panel" tabIndex={i===selected?0:-1} onClick={()=>choose(i)} onKeyDown={e=>{
     let next=i;
     if(['ArrowDown','ArrowRight'].includes(e.key))next=(i+1)%models.length;
@@ -32,8 +32,7 @@ export function Gallery(){
     e.preventDefault();choose(next);tabs.current[next]?.focus();
   }}><small>0{i+1}</small>{m.name}<span aria-hidden="true">↗</span></button>)}</div>
   <div role="tabpanel" id="model-panel" tabIndex={0} aria-labelledby={'tab-'+model.id} className="gallery-panel">
-   <div className="gallery-object"><span className="model-annotation annotation-left" aria-hidden="true">FORM / {model.id==='crystal'?'01':'02'}</span><span className="model-annotation annotation-right" aria-hidden="true">AZURE · CORAL</span>{mobile===false&&<SceneSurface key={model.id} model={model.id}/>}</div><p>{model.note}</p>
-   {model.id==='crystal'&&<small className="credit"><a href="https://sketchfab.com/3d-models/enchanted-crystal-6b01945a041d4ed3b80e14274f0e68c9">Enchanted Crystal by TheTallOne</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Materials adapted.</small>}
+   <div className="gallery-object"><span className="model-annotation annotation-left" aria-hidden="true">FORM / {model.id==='eva'?'01':'02'}</span><span className="model-annotation annotation-right" aria-hidden="true">AZURE · BLUE</span>{mobile===false&&<SceneSurface key={model.id} model={model.id}/>}</div><p>{model.note}</p>
   </div></div></>;
 }
 export function BriefDialog(){

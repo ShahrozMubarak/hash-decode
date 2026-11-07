@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-export type PosterModel = 'cube' | 'crystal' | 'halo';
+export type PosterModel = 'cube' | 'crystal' | 'halo' | 'eva';
 
 type PosterProps = {
   model: PosterModel;
@@ -11,6 +11,7 @@ const names: Record<PosterModel, string> = {
   cube: 'Hash Cube',
   crystal: 'Enchanted Crystal',
   halo: 'Titanium Halo',
+  eva: 'Eva Autonomous Robot',
 };
 
 // Each instance has its own gradients so the hero and the gallery can coexist.
@@ -56,6 +57,7 @@ export default function ModelPoster({ model, className }: PosterProps) {
       {model === 'cube' && <Cube id={id} />}
       {model === 'crystal' && <Crystal paint={paint} />}
       {model === 'halo' && <Halo paint={paint} />}
+      {model === 'eva' && <Eva paint={paint} />}
     </svg>
   );
 }
@@ -138,4 +140,20 @@ function Halo({ paint }: { paint: Paint }) {
     </g>)}
     <ellipse cy="16" rx="139" ry="139" stroke={paint('ice')} strokeWidth="1.2" opacity=".5" />
   </g>;
+}
+
+function Eva({ paint }: { paint: Paint }) {
+  return (
+    <g transform="translate(240 215) scale(0.95)">
+      <ellipse cx="0" cy="0" rx="140" ry="170" fill="var(--azure)" opacity="0.18" />
+      <path d="M-65 -110 C-65 -160, 65 -160, 65 -110 C65 -50, 75 70, 45 130 C20 160, -20 160, -45 130 C-75 70, -65 -50, -65 -110 Z" fill={paint('metal')} />
+      <ellipse cx="0" cy="-60" rx="46" ry="34" fill="var(--navy)" stroke="var(--azure)" strokeWidth="2" />
+      <ellipse cx="-16" cy="-60" rx="10" ry="5" fill="#00e5ff" opacity="0.9" />
+      <ellipse cx="16" cy="-60" rx="10" ry="5" fill="#00e5ff" opacity="0.9" />
+      <path d="M-75 -40 C-95 10, -90 60, -70 90 C-65 95, -55 70, -62 30 Z" fill={paint('ice')} />
+      <path d="M75 -40 C95 10, 90 60, 70 90 C65 95, 55 70, 62 30 Z" fill={paint('left')} />
+      <ellipse cx="0" cy="25" rx="14" ry="14" fill="#0066ff" opacity="0.75" />
+      <circle cx="0" cy="25" r="7" fill="#60a5fa" />
+    </g>
+  );
 }

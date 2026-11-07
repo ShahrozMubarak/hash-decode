@@ -5,6 +5,7 @@ import {WorkCard} from './Work';
 import ContactForm from './ContactForm';
 import DottedPoster from './DottedPoster';
 import ResponsiveStage,{MobileCrystal,MobileDotted} from './ResponsiveStage';
+import SceneSurface from './SceneSurface';
 import {Gallery,BriefDialog} from './StudioControls';
 import {ArrowUpRight,ArrowDown,AppWindow,Braces,ShieldCheck,Workflow} from 'lucide-react';
 
@@ -23,8 +24,8 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
      </div>
      <figure className="hero-object">
       <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
-      <div className="specimen-visual" id="hero-model-anchor"><div className="desktop-hero-poster"><DottedPoster/></div><div className="mobile-hero-poster"><MobileCrystal/></div></div>
-      <figcaption><span>FIG. 01</span><strong><span className="desktop-model-label">Hash study</span><span className="mobile-model-label">Enchanted Crystal</span></strong></figcaption>
+      <div className="specimen-visual" id="hero-model-anchor"><div className="desktop-hero-poster"><SceneSurface model="eva"/></div><div className="mobile-hero-poster"><MobileCrystal/></div></div>
+      <figcaption><span>FIG. 01</span><strong><span className="desktop-model-label">Eva Robot</span><span className="mobile-model-label">Eva Robot</span></strong></figcaption>
      </figure>
     </div><div className="wrap hero-baseline"><a href="#services"><ArrowDown size={15}/> Explore the studio</a><a href="#showcase">Object studies <span className="desktop-model-label">01—02</span></a></div></div>
    </section>

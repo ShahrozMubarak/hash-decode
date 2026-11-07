@@ -11,7 +11,7 @@ function useMobile(){
 }
 export function MobileCrystal(){
  const mobile=useMobile();
- return <div className="stationary-mobile-crystal">{mobile===true?<SceneSurface model="crystal" autoMobile/>:<ModelPoster model="crystal"/>}</div>;
+ return <div className="stationary-mobile-crystal">{mobile===true?<SceneSurface model="eva" autoMobile/>:<ModelPoster model="eva"/>}</div>;
 }
 export default function ResponsiveStage(){
  const mobile=useMobile(),[motion,setMotion]=useState(false);
@@ -19,4 +19,4 @@ export default function ResponsiveStage(){
  return motion&&mobile===false?<DottedJourney/>:null;
 }
 
-export function MobileDotted(){const mobile=useMobile();return mobile===true?<InlineDotted form={3}/>:null;}
+export function MobileDotted(){const mobile=useMobile();return mobile===true?<div className="stationary-mobile-crystal"><SceneSurface model="eva" autoMobile/></div>:null;}

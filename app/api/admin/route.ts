@@ -3,7 +3,7 @@ import {projects,inquiries,settings} from '@/db/schema';
 import {eq} from 'drizzle-orm';
 import {concepts,listProjects} from '@/lib/studio-data';
 import {manageContent} from '@/lib/cms';
-import {adminAccess,bounded,readSmall,sameOrigin,httpsUrl} from '@/lib/studio-security';
+import {adminAccess,bounded,readSmall,sameOrigin,httpsUrl,imageOrUrl} from '@/lib/studio-security';
 export async function POST(req:Request){
   if(!sameOrigin(req))return Response.json({error:'Untrusted request.'},{status:403});
   if(!(await adminAccess(req)).allowed)return Response.json({error:'Sign in to continue.'},{status:401});
@@ -17,7 +17,7 @@ export async function POST(req:Request){
       const existing=(await listProjects(true)).find(p=>p.slug===slug);
       if(d.isNew && existing)return Response.json({error:'That project address is already in use.'},{status:409});
       const title=bounded(d.title,90,2),category=bounded(d.category,45,2),summary=bounded(d.summary,240,8),challenge=bounded(d.challenge,2500),solution=bounded(d.solution,2500);
-      const url=httpsUrl(d.url),image=httpsUrl(d.image),status=d.status==='published'?'published':'draft',art=['orbit','relay','grid'].includes(d.art)?d.art:'grid';
+      const url=httpsUrl(d.url),image=imageOrUrl(d.image),status=d.status==='published'?'published':'draft',art=['orbit','relay','grid'].includes(d.art)?d.art:'grid';
       const position=Number(d.position);
       if(!Number.isInteger(position)||position<0||position>9999)throw Error('Position must be between 0 and 9999.');
       const kind=d.kind==='Studio concept'?'Studio concept':'Studio project';

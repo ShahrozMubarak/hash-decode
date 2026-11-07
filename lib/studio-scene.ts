@@ -13,12 +13,17 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  renderer.setClearColor(navy,0);
  const scene=new THREE.Scene(),object=new THREE.Group();
  const camera=new THREE.PerspectiveCamera(32,1,.1,50);
- camera.position.set(0,0,model==='cube'?7.2:5.4);
- const surface=new THREE.MeshPhysicalMaterial({color:azure,metalness:.22,roughness:.21,clearcoat:1,transparent:model!=='halo',opacity:model==='cube'?.57:.81,depthWrite:model==='halo',envMapIntensity:1.3});
+ camera.position.set(0,model==='eva'?0.2:0,model==='cube'?7.2:5.4);
+ const surface=new THREE.MeshPhysicalMaterial({color:azure,metalness:.22,roughness:.21,clearcoat:1,transparent:model!=='halo'&&model!=='eva',opacity:model==='cube'?.57:.81,depthWrite:model==='halo'||model==='eva',envMapIntensity:1.3});
  const core=new THREE.MeshStandardMaterial({color:coral,emissive:coral,emissiveIntensity:.38,roughness:.26});
  const metal=new THREE.MeshStandardMaterial({color:snow.clone().lerp(azure,.42),metalness:.83,roughness:.27});
  scene.add(object,new THREE.HemisphereLight(snow,azure,1.45));
- const key=new THREE.DirectionalLight(snow,2.1);key.position.set(-3,4,4);scene.add(key);
+ const key=new THREE.DirectionalLight(snow,2.4);key.position.set(-3,4,4);scene.add(key);
+ if(model==='eva'){
+  const blueRim=new THREE.DirectionalLight(new THREE.Color('#1e60ff'),3.8);blueRim.position.set(3,-1,-4);
+  const blueFill=new THREE.PointLight(new THREE.Color('#0055ff'),3.2,12);blueFill.position.set(0,0,-2);
+  scene.add(blueRim,blueFill);
+ }
  const pixels=new Uint8Array(128*64*4);
  const pixel=new THREE.Color();
  for(let y=0;y<64;y++)for(let x=0;x<128;x++){
@@ -38,13 +43,29 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   if(!last||now-last>=1000/fps){
    elapsed+=last?Math.min((now-last)/1000,.1):0;last=now;
    progress+=(targetProgress-progress)*.14;
-   object.rotation.y=-.55+elapsed*(lite?.12:.18)+progress*(model==='crystal'?1.5:1.1);
-   const angle=(progress-.5)*(model==='halo'?.55:.32);
-   camera.position.x=Math.sin(angle)*(model==='cube'?7.2:5.4);
-   camera.position.z=Math.cos(angle)*(model==='cube'?7.2:5.4)*(canvas.closest('.gallery-object')?1-Math.sin(progress*Math.PI)*.38:1);
-   camera.position.y=(progress-.5)*(lite?.28:.65);camera.lookAt(0,0,0);
-   object.rotation.x=(model==='cube'?.38:model==='halo'?.56:.05)+progress*.18;
-   object.rotation.z=model==='halo'?-.24:model==='crystal'?-.18:.025;
+   if(model==='eva'){
+    const floatY=Math.sin(elapsed*1.5)*.12;
+    const floatX=Math.cos(elapsed*1.0)*.05;
+    const floatZ=Math.sin(elapsed*0.8)*.04;
+    object.position.set(floatX,floatY,floatZ);
+    object.rotation.z=Math.sin(elapsed*1.2)*.035;
+    object.rotation.x=Math.cos(elapsed*0.9)*.025;
+    object.rotation.y=-.15+elapsed*(lite?.1:.16);
+    const orbitAngle=progress*Math.PI*2;
+    const dist=5.2;
+    camera.position.x=Math.sin(orbitAngle)*dist;
+    camera.position.z=Math.cos(orbitAngle)*dist;
+    camera.position.y=0.2+Math.sin(progress*Math.PI)*0.5;
+    camera.lookAt(0,floatY*.4,0);
+   }else{
+    object.rotation.y=-.55+elapsed*(lite?.12:.18)+progress*(model==='crystal'?1.5:1.1);
+    const angle=(progress-.5)*(model==='halo'?.55:.32);
+    camera.position.x=Math.sin(angle)*(model==='cube'?7.2:5.4);
+    camera.position.z=Math.cos(angle)*(model==='cube'?7.2:5.4)*(canvas.closest('.gallery-object')?1-Math.sin(progress*Math.PI)*.38:1);
+    camera.position.y=(progress-.5)*(lite?.28:.65);camera.lookAt(0,0,0);
+    object.rotation.x=(model==='cube'?.38:model==='halo'?.56:.05)+progress*.18;
+    object.rotation.z=model==='halo'?-.24:model==='crystal'?-.18:.025;
+   }
    if(instances){
     const scatter=Math.pow(1-Math.min(1,elapsed/.88),3);
     const nudge=Math.max(0,1-(elapsed-pulse)/.75);
@@ -64,7 +85,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const resize=new ResizeObserver(()=>{const {width,height}=canvas.getBoundingClientRect();if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();}});
  const view=new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible)start();else stop();});
  const interact=()=>{pulse=elapsed;};
- const onScroll=(e:Event)=>{const detail=(e as CustomEvent<{hero:number,gallery:number,crystal:number}>).detail;targetProgress=canvas.closest('.stationary-mobile-crystal')?0:model==='cube'?detail.hero:detail.gallery;};
+ const onScroll=(e:Event)=>{const detail=(e as CustomEvent<{hero:number,gallery:number,crystal:number,page:number}>).detail;targetProgress=canvas.closest('.stationary-mobile-crystal')?(detail.hero||0):model==='cube'?detail.hero:model==='eva'?(detail.hero||detail.gallery||detail.page||0):detail.gallery;};
  function lost(e:Event){e.preventDefault();suspended=true;stop();failed();}
  function restore(){suspended=false;start();}
  function dispose(){
@@ -88,6 +109,29 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   }else if(model==='halo'){
    const {createHaloGroup}=await import('./physical-halo');if(disposed)return;
    object.add(createHaloGroup(surface,metal,core));object.scale.setScalar(1.55);
+  }else if(model==='eva'){
+   const deadline=AbortSignal.any([signal,AbortSignal.timeout(10000)]);
+   const [reply,{GLTFLoader}]=await Promise.all([fetch('/models/eva.glb',{signal:deadline}),import('three/examples/jsm/loaders/GLTFLoader.js')]);
+   if(!reply.ok)throw Error('Eva model unavailable');
+   const gltf=await new GLTFLoader().parseAsync(await reply.arrayBuffer(),'');
+   const eva=gltf.scene;
+   eva.traverse(child=>{
+    if(child instanceof THREE.Mesh){
+     const mats=Array.isArray(child.material)?child.material:[child.material];
+     mats.forEach(m=>{
+      if(m&&m.name==='Putih'){m.roughness=.14;m.metalness=.12;}
+      else if(m&&m.name==='Material.002'){m.emissive=new THREE.Color('#0088ff');m.emissiveIntensity=2.8;}
+      else if(m&&m.name==='Material.006'){m.roughness=.2;m.metalness=.8;}
+     });
+    }
+   });
+   if(disposed)return;
+   object.add(eva);
+   if(deadline.aborted)throw Error('Model timed out');
+   const bounds=new THREE.Box3().setFromObject(eva),size=bounds.getSize(new THREE.Vector3()),centre=bounds.getCenter(new THREE.Vector3());
+   const scale=2.85/Math.max(size.x,size.y,size.z);
+   eva.scale.multiplyScalar(scale);
+   eva.position.sub(centre.multiplyScalar(scale));
   }else{
    const deadline=AbortSignal.any([signal,AbortSignal.timeout(8000)]);
    const [reply,{GLTFLoader}]=await Promise.all([fetch('/models/enchanted_crystal.glb',{signal:deadline}),import('three/examples/jsm/loaders/GLTFLoader.js')]);
