@@ -23,7 +23,7 @@ export default function JourneyControl(){
     hero=measureBox(heroAnchor,y);
     if(!mobile){
      const top=landing.getBoundingClientRect().top+y,trailHeight=landing.offsetHeight;trail.setAttribute('viewBox',`0 0 ${w} ${trailHeight}`);
-     const across=[.68,.28,.70,.5,.32,.68,.28,.72,.68];
+     const across=[.84,.88,.70,.5,.32,.68,.28,.72,.68];
      const points=offsets.map((at,i)=>({x:w*across[i],y:Math.max(18,at-top+Math.min(stations[i].offsetHeight*.48,v*.65))}));
      // Trail line starts below the hero section so the hero start is completely clean
      points[0].y=Math.max(stations[0].offsetHeight - 40, v * 0.85);
@@ -37,11 +37,11 @@ export default function JourneyControl(){
    landing.style.setProperty('--hero-y','0px');landing.style.setProperty('--hero-scale','1');
    landing.style.setProperty('--process-progress',String(motion?state.process:1));
    landing.style.setProperty('--scene-tint',(mobile?0:Math.sin(state.page*Math.PI*4)**2*100).toFixed(2)+'%');
-   const dark=mobile?0:ease((y+v*.7-offsets[2])/(v*.7))*(1-ease((y+v*.5-offsets[4])/(v*.8)));
+   const dark=mobile?0:ease((y+v*.6-offsets[1])/(v*.6))*(1-ease((y+v*.5-offsets[3])/(v*.8)));
    landing.style.setProperty('--story-dark',dark.toFixed(3));
    landing.style.setProperty('--ghost-x',(-state.page*220)+'px');
    track.querySelectorAll('.mobile-checkpoint').forEach((dot,i)=>{dot.classList.toggle('active',i<=state.current);dot.classList.toggle('current',i===state.current);});
-   const gallery=clampUnit((y-offsets[2])/Math.max(1,showcase.offsetHeight-v*.9));
+   const gallery=clampUnit((y-offsets[1])/Math.max(1,showcase.offsetHeight-v*.9));
    landing.style.setProperty('--collection-depth',(mobile?0:gallery*100)+'%');
    track.style.setProperty('--progress',String(state.page));
    label.textContent=stations[state.current].dataset.station+' · '+Math.round(state.page*100)+'%';
@@ -51,10 +51,10 @@ export default function JourneyControl(){
    const base=(at:number,x:number,cy:number,size:number,phase:number,yaw:number,pitch:number,alpha:number):Pose=>({at,x,y:cy,size,phase,yaw,pitch,distance:3.8-Math.sin(phase*Math.PI/2)*.65,alpha});
    const hsize=Math.min(hero.width*.36,hero.height*.4);
    const stops=[
-    base(0,hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0), // 0 alpha at start to remove # from hero
-    base(offsets[1]*.6,hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0),
-    base(offsets[1],w*.26,v*.46,Math.min(w*.22,v*.32),1,.8,.5,1),
+    base(0,hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0), // 0 alpha in hero
+    base(offsets[1],hero.x+hero.width*.5,hero.y+hero.height*.45,hsize,0,-.4,-.18,0), // 0 alpha in showcase so Eva Robot shines cleanly
     base(offsets[2]-v*.25,w*.7,v*.5,160,1,1.3,-.25,0),
+    base(offsets[2],w*.26,v*.46,Math.min(w*.22,v*.32),1,.8,.5,1),
     {...base(offsets[3],w*.72,v*.52,v*.48,3,0,0,1),distance:3.4},
     {...base(offsets[3]+v*.65,w*.6,v*.52,v*.48,3,.15,.08,1),distance:1.1},
     {...base(offsets[3]+v*1.1,w*.5,v*.52,v*.48,3,.25,.1,.85),distance:-.45},

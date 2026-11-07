@@ -20,9 +20,9 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  scene.add(object,new THREE.HemisphereLight(snow,azure,1.45));
  const key=new THREE.DirectionalLight(snow,2.4);key.position.set(-3,4,4);scene.add(key);
  if(model==='eva'||model!=='cube'){
-  const blueRim=new THREE.DirectionalLight(new THREE.Color('#1e75ff'),4.5);blueRim.position.set(3,-1,-4);
-  const blueFill=new THREE.PointLight(new THREE.Color('#0066ff'),3.6,14);blueFill.position.set(0,0,-2.5);
-  const cyanEyeLight=new THREE.PointLight(new THREE.Color('#00f0ff'),1.8,4);cyanEyeLight.position.set(0,0.4,-0.8);
+  const blueRim=new THREE.DirectionalLight(new THREE.Color('#1e75ff'),4.8);blueRim.position.set(3,-1,-4);
+  const blueFill=new THREE.PointLight(new THREE.Color('#0066ff'),3.8,14);blueFill.position.set(0,0,-2.5);
+  const cyanEyeLight=new THREE.PointLight(new THREE.Color('#00f0ff'),2.2,6);cyanEyeLight.position.set(0,0.4,1.4);
   scene.add(blueRim,blueFill,cyanEyeLight);
  }
  const pixels=new Uint8Array(128*64*4);
@@ -34,17 +34,17 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  }
  const environment=new THREE.DataTexture(pixels,128,64);
  environment.mapping=THREE.EquirectangularReflectionMapping;environment.needsUpdate=true;scene.environment=environment;
- let frame=0,last=0,elapsed=0,pulse=-5,progress=0,targetProgress=0,visible=false,disposed=false,loaded=false,suspended=false;
+ let frame=0,last=0,elapsed=0,pulse=-5,progress=0,targetProgress=0,visible=true,disposed=false,loaded=false,suspended=false;
  let instances:THREE.InstancedMesh|undefined;
  let mixer:THREE.AnimationMixer|undefined;
  
  // Grok-bot Eye Tracking & Animation State
  let eyeLeft:THREE.Object3D|undefined;
  let eyeRight:THREE.Object3D|undefined;
- let baseLeftEyeX=-0.27,baseRightEyeX=0.27,baseEyeZ=3.08;
+ let baseLeftEyeX=-0.27,baseRightEyeX=0.27,baseEyeY=3.08,baseEyeZ=0.355;
  let blinkTimer=0,nextBlink=3.2,blinkProgress=0;
  let lookTimer=0,nextLook=2.0;
- const currentLook={x:0,z:0},targetLook={x:0,z:0};
+ const currentLook={x:0,y:0},targetLook={x:0,y:0};
 
  const transforms=new THREE.Object3D(),cells=cubeCells.filter(([x,y,z])=>x||y||z);
  const cleanGeometry=()=>{const geometries=new Set<THREE.BufferGeometry>();object.traverse(node=>{if(node instanceof THREE.Mesh)geometries.add(node.geometry);});geometries.forEach(g=>g.dispose());};
@@ -70,25 +70,27 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     if(lookTimer>nextLook){
      lookTimer=0;nextLook=1.8+Math.random()*2.5;
      const targets=[
-      {x:0,z:0},
-      {x:-0.045,z:0.02},
-      {x:0.045,z:0.02},
-      {x:0,z:0.035},
-      {x:-0.03,z:-0.02},
-      {x:0.03,z:-0.02}
+      {x:0,y:0},
+      {x:-0.05,y:0.02},
+      {x:0.05,y:0.02},
+      {x:0,y:0.04},
+      {x:-0.04,y:-0.03},
+      {x:0.04,y:-0.03}
      ];
      const chosen=targets[Math.floor(Math.random()*targets.length)];
-     targetLook.x=chosen.x;targetLook.z=chosen.z;
+     targetLook.x=chosen.x;targetLook.y=chosen.y;
     }
     currentLook.x+=(targetLook.x-currentLook.x)*0.14;
-    currentLook.z+=(targetLook.z-currentLook.z)*0.14;
+    currentLook.y+=(targetLook.y-currentLook.y)*0.14;
 
     eyeLeft.scale.y=blinkScaleY;
     eyeRight.scale.y=blinkScaleY;
     eyeLeft.position.x=baseLeftEyeX+currentLook.x;
     eyeRight.position.x=baseRightEyeX+currentLook.x;
-    eyeLeft.position.z=baseEyeZ+currentLook.z;
-    eyeRight.position.z=baseEyeZ+currentLook.z;
+    eyeLeft.position.y=baseEyeY+currentLook.y;
+    eyeRight.position.y=baseEyeY+currentLook.y;
+    eyeLeft.position.z=baseEyeZ;
+    eyeRight.position.z=baseEyeZ;
    }
 
    if(model==='eva'||model!=='cube'){
@@ -155,7 +157,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    instances=new THREE.InstancedMesh(cell,surface,26);instances.frustumCulled=false;
    object.add(instances,new THREE.Mesh(cell,core));
   }else{
-   const deadline=AbortSignal.any([signal,AbortSignal.timeout(12000)]);
+   const deadline=typeof AbortSignal.any==="function"?AbortSignal.any([signal,AbortSignal.timeout(15000)]):signal;
    const [reply,{GLTFLoader}]=await Promise.all([
     fetch('/models/eva_robot.glb',{signal:deadline}).then(r=>r.ok?r:fetch('/models/fixer_robot.glb',{signal:deadline})),
     import('three/examples/jsm/loaders/GLTFLoader.js')
@@ -172,7 +174,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    // Identify Grok-bot Eye nodes
    eyeLeft=robot.getObjectByName('Eye_Left')||undefined;
    eyeRight=robot.getObjectByName('Eye_Right')||undefined;
-   if(eyeLeft){baseLeftEyeX=eyeLeft.position.x;baseEyeZ=eyeLeft.position.z;}
+   if(eyeLeft){baseLeftEyeX=eyeLeft.position.x;baseEyeY=eyeLeft.position.y;baseEyeZ=eyeLeft.position.z;}
    if(eyeRight){baseRightEyeX=eyeRight.position.x;}
 
    const grokEyeMat=new THREE.MeshStandardMaterial({
@@ -223,6 +225,10 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    robot.scale.multiplyScalar(scale);
    robot.position.sub(centre.multiplyScalar(scale));
   }
-  loaded=true;window.dispatchEvent(new Event('hd:measure'));start();
+  loaded=true;
+  const {width,height}=canvas.getBoundingClientRect();
+  if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();}
+  try{renderer.render(scene,camera);ready();}catch(e){}
+  window.dispatchEvent(new Event('hd:measure'));start();
  }catch(error){dispose();if(!signal.aborted)throw error;}
 }

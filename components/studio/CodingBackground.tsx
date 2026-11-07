@@ -154,3 +154,4 @@ export default function CodingBackground() {
     </div>
   );
 }
+
