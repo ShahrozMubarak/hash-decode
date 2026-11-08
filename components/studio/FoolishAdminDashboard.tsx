@@ -697,8 +697,8 @@ export default function FoolishAdminDashboard({
                       <h3 className="fd-card-heading">Acquisition &amp; Inquiries Volume</h3>
                       <p className="fd-card-sub">Daily brief submissions and traffic pacing</p>
                     </div>
-                    <span style={{ fontFamily: 'var(--mono)', fontSize: '0.74rem', color: '#FF4D36' }}>
-                      ● Live Ingestion Active
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: '0.74rem', color: '#1D70F5', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1D70F5' }} /> Live Ingestion Active
                     </span>
                   </div>
                   {/* High fidelity SVG Performance Chart */}
@@ -706,14 +706,14 @@ export default function FoolishAdminDashboard({
                     <svg viewBox="0 0 600 200" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
                       <defs>
                         <linearGradient id="fdChartGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#FF4D36" stopOpacity="0.35" />
-                          <stop offset="100%" stopColor="#FF4D36" stopOpacity="0.0" />
+                          <stop offset="0%" stopColor="#1D70F5" stopOpacity="0.25" />
+                          <stop offset="100%" stopColor="#1D70F5" stopOpacity="0.0" />
                         </linearGradient>
                       </defs>
                       {/* Grid Lines */}
-                      <line x1="0" y1="50" x2="600" y2="50" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
-                      <line x1="0" y1="100" x2="600" y2="100" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
-                      <line x1="0" y1="150" x2="600" y2="150" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
+                      <line x1="0" y1="50" x2="600" y2="50" stroke="#E2E8F0" strokeDasharray="4 4" />
+                      <line x1="0" y1="100" x2="600" y2="100" stroke="#E2E8F0" strokeDasharray="4 4" />
+                      <line x1="0" y1="150" x2="600" y2="150" stroke="#E2E8F0" strokeDasharray="4 4" />
 
                       {/* Area Fill */}
                       <polygon
@@ -721,28 +721,28 @@ export default function FoolishAdminDashboard({
                         fill="url(#fdChartGrad)"
                       />
 
-                      {/* Primary Coral Wave */}
+                      {/* Primary Azure Wave */}
                       <polyline
                         points="0,180 50,160 100,140 150,150 200,120 250,90 300,110 350,75 400,60 450,85 500,45 550,55 600,30"
                         fill="none"
-                        stroke="#FF4D36"
+                        stroke="#1D70F5"
                         strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       />
 
-                      {/* Secondary Frozen White Wave */}
+                      {/* Secondary Subtle Wave */}
                       <polyline
                         points="0,190 50,175 100,160 150,165 200,145 250,125 300,135 350,110 400,95 450,115 500,85 550,95 600,70"
                         fill="none"
-                        stroke="rgba(255,255,255,0.65)"
+                        stroke="#94A3B8"
                         strokeWidth="1.8"
                         strokeDasharray="6 4"
                       />
 
                       {/* Active Nodes */}
-                      <circle cx="500" cy="45" r="5" fill="#FFFFFF" stroke="#FF4D36" strokeWidth="2.5" />
-                      <circle cx="600" cy="30" r="5" fill="#FFFFFF" stroke="#FF4D36" strokeWidth="2.5" />
+                      <circle cx="500" cy="45" r="5" fill="#FFFFFF" stroke="#1D70F5" strokeWidth="2.5" />
+                      <circle cx="600" cy="30" r="5" fill="#FFFFFF" stroke="#1D70F5" strokeWidth="2.5" />
                     </svg>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', fontFamily: 'var(--mono)', fontSize: '0.72rem', color: '#64748B' }}>
@@ -750,7 +750,7 @@ export default function FoolishAdminDashboard({
                     <span>Week 2</span>
                     <span>Week 3</span>
                     <span>Week 4</span>
-                    <span style={{ color: '#F8FAFC' }}>Current Day (Peak)</span>
+                    <span style={{ color: '#0F172A', fontWeight: 600 }}>Current Day (Peak)</span>
                   </div>
                 </div>
 
@@ -765,13 +765,13 @@ export default function FoolishAdminDashboard({
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
                     <div style={{ position: 'relative', width: 140, height: 140 }}>
                       <svg viewBox="0 0 100 100" style={{ transform: 'rotate(-90deg)', width: '100%', height: '100%' }}>
-                        <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="12" />
+                        <circle cx="50" cy="50" r="38" fill="none" stroke="#E2E8F0" strokeWidth="12" />
                         <circle
                           cx="50"
                           cy="50"
                           r="38"
                           fill="none"
-                          stroke="#FF4D36"
+                          stroke="#1D70F5"
                           strokeWidth="12"
                           strokeDasharray="140 238"
                         />
@@ -780,7 +780,7 @@ export default function FoolishAdminDashboard({
                           cy="50"
                           r="38"
                           fill="none"
-                          stroke="#FFFFFF"
+                          stroke="#38BDF8"
                           strokeWidth="12"
                           strokeDasharray="65 238"
                           strokeDashoffset="-140"
@@ -788,32 +788,32 @@ export default function FoolishAdminDashboard({
                       </svg>
                       <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', textAlign: 'center' }}>
                         <div>
-                          <strong style={{ fontSize: '1.4rem', fontWeight: 800, color: '#FFFFFF', display: 'block' }}>{projects.length}</strong>
-                          <small style={{ fontFamily: 'var(--mono)', fontSize: '0.62rem', color: '#94A3B8' }}>BUILDS</small>
+                          <strong style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0F172A', display: 'block' }}>{projects.length}</strong>
+                          <small style={{ fontFamily: 'var(--mono)', fontSize: '0.62rem', color: '#64748B' }}>BUILDS</small>
                         </div>
                       </div>
                     </div>
                     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.82rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#CBD5E1' }}>
-                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF4D36' }} />
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#475569' }}>
+                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#1D70F5' }} />
                           Web Applications
                         </span>
-                        <strong style={{ color: '#FFFFFF' }}>58%</strong>
+                        <strong style={{ color: '#0F172A' }}>58%</strong>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#CBD5E1' }}>
-                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFFFFF' }} />
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#475569' }}>
+                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#38BDF8' }} />
                           Security Audits &amp; Zero-Day
                         </span>
-                        <strong style={{ color: '#FFFFFF' }}>28%</strong>
+                        <strong style={{ color: '#0F172A' }}>28%</strong>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#CBD5E1' }}>
-                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} />
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#475569' }}>
+                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#CBD5E1' }} />
                           APIs &amp; Microservices
                         </span>
-                        <strong style={{ color: '#FFFFFF' }}>14%</strong>
+                        <strong style={{ color: '#0F172A' }}>14%</strong>
                       </div>
                     </div>
                   </div>
@@ -894,9 +894,9 @@ export default function FoolishAdminDashboard({
                       key={cat}
                       className="fd-topbar-btn"
                       style={{
-                        background: projectCategoryFilter === cat ? 'rgba(255,77,54,0.18)' : 'rgba(255,255,255,0.04)',
-                        borderColor: projectCategoryFilter === cat ? '#FF4D36' : 'rgba(255,255,255,0.08)',
-                        color: projectCategoryFilter === cat ? '#FFFFFF' : '#94A3B8',
+                        background: projectCategoryFilter === cat ? '#EFF6FF' : '#F8FAFC',
+                        borderColor: projectCategoryFilter === cat ? '#BFDBFE' : '#E2E8F0',
+                        color: projectCategoryFilter === cat ? '#1D70F5' : '#64748B',
                         textTransform: 'capitalize'
                       }}
                       onClick={() => setProjectCategoryFilter(cat)}
@@ -922,7 +922,7 @@ export default function FoolishAdminDashboard({
                 {filteredProjects.map((proj) => (
                   <div key={proj.slug} className="fd-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <div>
-                      <div style={{ width: '100%', height: '170px', borderRadius: '14px', background: '#030504', overflow: 'hidden', position: 'relative', marginBottom: '1rem', border: '1px solid rgba(255,255,255,0.08)' }}>
+                      <div style={{ width: '100%', height: '170px', borderRadius: '14px', background: '#F1F5F9', overflow: 'hidden', position: 'relative', marginBottom: '1rem', border: '1px solid #E2E8F0' }}>
                         {proj.image ? (
                           <img src={proj.image} alt={proj.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         ) : (
@@ -937,18 +937,18 @@ export default function FoolishAdminDashboard({
                           {proj.status}
                         </span>
                       </div>
-                      <span style={{ fontFamily: 'var(--mono)', fontSize: '0.68rem', color: '#FF4D36', display: 'block', marginBottom: '0.3rem' }}>
+                      <span style={{ fontFamily: 'var(--mono)', fontSize: '0.68rem', color: '#1D70F5', display: 'block', marginBottom: '0.3rem', fontWeight: 600 }}>
                         {proj.category}
                       </span>
-                      <h4 style={{ fontSize: '1.1rem', fontWeight: 750, color: '#FFFFFF', margin: '0 0 0.4rem' }}>
+                      <h4 style={{ fontSize: '1.1rem', fontWeight: 750, color: '#0F172A', margin: '0 0 0.4rem' }}>
                         {proj.title || 'Untitled Project'}
                       </h4>
-                      <p style={{ fontSize: '0.82rem', color: '#94A3B8', lineHeight: 1.45, margin: 0 }}>
+                      <p style={{ fontSize: '0.82rem', color: '#64748B', lineHeight: 1.45, margin: 0 }}>
                         {proj.summary}
                       </p>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1.25rem', paddingTop: '0.85rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1.25rem', paddingTop: '0.85rem', borderTop: '1px solid #F1F5F9' }}>
                       <button
                         className="fd-topbar-btn"
                         style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem' }}
@@ -996,9 +996,9 @@ export default function FoolishAdminDashboard({
                       key={st}
                       className="fd-topbar-btn"
                       style={{
-                        background: inquiryStatusFilter === st ? 'rgba(255,77,54,0.18)' : 'rgba(255,255,255,0.04)',
-                        borderColor: inquiryStatusFilter === st ? '#FF4D36' : 'rgba(255,255,255,0.08)',
-                        color: inquiryStatusFilter === st ? '#FFFFFF' : '#94A3B8',
+                        background: inquiryStatusFilter === st ? '#EFF6FF' : '#F8FAFC',
+                        borderColor: inquiryStatusFilter === st ? '#BFDBFE' : '#E2E8F0',
+                        color: inquiryStatusFilter === st ? '#1D70F5' : '#64748B',
                         textTransform: 'capitalize'
                       }}
                       onClick={() => setInquiryStatusFilter(st)}
@@ -1007,7 +1007,7 @@ export default function FoolishAdminDashboard({
                     </button>
                   ))}
                 </div>
-                <button className="fd-topbar-btn" onClick={handleExportInquiriesCSV}>
+                <button className="fd-topbar-btn primary" onClick={handleExportInquiriesCSV}>
                   <Download size={15} />
                   <span>Download Lead CSV</span>
                 </button>

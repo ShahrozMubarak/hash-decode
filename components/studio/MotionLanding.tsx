@@ -17,20 +17,49 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
  return <div className="landing original-composition">
    <div className="story-backdrop" aria-hidden="true"/><JourneyControl/><ResponsiveStage/>
    <section className="hero-runway" id="overview" data-station="Overview">
-    <div className="hero-sheet"><div className="wrap hero-grid">
-     <div className="hero-copy">
-      <h1>Build it.<br/>Break it.<br/><TypingSecure /></h1>
-      <p className="hero-description">{intro}</p>
-      <div className="actions"><a className="cta" href="#brief">Start a project <ArrowUpRight size={18}/></a><a className="text-link" href="#showcase">Explore agent <ArrowDown size={15}/></a></div>
-     </div>
-     <figure className="hero-object">
-      <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
-      <div className="specimen-visual" id="hero-model-anchor">
-       <div className="hero-blueprint-lines" aria-hidden="true"/>
-       <SceneSurface model="eva" autoMobile={true}/>
+    <div className="hero-sheet">
+      <div className="wrap hero-grid">
+        <div className="hero-copy">
+          <h1>Build it.<br/>Break it.<br/><TypingSecure /></h1>
+          <p className="hero-description">{intro}</p>
+          <div className="actions">
+            <a className="cta" href="#brief">Start a project <ArrowUpRight size={18}/></a>
+            <a className="text-link" href="#showcase">Explore agent <ArrowDown size={15}/></a>
+          </div>
+        </div>
+        <figure className="hero-object">
+          <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
+          <div className="specimen-visual" id="hero-model-anchor">
+            <div className="hero-blueprint-lines" aria-hidden="true"/>
+            <SceneSurface model="eva" autoMobile={true}/>
+          </div>
+        </figure>
       </div>
-     </figure>
-    </div><div className="wrap hero-baseline"><a href="#showcase"><ArrowDown size={15}/> Explore the studio</a></div></div>
+
+      <div className="wrap hero-poster-wrap">
+        <div className="hero-poster-banner">
+          <div className="poster-copy">
+            <span className="poster-tag">[ ARCHITECTURE // ZERO-DAY SECURE ]</span>
+            <h2>Hash Platform Core <span>v2.4</span></h2>
+            <p>High-performance distributed web architectures, microservices, and cryptographic automated defense built for scale.</p>
+            <div className="poster-metrics">
+              <div className="metric-item"><strong>99.99%</strong><span>UPTIME SLA</span></div>
+              <div className="metric-item"><strong>&lt;12ms</strong><span>EDGE LATENCY</span></div>
+              <div className="metric-item"><strong>ZERO-DAY</strong><span>HARDENED</span></div>
+            </div>
+            <div className="poster-actions">
+              <a className="cta" href="#brief">Start a project <ArrowUpRight size={17} /></a>
+              <a className="text-link" href="/services">View architectures <ArrowUpRight size={15} /></a>
+            </div>
+          </div>
+          <div className="poster-visual">
+            <img src="/images/hero-showcase-poster.jpg" alt="Hash Decode Architecture Core" width={640} height={380} loading="eager" />
+          </div>
+        </div>
+      </div>
+
+      <div className="wrap hero-baseline"><a href="#showcase"><ArrowDown size={15}/> Explore the studio</a></div>
+    </div>
    </section>
    <section className="showcase dark-band" id="showcase" data-station="Agent">
     <CodingBackground />
@@ -40,28 +69,80 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
      </div>
     </div>
    </section>
-   <section className="band wrap" id="services" data-station="Services">
-     <div className="systems-story">
-       <div className="iris-pill-badge">[ ARCHITECTURE // SYSTEMS ]</div>
-       <h2>Speed,<br/>structured with<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>clarity.</span></h2>
-       <p>Custom web platforms, APIs and business tools, designed around the way your team works.</p>
-       <a className="text-link" href="/services">Explore services <ArrowUpRight size={16}/></a>
+   <section className="band wrap services-section" id="services" data-station="Services">
+     <div className="section-header-centered">
+       <div className="iris-pill-badge">[ CORE CAPABILITIES & ARCHITECTURES ]</div>
+       <h2>Speed, structured with <span className="text-coral" style={{ color: 'var(--coral)' }}>clarity.</span></h2>
+       <p>Custom web platforms, enterprise software, cryptographic security audits, and autonomous business tools designed around your mission.</p>
      </div>
-     <div className="service-cards">
-       {capabilities.map(([id,name],i)=>{
-         const Icon=serviceIcons[i];
-         const codeTag = `[ SYS_0${i + 1} ]`;
-         return (
-           <a className="service-card" key={id} href={'/services#'+id}>
-             <div className="service-card-head">
-               <Icon size={26} strokeWidth={1.4} className="icon-azure"/>
-               <span className="service-code-tag">{codeTag}</span>
-             </div>
-             <h3>{name}</h3>
-             <ArrowUpRight size={17} className="service-card-arrow"/>
-           </a>
-         );
-       })}
+     <div className="service-cards-image-grid">
+       <a className="service-image-card" href="/services#web">
+         <div className="service-card-poster">
+           <img src="/images/web-platforms.jpg" alt="Enterprise Web Platforms" width={520} height={320} loading="lazy" />
+           <span className="card-badge-azure">[ SYS_01 // WEB PLATFORMS ]</span>
+         </div>
+         <div className="service-card-content">
+           <div className="service-meta">
+             <span className="tech-badge">Next.js 15</span>
+             <span className="tech-badge">TypeScript</span>
+             <span className="tech-badge">Edge SSR</span>
+           </div>
+           <h3>Enterprise Web Platforms</h3>
+           <p>Modern Next.js and React web architectures built with fluid motion, instant sub-second TTFB, and responsive reliability.</p>
+           <span className="service-card-cta">Explore platforms <ArrowUpRight size={16} /></span>
+         </div>
+       </a>
+
+       <a className="service-image-card" href="/services#custom-software">
+         <div className="service-card-poster">
+           <img src="/images/custom-software.jpg" alt="Custom Enterprise Software" width={520} height={320} loading="lazy" />
+           <span className="card-badge-azure">[ SYS_02 // CUSTOM SOFTWARE ]</span>
+         </div>
+         <div className="service-card-content">
+           <div className="service-meta">
+             <span className="tech-badge">Node.js</span>
+             <span className="tech-badge">PostgreSQL</span>
+             <span className="tech-badge">APIs</span>
+           </div>
+           <h3>Custom Enterprise Software</h3>
+           <p>Scalable distributed microservices, REST & GraphQL APIs, resilient database layers, and mission-critical backends.</p>
+           <span className="service-card-cta">Explore software <ArrowUpRight size={16} /></span>
+         </div>
+       </a>
+
+       <a className="service-image-card" href="/services#security">
+         <div className="service-card-poster">
+           <img src="/images/security-hardening.jpg" alt="Security Audits & Hardening" width={520} height={320} loading="lazy" />
+           <span className="card-badge-azure">[ SYS_03 // CYBER DEFENSE ]</span>
+         </div>
+         <div className="service-card-content">
+           <div className="service-meta">
+             <span className="tech-badge">Zero-Day</span>
+             <span className="tech-badge">AST Scans</span>
+             <span className="tech-badge">Penetration</span>
+           </div>
+           <h3>Security Audits & Hardening</h3>
+           <p>Continuous penetration defense, automated AST vulnerability scanning, zero-trust infrastructure, and code verification.</p>
+           <span className="service-card-cta">Explore security <ArrowUpRight size={16} /></span>
+         </div>
+       </a>
+
+       <a className="service-image-card" href="/services#business-tools">
+         <div className="service-card-poster">
+           <img src="/images/business-tools.jpg" alt="Business Automation & AI Tools" width={520} height={320} loading="lazy" />
+           <span className="card-badge-azure">[ SYS_04 // AUTOMATION ]</span>
+         </div>
+         <div className="service-card-content">
+           <div className="service-meta">
+             <span className="tech-badge">AI Agents</span>
+             <span className="tech-badge">Workflows</span>
+             <span className="tech-badge">ETL</span>
+           </div>
+           <h3>Business Automation & AI Tools</h3>
+           <p>Custom operational tooling, autonomous agent workflows, CRM integrations, and automated business data pipelines.</p>
+           <span className="service-card-cta">Explore automation <ArrowUpRight size={16} /></span>
+         </div>
+       </a>
      </div>
    </section>
    <section className="wrap band security-section story-security" id="security" data-station="Security">
