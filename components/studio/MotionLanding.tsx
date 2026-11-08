@@ -142,25 +142,30 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
    {/* 1. SERVICES (3 CARDS) */}
    <section className="section-rule-block" id="services" data-station="Services">
      <div className="wrap">
-     <div className="section-head-rule">
-       <span className="section-rule-label">01 · CAPABILITIES</span>
-       <h2 className="section-rule-heading">Engineered for <span className="highlight-word">performance.</span></h2>
-       <p className="section-rule-lead">Custom software, web platforms, and secure APIs built around the way your business works.</p>
-     </div>
-     <div className="services-tri-grid">
-       {homeServices.map((svc, i)=>(
-         <article key={i} className="service-tri-card">
-           <div className="service-card-icon-wrap">
-             <svc.icon size={22} />
-           </div>
-           <h3>{svc.title}</h3>
-           <p>{svc.desc}</p>
-         </article>
-       ))}
-     </div>
-     <div className="section-rule-action">
-       <a className="cta" href="/services">Explore services <ArrowUpRight size={16}/></a>
-     </div>
+       <div className="section-head-rule section-head-with-action">
+         <div className="section-head-text">
+           <span className="section-rule-label">01 · CAPABILITIES</span>
+           <h2 className="section-rule-heading">Engineered for <span className="highlight-word">performance.</span></h2>
+           <p className="section-rule-lead">Custom software, web platforms, and secure APIs built around the way your business works.</p>
+         </div>
+         <div className="section-head-link-wrap">
+           <a className="section-text-link" href="/services">
+             <span>Explore services</span>
+             <ArrowUpRight size={16} aria-hidden="true"/>
+           </a>
+         </div>
+       </div>
+       <div className="services-tri-grid">
+         {homeServices.map((svc, i)=>(
+           <article key={i} className="service-tri-card">
+             <div className="service-card-icon-wrap">
+               <svc.icon size={22} />
+             </div>
+             <h3>{svc.title}</h3>
+             <p>{svc.desc}</p>
+           </article>
+         ))}
+       </div>
      </div>
    </section>
 
