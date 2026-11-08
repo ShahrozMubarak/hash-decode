@@ -609,14 +609,7 @@ function initSqliteDb(): PlatformDb {
       : null;
     if (req) {
       const { DatabaseSync } = req('node:sqlite');
-      const fs = req('node:fs');
-      const path = req('node:path');
-      const dbDir = path.join(process.cwd(), '.sqlite');
-      try {
-        if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
-      } catch {}
-      const dbPath = path.join(dbDir, 'studio.db');
-      const sql = new DatabaseSync(dbPath);
+      const sql = new DatabaseSync(':memory:');
       sql.exec(SCHEMA_DDL);
 
       class Statement implements PlatformStatement {

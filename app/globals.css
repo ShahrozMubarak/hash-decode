@@ -1,10 +1,10 @@
 @font-face{font-family:Studio Sans;src:url('/fonts/dm-sans-latin.woff2') format('woff2');font-weight:100 1000;font-display:swap}
 @font-face{font-family:Studio Mono;src:url('/fonts/ibm-plex-mono-latin.woff2') format('woff2');font-weight:400;font-display:swap}
 :root{
- --azure:#FD614B;--snow:#FFFFFF;--coral:#FD614B;--navy:#000000;--deep:#0a0a0a;
- --ink:var(--navy);--text:#262626;--line:rgba(0,0,0,0.10);--wash:#F8FAFC;--ice:#F1F5F9;--frost:rgba(255,255,255,0.88);
- --dark-line:rgba(255,255,255,0.15);--dark-muted:rgba(255,255,255,0.72);--shadow:rgba(0,0,0,0.08);
- --sans:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;--font-sans:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;--serif:'Instrument Serif',Georgia,serif;--font-serif:'Instrument Serif',Georgia,serif;--mono:'Space Mono',monospace;--font-mono:'Space Mono',monospace;--radius:12px;--gutter:clamp(1.25rem,5.4vw,6.5rem);--header:76px;
+ --azure:#1d70f5;--snow:#FEFDFE;--coral:#FD614B;--navy:#0A2540;--deep:#0B3056;
+ --ink:var(--navy);--text:color-mix(in srgb,var(--navy) 77%,var(--snow));--line:color-mix(in srgb,var(--navy) 18%,var(--snow));--wash:color-mix(in srgb,var(--azure) 5%,var(--snow));--ice:color-mix(in srgb,var(--azure) 13%,var(--snow));--frost:color-mix(in srgb,var(--snow) 85%,transparent);
+ --dark-line:color-mix(in srgb,var(--snow) 23%,transparent);--dark-muted:color-mix(in srgb,var(--snow) 76%,var(--azure));--shadow:color-mix(in srgb,var(--navy) 11%,transparent);
+ --sans:'Studio Sans',Arial,sans-serif;--mono:'Studio Mono',monospace;--radius:12px;--gutter:clamp(1.25rem,5.4vw,6.5rem);--header:76px;
  color:var(--navy);background:var(--snow);font-family:var(--sans);font-synthesis:none;-webkit-font-smoothing:antialiased
 }
 *{box-sizing:border-box}
@@ -322,7 +322,7 @@ button:active,.cta:active,.outline:active,.nav-contact:active,.icon-btn:active,a
 
 .footer-input-group:focus-within {
   border-color: var(--azure);
-  box-shadow: 0 0 16px rgba(253, 97, 75, 0.25);
+  box-shadow: 0 0 16px rgba(29, 112, 245, 0.25);
 }
 
 .footer-subscribe-input {

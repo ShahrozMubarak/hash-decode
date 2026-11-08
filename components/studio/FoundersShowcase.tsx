@@ -23,18 +23,14 @@ function BotFaceCursor() {
   );
 }
 
-function SequentialStream({
+function ChatGPTWordStream({
   text,
   start,
-  speed = 100,
-  onComplete,
-  className = '',
+  speed = 42,
 }: {
   text: string;
   start: boolean;
   speed?: number;
-  onComplete?: () => void;
-  className?: string;
 }) {
   const [wordIndex, setWordIndex] = useState(0);
   const words = text ? text.split(' ') : [];
@@ -44,13 +40,8 @@ function SequentialStream({
     setWordIndex(0);
     const interval = setInterval(() => {
       setWordIndex((prev) => {
-        if (prev < words.length) {
-          return prev + 1;
-        }
+        if (prev < words.length) return prev + 1;
         clearInterval(interval);
-        if (onComplete) {
-          setTimeout(onComplete, 240);
-        }
         return prev;
       });
     }, speed);
@@ -59,12 +50,10 @@ function SequentialStream({
 
   const isDone = wordIndex >= words.length;
 
-  if (!start) return null;
-
   return (
-    <span className={`word-stream-span ${className}`}>
+    <span className="word-stream-span">
       {words.slice(0, wordIndex).join(' ')}
-      {!isDone && <BotFaceCursor />}
+      {start && !isDone && <BotFaceCursor />}
     </span>
   );
 }
@@ -78,14 +67,7 @@ function FounderCard({
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
-  // Sequential pipeline:
-  // 0: idle before scroll
-  // 1: Name is typed first
-  // 2: Role is typed second
-  // 3: Quote is typed third (if exists)
-  // 4: Bio is typed fourth (2x slower, ~6s duration)
-  // 5: Skills and actions revealed
-  const [stage, setStage] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
+  const [infoReady, setInfoReady] = useState(false);
 
   useEffect(() => {
     const el = cardRef.current;
@@ -96,19 +78,24 @@ function FounderCard({
         if (entry.isIntersecting) {
           setInView(true);
           const timer = setTimeout(() => {
-            setStage(1); // Begin sequential typing with Founder Name first
-          }, 650);
+            setInfoReady(true);
+          }, 850);
           observer.unobserve(el);
           return () => clearTimeout(timer);
         }
       },
-      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.2, rootMargin: '0px 0px -40px 0px' }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
+  // 4 distinct scroll animations:
+  // 0: Pop-up scale overshoot
+  // 1: Slide from left with blur reveal
+  // 2: 3D perspective flip up
+  // 3: Elastic zoom and subtle rotate
   const animVariantClass =
     index === 0
       ? 'anim-popup'
@@ -119,8 +106,8 @@ function FounderCard({
       : 'anim-zoom-rotate';
 
   const bioWords = founder.bio ? founder.bio.split(' ') : [];
-  // 2x slower typing duration for bio (~6 seconds total duration, ~110-140ms/word)
-  const bioSpeed = Math.max(90, Math.round(6200 / Math.max(1, bioWords.length)));
+  // Approximately 3 seconds total typing duration for information text
+  const bioSpeed = Math.max(45, Math.round(3000 / Math.max(1, bioWords.length)));
 
   return (
     <article
@@ -142,72 +129,39 @@ function FounderCard({
           />
           <div className="founder-badge-pill">
             <span className="founder-dot" />
-            <span>( 0{index + 1} ) [ FOUNDER ]</span>
+            <span>Co-Founder {index + 1}</span>
           </div>
         </div>
       </div>
 
-      {/* Info Container strictly on RIGHT SIDE of Photo (Sequential 2x slower typing, structured width, justified) */}
-      <div className={`founder-info-wrap ${stage >= 1 ? 'info-active' : ''}`}>
-        {/* Step 1: Founder Name typed first */}
-        <h3 className="founder-name">
-          {stage >= 1 && (
-            <SequentialStream
-              text={founder.name}
-              start={stage >= 1}
-              speed={110}
-              onComplete={() => setStage(2)}
-            />
-          )}
-        </h3>
-
-        {/* Step 2: Role tag typed second */}
+      {/* Info Container strictly on RIGHT SIDE of Photo (Takes ~3s to write, clean justified lines, bold) */}
+      <div className={`founder-info-wrap ${infoReady ? 'info-active' : ''}`}>
         <div className="founder-role-strip">
-          {stage >= 2 && (
-            <span className="founder-role-tag">
-              <SequentialStream
-                text={founder.role}
-                start={stage >= 2}
-                speed={95}
-                onComplete={() => setStage(founder.quote ? 3 : 4)}
-              />
-            </span>
-          )}
+          <span className="founder-role-tag">
+            <ChatGPTWordStream text={founder.role} start={infoReady} speed={65} />
+          </span>
         </div>
 
-        {/* Step 3: Quote typed third if present */}
-        {founder.quote && stage >= 3 && (
+        <h3 className="founder-name">
+          {founder.name}
+        </h3>
+
+        {founder.quote && (
           <blockquote className="founder-quote">
             <p>
-              &ldquo;
-              <SequentialStream
-                text={founder.quote}
-                start={stage >= 3}
-                speed={85}
-                onComplete={() => setStage(4)}
-              />
-              &rdquo;
+              &ldquo;{founder.quote}&rdquo;
             </p>
           </blockquote>
         )}
 
-        {/* Step 4: Bio typed fourth at 2x slower speed (~6s duration) */}
         <div className="founder-bio">
-          {stage >= 4 && (
-            <p className="founder-bio-text font-bold">
-              <SequentialStream
-                text={founder.bio}
-                start={stage >= 4}
-                speed={bioSpeed}
-                onComplete={() => setStage(5)}
-              />
-            </p>
-          )}
+          <p className="founder-bio-text font-bold">
+            <ChatGPTWordStream text={founder.bio} start={infoReady} speed={bioSpeed} />
+          </p>
         </div>
 
-        {/* Step 5: Skills cloud and Connect button revealed */}
         {founder.skills && founder.skills.length > 0 && (
-          <div className={`founder-skills-cloud ${stage >= 5 ? 'revealed' : 'pending'}`}>
+          <div className="founder-skills-cloud">
             {founder.skills.map((skill) => (
               <span key={skill} className="founder-skill-chip">
                 <Check size={13} className="text-coral" />
@@ -218,14 +172,14 @@ function FounderCard({
         )}
 
         {founder.url && (
-          <div className={`founder-actions ${stage >= 5 ? 'revealed' : 'pending'}`}>
+          <div className="founder-actions">
             <a
               href={founder.url}
               target="_blank"
               rel="noopener noreferrer"
               className="founder-link-pill"
             >
-              <span>Connect with {founder.name.split(' ')[0]} ↗</span>
+              <span>Connect with {founder.name.split(' ')[0]}</span>
               <ArrowUpRight size={15} />
             </a>
           </div>

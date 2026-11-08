@@ -45,11 +45,7 @@ export async function POST(req: Request) {
     if (body.action === 'logout') {
       await revokeSession(req.headers.get('cookie'), directToken);
       await recordAuditLog({ action: 'owner_logout', actor: 'owner', ip });
-      const headers = new Headers();
-      headers.set('Cache-Control', 'no-store');
-      headers.append('Set-Cookie', 'studio-session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0');
-      headers.append('Set-Cookie', '__Host-studio-session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0');
-      return Response.json({ ok: true }, { status: 200, headers });
+      return reply(200, undefined, sessionCookie('', 0, isSecure));
     }
     if (body.action !== 'login') return reply(400, 'Invalid request.');
     if (!(await quota(req, 'owner-login', 8, 15 * 60 * 1000))) {
@@ -77,23 +73,11 @@ export async function POST(req: Request) {
       ip,
       detail: 'Authenticated owner session issued',
     });
-    const headers = new Headers();
-    headers.set('Cache-Control', 'no-store');
-    headers.append(
-      'Set-Cookie',
-      `studio-session=${session.token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=14400${isSecure ? '; Secure' : ''}`
-    );
-    if (isSecure) {
-      headers.append(
-        'Set-Cookie',
-        `__Host-studio-session=${session.token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=14400`
-      );
-    }
     return Response.json(
       { ok: true, token: session.token },
       {
         status: 200,
-        headers,
+        headers: { 'Cache-Control': 'no-store', 'Set-Cookie': session.cookie },
       }
     );
   } catch {
