@@ -117,23 +117,23 @@ export default function CodingBackground() {
           if (j === 0) {
             // Bright luminous head
             ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = '#38bdf8';
-            ctx.shadowBlur = col.layer === 'fore' ? 16 : 8;
+            ctx.shadowColor = '#ffffff';
+            ctx.shadowBlur = col.layer === 'fore' ? 14 : 7;
             ctx.fillText(char, col.x, charY);
           } else if (j < 4) {
-            // Neon cyan aura
-            ctx.fillStyle = '#67e8f9';
-            ctx.shadowColor = '#0284c7';
-            ctx.shadowBlur = col.layer === 'fore' ? 10 : 4;
+            // Luminous frosted platinum aura
+            ctx.fillStyle = '#e2e8f0';
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.45)';
+            ctx.shadowBlur = col.layer === 'fore' ? 8 : 3;
             ctx.fillText(char, col.x, charY);
           } else {
             // Fading cyber trail
             const fade = 1 - j / col.length;
             ctx.shadowBlur = 0;
             const alpha = col.layer === 'fore'
-              ? Math.max(0.08, fade * 0.85)
-              : Math.max(0.04, fade * 0.55);
-            ctx.fillStyle = `rgba(14, 165, 233, ${alpha.toFixed(3)})`;
+              ? Math.max(0.06, fade * 0.75)
+              : Math.max(0.03, fade * 0.45);
+            ctx.fillStyle = `rgba(203, 213, 225, ${alpha.toFixed(3)})`;
             ctx.fillText(char, col.x, charY);
           }
         }

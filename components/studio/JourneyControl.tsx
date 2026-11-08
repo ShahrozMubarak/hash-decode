@@ -12,7 +12,10 @@ export default function JourneyControl(){
   const heroAnchor=landing.querySelector<HTMLElement>('#hero-model-anchor')!;
   const headings=Array.from(landing.querySelectorAll<HTMLElement>('.band h2'));
   const label=track.querySelector<HTMLElement>('.rail-label')!,dots=Array.from(track.querySelectorAll<SVGCircleElement>('.journey-rail circle'));
-  const trail=track.querySelector<SVGSVGElement>('.journey-trail')!,paths=Array.from(trail.querySelectorAll('path')),nodes=Array.from(trail.querySelectorAll('circle'));
+  const trail=track.querySelector<SVGSVGElement>('.journey-trail')!,paths=Array.from(trail.querySelectorAll('path'));
+  const orbCore=trail.querySelector<SVGCircleElement>('.trail-orb-core');
+  const orbGlow=trail.querySelector<SVGCircleElement>('.trail-orb-glow');
+  const pathInk=trail.querySelector<SVGPathElement>('.trail-ink');
   let offsets:number[]=[],headingTops:number[]=[],height=0,heroDistance=1,processTop=0,processHeight=1,tick=0,dirty=true;
   let hero={x:0,y:0,width:0,height:0};
   const measureBox=(element:HTMLElement,y:number)=>{const r=element.getBoundingClientRect();return {x:r.left,y:r.top+y,width:r.width,height:r.height};};
@@ -37,28 +40,28 @@ export default function JourneyControl(){
       // Continuous, elegant path starting from Start a project button and descending strictly DOWN
       const totalDy = Math.max(800, endPt.y - startPt.y);
 
-      // Clean waypoints that strictly avoid the robot (left column) and form inputs (center column)
+      // Clean waypoints that strictly flow behind cards/laptop and avoid input controls
       const rawPoints: {x: number; y: number}[] = [
         { x: startPt.x, y: startPt.y },
         // Immediately flow downwards from the button, sweeping towards the right
         { x: startPt.x + Math.min(w * 0.12, 140), y: startPt.y + 110 },
         { x: Math.min(w * 0.78, w - 100),         y: startPt.y + totalDy * 0.10 },
         { x: Math.min(w * 0.88, w - 60),          y: startPt.y + totalDy * 0.19 },
-        // Irregular swing left across Section 02 coder showcase margin
+        // Swing gracefully behind Section 02 coder showcase
         { x: Math.max(w * 0.14, 70),              y: startPt.y + totalDy * 0.29 },
         { x: Math.max(w * 0.38, 180),             y: startPt.y + totalDy * 0.38 },
         // Broad sweeping arc right around Services
         { x: Math.min(w * 0.84, w - 80),          y: startPt.y + totalDy * 0.48 },
-        // Reverse cut into left gutter
+        // Reverse cut into left gutter behind security narrative
         { x: Math.max(w * 0.16, 80),              y: startPt.y + totalDy * 0.58 },
-        // Curving through Security narrative
+        // Curving behind Security cards
         { x: Math.min(w * 0.78, w - 100),         y: startPt.y + totalDy * 0.69 },
         // Weaving down through Process and Work
         { x: Math.max(w * 0.22, 90),              y: startPt.y + totalDy * 0.79 },
-        // Approaching Contact/Brief section: stay strictly in the far-right gutter (away from robot on left and form in center)
+        // Approaching Contact/Brief section
         { x: Math.min(w * 0.92, w - 50),          y: startPt.y + totalDy * 0.88 },
         { x: Math.min(w * 0.94, w - 40),          y: endPt.y - 120 },
-        // Smoothly curve into the Send project brief button from the side, without cutting across form fields or robot
+        // Smoothly curve into the Send project brief button from the side
         { x: Math.min(w * 0.88, endPt.x + 120),   y: endPt.y - 30 },
         { x: endPt.x, y: endPt.y }
       ];
@@ -74,12 +77,6 @@ export default function JourneyControl(){
       }).join(' ');
 
       paths.forEach(p => p.setAttribute('d', d));
-      nodes.forEach((node, i) => {
-        if (rawPoints[i]) {
-          node.setAttribute('cx', String(rawPoints[i].x));
-          node.setAttribute('cy', String(rawPoints[i].y));
-        }
-      });
     }
     dirty=false;
    }
@@ -109,7 +106,41 @@ export default function JourneyControl(){
    track.style.setProperty('--progress', progressVal.toFixed(4));
    label.textContent=stations[state.current].dataset.station+' · '+Math.round(state.page*100)+'%';
    dots.forEach((dot,i)=>{const p=clampUnit((offsets[i]-v*.38)/Math.max(1,height-v));dot.setAttribute('cy',String(4+192*p));dot.classList.toggle('active',i<=state.current);});
-   nodes.forEach((node,i)=>node.classList.toggle('active',i<=state.current));
+
+   // Dynamic traveling luminous orb tracking along the exact curve
+   if (pathInk && orbCore && orbGlow) {
+     const totalLen = pathInk.getTotalLength();
+     if (totalLen > 0) {
+       const curLen = Math.min(totalLen, Math.max(0, progressVal * totalLen));
+       const pt = pathInk.getPointAtLength(curLen);
+       orbCore.setAttribute('cx', String(pt.x));
+       orbCore.setAttribute('cy', String(pt.y));
+       orbGlow.setAttribute('cx', String(pt.x));
+       orbGlow.setAttribute('cy', String(pt.y));
+     }
+   }
+
+   // Scroll-driven background interpolation across stations (AERUM inspired)
+   const bgPalette = [
+     [6, 9, 15],    // 0: Overview (Deep Obsidian #06090f)
+     [4, 7, 12],    // 1: Agent (Showcase Matrix #04070c)
+     [9, 14, 22],   // 2: Services (Graphite Obsidian #090e16)
+     [12, 17, 28],  // 3: Security (Security Fortress Slate #0c111c)
+     [8, 12, 20],   // 4: Work (Indigo Charcoal #080c14)
+     [6, 10, 16],   // 5: Process (Minimal Obsidian #060a10)
+     [10, 14, 22],  // 6: Questions (Subtle Slate #0a0e16)
+     [5, 8, 14]     // 7: Contact (Deep Anchor #05080e)
+   ];
+   const progIndex = Math.min(bgPalette.length - 1, Math.max(0, state.page * (bgPalette.length - 1)));
+   const fromIdx = Math.floor(progIndex);
+   const toIdx = Math.min(bgPalette.length - 1, fromIdx + 1);
+   const subT = progIndex - fromIdx;
+   const fromColor = bgPalette[fromIdx];
+   const toColor = bgPalette[toIdx];
+   const rVal = Math.round(fromColor[0] + (toColor[0] - fromColor[0]) * subT);
+   const gVal = Math.round(fromColor[1] + (toColor[1] - fromColor[1]) * subT);
+   const bVal = Math.round(fromColor[2] + (toColor[2] - fromColor[2]) * subT);
+   landing.style.setProperty('--scroll-bg', `rgb(${rVal}, ${gVal}, ${bVal})`);
    headings.forEach((el,i)=>{const on=headingTops[i]<y+v*.94;el.classList.toggle('await-reveal',!on&&motion);if(on)el.classList.add('revealed');});
    const base=(at:number,x:number,cy:number,size:number,phase:number,yaw:number,pitch:number,alpha:number):Pose=>({at,x,y:cy,size,phase,yaw,pitch,distance:3.8-Math.sin(phase*Math.PI/2)*.65,alpha});
    const hsize=Math.min(hero.width*.36,hero.height*.4);
@@ -142,5 +173,39 @@ export default function JourneyControl(){
   window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',measure);window.addEventListener('hd:measure',measure);window.addEventListener('hd:motion',onMotion);landing.addEventListener('pointermove',move);landing.addEventListener('pointerleave',reset);
   return()=>{cancelAnimationFrame(tick);resize.disconnect();reset();window.removeEventListener('scroll',schedule);window.removeEventListener('resize',measure);window.removeEventListener('hd:measure',measure);window.removeEventListener('hd:motion',onMotion);landing.removeEventListener('pointermove',move);landing.removeEventListener('pointerleave',reset);};
  },[]);
- return <div ref={rail} aria-hidden="true" className="journey-decoration"><svg className="journey-trail" preserveAspectRatio="none"><path className="trail-base"/><path className="trail-ink" pathLength="1"/>{Array.from({length:16},(_,i)=><circle key={i} r="3.5"/>)}</svg><aside className="journey-rail"><svg viewBox="0 0 8 200" preserveAspectRatio="none"><path d="M4 4V196" className="rail-base"/><path pathLength="1" d="M4 4V196" className="rail-ink"/>{Array.from({length:8},(_,i)=><circle key={i} cx="4" cy={4+i*24} r="2.45"/>)}</svg><span className="rail-label">Overview</span></aside><div className="mobile-checkpoints">{Array.from({length:8},(_,i)=><i className="mobile-checkpoint" key={i}/>)}</div></div>;
+ return (
+  <div ref={rail} aria-hidden="true" className="journey-decoration">
+    <svg className="journey-trail" preserveAspectRatio="none">
+      <defs>
+        <filter id="whiteTrailGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <path className="trail-ambient-glow" />
+      <path className="trail-base" />
+      <path className="trail-ink" pathLength="1" filter="url(#whiteTrailGlow)" />
+      <circle className="trail-orb-glow" r="9" />
+      <circle className="trail-orb-core" r="4.2" />
+    </svg>
+    <aside className="journey-rail">
+      <svg viewBox="0 0 8 200" preserveAspectRatio="none">
+        <path d="M4 4V196" className="rail-base" />
+        <path pathLength="1" d="M4 4V196" className="rail-ink" />
+        {Array.from({ length: 8 }, (_, i) => (
+          <circle key={i} cx="4" cy={4 + i * 24} r="2.45" />
+        ))}
+      </svg>
+      <span className="rail-label">Overview</span>
+    </aside>
+    <div className="mobile-checkpoints">
+      {Array.from({ length: 8 }, (_, i) => (
+        <i className="mobile-checkpoint" key={i} />
+      ))}
+    </div>
+  </div>
+ );
 }

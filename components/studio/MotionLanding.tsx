@@ -41,15 +41,51 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
     </div>
    </section>
    <section className="band wrap" id="services" data-station="Services">
-     <div className="systems-story"><h2>Speed,<br/>structured with<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>clarity.</span></h2><p>Custom web platforms, APIs and business tools, designed around the way your team works.</p><a className="text-link" href="/services">Explore services <ArrowUpRight size={16}/></a></div>
-     <div className="service-cards">{capabilities.map(([id,name],i)=>{const Icon=serviceIcons[i];return <a className="service-card" key={id} href={'/services#'+id}><Icon size={26} strokeWidth={1.4} className="icon-azure"/><h3>{name}</h3><ArrowUpRight size={17}/></a>;})}</div>
+     <div className="systems-story">
+       <div className="iris-pill-badge">[ ARCHITECTURE // SYSTEMS ]</div>
+       <h2>Speed,<br/>structured with<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>clarity.</span></h2>
+       <p>Custom web platforms, APIs and business tools, designed around the way your team works.</p>
+       <a className="text-link" href="/services">Explore services <ArrowUpRight size={16}/></a>
+     </div>
+     <div className="service-cards">
+       {capabilities.map(([id,name],i)=>{
+         const Icon=serviceIcons[i];
+         const codeTag = `[ SYS_0${i + 1} ]`;
+         return (
+           <a className="service-card" key={id} href={'/services#'+id}>
+             <div className="service-card-head">
+               <Icon size={26} strokeWidth={1.4} className="icon-azure"/>
+               <span className="service-code-tag">{codeTag}</span>
+             </div>
+             <h3>{name}</h3>
+             <ArrowUpRight size={17} className="service-card-arrow"/>
+           </a>
+         );
+       })}
+     </div>
    </section>
    <section className="wrap band security-section story-security" id="security" data-station="Security">
     <div className="security-stage">
      <div className="security-narrative">
-      <div className="iris-pill-badge">[ v01b // SECURITY_AUDIT ]</div>
+      <div className="iris-pill-badge"><span className="telemetry-live-dot" /> [ SYS // ACTIVE_DEFENSE_V01 ]</div>
       <h2>Build it. Break it.<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>Secure it.</span></h2>
-      <p>Clear boundaries. Practical security testing. Verified fixes.</p>
+      <p className="security-lead">Clear boundaries. Practical security testing. Verified fixes.</p>
+      
+      <div className="tech-telemetry-row">
+        <div className="telemetry-pill">
+          <span className="telemetry-key">AST SCAN</span>
+          <span className="telemetry-val">100% COVERAGE</span>
+        </div>
+        <div className="telemetry-pill">
+          <span className="telemetry-key">EDGE MESH</span>
+          <span className="telemetry-val">ZERO-TRUST</span>
+        </div>
+        <div className="telemetry-pill">
+          <span className="telemetry-key">RESILIENCE</span>
+          <span className="telemetry-val">99.99%</span>
+        </div>
+      </div>
+
       <div className="security-actions">
         <a className="cta" href="/services#security">Our security approach <ArrowUpRight size={16}/></a>
         <a className="text-link" href="#brief">Request audit <ArrowDown size={15}/></a>
