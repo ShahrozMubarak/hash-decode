@@ -15,7 +15,7 @@
   --fd-text-main: #0F172A;
   --fd-text-muted: #64748B;
   --fd-azure: #1D70F5;
-  --fd-azure-soft: rgba(29, 112, 245, 0.1);
+  --fd-azure-soft: rgba(29, 112, 245, 0.08);
   --fd-coral: #FF4D36;
   --fd-coral-soft: rgba(255, 77, 54, 0.12);
   --fd-accent: #FF4D36;
@@ -41,7 +41,7 @@
   display: flex;
   min-height: calc(100svh - clamp(1.5rem, 4vw, 3rem));
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.06);
   position: relative;
 }
 
@@ -303,7 +303,7 @@
 .fd-search-box input:focus {
   border-color: #1D70F5;
   background: #FFFFFF;
-  box-shadow: 0 0 16px rgba(29, 112, 245, 0.2);
+  box-shadow: 0 0 0 3px rgba(29, 112, 245, 0.2);
 }
 
 .fd-search-icon {
@@ -509,14 +509,14 @@
 
 .fd-table th {
   padding: 0.9rem 1.2rem;
-  background: #F8FAFC;
+  background: rgba(29, 112, 245, 0.05);
   font-family: var(--mono, monospace);
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #64748B;
-  border-bottom: 1px solid var(--fd-card-border);
+  color: #1D70F5;
+  border-bottom: 1px solid rgba(29, 112, 245, 0.15);
 }
 
 .fd-table td {
@@ -549,9 +549,9 @@
 }
 
 .fd-badge.new {
-  background: rgba(255, 77, 54, 0.15);
-  color: #FF4D36;
-  border: 1px solid rgba(255, 77, 54, 0.35);
+  background: rgba(29, 112, 245, 0.1);
+  color: #1D70F5;
+  border: 1px solid rgba(29, 112, 245, 0.25);
 }
 
 .fd-badge.contacted,
@@ -575,6 +575,17 @@
   border: 1px solid rgba(148, 163, 184, 0.25);
 }
 
+/* Urgent Highlight Alerts */
+.unread-dot,
+.fd-badge-alert {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #FF4D36;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(255, 77, 54, 0.5);
+}
+
 /* --------------------------------------------------------------------------
    MODALS & SLIDE-OVER PANELS
    -------------------------------------------------------------------------- */
@@ -596,7 +607,7 @@
   width: min(100%, 640px);
   max-height: 88svh;
   overflow-y: auto;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.16);
   padding: 2rem;
   box-sizing: border-box;
 }
@@ -648,7 +659,7 @@
 .fd-form-group select:focus {
   border-color: #1D70F5;
   background: #FFFFFF;
-  box-shadow: 0 0 16px rgba(29, 112, 245, 0.2);
+  box-shadow: 0 0 0 3px rgba(29, 112, 245, 0.2);
 }
 
 .fd-btn-primary,
@@ -679,14 +690,14 @@
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: #101614;
-  border: 1px solid var(--fd-accent);
+  background: #0F172A;
+  border: 1px solid rgba(29, 112, 245, 0.4);
   border-radius: 999px;
   padding: 0.75rem 1.4rem;
   color: #FFFFFF;
   font-size: 0.88rem;
   font-weight: 600;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.25);
   z-index: 99;
   display: flex;
   align-items: center;
@@ -721,7 +732,7 @@
     inset: 0 auto 0 0;
     z-index: 60;
     width: 290px;
-    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.8);
+    box-shadow: 20px 0 60px rgba(15, 23, 42, 0.15);
   }
   .fd-topbar {
     padding: 1rem 1.25rem;

@@ -49,7 +49,7 @@ export function Header(){
           <span className="utility-sep">/</span>
           <a href="/about" className="utility-link">Founders</a>
           <span className="utility-sep">/</span>
-          <a href="/admin/login" className="utility-link admin-pill">Admin Portal</a>
+          <a href="/admin" className="utility-link admin-pill">Admin Portal</a>
         </div>
       </div>
     </div>

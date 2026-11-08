@@ -120,27 +120,8 @@ export default function JourneyControl(){
      }
    }
 
-   // Scroll-driven background interpolation across stations (AERUM inspired)
-   const bgPalette = [
-     [6, 9, 15],    // 0: Overview (Deep Obsidian #06090f)
-     [4, 7, 12],    // 1: Agent (Showcase Matrix #04070c)
-     [9, 14, 22],   // 2: Services (Graphite Obsidian #090e16)
-     [12, 17, 28],  // 3: Security (Security Fortress Slate #0c111c)
-     [8, 12, 20],   // 4: Work (Indigo Charcoal #080c14)
-     [6, 10, 16],   // 5: Process (Minimal Obsidian #060a10)
-     [10, 14, 22],  // 6: Questions (Subtle Slate #0a0e16)
-     [5, 8, 14]     // 7: Contact (Deep Anchor #05080e)
-   ];
-   const progIndex = Math.min(bgPalette.length - 1, Math.max(0, state.page * (bgPalette.length - 1)));
-   const fromIdx = Math.floor(progIndex);
-   const toIdx = Math.min(bgPalette.length - 1, fromIdx + 1);
-   const subT = progIndex - fromIdx;
-   const fromColor = bgPalette[fromIdx];
-   const toColor = bgPalette[toIdx];
-   const rVal = Math.round(fromColor[0] + (toColor[0] - fromColor[0]) * subT);
-   const gVal = Math.round(fromColor[1] + (toColor[1] - fromColor[1]) * subT);
-   const bVal = Math.round(fromColor[2] + (toColor[2] - fromColor[2]) * subT);
-   landing.style.setProperty('--scroll-bg', `rgb(${rVal}, ${gVal}, ${bVal})`);
+   // Pure clean white background throughout the site
+   landing.style.setProperty('--scroll-bg', '#ffffff');
    headings.forEach((el,i)=>{const on=headingTops[i]<y+v*.94;el.classList.toggle('await-reveal',!on&&motion);if(on)el.classList.add('revealed');});
    const base=(at:number,x:number,cy:number,size:number,phase:number,yaw:number,pitch:number,alpha:number):Pose=>({at,x,y:cy,size,phase,yaw,pitch,distance:3.8-Math.sin(phase*Math.PI/2)*.65,alpha});
    const hsize=Math.min(hero.width*.36,hero.height*.4);

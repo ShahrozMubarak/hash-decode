@@ -586,7 +586,7 @@ export default function FoolishAdminDashboard({
                 className="fd-topbar-btn"
                 value={timeRange}
                 onChange={(e) => setTimeRange(e.target.value)}
-                style={{ background: 'rgba(255,255,255,0.04)', color: '#F8FAFC' }}
+                style={{ background: '#FFFFFF', color: '#0F172A', border: '1px solid #CBD5E1' }}
               >
                 <option value="Last 14 Days">Last 14 Days</option>
                 <option value="Last 30 Days">Last 30 Days</option>
@@ -620,7 +620,7 @@ export default function FoolishAdminDashboard({
                 </button>
               )}
               {activeTab === 'inquiries' && (
-                <button className="fd-topbar-btn" onClick={handleExportInquiriesCSV}>
+                <button className="fd-topbar-btn primary" onClick={handleExportInquiriesCSV}>
                   <Download size={15} />
                   <span>Export CSV</span>
                 </button>
@@ -852,7 +852,7 @@ export default function FoolishAdminDashboard({
                             <small style={{ display: 'block', color: '#94A3B8', fontSize: '0.74rem' }}>{m.email}</small>
                           </td>
                           <td>{m.topic}</td>
-                          <td><span style={{ fontFamily: 'var(--mono)', color: '#FF4D36' }}>{m.budget || 'Custom'}</span></td>
+                          <td><span style={{ fontFamily: 'var(--mono)', color: '#1D70F5', fontWeight: 600 }}>{m.budget || 'Custom'}</span></td>
                           <td>
                             <span className={`fd-badge ${m.status}`}>{m.status}</span>
                           </td>
@@ -1044,7 +1044,7 @@ export default function FoolishAdminDashboard({
                           </p>
                         </td>
                         <td>
-                          <span style={{ fontFamily: 'var(--mono)', color: '#FF4D36' }}>
+                          <span style={{ fontFamily: 'var(--mono)', color: '#1D70F5', fontWeight: 600 }}>
                             {m.budget || 'Flexible'}
                           </span>
                         </td>
@@ -1053,9 +1053,9 @@ export default function FoolishAdminDashboard({
                             value={m.status}
                             onChange={(e) => handleUpdateMessageStatus(m.id, e.target.value)}
                             style={{
-                              background: 'rgba(255,255,255,0.04)',
-                              border: '1px solid rgba(255,255,255,0.1)',
-                              color: '#F8FAFC',
+                              background: '#FFFFFF',
+                              border: '1px solid #CBD5E1',
+                              color: '#0F172A',
                               fontSize: '0.78rem',
                               padding: '0.3rem 0.6rem',
                               borderRadius: '8px',
@@ -1108,7 +1108,7 @@ export default function FoolishAdminDashboard({
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', minHeight: '400px' }}>
                   {/* Threads List */}
-                  <div style={{ borderRight: '1px solid rgba(255,255,255,0.08)', paddingRight: '1rem', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  <div style={{ borderRight: '1px solid #E2E8F0', paddingRight: '1rem', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                     {messages.map((m) => (
                       <div
                         key={m.id}
@@ -1117,15 +1117,15 @@ export default function FoolishAdminDashboard({
                           padding: '0.85rem',
                           borderRadius: '12px',
                           cursor: 'pointer',
-                          background: selectedMessage?.id === m.id ? 'rgba(255,77,54,0.12)' : 'rgba(255,255,255,0.02)',
-                          border: selectedMessage?.id === m.id ? '1px solid rgba(255,77,54,0.35)' : '1px solid transparent',
+                          background: selectedMessage?.id === m.id ? '#EFF6FF' : 'transparent',
+                          border: selectedMessage?.id === m.id ? '1px solid #BFDBFE' : '1px solid transparent',
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <strong style={{ fontSize: '0.88rem', color: '#FFFFFF' }}>{m.name}</strong>
+                          <strong style={{ fontSize: '0.88rem', color: selectedMessage?.id === m.id ? '#1D70F5' : '#0F172A' }}>{m.name}</strong>
                           <span className={`fd-badge ${m.status}`} style={{ fontSize: '0.62rem' }}>{m.status}</span>
                         </div>
-                        <small style={{ color: '#94A3B8', display: 'block', marginTop: '0.2rem' }}>{m.topic}</small>
+                        <small style={{ color: '#64748B', display: 'block', marginTop: '0.2rem' }}>{m.topic}</small>
                       </div>
                     ))}
                   </div>
@@ -1134,16 +1134,16 @@ export default function FoolishAdminDashboard({
                   <div>
                     {selectedMessage ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1rem' }}>
-                          <h3 style={{ fontSize: '1.2rem', color: '#FFFFFF', margin: '0 0 0.35rem' }}>{selectedMessage.name}</h3>
-                          <a href={`mailto:${selectedMessage.email}`} style={{ color: '#FF4D36', fontSize: '0.84rem' }}>{selectedMessage.email}</a>
+                        <div style={{ borderBottom: '1px solid #E2E8F0', paddingBottom: '1rem' }}>
+                          <h3 style={{ fontSize: '1.2rem', color: '#0F172A', margin: '0 0 0.35rem' }}>{selectedMessage.name}</h3>
+                          <a href={`mailto:${selectedMessage.email}`} style={{ color: '#1D70F5', fontSize: '0.84rem' }}>{selectedMessage.email}</a>
                         </div>
-                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.7rem', color: '#94A3B8' }}>CLIENT BRIEF:</span>
-                          <p style={{ marginTop: '0.5rem', lineHeight: 1.6, color: '#F8FAFC' }}>{selectedMessage.brief}</p>
+                        <div style={{ background: '#F8FAFC', padding: '1.25rem', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.7rem', color: '#64748B' }}>CLIENT BRIEF:</span>
+                          <p style={{ marginTop: '0.5rem', lineHeight: 1.6, color: '#0F172A' }}>{selectedMessage.brief}</p>
                         </div>
                         <div>
-                          <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#94A3B8', display: 'block', marginBottom: '0.45rem' }}>
+                          <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#475569', display: 'block', marginBottom: '0.45rem' }}>
                             Internal Private Notes (Auto-saved)
                           </label>
                           <textarea
@@ -1153,11 +1153,11 @@ export default function FoolishAdminDashboard({
                             placeholder="Add private evaluation, budget negotiation notes, or engineering tasks..."
                             style={{
                               width: '100%',
-                              background: 'rgba(255,255,255,0.04)',
-                              border: '1px solid rgba(255,255,255,0.1)',
+                              background: '#FFFFFF',
+                              border: '1px solid #CBD5E1',
                               borderRadius: '12px',
                               padding: '0.75rem',
-                              color: '#FFFFFF',
+                              color: '#0F172A',
                               outline: 'none'
                             }}
                           />
@@ -1205,33 +1205,33 @@ export default function FoolishAdminDashboard({
                   <div key={f.id} className="fd-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
-                        <div style={{ width: 64, height: 64, borderRadius: '16px', background: '#0a100d', border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden' }}>
+                        <div style={{ width: 64, height: 64, borderRadius: '16px', background: '#F1F5F9', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
                           <img src={f.image} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                         <div>
-                          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.68rem', color: '#FF4D36' }}>
+                          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.68rem', color: '#1D70F5', fontWeight: 600 }}>
                             ( 0{i + 1} ) [ FOUNDING_PARTNER ]
                           </span>
-                          <h4 style={{ fontSize: '1.2rem', fontWeight: 750, color: '#FFFFFF', margin: '0.2rem 0' }}>{f.name}</h4>
-                          <small style={{ color: '#94A3B8' }}>{f.role}</small>
+                          <h4 style={{ fontSize: '1.2rem', fontWeight: 750, color: '#0F172A', margin: '0.2rem 0' }}>{f.name}</h4>
+                          <small style={{ color: '#64748B' }}>{f.role}</small>
                         </div>
                       </div>
                       {f.quote && (
-                        <blockquote style={{ fontStyle: 'italic', color: '#CBD5E1', fontSize: '0.85rem', margin: '0 0 0.85rem', borderLeft: '2px solid #FF4D36', paddingLeft: '0.75rem' }}>
+                        <blockquote style={{ fontStyle: 'italic', color: '#334155', fontSize: '0.85rem', margin: '0 0 0.85rem', borderLeft: '2px solid #1D70F5', paddingLeft: '0.75rem' }}>
                           &ldquo;{f.quote}&rdquo;
                         </blockquote>
                       )}
-                      <p style={{ fontSize: '0.84rem', color: '#94A3B8', lineHeight: 1.55 }}>{f.bio}</p>
+                      <p style={{ fontSize: '0.84rem', color: '#64748B', lineHeight: 1.55 }}>{f.bio}</p>
                       <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginTop: '0.85rem' }}>
                         {f.skills?.map((sk) => (
-                          <span key={sk} style={{ fontFamily: 'var(--mono)', fontSize: '0.65rem', padding: '0.2rem 0.5rem', borderRadius: '6px', background: 'rgba(255,255,255,0.04)', color: '#CBD5E1' }}>
+                          <span key={sk} style={{ fontFamily: 'var(--mono)', fontSize: '0.65rem', padding: '0.2rem 0.5rem', borderRadius: '6px', background: '#F1F5F9', color: '#475569', border: '1px solid #E2E8F0' }}>
                             {sk}
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '1.25rem', paddingTop: '0.85rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '1.25rem', paddingTop: '0.85rem', borderTop: '1px solid #F1F5F9' }}>
                       <button
                         className="fd-topbar-btn"
                         onClick={() => {
@@ -1298,9 +1298,9 @@ export default function FoolishAdminDashboard({
           {activeTab === 'subscribers' && (
             <div className="fd-workspace-body">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <p style={{ color: '#94A3B8', margin: 0 }}>Subscribed client and developer email contacts ({subscribers.length})</p>
+                <p style={{ color: '#64748B', margin: 0 }}>Subscribed client and developer email contacts ({subscribers.length})</p>
                 <button
-                  className="fd-topbar-btn"
+                  className="fd-topbar-btn primary"
                   onClick={() => {
                     const csv = ['Email,Status,SubscribedAt', ...subscribers.map((s) => `${s.email},${s.status},${new Date(s.created).toISOString()}`)].join('\n');
                     downloadCSV(`hash-decode-subscribers-${Date.now()}.csv`, csv);
@@ -1407,31 +1407,31 @@ export default function FoolishAdminDashboard({
                 <div className="fd-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
                     <h3 className="fd-card-heading" style={{ marginBottom: '1.25rem' }}>Security &amp; Infrastructure</h3>
-                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '1.25rem' }}>
+                    <div style={{ background: '#F8FAFC', padding: '1.25rem', borderRadius: '16px', border: '1px solid #E2E8F0', marginBottom: '1.25rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 700, color: '#FFFFFF' }}>
-                          <Database size={16} style={{ color: '#FF4D36' }} />
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 700, color: '#0F172A' }}>
+                          <Database size={16} style={{ color: '#1D70F5' }} />
                           MongoDB Atlas Cluster
                         </span>
                         <span className={`fd-badge ${mongoStatus.connected ? 'completed' : 'archived'}`}>
                           {mongoStatus.connected ? 'Connected' : 'Standby'}
                         </span>
                       </div>
-                      <p style={{ fontSize: '0.82rem', color: '#94A3B8', margin: 0 }}>
-                        Database: <code style={{ color: '#FF4D36' }}>{mongoStatus.dbName || 'hash_decode'}</code>
+                      <p style={{ fontSize: '0.82rem', color: '#64748B', margin: 0 }}>
+                        Database: <code style={{ color: '#1D70F5' }}>{mongoStatus.dbName || 'hash_decode'}</code>
                       </p>
                     </div>
 
-                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 700, color: '#FFFFFF', marginBottom: '0.45rem' }}>
-                        <Lock size={16} style={{ color: '#FF4D36' }} />
+                    <div style={{ background: '#F8FAFC', padding: '1.25rem', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 700, color: '#0F172A', marginBottom: '0.45rem' }}>
+                        <Lock size={16} style={{ color: '#1D70F5' }} />
                         Owner Authentication
                       </span>
-                      <p style={{ fontSize: '0.82rem', color: '#94A3B8', margin: '0 0 1rem' }}>
+                      <p style={{ fontSize: '0.82rem', color: '#64748B', margin: '0 0 1rem' }}>
                         Protected by PBKDF2 with 100,000 salt iterations and SameSite session isolation.
                       </p>
                       <button
-                        className="fd-topbar-btn"
+                        className="fd-topbar-btn primary"
                         onClick={() => setPasswordModalOpen(true)}
                       >
                         Rotate Admin Password
@@ -1439,7 +1439,7 @@ export default function FoolishAdminDashboard({
                     </div>
                   </div>
 
-                  <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid #E2E8F0' }}>
                     <button
                       className="fd-topbar-btn"
                       onClick={async () => {
@@ -1465,7 +1465,7 @@ export default function FoolishAdminDashboard({
         <div className="fd-modal-backdrop" onClick={() => setProjectModalOpen(false)}>
           <div className="fd-modal" onClick={(e) => e.stopPropagation()}>
             <div className="fd-modal-header">
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 750, color: '#FFFFFF', margin: 0 }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 750, color: '#0F172A', margin: 0 }}>
                 {editingProject.slug ? 'Edit Project' : 'Create New Studio Project'}
               </h3>
               <button className="fd-topbar-btn" onClick={() => setProjectModalOpen(false)}>
@@ -1579,7 +1579,7 @@ export default function FoolishAdminDashboard({
         <div className="fd-modal-backdrop" onClick={() => setFounderModalOpen(false)}>
           <div className="fd-modal" onClick={(e) => e.stopPropagation()}>
             <div className="fd-modal-header">
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 750, color: '#FFFFFF', margin: 0 }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 750, color: '#0F172A', margin: 0 }}>
                 Founder Profile
               </h3>
               <button className="fd-topbar-btn" onClick={() => setFounderModalOpen(false)}>
@@ -1667,7 +1667,7 @@ export default function FoolishAdminDashboard({
         <div className="fd-modal-backdrop" onClick={() => setPasswordModalOpen(false)}>
           <div className="fd-modal" onClick={(e) => e.stopPropagation()}>
             <div className="fd-modal-header">
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 750, color: '#FFFFFF', margin: 0 }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 750, color: '#0F172A', margin: 0 }}>
                 Rotate Owner Password
               </h3>
               <button className="fd-topbar-btn" onClick={() => setPasswordModalOpen(false)}>
@@ -1714,7 +1714,7 @@ export default function FoolishAdminDashboard({
           ===================================================================== */}
       {toastMessage && (
         <div className="fd-toast">
-          <Sparkles size={16} style={{ color: '#FF4D36' }} />
+          <Sparkles size={16} style={{ color: '#1D70F5' }} />
           <span>{toastMessage}</span>
         </div>
       )}
