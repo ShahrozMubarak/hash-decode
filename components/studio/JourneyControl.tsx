@@ -12,10 +12,6 @@ export default function JourneyControl() {
     const heroAnchor = landing.querySelector<HTMLElement>('#hero-model-anchor')!;
     const headings = Array.from(landing.querySelectorAll<HTMLElement>('.band h2'));
     const label = track.querySelector<HTMLElement>('.rail-label')!, dots = Array.from(track.querySelectorAll<SVGCircleElement>('.journey-rail circle'));
-    const trail = track.querySelector<SVGSVGElement>('.journey-trail')!, paths = Array.from(trail.querySelectorAll('path'));
-    const orbCore = trail.querySelector<SVGCircleElement>('.trail-orb-core');
-    const orbGlow = trail.querySelector<SVGCircleElement>('.trail-orb-glow');
-    const pathInk = trail.querySelector<SVGPathElement>('.trail-ink');
     let offsets: number[] = [], headingTops: number[] = [], height = 0, heroDistance = 1, processTop = 0, processHeight = 1, tick = 0, dirty = true;
     let hero = { x: 0, y: 0, width: 0, height: 0 };
     const measureBox = (element: HTMLElement, y: number) => { const r = element.getBoundingClientRect(); return { x: r.left, y: r.top + y, width: r.width, height: r.height }; };
@@ -24,51 +20,6 @@ export default function JourneyControl() {
       if (dirty) {
         height = root.scrollHeight; offsets = stations.map(el => el.getBoundingClientRect().top + y); headingTops = headings.map(el => el.getBoundingClientRect().top + y); heroDistance = Math.max(v * .45, stations[0].offsetHeight - v); processTop = process.getBoundingClientRect().top + y; processHeight = process.offsetHeight;
         hero = measureBox(heroAnchor, y);
-        if (!mobile) {
-          const top = landing.getBoundingClientRect().top + y, trailHeight = landing.offsetHeight;
-          trail.setAttribute('viewBox', `0 0 ${w} ${trailHeight}`);
-
-          const startBtn = landing.querySelector<HTMLElement>('#overview .cta');
-          const endBtn = landing.querySelector<HTMLElement>('#send-brief-btn') || landing.querySelector<HTMLElement>('#brief form button[type="submit"]') || landing.querySelector<HTMLElement>('#brief .cta');
-
-          let startPt = { x: w * .22, y: v * .75 };
-          if (startBtn) { const sr = startBtn.getBoundingClientRect(); startPt = { x: sr.left + sr.width * .5, y: sr.top + y - top + sr.height }; }
-
-          let endPt = { x: w * .35, y: trailHeight - 120 };
-          if (endBtn) { const er = endBtn.getBoundingClientRect(); endPt = { x: er.left + er.width * .5, y: er.top + y - top }; }
-
-          // Continuous, elegant path starting from Start a project button and descending strictly DOWN
-          const totalDy = Math.max(800, endPt.y - startPt.y);
-
-          // Reroute strictly through the outer right margin so it never crosses any text or cards
-          const rightMargin = Math.max(w - 44, w * 0.965);
-          const rawPoints: { x: number; y: number }[] = [
-            { x: startPt.x, y: startPt.y },
-            { x: rightMargin, y: startPt.y + 70 },
-            { x: rightMargin - 4, y: startPt.y + totalDy * 0.12 },
-            { x: rightMargin + 4, y: startPt.y + totalDy * 0.24 },
-            { x: rightMargin - 3, y: startPt.y + totalDy * 0.36 },
-            { x: rightMargin + 3, y: startPt.y + totalDy * 0.50 },
-            { x: rightMargin - 4, y: startPt.y + totalDy * 0.64 },
-            { x: rightMargin + 4, y: startPt.y + totalDy * 0.78 },
-            { x: rightMargin - 2, y: startPt.y + totalDy * 0.90 },
-            { x: rightMargin, y: endPt.y - 70 },
-            { x: Math.max(endPt.x + 30, rightMargin - 25), y: endPt.y - 20 },
-            { x: endPt.x, y: endPt.y }
-          ];
-
-          // Smooth organic cubic Bézier curve with natural tangents
-          const d = rawPoints.map((p, i) => {
-            if (!i) return `M${p.x} ${p.y}`;
-            const a = rawPoints[i - 1];
-            const dy = p.y - a.y;
-            const cy1 = a.y + dy * 0.45;
-            const cy2 = p.y - dy * 0.45;
-            return `C${a.x} ${cy1},${p.x} ${cy2},${p.x} ${p.y}`;
-          }).join(' ');
-
-          paths.forEach(p => p.setAttribute('d', d));
-        }
         dirty = false;
       }
       const state = journeyAt(y, v, height, offsets, heroDistance, processTop, processHeight);
@@ -97,19 +48,6 @@ export default function JourneyControl() {
       track.style.setProperty('--progress', progressVal.toFixed(4));
       label.textContent = stations[state.current].dataset.station + ' · ' + Math.round(state.page * 100) + '%';
       dots.forEach((dot, i) => { const p = clampUnit((offsets[i] - v * .38) / Math.max(1, height - v)); dot.setAttribute('cy', String(4 + 192 * p)); dot.classList.toggle('active', i <= state.current); });
-
-      // Dynamic traveling luminous orb tracking along the exact curve
-      if (pathInk && orbCore && orbGlow) {
-        const totalLen = pathInk.getTotalLength();
-        if (totalLen > 0) {
-          const curLen = Math.min(totalLen, Math.max(0, progressVal * totalLen));
-          const pt = pathInk.getPointAtLength(curLen);
-          orbCore.setAttribute('cx', String(pt.x));
-          orbCore.setAttribute('cy', String(pt.y));
-          orbGlow.setAttribute('cx', String(pt.x));
-          orbGlow.setAttribute('cy', String(pt.y));
-        }
-      }
 
       // Pure clean white background throughout the site
       landing.style.setProperty('--scroll-bg', '#ffffff');
@@ -147,22 +85,6 @@ export default function JourneyControl() {
   }, []);
   return (
     <div ref={rail} aria-hidden="true" className="journey-decoration">
-      <svg className="journey-trail" preserveAspectRatio="none">
-        <defs>
-          <filter id="whiteTrailGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3.5" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <path className="trail-ambient-glow" />
-        <path className="trail-base" />
-        <path className="trail-ink" pathLength="1" filter="url(#whiteTrailGlow)" />
-        <circle className="trail-orb-glow" r="9" />
-        <circle className="trail-orb-core" r="4.2" />
-      </svg>
       <aside className="journey-rail">
         <svg viewBox="0 0 8 200" preserveAspectRatio="none">
           <path d="M4 4V196" className="rail-base" />
