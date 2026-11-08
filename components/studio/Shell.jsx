@@ -44,31 +44,33 @@ export function Header(){
  return (
   <header className="site-header ronin-header" onKeyDown={e=>{if(open&&e.key==='Escape')closeMenu();}}>
     <a className="skip" href="#main">Skip to content</a>
-    <div className="wrap nav ronin-nav">
-      <div className="ronin-brand-wrap">
-        <Brand/>
-      </div>
-      <nav id="site-links" className="site-links ronin-links" aria-label="Main navigation">
-        {links.map(({name,url,icon:Icon})=>(
-          <a href={url} aria-current={path===url?'page':undefined} key={url} className="ronin-nav-item" onClick={()=>setOpen(false)}>
-            <Icon size={15} className="ronin-nav-icon" aria-hidden="true" />
-            <strong className="ronin-nav-text">{name}</strong>
+    <div className="wrap ronin-header-wrap">
+      <nav id="site-links" className="nav ronin-nav" aria-label="Main navigation">
+        <div className="ronin-brand-wrap">
+          <Brand/>
+        </div>
+        <div className="site-links ronin-links">
+          {links.map(({name,url,icon:Icon})=>(
+            <a href={url} aria-current={path===url?'page':undefined} key={url} className="ronin-nav-item" onClick={()=>setOpen(false)}>
+              <Icon size={15} className="ronin-nav-icon" aria-hidden="true" />
+              <strong className="ronin-nav-text">{name}</strong>
+            </a>
+          ))}
+        </div>
+        <div className="nav-actions ronin-actions">
+          <button type="button" className="icon-btn motion-toggle ronin-icon-btn" onClick={pause} aria-pressed={paused} title={paused?'Resume motion':'Pause motion'} aria-label={paused?'Resume motion':'Pause motion'}>
+            {paused?<Play size={15}/>:<Pause size={15}/>}
+          </button>
+          <a className="nav-contact ronin-cta-pill" href="/contact">
+            <Terminal size={14} aria-hidden="true" />
+            <span>Get in touch</span>
+            <ArrowUpRight size={14}/>
           </a>
-        ))}
+          <button className="icon-btn nav-toggle ronin-icon-btn" ref={toggle} aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} aria-controls="studio-menu" onClick={openMenu}>
+            {open?<X size={20}/>:<Menu size={20}/>}
+          </button>
+        </div>
       </nav>
-      <div className="nav-actions ronin-actions">
-        <button type="button" className="icon-btn motion-toggle ronin-icon-btn" onClick={pause} aria-pressed={paused} title={paused?'Resume motion':'Pause motion'} aria-label={paused?'Resume motion':'Pause motion'}>
-          {paused?<Play size={15}/>:<Pause size={15}/>}
-        </button>
-        <a className="nav-contact ronin-cta-pill" href="/contact">
-          <Terminal size={14} aria-hidden="true" />
-          <span>Get in touch</span>
-          <ArrowUpRight size={14}/>
-        </a>
-        <button className="icon-btn nav-toggle ronin-icon-btn" ref={toggle} aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} aria-controls="studio-menu" onClick={openMenu}>
-          {open?<X size={20}/>:<Menu size={20}/>}
-        </button>
-      </div>
     </div>
     <dialog ref={menu} id="studio-menu" className="studio-menu" aria-label="Explore Hash Decode" onClose={()=>{setOpen(false);toggle.current?.focus();}} onClick={e=>{if(e.target===menu.current)closeMenu();}}>
       <div className="menu-panel">

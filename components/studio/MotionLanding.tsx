@@ -125,9 +125,10 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
    </section>
 
    {/* 1. SERVICES (3 CARDS) */}
-   <section className="band wrap section-rule-block" id="services" data-station="Services">
+   <section className="section-rule-block" id="services" data-station="Services">
+     <div className="wrap">
      <div className="section-head-rule">
-       <span className="section-rule-label">[ 01 // CAPABILITIES ]</span>
+       <span className="section-rule-label">01 · CAPABILITIES</span>
        <h2 className="section-rule-heading">Engineered for <span className="highlight-word">performance.</span></h2>
        <p className="section-rule-lead">Custom software, web platforms, and secure APIs built around the way your business works.</p>
      </div>
@@ -145,12 +146,14 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
      <div className="section-rule-action">
        <a className="cta" href="/services">Explore services <ArrowUpRight size={16}/></a>
      </div>
+     </div>
    </section>
 
    {/* 2. SECURITY (3-STEP STRIP: Scope, Test, Verify fixes + one "Request an audit" button) */}
-   <section className="band wrap section-rule-block" id="security" data-station="Security">
+   <section className="section-rule-block" id="security" data-station="Security">
+     <div className="wrap">
      <div className="section-head-rule">
-       <span className="section-rule-label">[ 02 // SECURITY ASSURANCE ]</span>
+       <span className="section-rule-label">02 · SECURITY ASSURANCE</span>
        <h2 className="section-rule-heading">Tested before <span className="highlight-word">launch.</span></h2>
        <p className="section-rule-lead">Rigorous penetration testing, authorized code reviews, and concrete security sign-offs.</p>
      </div>
@@ -166,12 +169,14 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
      <div className="section-rule-action">
        <a className="cta" href="#brief">Request an audit <ArrowUpRight size={16}/></a>
      </div>
+     </div>
    </section>
 
    {/* 3. WORK (2 CONCEPT CARDS + PROJECT INDEX LINK) */}
-   <section className="band wrap section-rule-block" id="work" data-station="Work">
+   <section className="section-rule-block" id="work" data-station="Work">
+     <div className="wrap">
      <div className="section-head-rule">
-       <span className="section-rule-label">[ 03 // STUDIO WORK ]</span>
+       <span className="section-rule-label">03 · SELECTED CONCEPTS</span>
        <h2 className="section-rule-heading">Proven software <span className="highlight-word">concepts.</span></h2>
        <p className="section-rule-lead">Explore working architectures, reactive tools, and real-time operational interfaces.</p>
      </div>
@@ -183,12 +188,14 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
      <div className="section-rule-action">
        <a className="cta" href="/portfolio">Project index <ArrowUpRight size={16}/></a>
      </div>
+     </div>
    </section>
 
    {/* 4. PROCESS (4-STEP TIMELINE: Brief, Design, Build, Handover) */}
-   <section className="band wrap section-rule-block" id="process" data-station="Process">
+   <section className="section-rule-block" id="process" data-station="Process">
+     <div className="wrap">
      <div className="section-head-rule">
-       <span className="section-rule-label">[ 04 // HOW WE WORK ]</span>
+       <span className="section-rule-label">04 · DELIVERY LIFECYCLE</span>
        <h2 className="section-rule-heading">From brief to <span className="highlight-word">handover.</span></h2>
        <p className="section-rule-lead">A direct engineering process with transparent weekly increments and full client ownership.</p>
      </div>
@@ -204,12 +211,14 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
      <div className="section-rule-action">
        <a className="cta" href="/about">How we work <ArrowUpRight size={16}/></a>
      </div>
+     </div>
    </section>
 
    {/* 5. TEAM STRIP */}
-   <section className="band wrap section-rule-block" id="team" data-station="Team">
+   <section className="section-rule-block" id="team" data-station="Team">
+     <div className="wrap">
      <div className="section-head-rule">
-       <span className="section-rule-label">[ 05 // LEADERSHIP ]</span>
+       <span className="section-rule-label">05 · LEADERSHIP</span>
        <h2 className="section-rule-heading">Senior engineering <span className="highlight-word">talent.</span></h2>
        <p className="section-rule-lead">Led by architects and security specialists dedicated to building resilient platforms.</p>
      </div>
@@ -232,12 +241,14 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
      <div className="section-rule-action">
        <a className="cta" href="/about">Meet the team <ArrowUpRight size={16}/></a>
      </div>
+     </div>
    </section>
 
    {/* 6. FAQ (5 QUESTIONS) */}
-   <section className="band wrap section-rule-block" id="faq" data-station="Questions">
+   <section className="section-rule-block" id="faq" data-station="Questions">
+     <div className="wrap">
      <div className="section-head-rule">
-       <span className="section-rule-label">[ 06 // COMMON QUESTIONS ]</span>
+       <span className="section-rule-label">06 · COMMON QUESTIONS</span>
        <h2 className="section-rule-heading">Everything you need to <span className="highlight-word">know.</span></h2>
        <p className="section-rule-lead">Transparent pricing, clear timelines, code ownership, and post-launch support.</p>
      </div>
@@ -252,13 +263,14 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
      <div className="section-rule-action">
        <a className="cta" href="/tools">Explore project tools <ArrowUpRight size={16}/></a>
      </div>
+     </div>
    </section>
 
    {/* 7. FINAL CTA */}
-   <section className="tint-band section-rule-block" id="brief" data-station="Contact">
-     <div className="wrap band contact-grid">
+   <section className="section-rule-block" id="brief" data-station="Contact">
+     <div className="wrap contact-grid">
        <div>
-         <span className="section-rule-label">[ 07 // PROJECT BRIEF ]</span>
+         <span className="section-rule-label">07 · PROJECT BRIEF</span>
          <h2 className="section-rule-heading" style={{margin:'0.6rem 0 1rem'}}>What are you <span className="highlight-word">working on?</span></h2>
          <p className="section-rule-lead" style={{maxWidth:'42ch',marginBottom:'1.5rem'}}>Tell us who it’s for, what needs to change, and your target timeline.</p>
          <div className="contact-links">
