@@ -86,8 +86,8 @@ export default function CodingBackground() {
       const delta = Math.min(time - lastTime, 60);
       lastTime = time;
 
-      // Dark background trail persistence for liquid neon blur
-      ctx.fillStyle = 'rgba(2, 8, 23, 0.22)';
+      // Dark obsidian background trail persistence for liquid neon blur (no blue)
+      ctx.fillStyle = 'rgba(7, 10, 9, 0.22)';
       ctx.fillRect(0, 0, width, height);
 
       cols.forEach((col) => {
@@ -115,25 +115,25 @@ export default function CodingBackground() {
           const char = col.chars[j];
 
           if (j === 0) {
-            // Bright luminous head
+            // Bright luminous head - Pure Frozen White with crisp white glow
             ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = '#38bdf8';
-            ctx.shadowBlur = col.layer === 'fore' ? 16 : 8;
+            ctx.shadowColor = '#ffffff';
+            ctx.shadowBlur = col.layer === 'fore' ? 18 : 10;
             ctx.fillText(char, col.x, charY);
           } else if (j < 4) {
-            // Neon cyan aura
-            ctx.fillStyle = '#67e8f9';
-            ctx.shadowColor = '#0284c7';
+            // Silver-white / subtle coral aura (zero blue)
+            ctx.fillStyle = j === 1 ? '#ff7a66' : '#f1f5f9';
+            ctx.shadowColor = j === 1 ? '#ff4d36' : 'rgba(255, 255, 255, 0.7)';
             ctx.shadowBlur = col.layer === 'fore' ? 10 : 4;
             ctx.fillText(char, col.x, charY);
           } else {
-            // Fading cyber trail
+            // Fading cyber trail - Slate/silver glyphs fading to transparent obsidian
             const fade = 1 - j / col.length;
             ctx.shadowBlur = 0;
             const alpha = col.layer === 'fore'
               ? Math.max(0.08, fade * 0.85)
               : Math.max(0.04, fade * 0.55);
-            ctx.fillStyle = `rgba(14, 165, 233, ${alpha.toFixed(3)})`;
+            ctx.fillStyle = `rgba(226, 232, 240, ${alpha.toFixed(3)})`;
             ctx.fillText(char, col.x, charY);
           }
         }

@@ -1,6 +1,7 @@
-import EditorialAdmin from '@/components/studio/EditorialAdmin';
+import '@/app/admin-dashboard.css';
+import FoolishAdminDashboard from '@/components/studio/FoolishAdminDashboard';
 import { getLinks, entries } from '@/lib/cms';
-import { runtime, trafficSince } from '@/lib/abuse';
+import { trafficSince } from '@/lib/abuse';
 import AdminSessionGuard from '@/components/studio/AdminSessionGuard';
 import OwnerSession from '@/components/studio/OwnerSession';
 import { adminAccess } from '@/lib/studio-security';
@@ -8,14 +9,13 @@ import { getDb } from '@/db';
 import { inquiries } from '@/db/schema';
 import { desc } from 'drizzle-orm';
 import { listProjects, studioCopy, listFounders } from '@/lib/studio-data';
-import Admin from '@/components/studio/Admin';
 import { getMongoSyncStatus, getMongoInquiries, getAuditLogs } from '@/lib/mongodb';
 import { getPlatformDb } from '@/lib/platform-db';
 import { loadSubscribersList, loadInquiryNotesMap } from '@/app/api/admin/route';
 
 export const dynamic = 'force-dynamic';
 export const metadata = {
-  title: 'Studio Admin | Hash Decode',
+  title: 'Studio Command | Hash Decode Atelier',
   robots: { index: false, follow: false },
 };
 
@@ -97,82 +97,21 @@ export default async function AdminPage() {
   const views = stats.results.reduce((v: number, r: { n: number }) => v + r.n, 0);
 
   return (
-    <div className="wrap interior admin-dashboard">
+    <>
       <AdminSessionGuard />
-      <div className="admin-top">
-        <header className="page-intro compact">
-          <p className="eyebrow">
-            <i /> Owner workspace
-          </p>
-          <h1>
-            Studio <em>admin.</em>
-          </h1>
-        </header>
-        <OwnerSession logout />
-      </div>
-      <div className="dashboard-kpis">
-        {[
-          [projects.filter((p) => p.status === 'published').length, 'Published projects'],
-          [messages.filter((m) => m.status === 'new').length, 'New briefs · recent 200'],
-          [
-            content.filter((x: any) => x.kind === 'post' && x.status === 'published').length,
-            'Published notes',
-          ],
-          [views, 'Page views · 30 days'],
-        ].map(([v, l]) => (
-          <div key={l}>
-            <span className="eyebrow">{l}</span>
-            <strong>{v}</strong>
-          </div>
-        ))}
-      </div>
-      <div className="stats-panel">
-        <div>
-          <p className="eyebrow">Acquisition / 30 days</p>
-          <h3>Traffic sources</h3>
-        </div>
-        <div>
-          {stats.results.length ? (
-            stats.results.map((r: any) => (
-              <div className="chart-row" key={r.source}>
-                <span>{r.source}</span>
-                <meter min={0} max={views || 1} value={r.n} />
-                <b>{r.n}</b>
-              </div>
-            ))
-          ) : (
-            <p>Traffic appears as visitors use public pages.</p>
-          )}
-        </div>
-      </div>
-      <p className="system-note">
-        Email notifications:{' '}
-        {runtime('RESEND_API_KEY') &&
-        (runtime('MAIL_TO') || runtime('STUDIO_OWNER_EMAIL') || runtime('ADMIN_NOTIFICATION_EMAIL'))
-          ? 'configured'
-          : 'not configured — inquiries are saved in the inbox'}
-        . Human verification:{' '}
-        {runtime('TURNSTILE_SECRET') && runtime('TURNSTILE_SITE_KEY')
-          ? 'Cloudflare Turnstile'
-          : 'one-time math challenge'}
-        . MongoDB Atlas:{' '}
-        {mongo.configured
-          ? mongo.connected
-            ? `connected (${mongo.dbName})`
-            : 'configured (verifying connection)'
-          : 'standby'}
-        . Subscribers: {subscribers.length}.
-      </p>
-      <Admin
-        initial={projects}
-        messages={messages}
-        copy={copy}
+      <FoolishAdminDashboard
+        initialProjects={projects}
+        initialMessages={messages}
+        initialCopy={copy}
         initialFounders={founders}
         initialSubscribers={subscribers}
         initialAuditLogs={auditLogs}
         initialMongoStatus={mongo}
+        initialEntries={content}
+        initialLinks={links}
+        trafficStats={stats}
+        totalViews={views}
       />
-      <EditorialAdmin initial={content} links={links} />
-    </div>
+    </>
   );
 }
