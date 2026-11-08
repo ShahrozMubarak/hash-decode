@@ -68,7 +68,7 @@ export async function verifySignedChallengeId(id: string, answer: string): Promi
 
 export async function GET(req: Request) {
   try {
-    if (!(await quota(req, 'captcha', 500))) {
+    if (!(await quota(req, 'captcha', 1000, 10 * 60 * 1000))) {
       return Response.json({ error: 'Too many attempts. Try again later.' }, { status: 429 });
     }
     const siteKey = runtime('TURNSTILE_SITE_KEY');

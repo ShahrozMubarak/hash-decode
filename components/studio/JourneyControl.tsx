@@ -35,32 +35,30 @@ export default function JourneyControl(){
       if(endBtn){const er=endBtn.getBoundingClientRect();endPt={x:er.left+er.width*.5,y:er.top+y-top};}
 
       // Continuous, elegant path starting from Start a project button and descending strictly DOWN
-      const totalDy = Math.max(800, endPt.y - startPt.y);
+      const totalDy = Math.max(800, trailHeight - startPt.y - 80);
 
-      // Clean waypoints that strictly avoid the robot (left column) and form inputs (center column)
+      // Clean waypoints that strictly avoid the robot (left column) and form inputs (center/right columns)
       const rawPoints: {x: number; y: number}[] = [
         { x: startPt.x, y: startPt.y },
         // Immediately flow downwards from the button, sweeping towards the right
         { x: startPt.x + Math.min(w * 0.12, 140), y: startPt.y + 110 },
         { x: Math.min(w * 0.78, w - 100),         y: startPt.y + totalDy * 0.10 },
         { x: Math.min(w * 0.88, w - 60),          y: startPt.y + totalDy * 0.19 },
-        // Irregular swing left across Section 02 coder showcase margin
-        { x: Math.max(w * 0.14, 70),              y: startPt.y + totalDy * 0.29 },
-        { x: Math.max(w * 0.38, 180),             y: startPt.y + totalDy * 0.38 },
+        // Irregular swing left across Section 02 coder showcase margin (staying clear of center)
+        { x: Math.max(w * 0.12, 60),              y: startPt.y + totalDy * 0.29 },
+        { x: Math.max(w * 0.35, 160),             y: startPt.y + totalDy * 0.38 },
         // Broad sweeping arc right around Services
         { x: Math.min(w * 0.84, w - 80),          y: startPt.y + totalDy * 0.48 },
         // Reverse cut into left gutter
-        { x: Math.max(w * 0.16, 80),              y: startPt.y + totalDy * 0.58 },
+        { x: Math.max(w * 0.15, 75),              y: startPt.y + totalDy * 0.58 },
         // Curving through Security narrative
-        { x: Math.min(w * 0.78, w - 100),         y: startPt.y + totalDy * 0.69 },
-        // Weaving down through Process and Work
-        { x: Math.max(w * 0.22, 90),              y: startPt.y + totalDy * 0.79 },
-        // Approaching Contact/Brief section: stay strictly in the far-right gutter (away from robot on left and form in center)
-        { x: Math.min(w * 0.92, w - 50),          y: startPt.y + totalDy * 0.88 },
-        { x: Math.min(w * 0.94, w - 40),          y: endPt.y - 120 },
-        // Smoothly curve into the Send project brief button from the side, without cutting across form fields or robot
-        { x: Math.min(w * 0.88, endPt.x + 120),   y: endPt.y - 30 },
-        { x: endPt.x, y: endPt.y }
+        { x: Math.min(w * 0.82, w - 80),          y: startPt.y + totalDy * 0.69 },
+        // Work section
+        { x: Math.min(w * 0.85, w - 60),          y: startPt.y + totalDy * 0.78 },
+        // Approaching Contact/Brief section: stay strictly in the far-right gutter outside robot and form
+        { x: Math.min(w * 0.94, w - 35),          y: startPt.y + totalDy * 0.86 },
+        { x: Math.min(w * 0.95, w - 24),          y: startPt.y + totalDy * 0.93 },
+        { x: Math.min(w * 0.93, w - 28),          y: startPt.y + totalDy * 0.99 }
       ];
 
       // Smooth organic cubic Bézier curve with natural tangents
@@ -104,8 +102,8 @@ export default function JourneyControl(){
    track.querySelectorAll('.mobile-checkpoint').forEach((dot,i)=>{dot.classList.toggle('active',i<=state.current);dot.classList.toggle('current',i===state.current);});
    const gallery=clampUnit((y-offsets[1])/Math.max(1,showcase.offsetHeight-v*.9));
    landing.style.setProperty('--collection-depth',(mobile?0:gallery*100)+'%');
-   // Slower, smooth progress that doesn't jump 20% ahead
-   const progressVal = Math.min(1, Math.max(0, Math.pow(state.page, 0.95) * 1.05));
+   // Slower, smooth progress that loads 20% less so it follows cleanly without rushing ahead
+   const progressVal = Math.min(0.92, Math.max(0, Math.pow(state.page, 1.15) * 0.80));
    track.style.setProperty('--progress', progressVal.toFixed(4));
    label.textContent=stations[state.current].dataset.station+' · '+Math.round(state.page*100)+'%';
    dots.forEach((dot,i)=>{const p=clampUnit((offsets[i]-v*.38)/Math.max(1,height-v));dot.setAttribute('cy',String(4+192*p));dot.classList.toggle('active',i<=state.current);});

@@ -57,7 +57,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    if (!(await quota(req, 'brief-attempt', 120))) {
+    if (!(await quota(req, 'brief-attempt', 300, 10 * 60 * 1000))) {
       return Response.json({ error: 'Please wait before trying again.' }, { status: 429 });
     }
 
@@ -174,7 +174,7 @@ export async function POST(req: Request) {
       }
     }
 
-    if (!(await quota(req, 'brief', 60))) {
+    if (!(await quota(req, 'brief', 120, 60 * 60 * 1000))) {
       return Response.json({ error: 'Please wait before submitting another brief.' }, { status: 429 });
     }
 

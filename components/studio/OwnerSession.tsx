@@ -1,9 +1,31 @@
 'use client';
-import {useState,useRef} from 'react';
+import {useState,useRef,useEffect} from 'react';
 import {ArrowUpRight,Eye,EyeOff,LogOut,LockKeyhole} from 'lucide-react';
 export default function OwnerSession({logout=false}:{logout?:boolean}){
  const locked=useRef(false);
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[visible,setVisible]=useState(false);
+
+ useEffect(()=>{
+  if(logout)return;
+  // Check if we have an active session in localStorage that can recover the cookie
+  try{
+    const stored=localStorage.getItem('hashdecode_owner_session');
+    if(stored){
+      const {token,time}=JSON.parse(stored);
+      if(token && Date.now() - Number(time) < 14400000){
+        // Ensure cookie is set
+        document.cookie=`studio-session=${token}; Path=/; SameSite=Lax; Max-Age=14400`;
+        // Verify with /api/session
+        fetch('/api/session', { headers: { 'Authorization': `Bearer ${token}` } })
+          .then(r => {
+            if(r.ok) window.location.href = '/admin';
+          })
+          .catch(()=>{});
+      }
+    }
+  }catch{}
+ },[logout]);
+
  return <form className={logout?'owner-logout':'form-panel owner-login'} aria-busy={busy} onSubmit={async event=>{
   event.preventDefault();if(locked.current)return;
   const formData=new FormData(event.currentTarget);
@@ -15,11 +37,26 @@ export default function OwnerSession({logout=false}:{logout?:boolean}){
    if(!response.ok){setError(response.status===429?'Too many attempts. Try again in 15 minutes.':response.status===503?'Sign-in is temporarily unavailable. Please try again.':'Unable to sign in. Check your email & password and try again.');return;}
    const data=await response.json().catch(()=>({}));
    if(!logout&&data?.token){
-     try{localStorage.setItem('hashdecode_owner_session',JSON.stringify({token:data.token,email,time:Date.now()}));}catch{}
+     try{
+       localStorage.setItem('hashdecode_owner_session',JSON.stringify({token:data.token,email,time:Date.now()}));
+       document.cookie=`studio-session=${data.token}; Path=/; SameSite=Lax; Max-Age=14400`;
+     }catch{}
+     setTimeout(()=>{
+       window.location.href='/admin';
+     },120);
+     return;
    }else if(logout){
-     try{localStorage.removeItem('hashdecode_owner_session');}catch{}
+     try{
+       localStorage.removeItem('hashdecode_owner_session');
+       document.cookie='studio-session=; Path=/; SameSite=Lax; Max-Age=0';
+       document.cookie='__Host-studio-session=; Path=/; SameSite=Lax; Max-Age=0';
+     }catch{}
+     setTimeout(()=>{
+       window.location.href='/admin';
+     },120);
+     return;
    }
-   location.replace('/admin');
+   window.location.href='/admin';
   }catch{setError('Connection interrupted. Please try again.');}finally{locked.current=false;setBusy(false);}
  }}>
  {!logout&&<>

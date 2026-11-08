@@ -47,14 +47,52 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
    <section className="wrap band security-section story-security" id="security" data-station="Security">
     <div className="security-stage">
      <div className="security-narrative">
+      <span className="eyebrow"><i /> ( 03 ) [ INTEGRITY_SYSTEMS ]</span>
       <h2>Build it. Break it.<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>Secure it.</span></h2>
       <p>Clear boundaries. Practical security testing. Verified fixes.</p>
       <a className="text-link" href="/services#security">Our security approach <ArrowUpRight size={16}/></a>
      </div>
+     <div className="security-cards-grid">
+      <div className="security-audit-card">
+       <span className="card-kicker">( 01 ) [ PENETRATION_AUDIT ]</span>
+       <h4>Full Stack Threat Simulation</h4>
+       <p>Zero-leak boundary testing across authenticated endpoints, token validation, and multi-tenant isolation layers.</p>
+      </div>
+      <div className="security-audit-card">
+       <span className="card-kicker">( 02 ) [ CRYPTOGRAPHIC_KEYS ]</span>
+       <h4>Client-Exclusive Control</h4>
+       <p>Zero vendor lock-in with constant-time cryptographic verification, signed challenge tokens, and isolated storage.</p>
+      </div>
+      <div className="security-audit-card">
+       <span className="card-kicker">( 03 ) [ CONTINUOUS_DEFENSE ]</span>
+       <h4>Automated Abuse Isolation</h4>
+       <p>Real-time rate throttling, distributed replay protection, and audit logging for complete operational visibility.</p>
+      </div>
+     </div>
     </div>
    </section>
    <section className="tint-band" id="work" data-station="Work"><div className="wrap band">
-    <div className="craft-story"><h2>Rock-solid systems.<br/><span className="text-azure" style={{ color: 'var(--azure)' }}>Fluid experience.</span></h2><p>From database design to the final interaction, reliable foundations and thoughtful details belong together.</p></div><div className="section-head"><h2>Studio concepts.</h2><a className="text-link" href="/portfolio">Project index <ArrowUpRight size={16}/></a></div>
+    <div className="craft-stage-split">
+     <div className="craft-story"><span className="eyebrow"><i /> ( 04 ) [ PRODUCTION_BENCHMARKS ]</span><h2>Rock-solid systems.<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>Fluid experience.</span></h2><p>From database design to the final interaction, reliable foundations and thoughtful details belong together.</p></div>
+     <div className="craft-metrics-cards">
+      <div className="craft-pill-card">
+       <span className="pill-metric">&lt;150ms</span>
+       <span className="pill-label">P99 Edge Latency</span>
+       <p>Streamlined distributed pipelines with zero render waterfall bottlenecks.</p>
+      </div>
+      <div className="craft-pill-card">
+       <span className="pill-metric">100%</span>
+       <span className="pill-label">Client Code Ownership</span>
+       <p>Complete source code delivery, self-hostable databases, and zero lock-in.</p>
+      </div>
+      <div className="craft-pill-card">
+       <span className="pill-metric">0-Day</span>
+       <span className="pill-label">Security Standards</span>
+       <p>Automated static invariants, verified memory safety, and signed sessions.</p>
+      </div>
+     </div>
+    </div>
+    <div className="section-head"><h2>Studio concepts.</h2><a className="text-link" href="/portfolio">Project index <ArrowUpRight size={16}/></a></div>
     <div className="work-grid">{projects.map((project,index)=><WorkCard key={project.slug} project={project} index={index}/>)}</div>
    </div></section>
    <section id="process" data-station="Process" className="wrap band"><h2>From brief to handover.</h2>

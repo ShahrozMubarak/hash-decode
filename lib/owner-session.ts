@@ -151,7 +151,7 @@ export function sessionCookie(token: string, age: number, isSecure = true) {
   if (!isSecure) {
     return `studio-session=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${age}`;
   }
-  return `${cookieName}=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${age}`;
+  return `${cookieName}=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${age}`;
 }
 
 export async function issueSession(isSecure = true) {

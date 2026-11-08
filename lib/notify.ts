@@ -36,7 +36,12 @@ export async function mailBrief(m: {
         text: `New Project Inquiry received on Hash Decode Studio:\n\nName: ${m.name}\nEmail: ${m.email}\nService: ${m.topic}\nBudget: ${m.budget}\n\nBrief:\n${m.brief}\n\nReference ID: ${m.id}`,
       }),
     });
-    return r.ok ? 'accepted' : 'failed';
+    if (!r.ok) {
+      const errBody = await r.text().catch(() => '');
+      console.warn('[Resend API Error]:', r.status, errBody);
+      return 'failed';
+    }
+    return 'accepted';
   } catch {
     return 'failed';
   }

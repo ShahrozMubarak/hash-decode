@@ -107,8 +107,11 @@ export default function TeleportBot({ className = '' }: Props) {
     window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'idle' } }));
   }, [mood]);
 
+  const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+
   // Hold for 4 full seconds to engage security / angry mode
-  const handlePointerDown = useCallback(() => {
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    dragStartRef.current = { x: e.clientX, y: e.clientY };
     if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
     holdTimerRef.current = setTimeout(() => {
       setMood('angry');
@@ -122,7 +125,21 @@ export default function TeleportBot({ className = '' }: Props) {
     }, 4000);
   }, []);
 
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragStartRef.current) return;
+    const dx = Math.abs(e.clientX - dragStartRef.current.x);
+    const dy = Math.abs(e.clientY - dragStartRef.current.y);
+    // If user is swiping or dragging the bot, cancel the 4s hold-to-angry timer
+    if (dx > 6 || dy > 6) {
+      if (holdTimerRef.current) {
+        clearTimeout(holdTimerRef.current);
+        holdTimerRef.current = null;
+      }
+    }
+  }, []);
+
   const handlePointerUp = useCallback(() => {
+    dragStartRef.current = null;
     if (holdTimerRef.current) {
       clearTimeout(holdTimerRef.current);
       holdTimerRef.current = null;
@@ -136,6 +153,7 @@ export default function TeleportBot({ className = '' }: Props) {
       onMouseEnter={handlePointerEnter}
       onMouseLeave={handlePointerLeave}
       onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
     >
@@ -147,7 +165,7 @@ export default function TeleportBot({ className = '' }: Props) {
         <div className="teleport-ring" />
       </div>
 
-      {/* Hand-Drawn Sketchy Thought/Speech Bubble (Matching Image 1) */}
+      {/* Hand-Drawn Sketchy Thought/Speech Bubble */}
       <div className={`teleport-thought-bubble bubble-${mood}`}>
         <svg
           viewBox="0 0 320 200"
@@ -165,8 +183,8 @@ export default function TeleportBot({ className = '' }: Props) {
                C 32 155, 30 140, 25 125
                C 12 95, 15 50, 45 35 Z"
             fill="#ffffff"
-            stroke="#0A2540"
-            strokeWidth="3.2"
+            stroke="#000000"
+            strokeWidth="2.8"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -180,19 +198,16 @@ export default function TeleportBot({ className = '' }: Props) {
                C 34 153, 32 138, 27 127
                C 15 97, 18 53, 47 38 Z"
             fill="none"
-            stroke="rgba(10, 37, 64, 0.45)"
-            strokeWidth="1.8"
+            stroke="rgba(0, 0, 0, 0.35)"
+            strokeWidth="1.6"
             strokeLinecap="round"
           />
-
-          {/* Quotation Marks: Opening double quotes top-left */}
-          <text x="45" y="55" className="bubble-quote-glyph">“</text>
-          {/* Quotation Marks: Closing double quotes bottom-right */}
-          <text x="270" y="142" className="bubble-quote-glyph">”</text>
         </svg>
 
         <div className="bubble-text-content">
-          <p>{thoughtText}</p>
+          <p className="bubble-narrative">{thoughtText}</p>
+        </div>
+        <div className="bubble-hint-wrap">
           <span className="bubble-tap-hint">
             {mood === 'angry' ? '⚡ Security posture engaged' : mood === 'happy' ? '✨ Hash online' : 'Drag to rotate · Hold 4s for security mode'}
           </span>
