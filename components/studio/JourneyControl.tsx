@@ -49,8 +49,8 @@ export default function JourneyControl() {
       label.textContent = stations[state.current].dataset.station + ' · ' + Math.round(state.page * 100) + '%';
       dots.forEach((dot, i) => { const p = clampUnit((offsets[i] - v * .38) / Math.max(1, height - v)); dot.setAttribute('cy', String(4 + 192 * p)); dot.classList.toggle('active', i <= state.current); });
 
-      // Pure clean white background throughout the site
-      landing.style.setProperty('--scroll-bg', '#ffffff');
+      // Subtle background variable
+      landing.style.setProperty('--scroll-bg', '#acb0b0');
       headings.forEach((el, i) => { const on = headingTops[i] < y + v * .94; el.classList.toggle('await-reveal', !on && motion); if (on) el.classList.add('revealed'); });
       const base = (at: number, x: number, cy: number, size: number, phase: number, yaw: number, pitch: number, alpha: number): Pose => ({ at, x, y: cy, size, phase, yaw, pitch, distance: 3.8 - Math.sin(phase * Math.PI / 2) * .65, alpha });
       const hsize = Math.min(hero.width * .36, hero.height * .4);

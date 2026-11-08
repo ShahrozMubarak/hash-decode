@@ -60,7 +60,7 @@ html[data-motion=off] .stack-set[aria-hidden=true]{display:none}html[data-motion
 
 /* Original composition: open narrative scenes, a full-width specimen and a crossing trail. */
 .original-composition{isolation:isolate}
-.story-backdrop{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;background:#ffffff!important;pointer-events:none!important;z-index:0!important}
+.story-backdrop{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;background:#acb0b0!important;pointer-events:none!important;z-index:0!important}
 .systems-story p,.craft-story p{max-width:48ch}.systems-story h2{margin-bottom:.35em}.craft-story{padding-block:3rem;text-align:center}.craft-story p{margin:1.5rem auto}.craft-story h2{font-size:clamp(2.5rem,6vw,7rem)}
 
 .original-composition #services{min-height:auto;padding-block:clamp(3.5rem,6vw,5.5rem);padding-inline:8vw;display:flex;align-items:center;justify-content:center;background:transparent!important;color:#0f172a!important;position:relative;z-index:5;max-width:1520px;margin:0 auto}
@@ -69,7 +69,7 @@ html[data-motion=off] .stack-set[aria-hidden=true]{display:none}html[data-motion
 .systems-story p{color:#475569!important;font-size:1.05rem;line-height:1.6;max-width:54ch;margin:0}
 
 @media(min-width:851px){
- .original-composition .story-backdrop{position:fixed!important;background:#FAFAFB!important;background-image:linear-gradient(rgba(0,0,0,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.025) 1px,transparent 1px)!important;background-size:90px 45px!important}
+ .original-composition .story-backdrop{position:fixed!important;background:#acb0b0!important;background-image:linear-gradient(rgba(0,0,0,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.035) 1px,transparent 1px)!important;background-size:90px 45px!important}
  .original-composition .hero-runway,.original-composition .hero-sheet,.original-composition .tint-band{background:transparent!important;border:0}
  .original-composition .hero-sheet{position:relative;min-height:calc(100svh - var(--header));display:flex;flex-direction:column;justify-content:center}
  .original-composition .hero-grid{position:relative;width:100%;max-width:1520px;min-height:clamp(520px,78svh,840px);padding-inline:8vw;display:flex!important;align-items:center!important;justify-content:center!important;margin:0 auto}
