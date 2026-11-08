@@ -51,7 +51,6 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
    </section>
    <section className="band wrap" id="services" data-station="Services">
      <div className="systems-story">
-       <div className="iris-pill-badge">[ ARCHITECTURE // SYSTEMS ]</div>
        <h2>Speed,<br/>structured with<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>clarity.</span></h2>
        <p>Custom web platforms, APIs and business tools, designed around the way your team works.</p>
        <a className="text-link" href="/services">Explore services <ArrowUpRight size={16}/></a>
