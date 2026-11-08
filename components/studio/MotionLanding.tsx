@@ -78,35 +78,37 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
     <div className="hero-sheet">
       <div className="wrap hero-grid">
         <div className="hero-heading-block">
+          <div className="hero-pill-badge">SECURE SOFTWARE STUDIO</div>
           <h1>Build it.<br/>Break it.<br/><TypingSecure /></h1>
         </div>
 
         <figure className="hero-object">
           <div className="hero-robot-glow" aria-hidden="true"/>
           <div className="hero-robot-shadow" aria-hidden="true"/>
-          <div className="hero-flank-watermark hero-flank-left" aria-hidden="true">
-            <span className="hero-watermark-hash">HASH</span>
+          <div className="hero-wordmark-backdrop" aria-hidden="true">
+            <span>HASH DECODE</span>
           </div>
-          <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
           <div className="specimen-visual" id="hero-model-anchor">
-            <div className="hero-blueprint-lines" aria-hidden="true"/>
             <SceneSurface model="eva" autoMobile={true}/>
           </div>
         </figure>
 
         <div className="hero-cta-block">
           <p className="hero-cta-subtext">
-            Custom software, web platforms and<br/>
-            security reviews for modern teams<br/>
-            building their next release.
+            Custom software, web platforms and security reviews for teams building their next release.
           </p>
           <div className="actions">
-            <a className="cta hero-create-cta" href="#brief">Create project <ArrowUpRight size={22}/></a>
+            <a className="hero-start-cta" href="#brief">
+              <span>Start a project</span>
+              <span className="cta-arrow-circle"><ArrowUpRight size={14}/></span>
+            </a>
           </div>
         </div>
       </div>
 
-      <div className="wrap hero-baseline"><a href="#showcase"><ArrowDown size={15}/> Explore the studio</a></div>
+      <div className="wrap hero-baseline">
+        <a href="#showcase" className="hero-explore-link">Explore the studio <ArrowDown size={14}/></a>
+      </div>
     </div>
    </section>
 

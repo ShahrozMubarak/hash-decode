@@ -15,19 +15,19 @@ export default function TypingSecure() {
         timer = setTimeout(() => {
           setText(fullText.slice(0, index + 1));
           setIndex(prev => prev + 1);
-        }, 120);
+        }, 70); // 70ms per character
       } else {
-        // Hold on "Secure it." for 3.5 seconds
+        // Hold on "Secure it." for 2.5 seconds
         timer = setTimeout(() => {
           setIsDeleting(true);
-        }, 3500);
+        }, 2500);
       }
     } else {
       if (index > 0) {
         timer = setTimeout(() => {
           setText(fullText.slice(0, index - 1));
           setIndex(prev => prev - 1);
-        }, 60);
+        }, 45);
       } else {
         setIsDeleting(false);
       }
