@@ -110,43 +110,6 @@ export default function JourneyControl(){
    label.textContent=stations[state.current].dataset.station+' · '+Math.round(state.page*100)+'%';
    dots.forEach((dot,i)=>{const p=clampUnit((offsets[i]-v*.38)/Math.max(1,height-v));dot.setAttribute('cy',String(4+192*p));dot.classList.toggle('active',i<=state.current);});
    nodes.forEach((node,i)=>node.classList.toggle('active',i<=state.current));
-
-   // AERUM Glowing Head Orb following exact SVG spline point
-   const inkPath = paths[1] as SVGGeometryElement | undefined;
-   const headOrb = trail.querySelector<SVGCircleElement>('.trail-head-orb');
-   if (inkPath && headOrb && typeof inkPath.getTotalLength === 'function') {
-     try {
-       const totalL = inkPath.getTotalLength();
-       const currentL = Math.max(0, Math.min(totalL, totalL * progressVal));
-       const pt = inkPath.getPointAtLength(currentL);
-       headOrb.setAttribute('cx', String(pt.x));
-       headOrb.setAttribute('cy', String(pt.y));
-       headOrb.style.opacity = progressVal > 0.005 ? '1' : '0';
-     } catch {}
-   }
-
-   // AERUM Scroll-Driven Ambient Background Transitions across sections
-   const bgColors = [
-     [7, 10, 9],    // 0: Overview #070a09 (Obsidian)
-     [3, 5, 4],     // 1: Agent #030504 (Matrix Void)
-     [11, 15, 14],  // 2: Services #0b0f0e (Graphite Bezel)
-     [5, 8, 7],     // 3: Security #050807 (Deep Cryptographic Obsidian)
-     [8, 12, 10],   // 4: Work #080c0a (Graphite Canvas)
-     [6, 9, 7],     // 5: Process #060907 (Midnight Slate)
-     [5, 7, 6],     // 6: Questions #050706 (Deep Horizon)
-     [4, 6, 5]      // 7: Contact #040605 (Obsidian Finish)
-   ];
-   const progressIndex = state.page * (bgColors.length - 1);
-   const curIdx = Math.min(bgColors.length - 1, Math.max(0, Math.floor(progressIndex)));
-   const nextIdx = Math.min(bgColors.length - 1, curIdx + 1);
-   const segT = Math.min(1, Math.max(0, progressIndex - curIdx));
-   const c1 = bgColors[curIdx];
-   const c2 = bgColors[nextIdx];
-   const bgR = Math.round(c1[0] + (c2[0] - c1[0]) * segT);
-   const bgG = Math.round(c1[1] + (c2[1] - c1[1]) * segT);
-   const bgB = Math.round(c1[2] + (c2[2] - c1[2]) * segT);
-   landing.style.setProperty('--landing-bg', `rgb(${bgR}, ${bgG}, ${bgB})`);
-
    headings.forEach((el,i)=>{const on=headingTops[i]<y+v*.94;el.classList.toggle('await-reveal',!on&&motion);if(on)el.classList.add('revealed');});
    const base=(at:number,x:number,cy:number,size:number,phase:number,yaw:number,pitch:number,alpha:number):Pose=>({at,x,y:cy,size,phase,yaw,pitch,distance:3.8-Math.sin(phase*Math.PI/2)*.65,alpha});
    const hsize=Math.min(hero.width*.36,hero.height*.4);
@@ -179,5 +142,5 @@ export default function JourneyControl(){
   window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',measure);window.addEventListener('hd:measure',measure);window.addEventListener('hd:motion',onMotion);landing.addEventListener('pointermove',move);landing.addEventListener('pointerleave',reset);
   return()=>{cancelAnimationFrame(tick);resize.disconnect();reset();window.removeEventListener('scroll',schedule);window.removeEventListener('resize',measure);window.removeEventListener('hd:measure',measure);window.removeEventListener('hd:motion',onMotion);landing.removeEventListener('pointermove',move);landing.removeEventListener('pointerleave',reset);};
  },[]);
- return <div ref={rail} aria-hidden="true" className="journey-decoration"><svg className="journey-trail" preserveAspectRatio="none"><path className="trail-base"/><path className="trail-ink" pathLength="1"/><circle className="trail-head-orb" r="5" cx="-100" cy="-100"/>{Array.from({length:16},(_,i)=><circle key={i} r="3.5"/>)}</svg><aside className="journey-rail"><svg viewBox="0 0 8 200" preserveAspectRatio="none"><path d="M4 4V196" className="rail-base"/><path pathLength="1" d="M4 4V196" className="rail-ink"/>{Array.from({length:8},(_,i)=><circle key={i} cx="4" cy={4+i*24} r="2.45"/>)}</svg><span className="rail-label">Overview</span></aside><div className="mobile-checkpoints">{Array.from({length:8},(_,i)=><i className="mobile-checkpoint" key={i}/>)}</div></div>;
+ return <div ref={rail} aria-hidden="true" className="journey-decoration"><svg className="journey-trail" preserveAspectRatio="none"><path className="trail-base"/><path className="trail-ink" pathLength="1"/>{Array.from({length:16},(_,i)=><circle key={i} r="3.5"/>)}</svg><aside className="journey-rail"><svg viewBox="0 0 8 200" preserveAspectRatio="none"><path d="M4 4V196" className="rail-base"/><path pathLength="1" d="M4 4V196" className="rail-ink"/>{Array.from({length:8},(_,i)=><circle key={i} cx="4" cy={4+i*24} r="2.45"/>)}</svg><span className="rail-label">Overview</span></aside><div className="mobile-checkpoints">{Array.from({length:8},(_,i)=><i className="mobile-checkpoint" key={i}/>)}</div></div>;
 }
