@@ -47,14 +47,53 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
    <section className="wrap band security-section story-security" id="security" data-station="Security">
     <div className="security-stage">
      <div className="security-narrative">
+      <div className="iris-pill-badge">[ v01b // SECURITY_AUDIT ]</div>
       <h2>Build it. Break it.<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>Secure it.</span></h2>
       <p>Clear boundaries. Practical security testing. Verified fixes.</p>
-      <a className="text-link" href="/services#security">Our security approach <ArrowUpRight size={16}/></a>
+      <div className="security-actions">
+        <a className="cta" href="/services#security">Our security approach <ArrowUpRight size={16}/></a>
+        <a className="text-link" href="#brief">Request audit <ArrowDown size={15}/></a>
+      </div>
+     </div>
+
+     <div className="security-cards-grid">
+       <article className="security-card">
+         <div className="security-card-media">
+           <img src="/images/security-core.jpg" alt="Cryptographic Penetration Audit" width={480} height={320} loading="lazy" />
+           <span className="card-tag">( 01 ) [ PENETRATION_AUDIT ]</span>
+         </div>
+         <div className="security-card-body">
+           <h3>Cryptographic Defense Matrix</h3>
+           <p>Automated zero-day simulation, memory safety validation, and smart contract protocol verification.</p>
+         </div>
+       </article>
+
+       <article className="security-card">
+         <div className="security-card-media">
+           <img src="/images/cloud-architecture.jpg" alt="Distributed Edge Mesh" width={480} height={320} loading="lazy" />
+           <span className="card-tag">( 02 ) [ CLOUD_RESILIENCE ]</span>
+         </div>
+         <div className="security-card-body">
+           <h3>Distributed Edge Infrastructure</h3>
+           <p>Isolated VPC boundaries, global Anycast routing, and micro-segmented zero-trust access control.</p>
+         </div>
+       </article>
+
+       <article className="security-card">
+         <div className="security-card-media">
+           <img src="/images/code-audit.jpg" alt="Continuous Verification" width={480} height={320} loading="lazy" />
+           <span className="card-tag">( 03 ) [ CONTINUOUS_VERIFY ]</span>
+         </div>
+         <div className="security-card-body">
+           <h3>Automated AST & Code Auditing</h3>
+           <p>Static syntax vulnerability detection, compiler dependency checks, and regression resistance.</p>
+         </div>
+       </article>
      </div>
     </div>
    </section>
    <section className="tint-band" id="work" data-station="Work"><div className="wrap band">
-    <div className="craft-story"><h2>Rock-solid systems.<br/><span className="text-azure" style={{ color: 'var(--azure)' }}>Fluid experience.</span></h2><p>From database design to the final interaction, reliable foundations and thoughtful details belong together.</p></div><div className="section-head"><h2>Studio concepts.</h2><a className="text-link" href="/portfolio">Project index <ArrowUpRight size={16}/></a></div>
+    <div className="craft-story"><h2>Rock-solid systems.<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>Fluid experience.</span></h2><p>From database design to the final interaction, reliable foundations and thoughtful details belong together.</p></div><div className="section-head"><h2>Studio concepts.</h2><a className="text-link" href="/portfolio">Project index <ArrowUpRight size={16}/></a></div>
     <div className="work-grid">{projects.map((project,index)=><WorkCard key={project.slug} project={project} index={index}/>)}</div>
    </div></section>
    <section id="process" data-station="Process" className="wrap band"><h2>From brief to handover.</h2>

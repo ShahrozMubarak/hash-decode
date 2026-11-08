@@ -67,6 +67,22 @@ export const env = {
 export async function headers() {
   return new Headers();
 }
+export async function cookies() {
+  return {
+    get() {
+      return undefined;
+    },
+    getAll() {
+      return [];
+    },
+    has() {
+      return false;
+    },
+  };
+}
 export function redirect(path) {
+  throw Error('Redirect ' + path);
+}
+export function permanentRedirect(path) {
   throw Error('Redirect ' + path);
 }

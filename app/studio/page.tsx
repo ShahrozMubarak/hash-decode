@@ -1,2 +1,2 @@
 import { permanentRedirect } from "next/navigation";
-export default function Alias(){permanentRedirect("/about");}
+export default function Alias(){permanentRedirect("/admin");}

@@ -2,6 +2,11 @@ import { runtime } from '@/lib/abuse';
 
 const DEFAULT_OWNER_EMAIL = 'shaahrozdogar@gmail.com';
 
+function cleanEnvEmail(val: string | undefined): string {
+  if (!val) return '';
+  return val.replace(/^['"]|['"]$/g, '').trim();
+}
+
 export async function mailBrief(m: {
   id: string;
   name: string;
@@ -11,13 +16,23 @@ export async function mailBrief(m: {
   brief: string;
 }) {
   const key = runtime('RESEND_API_KEY');
-  const from = runtime('MAIL_FROM') || 'onboarding@resend.dev';
+  const configuredFrom = cleanEnvEmail(runtime('RESEND_FROM')) || cleanEnvEmail(runtime('MAIL_FROM'));
+  // Use formatted sender with verified domain fallback
+  const from = configuredFrom && configuredFrom.includes('@')
+    ? (configuredFrom.includes('<') ? configuredFrom : `Hash Decode <${configuredFrom}>`)
+    : 'Hash Decode <onboarding@resend.dev>';
+
   const to =
-    runtime('ADMIN_NOTIFICATION_EMAIL') ||
-    runtime('MAIL_TO') ||
-    runtime('STUDIO_OWNER_EMAIL') ||
+    cleanEnvEmail(runtime('ADMIN_NOTIFICATION_EMAIL')) ||
+    cleanEnvEmail(runtime('MAIL_TO')) ||
+    cleanEnvEmail(runtime('STUDIO_OWNER_EMAIL')) ||
     DEFAULT_OWNER_EMAIL;
-  if (!key) return 'not configured';
+
+  if (!key) {
+    console.warn('[Resend] RESEND_API_KEY is not configured.');
+    return 'not configured';
+  }
+
   try {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -36,20 +51,32 @@ export async function mailBrief(m: {
         text: `New Project Inquiry received on Hash Decode Studio:\n\nName: ${m.name}\nEmail: ${m.email}\nService: ${m.topic}\nBudget: ${m.budget}\n\nBrief:\n${m.brief}\n\nReference ID: ${m.id}`,
       }),
     });
-    return r.ok ? 'accepted' : 'failed';
-  } catch {
+    const result = (await r.json().catch(() => ({}))) as Record<string, unknown>;
+    if (!r.ok) {
+      console.error('[Resend Error]:', r.status, result);
+      return 'failed';
+    }
+    console.log('[Resend Success]: Brief notification delivered to', to, 'ID:', result.id);
+    return 'accepted';
+  } catch (err) {
+    console.error('[Resend Exception]:', err);
     return 'failed';
   }
 }
 
 export async function mailSubscriber(email: string) {
   const key = runtime('RESEND_API_KEY');
-  const from = runtime('MAIL_FROM') || 'onboarding@resend.dev';
+  const configuredFrom = cleanEnvEmail(runtime('RESEND_FROM')) || cleanEnvEmail(runtime('MAIL_FROM'));
+  const from = configuredFrom && configuredFrom.includes('@')
+    ? (configuredFrom.includes('<') ? configuredFrom : `Hash Decode <${configuredFrom}>`)
+    : 'Hash Decode <onboarding@resend.dev>';
+
   const to =
-    runtime('ADMIN_NOTIFICATION_EMAIL') ||
-    runtime('MAIL_TO') ||
-    runtime('STUDIO_OWNER_EMAIL') ||
+    cleanEnvEmail(runtime('ADMIN_NOTIFICATION_EMAIL')) ||
+    cleanEnvEmail(runtime('MAIL_TO')) ||
+    cleanEnvEmail(runtime('STUDIO_OWNER_EMAIL')) ||
     DEFAULT_OWNER_EMAIL;
+
   if (!key) return false;
   try {
     const r = await fetch('https://api.resend.com/emails', {

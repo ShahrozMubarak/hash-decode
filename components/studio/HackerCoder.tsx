@@ -312,13 +312,6 @@ export default function HackerCoder() {
           </g>
         </g>
       </svg>
-
-      {/* Interactive Overlay Terminal Badge */}
-      <div className="hacker-status-pill">
-        <span className="status-indicator-live" />
-        <span className="mono-status">SEC_ENGINEER // ACTIVE_AUDIT</span>
-        <span className="status-speed">{isTypingFast ? 'ANALYSIS_FAST' : 'STEADY_FLOW'}</span>
-      </div>
     </div>
   );
 }

@@ -1,11 +1,31 @@
-import { headers } from 'next/headers';
+import { headers, cookies } from 'next/headers';
 import { sessionValid } from './owner-session';
 
 export async function adminAccess(request?: Request) {
-  const source = request?.headers ?? (await headers());
-  const authHeader = source.get('authorization') || '';
-  const directToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
-  return { allowed: await sessionValid(source.get('cookie'), directToken) };
+  let directToken: string | null = null;
+  let cookieHeader: string | null = null;
+
+  if (request) {
+    const authHeader = request.headers.get('authorization') || '';
+    if (authHeader.startsWith('Bearer ')) directToken = authHeader.slice(7).trim();
+    cookieHeader = request.headers.get('cookie');
+  } else {
+    try {
+      const cookieStore = await cookies();
+      const studioCookie = cookieStore.get('studio-session')?.value || cookieStore.get('__Host-studio-session')?.value;
+      if (studioCookie && /^[a-f0-9]{64}$/.test(studioCookie)) {
+        directToken = studioCookie;
+      }
+    } catch {}
+
+    try {
+      const h = await headers();
+      const authHeader = h.get('authorization') || '';
+      if (authHeader.startsWith('Bearer ')) directToken = authHeader.slice(7).trim();
+      if (!cookieHeader) cookieHeader = h.get('cookie');
+    } catch {}
+  }
+  return { allowed: await sessionValid(cookieHeader, directToken) };
 }
 
 export function bounded(value: unknown, max: number, min = 0) {

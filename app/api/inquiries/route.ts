@@ -26,14 +26,25 @@ export async function POST(req: Request) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       throw Error('Enter a valid email address.');
     }
-    const topic = bounded(d.topic, 60, 1);
-    const budget = bounded(d.budget, 52, 1);
-    if (
-      !['Digital product', 'Web platform', 'Business system', 'Security audit', 'Something else'].includes(topic) ||
-      !['Under US$2,500', 'US$2,500–7,500', 'US$7,500–20,000', 'US$20,000+', 'Still exploring'].includes(budget)
-    ) {
-      throw Error('Select a project type and budget.');
-    }
+    const rawTopic = bounded(d.topic, 60, 1);
+    const validTopics = ['Digital product', 'Web platform', 'Business system', 'Security audit', 'Something else'];
+    const topic = validTopics.find(
+      (t) => t.toLowerCase() === rawTopic.toLowerCase()
+    ) || 'Web platform';
+
+    const rawBudget = bounded(d.budget, 60, 1);
+    const normBudget = rawBudget.replace(/[\u2010\u2011\u2012\u2013\u2014\u2212]/g, '-').toLowerCase();
+    const budgetMap: Record<string, string> = {
+      'under us$2,500': 'Under US$2,500',
+      'us$2,500-7,500': 'US$2,500–7,500',
+      'us$7,500-20,000': 'US$7,500–20,000',
+      'us$20,000+': 'US$20,000+',
+      'still exploring': 'Still exploring',
+    };
+    const budget =
+      budgetMap[normBudget] ||
+      Object.entries(budgetMap).find(([k]) => normBudget.includes(k.slice(0, 8)))?.[1] ||
+      'Still exploring';
     const id = d.submissionId === undefined ? crypto.randomUUID() : bounded(d.submissionId, 36, 36);
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
       throw Error();
@@ -57,7 +68,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    if (!(await quota(req, 'brief-attempt', 120))) {
+    if (!(await quota(req, 'brief-attempt', 500, 10 * 60 * 1000))) {
       return Response.json({ error: 'Please wait before trying again.' }, { status: 429 });
     }
 
@@ -174,7 +185,7 @@ export async function POST(req: Request) {
       }
     }
 
-    if (!(await quota(req, 'brief', 60))) {
+    if (!(await quota(req, 'brief', 120, 60 * 60 * 1000))) {
       return Response.json({ error: 'Please wait before submitting another brief.' }, { status: 429 });
     }
 

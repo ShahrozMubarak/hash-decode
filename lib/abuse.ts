@@ -47,12 +47,14 @@ function ensureDotEnvLoaded() {
 
 export function getClientIp(req: Request): string {
   const forwarded = req.headers.get('x-forwarded-for') || '';
-  const firstForwarded = forwarded.split(',')[0]?.trim() || '';
+  const firstForwarded = forwarded.split(',')[0]?.trim();
   return (
+    firstForwarded ||
     req.headers.get('cf-connecting-ip') ||
     req.headers.get('x-real-ip') ||
-    firstForwarded ||
-    'local'
+    req.headers.get('true-client-ip') ||
+    req.headers.get('x-client-ip') ||
+    '127.0.0.1'
   );
 }
 
