@@ -898,3 +898,370 @@ html[data-motion=off] .original-composition .story-security,html[data-motion=off
     aspect-ratio: 1 / 1 !important;
   }
 }
+
+
+/* ========================================================================
+   RESTRUCTURED HOMEPAGE SECTIONS: STRICT RULE COMPLIANCE
+   1. Services (3 cards)
+   2. Security (3-step strip: Scope, Test, Verify fixes + 1 audit button)
+   3. Work (2 concept cards + Project index link)
+   4. Process (4-step timeline: Brief, Design, Build, Handover)
+   5. Team strip
+   6. FAQ (5 questions)
+   7. Final CTA
+   ======================================================================== */
+
+.section-rule-block {
+  padding-block: clamp(3.5rem, 6vw, 6rem);
+  position: relative;
+  z-index: 5;
+  color: #0f172a;
+}
+
+.section-head-rule {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
+}
+
+.section-rule-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+/* Section headings ~60% of hero heading size (clamp(30px, 3.8vw, 56px)) */
+.section-rule-heading {
+  font-family: var(--font-body, sans-serif);
+  font-size: clamp(20px, 2.3vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  color: #0f172a;
+  margin: 0;
+}
+
+/* One accent colour for highlighted heading words */
+.highlight-word {
+  color: var(--coral, #f43f5e) !important;
+}
+
+.section-rule-lead {
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  line-height: 1.6;
+  color: #475569;
+  max-width: 58ch;
+  margin: 0;
+}
+
+.section-rule-action {
+  margin-top: clamp(2rem, 3vw, 2.75rem);
+  display: flex;
+  align-items: center;
+}
+
+/* 1. Services Tri Grid (3 cards) */
+.services-tri-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2vw, 2rem);
+}
+
+.service-tri-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 16px;
+  padding: clamp(1.5rem, 2.5vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.service-tri-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px -6px rgba(15, 23, 42, 0.08);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+.service-card-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--azure, #1d70f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-tri-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.service-tri-card p {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #475569;
+  margin: 0;
+}
+
+/* 2. Security Strip (3-step strip) */
+.security-strip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.security-strip-card {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 14px;
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.security-strip-card:hover {
+  border-color: rgba(37, 99, 235, 0.3);
+  transform: translateY(-2px);
+}
+
+.strip-step-num {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--azure, #1d70f5);
+  background: rgba(37, 99, 235, 0.08);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.security-strip-card h3 {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.security-strip-card p {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #475569;
+  margin: 0;
+}
+
+/* 3. Work Duo Grid (2 concept cards) */
+.work-duo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+/* 4. Process Timeline Grid (4 steps) */
+.process-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.process-timeline-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 12px;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+}
+
+.timeline-step-pill {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--coral, #f43f5e);
+  background: rgba(244, 63, 94, 0.08);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.process-timeline-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.process-timeline-card p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #475569;
+  margin: 0;
+}
+
+/* 5. Team Strip Grid */
+.team-strip-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.team-strip-card {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 14px;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.team-strip-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+.team-avatar-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f1f5f9;
+  border: 2px solid rgba(37, 99, 235, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-strip-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.team-role-tag {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* 6. FAQ Accordions Block */
+.faq-accordions-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 860px;
+}
+
+.faq-accordion-item {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 12px;
+  padding: 1.1rem 1.35rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq-accordion-item[open] {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+.faq-accordion-item summary {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #0f172a;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  user-select: none;
+}
+
+.faq-accordion-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-plus {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--azure, #1d70f5);
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.faq-accordion-item[open] .faq-plus {
+  transform: rotate(45deg);
+}
+
+.faq-accordion-item p {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #475569;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 950px) {
+  .process-timeline-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .team-strip-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .services-tri-grid {
+    grid-template-columns: 1fr;
+  }
+  .security-strip-grid {
+    grid-template-columns: 1fr;
+  }
+  .work-duo-grid {
+    grid-template-columns: 1fr;
+  }
+  .section-head-rule {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .process-timeline-grid {
+    grid-template-columns: 1fr;
+  }
+  .team-strip-grid {
+    grid-template-columns: 1fr;
+  }
+}

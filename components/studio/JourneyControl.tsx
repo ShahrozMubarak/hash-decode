@@ -40,29 +40,20 @@ export default function JourneyControl() {
           // Continuous, elegant path starting from Start a project button and descending strictly DOWN
           const totalDy = Math.max(800, endPt.y - startPt.y);
 
-          // Clean waypoints that strictly flow behind cards/laptop and avoid input controls
+          // Reroute strictly through the outer right margin so it never crosses any text or cards
+          const rightMargin = Math.max(w - 44, w * 0.965);
           const rawPoints: { x: number; y: number }[] = [
             { x: startPt.x, y: startPt.y },
-            // Immediately flow downwards from the button towards showcase
-            { x: Math.min(w - 70, startPt.x + 20), y: startPt.y + 90 },
-            { x: Math.min(w * 0.82, w - 80), y: startPt.y + totalDy * 0.12 },
-            { x: Math.min(w * 0.70, w - 120), y: startPt.y + totalDy * 0.20 },
-            // Swing gracefully behind Section 02 coder showcase
-            { x: Math.max(w * 0.14, 70), y: startPt.y + totalDy * 0.29 },
-            { x: Math.max(w * 0.38, 180), y: startPt.y + totalDy * 0.38 },
-            // Broad sweeping arc right around Services
-            { x: Math.min(w * 0.84, w - 80), y: startPt.y + totalDy * 0.48 },
-            // Reverse cut into left gutter behind security narrative
-            { x: Math.max(w * 0.16, 80), y: startPt.y + totalDy * 0.58 },
-            // Curving behind Security cards
-            { x: Math.min(w * 0.78, w - 100), y: startPt.y + totalDy * 0.69 },
-            // Weaving down through Process and Work
-            { x: Math.max(w * 0.22, 90), y: startPt.y + totalDy * 0.79 },
-            // Approaching Contact/Brief section
-            { x: Math.min(w * 0.92, w - 50), y: startPt.y + totalDy * 0.88 },
-            { x: Math.min(w * 0.94, w - 40), y: endPt.y - 120 },
-            // Smoothly curve into the Send project brief button from the side
-            { x: Math.min(w * 0.88, endPt.x + 120), y: endPt.y - 30 },
+            { x: rightMargin, y: startPt.y + 70 },
+            { x: rightMargin - 4, y: startPt.y + totalDy * 0.12 },
+            { x: rightMargin + 4, y: startPt.y + totalDy * 0.24 },
+            { x: rightMargin - 3, y: startPt.y + totalDy * 0.36 },
+            { x: rightMargin + 3, y: startPt.y + totalDy * 0.50 },
+            { x: rightMargin - 4, y: startPt.y + totalDy * 0.64 },
+            { x: rightMargin + 4, y: startPt.y + totalDy * 0.78 },
+            { x: rightMargin - 2, y: startPt.y + totalDy * 0.90 },
+            { x: rightMargin, y: endPt.y - 70 },
+            { x: Math.max(endPt.x + 30, rightMargin - 25), y: endPt.y - 20 },
             { x: endPt.x, y: endPt.y }
           ];
 

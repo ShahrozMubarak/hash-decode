@@ -9,8 +9,7 @@ const links=[
   {name:'Work',url:'/portfolio',icon:Briefcase},
   {name:'Services',url:'/services',icon:Cpu},
   {name:'About',url:'/about',icon:Users},
-  {name:'Contact',url:'/contact',icon:Mail},
-  {name:'Admin',url:'/admin',icon:ShieldCheck}
+  {name:'Contact',url:'/contact',icon:Mail}
 ];
 
 export function Brand(){
@@ -127,6 +126,7 @@ export function Footer(){
         <Brand/>
         <nav className="footer-nav" aria-label="Footer navigation">
           {links.map(({name,url})=><a key={url} href={url}>{name}</a>)}
+          <a key="/admin" href="/admin">Admin</a>
           <a key="/privacy" href="/privacy">Privacy</a>
         </nav>
         <p className="developed-by">Developed by <strong>Shahroz Dogar</strong></p>
