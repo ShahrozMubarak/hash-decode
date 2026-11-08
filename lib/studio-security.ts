@@ -91,6 +91,14 @@ export function sameOrigin(req: Request) {
   }
   if (originUrl.origin === reqUrl.origin) return true;
 
+  const cleanHost = (h: string) => h.toLowerCase().replace(/^www\./, '');
+  if (
+    originUrl.protocol === reqUrl.protocol &&
+    cleanHost(originUrl.host) === cleanHost(reqUrl.host)
+  ) {
+    return true;
+  }
+
   // Handle reverse-proxy / TLS-termination / local dev port forwarding safely
   const forwardedHost = req.headers.get('x-forwarded-host')?.split(',')[0]?.trim();
   const hostHeader = req.headers.get('host')?.trim();
@@ -100,11 +108,15 @@ export function sameOrigin(req: Request) {
     if (isLoopback(originUrl.hostname) && (originUrl.port === reqUrl.port || !reqUrl.port)) {
       return true;
     }
-    if (forwardedHost && originUrl.host === forwardedHost) return true;
-    if (hostHeader && !isLoopback(hostHeader.split(':')[0]) && originUrl.host === hostHeader) return true;
+    if (forwardedHost && (originUrl.host === forwardedHost || cleanHost(originUrl.host) === cleanHost(forwardedHost))) return true;
+    if (hostHeader && !isLoopback(hostHeader.split(':')[0]) && (originUrl.host === hostHeader || cleanHost(originUrl.host) === cleanHost(hostHeader))) return true;
   }
 
-  if (originUrl.host === reqUrl.host && forwardedProto && originUrl.protocol === `${forwardedProto}:`) {
+  if (
+    (originUrl.host === reqUrl.host || cleanHost(originUrl.host) === cleanHost(reqUrl.host)) &&
+    forwardedProto &&
+    originUrl.protocol === `${forwardedProto}:`
+  ) {
     return true;
   }
 

@@ -44,10 +44,11 @@ export function getToken(cookies: string | null) {
   if (!cookies) return null;
   const parts = cookies.split(';').map((part) => part.trim());
   for (const name of [cookieName, 'studio-session']) {
-    const match = parts.find((part) => part.startsWith(name + '='));
-    if (match) {
-      const val = match.slice(name.length + 1);
-      if (val && /^[a-f0-9]{64}$/.test(val)) return val;
+    for (const part of parts) {
+      if (part.startsWith(name + '=')) {
+        const val = part.slice(name.length + 1).trim();
+        if (val && /^[a-f0-9]{64}$/.test(val)) return val;
+      }
     }
   }
   return null;
@@ -154,8 +155,56 @@ export function sessionCookie(token: string, age: number, isSecure = true) {
   return `${cookieName}=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${age}`;
 }
 
+async function getSigningSecret(): Promise<string> {
+  const jwt = runtime('JWT_SECRET');
+  if (jwt && jwt.length >= 16) return jwt;
+  return credential();
+}
+
+async function createStatelessToken(secret: string, ttlSeconds = sessionSeconds): Promise<string> {
+  const expSeconds = Math.floor(Date.now() / 1000) + ttlSeconds;
+  const expHex = expSeconds.toString(16).padStart(8, '0');
+  const nonceBytes = crypto.getRandomValues(new Uint8Array(12));
+  const nonceHex = toHex(nonceBytes.buffer);
+  const payload = expHex + nonceHex; // 32 hex chars
+  
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const sigBuf = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(payload));
+  const sigHex = toHex(sigBuf).slice(0, 32); // 32 hex chars
+  return payload + sigHex; // 64 hex chars total
+}
+
+async function verifyStatelessToken(token: string, secret: string): Promise<boolean> {
+  if (!token || token.length !== 64 || !/^[a-f0-9]{64}$/.test(token)) return false;
+  const payload = token.slice(0, 32);
+  const expSeconds = parseInt(token.slice(0, 8), 16);
+  if (isNaN(expSeconds) || expSeconds * 1000 <= Date.now()) return false;
+  
+  try {
+    const key = await crypto.subtle.importKey(
+      'raw',
+      new TextEncoder().encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    const sigBuf = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(payload));
+    const expectedSig = toHex(sigBuf).slice(0, 32);
+    return constantTimeEqualStrings(token.slice(32, 64), expectedSig);
+  } catch {
+    return false;
+  }
+}
+
 export async function issueSession(isSecure = true) {
-  const token = toHex(crypto.getRandomValues(new Uint8Array(32)).buffer);
+  const secret = await getSigningSecret();
+  const token = await createStatelessToken(secret, sessionSeconds);
   const tokenHash = await hash(token);
   const credHash = await hash(credential());
   const expires = Date.now() + sessionSeconds * 1000;
@@ -204,37 +253,39 @@ export async function sessionValid(cookies: string | null, directToken?: string 
   const credHash = await hash(stored);
   const now = Date.now();
 
+  // 1. Primary check in local platform DB
   try {
     const db = getPlatformDb();
     const row = await db
       .prepare(
-        'SELECT 1 FROM owner_sessions WHERE token_hash=? AND credential_id=? AND expires>?'
+        'SELECT expires,credential_id FROM owner_sessions WHERE token_hash=?'
       )
-      .bind(tokenHash, credHash, now)
-      .first();
-    if (row) return true;
+      .bind(tokenHash)
+      .first<{ expires: number; credential_id: string }>();
+
+    if (row) {
+      return row.credential_id === credHash && row.expires > now;
+    }
   } catch {}
 
-  // Fallback check in MongoDB Atlas (for multi-instance or serverless cold-start recovery)
+  // 2. Fallback check in MongoDB Atlas (for multi-instance or serverless cold-start recovery)
   try {
     const mongo = await getMongoDb();
     if (mongo) {
       const doc = await mongo.collection('owner_sessions').findOne({
         token_hash: tokenHash,
-        credential_id: credHash,
-        expires: { $gt: now },
       });
       if (doc) {
-        const db = getPlatformDb();
-        await db
-          .prepare(
-            'INSERT OR REPLACE INTO owner_sessions(token_hash,credential_id,expires) VALUES(?,?,?)'
-          )
-          .bind(tokenHash, credHash, Number(doc.expires))
-          .run()
-          .catch(() => {});
-        return true;
+        return doc.credential_id === credHash && Number(doc.expires) > now;
       }
+    }
+  } catch {}
+
+  // 3. Stateless signed token check (for serverless environments where local DB is ephemeral)
+  try {
+    const secret = await getSigningSecret();
+    if (await verifyStatelessToken(token, secret)) {
+      return true;
     }
   } catch {}
 
@@ -246,10 +297,19 @@ export async function revokeSession(cookies: string | null, directToken?: string
     directToken && /^[a-f0-9]{64}$/.test(directToken) ? directToken : getToken(cookies);
   if (token) {
     const tokenHash = await hash(token);
+    const credHash = await hash(credential());
     try {
       const db = getPlatformDb();
-      await db.prepare('DELETE FROM owner_sessions WHERE token_hash=?').bind(tokenHash).run();
-    } catch {}
+      await db
+        .prepare('INSERT OR REPLACE INTO owner_sessions(token_hash,credential_id,expires) VALUES(?,?,0)')
+        .bind(tokenHash, credHash)
+        .run();
+    } catch {
+      try {
+        const db = getPlatformDb();
+        await db.prepare('DELETE FROM owner_sessions WHERE token_hash=?').bind(tokenHash).run();
+      } catch {}
+    }
     try {
       const mongo = await getMongoDb();
       if (mongo) {

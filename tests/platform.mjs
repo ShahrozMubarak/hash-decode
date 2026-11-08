@@ -62,6 +62,8 @@ function createTestDb() {
 
 export const env = {
   STUDIO_OWNER_EMAIL: 'owner@example.test',
+  RESEND_API_KEY: '',
+  MONGODB_URI: '',
   DB: createTestDb(),
 };
 export async function headers() {

@@ -1,9 +1,13 @@
 'use client';
 import {useState,useRef,useEffect} from 'react';
-import {ArrowUpRight,Eye,EyeOff,LogOut,LockKeyhole} from 'lucide-react';
+import {ArrowUpRight,Eye,EyeOff,LogOut,LockKeyhole,Check} from 'lucide-react';
+
 export default function OwnerSession({logout=false}:{logout?:boolean}){
  const locked=useRef(false);
- const [busy,setBusy]=useState(false),[error,setError]=useState(''),[visible,setVisible]=useState(false);
+ const [busy,setBusy]=useState(false);
+ const [error,setError]=useState('');
+ const [success,setSuccess]=useState('');
+ const [visible,setVisible]=useState(false);
 
  useEffect(()=>{
   if(logout)return;
@@ -12,10 +16,13 @@ export default function OwnerSession({logout=false}:{logout?:boolean}){
     if(stored){
       const {token,time}=JSON.parse(stored);
       if(token && Date.now() - Number(time) < 14400000){
-        document.cookie=`studio-session=${token}; Path=/; SameSite=Lax; Max-Age=14400`;
+        const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
+        document.cookie=`studio-session=${token}; Path=/; SameSite=Lax; Max-Age=14400${isSecure ? '; Secure' : ''}`;
         fetch('/api/session', { headers: { 'Authorization': `Bearer ${token}` } })
           .then(r => {
-            if(r.ok) window.location.href = '/admin';
+            if(r.ok) {
+              window.location.replace('/admin?auth=' + Date.now());
+            }
           })
           .catch(()=>{});
       }
@@ -28,19 +35,29 @@ export default function OwnerSession({logout=false}:{logout?:boolean}){
   const formData=new FormData(event.currentTarget);
   const email=formData.get('email');
   const password=formData.get('password');
-  locked.current=true;setBusy(true);setError('');
+  locked.current=true;setBusy(true);setError('');setSuccess('');
   try{
    const response=await fetch('/api/session',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:logout?'logout':'login',email,password}),signal:AbortSignal.timeout(12000)});
-   if(!response.ok){setError(response.status===429?'Too many attempts. Try again in 15 minutes.':response.status===503?'Sign-in is temporarily unavailable. Please try again.':'Unable to sign in. Check your email & password and try again.');return;}
+   if(!response.ok){
+     const msg = response.status===429
+       ? 'Too many attempts. Try again in a few minutes.'
+       : response.status===503
+       ? 'Sign-in is temporarily unavailable. Please try again.'
+       : 'Unable to sign in. Check your email & password and try again.';
+     setError(msg);
+     return;
+   }
    const data=await response.json().catch(()=>({}));
    if(!logout&&data?.token){
+     setSuccess('Signed in. Opening dashboard…');
      try{
        localStorage.setItem('hashdecode_owner_session',JSON.stringify({token:data.token,email,time:Date.now()}));
-       document.cookie=`studio-session=${data.token}; Path=/; SameSite=Lax; Max-Age=14400`;
+       const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
+       document.cookie=`studio-session=${data.token}; Path=/; SameSite=Lax; Max-Age=14400${isSecure ? '; Secure' : ''}`;
      }catch{}
      setTimeout(()=>{
-       window.location.href='/admin';
-     },120);
+       window.location.replace('/admin?auth=' + Date.now());
+     },80);
      return;
    }else if(logout){
      try{
@@ -49,11 +66,11 @@ export default function OwnerSession({logout=false}:{logout?:boolean}){
        document.cookie='__Host-studio-session=; Path=/; SameSite=Lax; Max-Age=0';
      }catch{}
      setTimeout(()=>{
-       window.location.href='/admin';
-     },120);
+       window.location.replace('/admin?logged_out=' + Date.now());
+     },80);
      return;
    }
-   window.location.href='/admin';
+   window.location.replace('/admin?auth=' + Date.now());
   }catch{setError('Connection interrupted. Please try again.');}finally{locked.current=false;setBusy(false);}
  }}>
  {!logout&&<>
@@ -72,9 +89,10 @@ export default function OwnerSession({logout=false}:{logout?:boolean}){
   <p className="tiny" id="login-help">Sign in using your email and owner password.</p>
  </>}
  <button className={logout?'outline':'cta'} disabled={busy}>
-  {busy?'Please wait…':logout?'Sign out':'Sign in'}
-  {logout?<LogOut size={16}/>:<ArrowUpRight size={17}/>}
+  {busy?(success || 'Please wait…'):logout?'Sign out':'Sign in'}
+  {success ? <Check size={17}/> : logout ? <LogOut size={16}/> : <ArrowUpRight size={17}/>}
  </button>
+ {success && <p className="form-status" style={{ color: 'var(--coral)', fontWeight: 600 }}>{success}</p>}
  <p id={logout?undefined:'login-status'} className={error?'form-error':'form-status'} role="status" aria-live="polite">{error}</p>
  </form>;
 }

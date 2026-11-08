@@ -48,7 +48,7 @@ export default async function AdminPage() {
   const platformDb = getPlatformDb();
   const [projects, d1Messages, mongoMessages, notesMap, copy, founders, subscribers, auditLogs] =
     await Promise.all([
-      listProjects(true),
+      listProjects(true).catch(() => []),
       db
         .select()
         .from(inquiries)
@@ -57,8 +57,8 @@ export default async function AdminPage() {
         .catch(() => []),
       getMongoInquiries(200).catch(() => []),
       loadInquiryNotesMap().catch(() => new Map<string, string>()),
-      studioCopy(),
-      listFounders(true),
+      studioCopy().catch(() => ({ intro: '', about: '' })),
+      listFounders(true).catch(() => []),
       loadSubscribersList(500).catch(() => []),
       getAuditLogs(80).catch(() => []),
     ]);
@@ -78,8 +78,8 @@ export default async function AdminPage() {
   const messages = Array.from(messagesMap.values()).sort((a, b) => b.created - a.created);
 
   const [content, links, stats, mongo] = await Promise.all([
-    entries(undefined, true),
-    getLinks(),
+    entries(undefined, true).catch(() => []),
+    getLinks().catch(() => ({ whatsapp: '', booking: '' })),
     platformDb
       .prepare(
         'SELECT source,SUM(views) AS n FROM traffic_totals WHERE day>=? GROUP BY source ORDER BY n DESC'
