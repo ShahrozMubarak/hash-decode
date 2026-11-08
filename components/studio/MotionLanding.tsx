@@ -19,21 +19,30 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
    <section className="hero-runway" id="overview" data-station="Overview">
     <div className="hero-sheet">
       <div className="wrap hero-grid">
-        <div className="hero-copy">
+        <div className="hero-heading-block">
           <h1>Build it.<br/>Break it.<br/><TypingSecure /></h1>
-          <p className="hero-description">{intro}</p>
-          <div className="actions">
-            <a className="cta" href="#brief">Start a project <ArrowUpRight size={18}/></a>
-            <a className="text-link" href="#showcase">Explore agent <ArrowDown size={15}/></a>
-          </div>
         </div>
+
         <figure className="hero-object">
+          <div className="hero-robot-glow" aria-hidden="true"/>
           <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
           <div className="specimen-visual" id="hero-model-anchor">
             <div className="hero-blueprint-lines" aria-hidden="true"/>
             <SceneSurface model="eva" autoMobile={true}/>
           </div>
         </figure>
+
+        <div className="hero-cta-block">
+          <p className="hero-cta-subtext">
+            Custom software, web platforms and<br/>
+            security reviews for modern teams<br/>
+            building their next release.
+          </p>
+          <div className="actions">
+            <a className="cta" href="#brief">Create project <ArrowUpRight size={18}/></a>
+            <a className="text-link" href="#showcase">Explore agent <ArrowDown size={15}/></a>
+          </div>
+        </div>
       </div>
 
       <div className="wrap hero-baseline"><a href="#showcase"><ArrowDown size={15}/> Explore the studio</a></div>
