@@ -765,82 +765,119 @@ html[data-motion=off] .original-composition .story-security,html[data-motion=off
   transform: translateY(-4px);
 }
 
-/* Hand-Drawn Sketchy Speech Bubble (Image 1 Style) */
-.teleport-thought-bubble {
+/* Unified Bot Speech Card (Stage 4) */
+.bot-speech-card {
   position: relative;
   width: 100%;
-  max-width: 380px;
-  margin-bottom: -0.5rem;
+  max-width: 440px;
+  min-height: 220px;
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(11, 31, 58, 0.14) !important;
+  border-radius: 24px !important;
+  padding: 24px 28px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  box-shadow: 0 10px 30px rgba(11, 31, 58, 0.14) !important;
+  margin-bottom: 20px !important;
   z-index: 5;
-  filter: drop-shadow(0 8px 24px rgba(10, 37, 64, 0.10));
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.teleport-bot-stage:hover .teleport-thought-bubble {
-  transform: translateY(-5px) scale(1.02);
-}
-
-.bubble-hand-drawn-svg {
-  width: 100%;
-  height: auto;
-  display: block;
-  overflow: visible;
-}
-
-.bubble-quote-glyph {
-  font-family: 'Georgia', serif;
-  font-size: 24px;
-  font-weight: 900;
-  fill: #0A2540;
-  opacity: 0.22;
-  user-select: none;
-}
-
-.bubble-text-content {
-  position: absolute;
-  inset: 12% 10% 24% 10%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
   box-sizing: border-box;
-  overflow: hidden;
-  padding: 0 4px;
 }
 
-.bubble-text-content p {
-  font-family: 'Montserrat', var(--font-sans), sans-serif;
-  font-size: clamp(0.85rem, 1.6vw, 0.95rem);
-  font-weight: 600;
-  line-height: 1.35;
-  color: #0A2540;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
+.teleport-bot-stage:hover .bot-speech-card {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(11, 31, 58, 0.18) !important;
 }
 
-.bubble-tap-hint {
-  font-family: var(--mono, monospace);
-  font-size: 0.85rem;
-  color: var(--azure, #1d70f5);
-  margin-top: 0.2rem;
-  display: block;
-  white-space: nowrap;
+/* Subtle downward CSS triangle pointer to robot head */
+.bot-speech-card::before {
+  content: '';
+  position: absolute;
+  bottom: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 11px solid rgba(11, 31, 58, 0.14);
+  z-index: 1;
 }
 
-.bubble-angry .bubble-quote-glyph,
-.bubble-angry .bubble-text-content p {
+.bot-speech-card::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 10px solid rgba(255, 255, 255, 0.95);
+  z-index: 2;
+}
+
+.bot-speech-text {
+  font-family: var(--font-body), sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  color: #0B1F3A !important;
+  margin: 0 !important;
+  font-weight: 500 !important;
+}
+
+.bot-speech-hint {
+  font-family: var(--font-mono), monospace !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #1E40AF !important;
+  letter-spacing: 0.04em !important;
+  display: block !important;
+}
+
+.bot-speech-card.mood-angry .bot-speech-text {
   color: #cc0022 !important;
 }
 
-.bubble-happy .bubble-quote-glyph,
-.bubble-happy .bubble-text-content p {
-  color: #0d5bb8 !important;
+.bot-speech-card.mood-angry .bot-speech-hint {
+  color: #D93A2F !important;
+}
+
+.bot-speech-card.mood-happy .bot-speech-hint {
+  color: #1E40AF !important;
+}
+
+/* Contact Grid Tops Alignment (Stage 4) */
+.original-composition #brief .contact-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) !important;
+  align-items: start !important;
+  gap: clamp(2rem, 5vw, 4.5rem) !important;
+  width: 100% !important;
+}
+
+.original-composition #brief .contact-grid > div:first-child {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.original-composition #brief .form-panel {
+  margin: 0 !important;
+}
+
+@media(max-width: 850px) {
+  .original-composition #brief .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
 }
 
 /* ========================================================================

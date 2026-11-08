@@ -5,7 +5,6 @@ import {WorkCard} from './Work';
 import ContactForm from './ContactForm';
 import ResponsiveStage from './ResponsiveStage';
 import SceneSurface from './SceneSurface';
-import {BriefDialog} from './StudioControls';
 import TypingSecure from './TypingSecure';
 import CodingBackground from './CodingBackground';
 import HackerCoder from './HackerCoder';
@@ -304,7 +303,7 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
              WhatsApp the studio ↗
            </a>
            {links.booking&&<a className="text-link" href={links.booking}>Book a conversation ↗</a>}
-           <a className="text-link" href="/contact">Contact page ↗</a><BriefDialog/>
+           <a className="text-link" href="/contact">Contact page ↗</a>
          </div>
          <TeleportBot />
        </div>

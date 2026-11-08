@@ -147,56 +147,12 @@ export default function TeleportBot({ className = '' }: Props) {
         <div className="teleport-ring" />
       </div>
 
-      {/* Hand-Drawn Sketchy Thought/Speech Bubble (Matching Image 1) */}
-      <div className={`teleport-thought-bubble bubble-${mood}`}>
-        <svg
-          viewBox="0 0 320 200"
-          className="bubble-hand-drawn-svg"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          {/* Hand-drawn organic multi-stroke wobbly bubble matching Image 1 */}
-          <path
-            d="M 45 35
-               C 120 18, 220 18, 280 38
-               C 310 50, 312 110, 285 130
-               C 260 148, 180 152, 100 148
-               C 65 146, 42 165, 25 180
-               C 32 155, 30 140, 25 125
-               C 12 95, 15 50, 45 35 Z"
-            fill="#ffffff"
-            stroke="#0A2540"
-            strokeWidth="3.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          {/* Second overlapping sketchy contour for hand-drawn art effect */}
-          <path
-            d="M 47 38
-               C 122 22, 218 22, 278 40
-               C 306 53, 308 108, 282 128
-               C 258 145, 178 150, 102 146
-               C 68 144, 45 162, 28 176
-               C 34 153, 32 138, 27 127
-               C 15 97, 18 53, 47 38 Z"
-            fill="none"
-            stroke="rgba(10, 37, 64, 0.45)"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-
-          {/* Quotation Marks: Opening double quotes top-left */}
-          <text x="45" y="55" className="bubble-quote-glyph">“</text>
-          {/* Quotation Marks: Closing double quotes bottom-right */}
-          <text x="270" y="142" className="bubble-quote-glyph">”</text>
-        </svg>
-
-        <div className="bubble-text-content">
-          <p>{thoughtText}</p>
-          <span className="bubble-tap-hint">
-            {mood === 'angry' ? '⚡ Security posture engaged' : mood === 'happy' ? '✨ Hash online' : 'Drag to rotate · Hold 4s for security mode'}
-          </span>
-        </div>
+      {/* Unified Bot Speech Card with pointer to robot head */}
+      <div className={`bot-speech-card mood-${mood}`}>
+        <p className="bot-speech-text">{thoughtText}</p>
+        <span className="bot-speech-hint">
+          {mood === 'angry' ? '⚡ Security posture engaged' : mood === 'happy' ? '✨ Hash online' : 'Drag to rotate · Hold 4s for security mode'}
+        </span>
       </div>
 
       {/* 3D Bot Specimen Surface */}
