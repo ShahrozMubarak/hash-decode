@@ -312,6 +312,52 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     }
    });
    if(disposed)return;
+
+   // Add tiny Hash Decode logo to the chest of the robot
+   if(model==='eva'||model==='fixer'){
+    const logoCanvas=document.createElement('canvas');
+    logoCanvas.width=128;logoCanvas.height=128;
+    const ctx=logoCanvas.getContext('2d');
+    if(ctx){
+     ctx.clearRect(0,0,128,128);
+     ctx.beginPath();
+     ctx.arc(64,64,54,0,Math.PI*2);
+     ctx.fillStyle='rgba(37,99,235,0.18)';
+     ctx.fill();
+     ctx.lineWidth=4;
+     ctx.strokeStyle='rgba(37,99,235,0.6)';
+     ctx.stroke();
+
+     ctx.strokeStyle='#ffffff';
+     ctx.lineWidth=11;
+     ctx.lineCap='round';
+     ctx.beginPath();
+     ctx.moveTo(48,22);ctx.lineTo(40,106);
+     ctx.moveTo(88,22);ctx.lineTo(80,106);
+     ctx.moveTo(22,48);ctx.lineTo(106,48);
+     ctx.moveTo(18,80);ctx.lineTo(102,80);
+     ctx.stroke();
+    }
+    const logoTexture=new THREE.CanvasTexture(logoCanvas);
+    logoTexture.needsUpdate=true;
+    const logoMat=new THREE.MeshStandardMaterial({
+     map:logoTexture,
+     transparent:true,
+     roughness:0.2,
+     metalness:0.3,
+     emissive:new THREE.Color('#2563eb'),
+     emissiveIntensity:0.65,
+     depthWrite:false,
+     polygonOffset:true,
+     polygonOffsetFactor:-2,
+     polygonOffsetUnits:-2
+    });
+    const chestLogo=new THREE.Mesh(new THREE.PlaneGeometry(0.38,0.38),logoMat);
+    chestLogo.position.set(0,2.15,0.86);
+    chestLogo.rotation.x=-0.08;
+    robot.add(chestLogo);
+   }
+
    object.add(robot);
    if(deadline.aborted)throw Error('Model timed out');
    const bounds=new THREE.Box3().setFromObject(robot),size=bounds.getSize(new THREE.Vector3()),centre=bounds.getCenter(new THREE.Vector3());

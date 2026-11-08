@@ -26,6 +26,9 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
         <figure className="hero-object">
           <div className="hero-robot-glow" aria-hidden="true"/>
           <div className="hero-robot-shadow" aria-hidden="true"/>
+          <div className="hero-robot-glass-badge" aria-hidden="true">
+            <span className="hero-glass-text">DECODE</span>
+          </div>
           <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
           <div className="specimen-visual" id="hero-model-anchor">
             <div className="hero-blueprint-lines" aria-hidden="true"/>
