@@ -61,50 +61,6 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
       </div>
     </div>
    </section>
-   <section className="band wrap" id="services" data-station="Services">
-     <div className="systems-story">
-       <h2>Speed,<br/>structured with<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>clarity.</span></h2>
-       <p>Custom web platforms, APIs and business tools, designed around the way your team works.</p>
-       <a className="text-link" href="/services">Explore services <ArrowUpRight size={16}/></a>
-     </div>
-   </section>
-   <section className="wrap band security-section story-security" id="security" data-station="Security">
-    <div className="security-stage">
-     <div className="security-narrative">
-      <div className="iris-pill-badge"><span className="telemetry-live-dot" /> [ SYS // ACTIVE_DEFENSE_V01 ]</div>
-      <h2>Build it. Break it.<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>Secure it.</span></h2>
-      <p className="security-lead">Clear boundaries. Practical security testing. Verified fixes.</p>
-      
-      <div className="tech-telemetry-row">
-        <div className="telemetry-pill">
-          <span className="telemetry-key">AST SCAN</span>
-          <span className="telemetry-val">100% COVERAGE</span>
-        </div>
-        <div className="telemetry-pill">
-          <span className="telemetry-key">EDGE MESH</span>
-          <span className="telemetry-val">ZERO-TRUST</span>
-        </div>
-        <div className="telemetry-pill">
-          <span className="telemetry-key">RESILIENCE</span>
-          <span className="telemetry-val">99.99%</span>
-        </div>
-      </div>
-
-      <div className="security-actions">
-        <a className="cta" href="/services#security">Our security approach <ArrowUpRight size={16}/></a>
-        <a className="text-link" href="#brief">Request audit <ArrowDown size={15}/></a>
-      </div>
-     </div>
-    </div>
-   </section>
-   <section className="tint-band" id="work" data-station="Work"><div className="wrap band">
-    <div className="craft-story"><h2>Rock-solid systems.<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>Fluid experience.</span></h2><p>From database design to the final interaction, reliable foundations and thoughtful details belong together.</p></div><div className="section-head"><h2>Studio concepts.</h2><a className="text-link" href="/portfolio">Project index <ArrowUpRight size={16}/></a></div>
-    <div className="work-grid">{projects.map((project,index)=><WorkCard key={project.slug} project={project} index={index}/>)}</div>
-   </div></section>
-   <section id="process" data-station="Process" className="wrap band"><h2>From brief to handover.</h2>
-    <ol className="process-list">{processSteps.map(([name],i)=><li key={name}><span className="step-dot"/><h3>{name}</h3></li>)}</ol>
-   </section>
-   <section className="wrap band faq-section" id="faq" data-station="Questions"><div><h2>Before we start.</h2></div><div className="questions">{faq.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}<a className="text-link" href="/tools">Explore project tools <ArrowUpRight size={16}/></a></div></section>
    <section className="tint-band" id="brief" data-station="Contact"><div className="wrap band contact-grid"><div><h2>What are you<br/><span className="text-coral" style={{ color: 'var(--coral)' }}>working on?</span></h2><p>Tell us who it’s for, what needs to change and when you need it.</p><div className="contact-links">
     <a className="text-link whatsapp-contact-link" href={'https://wa.me/' + (links.whatsapp || '923000000000')} target="_blank" rel="noopener noreferrer">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true">
