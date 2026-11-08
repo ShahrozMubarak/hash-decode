@@ -20,10 +20,10 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  scene.add(object,new THREE.HemisphereLight(snow,azure,1.45));
  const key=new THREE.DirectionalLight(snow,2.4);key.position.set(-3,4,4);scene.add(key);
  if(model==='eva'||model!=='cube'){
-  const coralRim=new THREE.DirectionalLight(new THREE.Color('#fd614b'),4.8);coralRim.position.set(3,-1,-4);
-  const coralFill=new THREE.PointLight(new THREE.Color('#fd614b'),3.8,14);coralFill.position.set(0,0,-2.5);
-  const coralEyeLight=new THREE.PointLight(new THREE.Color('#fd614b'),2.2,6);coralEyeLight.position.set(0,0.4,1.4);
-  scene.add(coralRim,coralFill,coralEyeLight);
+  const blueRim=new THREE.DirectionalLight(new THREE.Color('#1e75ff'),4.8);blueRim.position.set(3,-1,-4);
+  const blueFill=new THREE.PointLight(new THREE.Color('#0066ff'),3.8,14);blueFill.position.set(0,0,-2.5);
+  const cyanEyeLight=new THREE.PointLight(new THREE.Color('#00f0ff'),2.2,6);cyanEyeLight.position.set(0,0.4,1.4);
+  scene.add(blueRim,blueFill,cyanEyeLight);
  }
  const pixels=new Uint8Array(128*64*4);
  const pixel=new THREE.Color();
@@ -256,8 +256,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    if(eyeRight){baseRightEyeX=eyeRight.position.x;}
 
    grokEyeMat=new THREE.MeshStandardMaterial({
-    color:new THREE.Color('#fd614b'),
-    emissive:new THREE.Color('#fd614b'),
+    color:new THREE.Color('#00f0ff'),
+    emissive:new THREE.Color('#00f0ff'),
     emissiveIntensity:4.5,
     roughness:0.1,
     metalness:0.1

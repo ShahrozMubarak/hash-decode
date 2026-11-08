@@ -9,6 +9,7 @@ export interface D1PreparedStatementLike {
 }
 
 export interface D1DatabaseLike {
+  __isMockDb?: boolean;
   prepare(query: string): D1PreparedStatementLike;
   batch<T = unknown>(statements: D1PreparedStatementLike[]): Promise<any[]>;
   exec(query: string): Promise<{ count: number; duration: number }>;
@@ -45,6 +46,7 @@ class MockStatement implements D1PreparedStatementLike {
 }
 
 export const mockDb: D1DatabaseLike = {
+  __isMockDb: true,
   prepare: (query: string) => new MockStatement(query),
   batch: async (_statements: D1PreparedStatementLike[]) => [],
   exec: async (_query: string) => ({ count: 0, duration: 0 }),
@@ -64,9 +66,19 @@ export const env: CloudflareWorkersEnv = new Proxy(
   {
     get(_target, prop: string) {
       if (prop === 'DB') {
-        return (globalThis as any)?.__CF_ENV__?.DB || (globalThis as any)?.env?.DB || mockDb;
+        return (globalThis as any)?.__CF_ENV__?.DB || (globalThis as any)?.env?.DB || undefined;
       }
-      return process.env[prop] ?? (globalThis as any)?.__CF_ENV__?.[prop];
+      return process.env[prop] ?? (globalThis as any)?.__CF_ENV__?.[prop] ?? (globalThis as any)?.env?.[prop];
+    },
+    set(_target, prop: string, value: any) {
+      if (typeof process !== 'undefined' && process.env && typeof value === 'string') {
+        process.env[prop] = value;
+      }
+      if (!(globalThis as any).__CF_ENV__) {
+        (globalThis as any).__CF_ENV__ = {};
+      }
+      (globalThis as any).__CF_ENV__[prop] = value;
+      return true;
     },
   }
 );

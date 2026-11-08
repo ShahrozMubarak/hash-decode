@@ -50,30 +50,30 @@ export default function HackerCoder() {
         <defs>
           {/* Gradient for dark hoodie silhouette */}
           <linearGradient id="hoodieGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#181818" />
-            <stop offset="60%" stop-color="#0a0a0a" />
-            <stop offset="100%" stop-color="#020202" />
+            <stop offset="0%" stop-color="#14213d" />
+            <stop offset="60%" stop-color="#0a1224" />
+            <stop offset="100%" stop-color="#050914" />
           </linearGradient>
 
-          {/* Coral Screen Cast Light */}
+          {/* Cyan/Blue Laptop Screen Cast Light */}
           <radialGradient id="screenCastGrad" cx="50%" cy="80%" r="70%">
-            <stop offset="0%" stop-color="rgba(253, 97, 75, 0.45)" />
-            <stop offset="40%" stop-color="rgba(253, 97, 75, 0.15)" />
+            <stop offset="0%" stop-color="rgba(29, 112, 245, 0.45)" />
+            <stop offset="40%" stop-color="rgba(0, 240, 255, 0.22)" />
             <stop offset="100%" stop-color="transparent" />
           </radialGradient>
 
           {/* Screen Light Reflection on Face and Hood */}
           <linearGradient id="faceRimLight" x1="50%" y1="100%" x2="50%" y2="0%">
-            <stop offset="0%" stop-color="rgba(253, 97, 75, 0.65)" />
-            <stop offset="60%" stop-color="rgba(253, 97, 75, 0.2)" />
+            <stop offset="0%" stop-color="rgba(29, 112, 245, 0.65)" />
+            <stop offset="60%" stop-color="rgba(0, 240, 255, 0.2)" />
             <stop offset="100%" stop-color="transparent" />
           </linearGradient>
 
-          {/* Coral / Frozen White rim highlight */}
+          {/* Neon Blue rim highlight */}
           <linearGradient id="neonRim" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#FD614B" />
-            <stop offset="50%" stop-color="#ffffff" />
-            <stop offset="100%" stop-color="#FD614B" />
+            <stop offset="0%" stop-color="#1d70f5" />
+            <stop offset="50%" stop-color="#00f0ff" />
+            <stop offset="100%" stop-color="#1d70f5" />
           </linearGradient>
 
           <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
@@ -106,23 +106,23 @@ export default function HackerCoder() {
           <path
             d="M250 540 C280 470, 340 430, 400 430 C460 430, 520 470, 550 540"
             fill="none"
-            stroke="#FD614B"
-            stroke-width="2.5"
+            stroke="#1d70f5"
+            stroke-width="3"
             stroke-opacity="0.25"
           />
 
           {/* Hoodie Body (Arms coming forward toward desk) */}
           <path
             d="M260 520 C280 460, 310 440, 340 440 L350 490 L290 530 Z"
-            fill="#0a0a0a"
-            stroke="#FD614B"
+            fill="#09101f"
+            stroke="#1d70f5"
             stroke-width="1.5"
             stroke-opacity="0.3"
           />
           <path
             d="M540 520 C520 460, 490 440, 460 440 L450 490 L510 530 Z"
-            fill="#0a0a0a"
-            stroke="#FD614B"
+            fill="#09101f"
+            stroke="#1d70f5"
             stroke-width="1.5"
             stroke-opacity="0.3"
           />
@@ -131,7 +131,7 @@ export default function HackerCoder() {
           <path
             d="M325 350 C325 210, 475 210, 475 350 C475 385, 450 405, 400 405 C350 405, 325 385, 325 350 Z"
             fill="url(#hoodieGrad)"
-            stroke="#FD614B"
+            stroke="#1d70f5"
             stroke-width="2.5"
             stroke-opacity="0.4"
           />
@@ -139,7 +139,7 @@ export default function HackerCoder() {
           {/* Inner Hood Dark Void & Silhouette Face */}
           <path
             d="M345 340 C345 240, 455 240, 455 340 C455 375, 435 390, 400 390 C365 390, 345 375, 345 340 Z"
-            fill="#000000"
+            fill="#03060d"
           />
 
           {/* Profile Jaw / Nose Rim Light from Laptop */}
@@ -149,35 +149,35 @@ export default function HackerCoder() {
             stroke="url(#neonRim)"
             stroke-width="3"
             stroke-linecap="round"
-            opacity="0.85"
+            opacity="0.75"
           />
 
-          {/* Hoodie Creases and Folds */}
+          {/* Hoodie Creases and Folds (Image 3 Art Style) */}
           <path
             d="M360 250 C375 235, 425 235, 440 250"
             fill="none"
-            stroke="#FD614B"
-            stroke-width="2.5"
+            stroke="#1d70f5"
+            stroke-width="3"
             stroke-opacity="0.3"
           />
           <path
             d="M340 310 C360 300, 370 320, 375 350"
             fill="none"
-            stroke="#FD614B"
-            stroke-width="2"
+            stroke="#1d70f5"
+            stroke-width="2.5"
             stroke-opacity="0.3"
           />
           <path
             d="M460 310 C440 300, 430 320, 425 350"
             fill="none"
-            stroke="#FD614B"
-            stroke-width="2"
+            stroke="#1d70f5"
+            stroke-width="2.5"
             stroke-opacity="0.3"
           />
 
           {/* Hoodie Drawstrings */}
-          <path d="M375 385 Q370 430 365 460" fill="none" stroke="#FD614B" stroke-width="2" stroke-opacity="0.5" />
-          <path d="M425 385 Q430 430 435 460" fill="none" stroke="#FD614B" stroke-width="2" stroke-opacity="0.5" />
+          <path d="M375 385 Q370 430 365 460" fill="none" stroke="#2563eb" stroke-width="2.5" />
+          <path d="M425 385 Q430 430 435 460" fill="none" stroke="#2563eb" stroke-width="2.5" />
         </g>
 
         {/* ==============================================================
@@ -187,29 +187,29 @@ export default function HackerCoder() {
           {/* Left Hand & Forearm */}
           <path
             d="M320 480 L355 465 L375 490 L335 505 Z"
-            fill="#111111"
-            stroke="#FD614B"
+            fill="#0c172d"
+            stroke="#00f0ff"
             stroke-width="1.5"
-            stroke-opacity="0.6"
+            stroke-opacity="0.5"
           />
           <g className="hand-left-fingers">
-            <ellipse cx="370" cy="482" rx="7" ry="4" fill="#FD614B" opacity="0.8" />
-            <ellipse cx="380" cy="486" rx="6" ry="4" fill="#ffffff" opacity="0.9" />
-            <ellipse cx="390" cy="490" rx="6" ry="4" fill="#FD614B" opacity="0.8" />
+            <ellipse cx="370" cy="482" rx="7" ry="4" fill="#00f0ff" opacity="0.8" />
+            <ellipse cx="380" cy="486" rx="6" ry="4" fill="#1d70f5" opacity="0.85" />
+            <ellipse cx="390" cy="490" rx="6" ry="4" fill="#00f0ff" opacity="0.8" />
           </g>
 
           {/* Right Hand & Forearm */}
           <path
             d="M480 480 L445 465 L425 490 L465 505 Z"
-            fill="#111111"
-            stroke="#FD614B"
+            fill="#0c172d"
+            stroke="#00f0ff"
             stroke-width="1.5"
-            stroke-opacity="0.6"
+            stroke-opacity="0.5"
           />
           <g className="hand-right-fingers">
-            <ellipse cx="430" cy="482" rx="7" ry="4" fill="#FD614B" opacity="0.8" />
-            <ellipse cx="420" cy="486" rx="6" ry="4" fill="#ffffff" opacity="0.9" />
-            <ellipse cx="410" cy="490" rx="6" ry="4" fill="#FD614B" opacity="0.8" />
+            <ellipse cx="430" cy="482" rx="7" ry="4" fill="#00f0ff" opacity="0.8" />
+            <ellipse cx="420" cy="486" rx="6" ry="4" fill="#1d70f5" opacity="0.85" />
+            <ellipse cx="410" cy="490" rx="6" ry="4" fill="#00f0ff" opacity="0.8" />
           </g>
         </g>
 
@@ -220,33 +220,33 @@ export default function HackerCoder() {
           {/* Laptop Base (Keyboard Deck) */}
           <polygon
             points="280,510 520,510 570,555 230,555"
-            fill="#050505"
-            stroke="#FD614B"
-            stroke-width="2.5"
+            fill="#060c18"
+            stroke="#1d70f5"
+            stroke-width="3"
           />
 
           {/* Glowing Trackpad */}
           <polygon
             points="375,532 425,532 432,548 368,548"
             fill="none"
-            stroke="#FD614B"
+            stroke="#00f0ff"
             stroke-width="1.2"
-            opacity="0.6"
+            opacity="0.5"
           />
 
           {/* Keyboard Grid with animated neon key strikes */}
           <g opacity="0.85">
-            <line x1="295" y1="518" x2="505" y2="518" stroke="#FD614B" stroke-width="1.5" stroke-dasharray="8 3" />
-            <line x1="290" y1="524" x2="510" y2="524" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="10 4" />
-            <line x1="285" y1="530" x2="515" y2="530" stroke="#FD614B" stroke-width="1.5" stroke-dasharray="9 3" />
+            <line x1="295" y1="518" x2="505" y2="518" stroke="#1d70f5" stroke-width="1.5" stroke-dasharray="8 3" />
+            <line x1="290" y1="524" x2="510" y2="524" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="10 4" />
+            <line x1="285" y1="530" x2="515" y2="530" stroke="#1d70f5" stroke-width="1.5" stroke-dasharray="9 3" />
           </g>
 
           {/* Laptop Screen Lid (Facing the Viewer at an angle) */}
           <polygon
             points="310,340 490,340 520,510 280,510"
-            fill="#020202"
-            stroke="#FD614B"
-            stroke-width="3"
+            fill="#02050c"
+            stroke="#1d70f5"
+            stroke-width="3.5"
             className="laptop-screen-lid"
           />
 
@@ -254,8 +254,8 @@ export default function HackerCoder() {
           <polygon
             points="318,348 482,348 510,504 290,504"
             fill="none"
-            stroke="#ffffff"
-            stroke-width="1"
+            stroke="#00f0ff"
+            stroke-width="1.2"
             opacity="0.3"
           />
 
@@ -305,10 +305,10 @@ export default function HackerCoder() {
 
           {/* Screen Light Projection Particles Emitted Upwards */}
           <g className="data-fumes">
-            <circle cx="360" cy="460" r="2" fill="#FD614B" opacity="0.8" />
-            <circle cx="440" cy="450" r="2.5" fill="#ffffff" opacity="0.75" />
-            <circle cx="390" cy="430" r="1.5" fill="#FD614B" opacity="0.9" />
-            <circle cx="420" cy="410" r="2" fill="#ffffff" opacity="0.8" />
+            <circle cx="360" cy="460" r="2" fill="#00f0ff" opacity="0.8" />
+            <circle cx="440" cy="450" r="2.5" fill="#1d70f5" opacity="0.75" />
+            <circle cx="390" cy="430" r="1.5" fill="#00f0ff" opacity="0.9" />
+            <circle cx="420" cy="410" r="2" fill="#38bdf8" opacity="0.8" />
           </g>
         </g>
       </svg>
