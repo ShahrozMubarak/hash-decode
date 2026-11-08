@@ -1022,18 +1022,34 @@ html[data-motion=off] .original-composition .story-security,html[data-motion=off
   font-family: var(--font-body), sans-serif !important;
   font-size: 0.95rem !important;
   font-weight: 600 !important;
-  padding: 0.75rem 1.6rem !important;
+  padding: 0.55rem 0.65rem 0.55rem 1.45rem !important;
   min-height: 48px !important;
   border-radius: 999px !important;
   border: none !important;
   box-shadow: 0 4px 16px rgba(217, 58, 47, 0.25) !important;
   text-decoration: none !important;
+  cursor: pointer !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .section-rule-action .cta:hover {
   transform: translateY(-2px) !important;
   box-shadow: 0 0 24px rgba(255, 90, 60, 0.35) !important;
+}
+
+.section-rule-action .cta .cta-arrow-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.section-rule-action .cta:hover .cta-arrow-circle {
+  transform: rotate(45deg);
 }
 
 /* 1. Services Tri Grid (3 cards) */
@@ -1103,7 +1119,9 @@ html[data-motion=off] .original-composition .story-security,html[data-motion=off
 .security-strip-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.25rem, 2vw, 1.75rem);
+  align-items: stretch;
+  gap: clamp(1.25rem, 2vw, 2rem);
+  width: 100%;
 }
 
 .security-strip-card {
@@ -1115,7 +1133,10 @@ html[data-motion=off] .original-composition .story-security,html[data-motion=off
   padding: 32px !important;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 100%;
+  gap: 0;
   box-shadow: 0 10px 30px rgba(11, 31, 58, 0.14) !important;
   transition: transform 0.25s ease, box-shadow 0.25s ease !important;
 }
@@ -1132,19 +1153,22 @@ html[data-motion=off] .original-composition .story-security,html[data-motion=off
   font-weight: 700 !important;
   color: #0B1F3A !important;
   background: rgba(11, 31, 58, 0.08) !important;
-  padding: 0.25rem 0.65rem !important;
-  border-radius: 6px !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
   width: fit-content;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
 }
 
 .security-strip-card h3 {
   font-family: var(--font-body), sans-serif !important;
-  font-size: 1.2rem !important;
+  font-size: 1.25rem !important;
   font-weight: 700 !important;
   color: #0B1F3A !important;
-  margin: 0 !important;
+  margin: 0 0 0.65rem 0 !important;
   letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
 .security-strip-card p {

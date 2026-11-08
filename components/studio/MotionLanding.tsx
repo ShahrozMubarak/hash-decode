@@ -187,7 +187,10 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
        ))}
      </div>
      <div className="section-rule-action">
-       <a className="cta" href="#brief">Request an audit <ArrowUpRight size={16}/></a>
+       <a className="cta" href="#brief">
+         <span>Request an audit</span>
+         <span className="cta-arrow-circle"><ArrowUpRight size={14}/></span>
+       </a>
      </div>
      </div>
    </section>
