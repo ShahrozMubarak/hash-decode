@@ -177,7 +177,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  }
  const start=()=>{if(!frame&&!disposed&&loaded&&visible&&!suspended&&!document.hidden)frame=requestAnimationFrame(frameLoop);};
  const visibility=()=>{if(document.hidden)stop();else start();};
- const updateDist=(w:number,h:number)=>{if(model==='cube'){currentDist=7.2;return;}const asp=w>0&&h>0?w/h:1;const zoom=asp<1?Math.max(1,0.95/asp):1;currentDist=4.6*zoom;};
+ const updateDist=(w:number,h:number)=>{if(model==='cube'){currentDist=7.2;return;}const asp=w>0&&h>0?w/h:1;const zoom=asp<1?Math.max(1,0.95/asp):1;currentDist=(model==='eva'?3.8:4.6)*zoom;};
  const resize=new ResizeObserver(()=>{const {width,height}=canvas.getBoundingClientRect();if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();updateDist(width,height);}});
  const view=new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible)start();else stop();});
  let holdAngryTimer:any=undefined;let dragDistance=0;
