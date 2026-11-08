@@ -1,253 +1,324 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
+import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {cubeCells,sceneBudget} from './scene-settings';
 import type {PosterModel} from '@/components/studio/ModelPoster';
 
 export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,signal:AbortSignal,ready:()=>void,failed:()=>void){
+ const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
  const {lite,dpr,fps}=sceneBudget(innerWidth,navigator.hardwareConcurrency,(navigator as Navigator&{deviceMemory?:number}).deviceMemory||0,devicePixelRatio);
  const css=getComputedStyle(document.documentElement);
- const shade=(key:string)=>new THREE.Color(css.getPropertyValue(key).trim());
- const azure=shade('--azure'),snow=shade('--snow'),coral=shade('--coral'),navy=shade('--navy');
- const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:!lite,powerPreference:'low-power',preserveDrawingBuffer:false});
- renderer.setPixelRatio(dpr);
+ const shade=(key:string)=>new THREE.Color(css.getPropertyValue(key).trim()||'#0B1F3A');
+ const navy=shade('--ink');
+
+ // 7.1 Renderer
+ const renderer=new THREE.WebGLRenderer({
+  canvas,
+  alpha:true,
+  antialias:!lite,
+  powerPreference:'high-performance',
+  preserveDrawingBuffer:false
+ });
+ renderer.setPixelRatio(Math.min(dpr, 2));
  renderer.setClearColor(navy,0);
+ renderer.toneMapping=THREE.ACESFilmicToneMapping;
+ renderer.toneMappingExposure=1.1;
+ renderer.outputColorSpace=THREE.SRGBColorSpace;
+
  const scene=new THREE.Scene(),object=new THREE.Group();
- const camera=new THREE.PerspectiveCamera(30,1,.1,50);
- camera.position.set(0,model==='eva'?0.15:0,model==='cube'?7.2:4.2);
- const surface=new THREE.MeshPhysicalMaterial({color:azure,metalness:.22,roughness:.21,clearcoat:1,transparent:model!=='halo'&&model!=='eva',opacity:model==='cube'?.57:.81,depthWrite:model==='halo'||model==='eva',envMapIntensity:1.3});
- const core=new THREE.MeshStandardMaterial({color:coral,emissive:coral,emissiveIntensity:.38,roughness:.26});
- const metal=new THREE.MeshStandardMaterial({color:snow.clone().lerp(azure,.42),metalness:.83,roughness:.27});
- scene.add(object,new THREE.HemisphereLight(snow,azure,1.45));
- const key=new THREE.DirectionalLight(snow,2.4);key.position.set(-3,4,4);scene.add(key);
- if(model==='eva'||model!=='cube'){
-  const blueRim=new THREE.DirectionalLight(new THREE.Color('#1e75ff'),4.8);blueRim.position.set(3,-1,-4);
-  const blueFill=new THREE.PointLight(new THREE.Color('#0066ff'),3.8,14);blueFill.position.set(0,0,-2.5);
-  const cyanEyeLight=new THREE.PointLight(new THREE.Color('#00f0ff'),2.2,6);cyanEyeLight.position.set(0,0.4,1.4);
-  scene.add(blueRim,blueFill,cyanEyeLight);
- }
- const pixels=new Uint8Array(128*64*4);
- const pixel=new THREE.Color();
- for(let y=0;y<64;y++)for(let x=0;x<128;x++){
-   const value=Math.max(0,1-y/66)*.38+(x>13&&x<35&&y>15&&y<42?.58:0)+(x>78&&x<91&&y<44?.65:0);
-   pixel.copy(navy).lerp(snow,Math.min(1,value));const i=(y*128+x)*4;
-   pixels.set([pixel.r*255,pixel.g*255,pixel.b*255,255],i);
- }
- const environment=new THREE.DataTexture(pixels,128,64);
- environment.mapping=THREE.EquirectangularReflectionMapping;environment.needsUpdate=true;scene.environment=environment;
- let frame=0,last=0,elapsed=0,pulse=-5,progress=0,targetProgress=0,visible=true,disposed=false,loaded=false,suspended=false,currentDist=4.6;
- let instances:THREE.InstancedMesh|undefined;
- let mixer:THREE.AnimationMixer|undefined;
- 
- // Grok-bot Eye Tracking & Animation State
+
+ // 7.2 Camera (STATIC, FOV 32 desktop / 38 mobile, position (0, 0.15, 5.6) / (0, 0.15, 6.2))
+ const camera=new THREE.PerspectiveCamera(isMobile ? 38 : 32, 1, 0.1, 50);
+ camera.position.set(0, 0.15, isMobile ? 6.2 : 5.6);
+ camera.lookAt(0, 0, 0);
+
+ // 7.3 Environment (PMREMGenerator + RoomEnvironment, environmentIntensity 1.0)
+ const pmrem=new THREE.PMREMGenerator(renderer);
+ pmrem.compileEquirectangularShader();
+ const roomEnv=new RoomEnvironment();
+ const envTexture=pmrem.fromScene(roomEnv,0.04).texture;
+ scene.environment=envTexture;
+ scene.environmentIntensity=1.0;
+ roomEnv.dispose();
+ pmrem.dispose();
+
+ // 7.4 Lights
+ // Key (directional) #ffffff, intensity 2.2, at (3, 4, 5)
+ const keyLight=new THREE.DirectionalLight(0xffffff, 2.2);
+ keyLight.position.set(3, 4, 5);
+ scene.add(keyLight);
+
+ // Cool rim (directional) #dbe8ff, intensity 1.8, at (-4, 2, -3)
+ const coolRim=new THREE.DirectionalLight(new THREE.Color('#dbe8ff'), 1.8);
+ coolRim.position.set(-4, 2, -3);
+ scene.add(coolRim);
+
+ // Coral rim (directional) #FF5A3C, intensity 2.0, at (4, -1, -2)
+ const coralRim=new THREE.DirectionalLight(new THREE.Color('#FF5A3C'), 2.0);
+ coralRim.position.set(4, -1, -2);
+ scene.add(coralRim);
+
+ // Hemisphere fill, sky #dfe6e6, ground #7d8484, intensity 0.4
+ const hemiLight=new THREE.HemisphereLight(new THREE.Color('#dfe6e6'), new THREE.Color('#7d8484'), 0.4);
+ scene.add(hemiLight);
+
+ scene.add(object);
+
+ // Materials
+ const azure=new THREE.Color('#1E40AF'),snow=new THREE.Color('#dfe6e6'),coral=new THREE.Color('#D93A2F');
+ const surface=new THREE.MeshPhysicalMaterial({color:azure,metalness:.9,roughness:.12,clearcoat:1,transparent:false,envMapIntensity:1.2});
+ const coreFallback=new THREE.MeshStandardMaterial({color:coral,emissive:coral,emissiveIntensity:1.5,roughness:.26});
+ const metal=new THREE.MeshStandardMaterial({color:snow,metalness:.83,roughness:.27});
+
+ // 7.5 Materials for Robot
+ const chromeShellMat=new THREE.MeshPhysicalMaterial({
+  color:new THREE.Color('#e6ebef'),
+  metalness:0.9,
+  roughness:0.12,
+  clearcoat:1.0,
+  clearcoatRoughness:0.08,
+  envMapIntensity:1.2
+ });
+
+ const visorGlassMat=(isMobile||lite)?new THREE.MeshStandardMaterial({
+  color:new THREE.Color('#0b1220'),
+  metalness:0.95,
+  roughness:0.1
+ }):new THREE.MeshPhysicalMaterial({
+  color:new THREE.Color('#0b1220'),
+  metalness:0.1,
+  roughness:0.05,
+  transmission:0.9,
+  ior:1.45,
+  thickness:1.2,
+  transparent:true,
+  depthWrite:true
+ });
+
+ const visorScreenMat=new THREE.MeshStandardMaterial({
+  color:new THREE.Color('#040711'),
+  roughness:0.08,
+  metalness:0.2
+ });
+
+ const grokEyeMat=new THREE.MeshStandardMaterial({
+  color:new THREE.Color('#3de0d0'),
+  emissive:new THREE.Color('#3de0d0'),
+  emissiveIntensity:1.5,
+  roughness:0.1,
+  metalness:0.1
+ });
+
+ const coreMat=new THREE.MeshStandardMaterial({
+  color:new THREE.Color('#FF5A3C'),
+  emissive:new THREE.Color('#FF5A3C'),
+  emissiveIntensity:1.5,
+  roughness:0.15,
+  metalness:0.1
+ });
+
+ const bezelMat=new THREE.MeshStandardMaterial({
+  color:new THREE.Color('#0B1F3A'),
+  metalness:0.9,
+  roughness:0.2
+ });
+
+ let corePointLight:THREE.PointLight|undefined;
  let eyeLeft:THREE.Object3D|undefined;
  let eyeRight:THREE.Object3D|undefined;
  let baseLeftEyeX=-0.27,baseRightEyeX=0.27,baseEyeY=3.08,baseEyeZ=0.355;
- let blinkTimer=0,nextBlink=3.2,blinkProgress=0;
- let lookTimer=0,nextLook=2.0;
- const currentLook={x:0,y:0},targetLook={x:0,y:0};
+ let blinkTimer=0,nextBlink=4.5,blinkProgress=0;
 
+ let frame=0,last=0,elapsed=0,progress=0,targetProgress=0,visible=true,disposed=false,loaded=false,suspended=false;
+ let instances:THREE.InstancedMesh|undefined;
+ let mixer:THREE.AnimationMixer|undefined;
  const transforms=new THREE.Object3D(),cells=cubeCells.filter(([x,y,z])=>x||y||z);
- let grokEyeMat:THREE.MeshStandardMaterial|undefined;
- let isHovered=false,angerFactor=0,happyFactor=0,mood:'idle'|'happy'|'angry'='idle';
+
+ // Mouse look interaction bounds
+ const MAX_MOUSE_YAW=0.2094; // +-12 degrees (in radians)
+ const MAX_MOUSE_PITCH=0.1396; // +-8 degrees (in radians)
+ const SWAY_MAX=0.2618; // +-15 degrees idle sway (in radians)
+ const LERP_FACTOR=0.06;
+
+ let mouseTargetYaw=0;
+ let mouseTargetPitch=0;
+ let currentMouseYaw=0;
+ let currentMousePitch=0;
  let isDragging=false,dragStartX=0,dragStartY=0,userDragRotX=0,userDragRotY=0;
- let pauseResumeElapsed=0;
- let autoSpinTime=0;
- const cleanGeometry=()=>{const geometries=new Set<THREE.BufferGeometry>();object.traverse(node=>{if(node instanceof THREE.Mesh)geometries.add(node.geometry);});geometries.forEach(g=>g.dispose());};
+
+ const cleanGeometry=()=>{
+  const geometries=new Set<THREE.BufferGeometry>();
+  object.traverse(node=>{if(node instanceof THREE.Mesh)geometries.add(node.geometry);});
+  geometries.forEach(g=>g.dispose());
+ };
  const stop=()=>{cancelAnimationFrame(frame);frame=0;last=0;};
+
  function frameLoop(now:number){
   frame=0;if(disposed||suspended||!loaded||!visible||document.hidden)return;
   if(!last||now-last>=1000/fps){
    const delta=last?Math.min((now-last)/1000,.1):0;elapsed+=delta;last=now;mixer?.update(delta);
-   if(!isDragging&&elapsed>=pauseResumeElapsed){
-    autoSpinTime+=delta;
-   }
    progress+=(targetProgress-progress)*.14;
 
-   // Grok-bot Eye Animations (Blinking & Organic Saccades)
+   // Core pulse: 2.4s period, emissive 1.2 to 2.2, point light 1.2 to 3.0
+   const corePulse=(Math.sin(elapsed*(Math.PI*2/2.4))+1)*0.5; // 0.0 to 1.0
+   coreMat.emissiveIntensity=1.2+corePulse*1.0;
+   if(corePointLight)corePointLight.intensity=1.2+corePulse*1.8;
+
+   // Eye Blink (every 4-6s, 120ms duration)
    if(eyeLeft&&eyeRight){
     blinkTimer+=delta;
     if(blinkTimer>nextBlink){
-     blinkProgress+=delta*15;
-     if(blinkProgress>=Math.PI){
-      blinkTimer=0;blinkProgress=0;nextBlink=2.6+Math.random()*3.0;
+     blinkProgress+=delta/0.12;
+     if(blinkProgress>=1.0){
+      blinkTimer=0;blinkProgress=0;nextBlink=4.0+Math.random()*2.0;
      }
     }
-    const blinkScaleY=blinkProgress>0?Math.max(0.04,Math.abs(Math.cos(blinkProgress))):1.0;
+    const blinkScaleY=blinkProgress>0?Math.max(0.1,1.0-Math.sin(blinkProgress*Math.PI)*0.9):1.0;
+    eyeLeft.scale.y=blinkScaleY;
+    eyeRight.scale.y=blinkScaleY;
 
-    lookTimer+=delta;
-    if(lookTimer>nextLook){
-     lookTimer=0;nextLook=1.8+Math.random()*2.5;
-     const targets=[
-      {x:0,y:0},
-      {x:-0.05,y:0.02},
-      {x:0.05,y:0.02},
-      {x:0,y:0.04},
-      {x:-0.04,y:-0.03},
-      {x:0.04,y:-0.03}
-     ];
-     const chosen=targets[Math.floor(Math.random()*targets.length)];
-     targetLook.x=chosen.x;targetLook.y=chosen.y;
-    }
-    currentLook.x+=(targetLook.x-currentLook.x)*0.14;
-    currentLook.y+=(targetLook.y-currentLook.y)*0.14;
+    // Subtle eye shift toward cursor
+    eyeLeft.position.x=baseLeftEyeX+(currentMouseYaw/MAX_MOUSE_YAW)*0.035;
+    eyeRight.position.x=baseRightEyeX+(currentMouseYaw/MAX_MOUSE_YAW)*0.035;
+    eyeLeft.position.y=baseEyeY+(currentMousePitch/MAX_MOUSE_PITCH)*0.025;
+    eyeRight.position.y=baseEyeY+(currentMousePitch/MAX_MOUSE_PITCH)*0.025;
+   }
 
-     const targetAnger=mood==='angry'?1:0;
-     const targetHappy=(mood==='happy'||(isHovered&&mood!=='angry'))?1:0;
-     angerFactor+=(targetAnger-angerFactor)*0.16;
-     happyFactor+=(targetHappy-happyFactor)*0.16;
+   // Mobile touch look-around (when not on pointer)
+   if(isMobile&&!isDragging){
+    mouseTargetYaw=Math.sin(elapsed*(Math.PI*2/10))*(8*Math.PI/180);
+    mouseTargetPitch=0;
+   }
 
-     if(grokEyeMat){
-      if(angerFactor>0.08){
-       // Dark Crimson Red (Provoked / Angry)
-       const r=THREE.MathUtils.lerp(0.0,0.85,angerFactor);
-       const g=THREE.MathUtils.lerp(0.94,0.01,angerFactor);
-       const b=THREE.MathUtils.lerp(1.0,0.08,angerFactor);
-       grokEyeMat.color.setRGB(r,g,b);
-       grokEyeMat.emissive.setRGB(r,g,b);
-       grokEyeMat.emissiveIntensity=4.5+angerFactor*5.5;
-      }else if(happyFactor>0.08){
-       // Bright Glowing Cyan / Aqua (Happy / Cheerful)
-       const r=0.0;
-       const g=THREE.MathUtils.lerp(0.94,1.0,happyFactor);
-       const b=THREE.MathUtils.lerp(1.0,0.82,happyFactor);
-       grokEyeMat.color.setRGB(r,g,b);
-       grokEyeMat.emissive.setRGB(r,g,b);
-       grokEyeMat.emissiveIntensity=4.5+happyFactor*3.0;
-      }else{
-       grokEyeMat.color.setRGB(0,0.94,1.0);
-       grokEyeMat.emissive.setRGB(0,0.94,1.0);
-       grokEyeMat.emissiveIntensity=4.5;
-      }
-     }
+   // Mouse look lerp
+   currentMouseYaw+=(mouseTargetYaw-currentMouseYaw)*LERP_FACTOR;
+   currentMousePitch+=(mouseTargetPitch-currentMousePitch)*LERP_FACTOR;
 
-     // Eye shape:
-     // Happy: wide & round (scale.x: 1.35, scale.y: 1.35)
-     // Angry: narrowed slant (scale.y: 0.50, rotation.z: ±0.48)
-     const eyeScaleY=blinkScaleY*(1 - 0.50*angerFactor + 0.35*happyFactor);
-     const eyeScaleX=1 + 0.22*angerFactor + 0.35*happyFactor;
-     eyeLeft.scale.y=eyeScaleY;
-     eyeRight.scale.y=eyeScaleY;
-     eyeLeft.scale.x=eyeScaleX;
-     eyeRight.scale.x=eyeScaleX;
-     eyeLeft.rotation.z=-0.48*angerFactor;
-     eyeRight.rotation.z=0.48*angerFactor;
+   if(!isDragging){
+    userDragRotX*=0.92;
+    userDragRotY*=0.92;
+   }
 
-     eyeLeft.position.x=baseLeftEyeX+currentLook.x;
-     eyeRight.position.x=baseRightEyeX+currentLook.x;
-     eyeLeft.position.y=baseEyeY+currentLook.y;
-     eyeRight.position.y=baseEyeY+currentLook.y;
-     eyeLeft.position.z=baseEyeZ;
-     eyeRight.position.z=baseEyeZ;
-    }
+   if(model==='eva'||model==='fixer'){
+    // Idle float: sin(t * 0.9) * 0.06 (~7s period)
+    const floatY=Math.sin(elapsed*0.9)*0.06;
 
-    if(model==='eva'||model!=='cube'){
-     const floatY=Math.sin(elapsed*1.5)*.06 + (happyFactor*0.04*Math.sin(elapsed*4));
-     const floatX=Math.cos(elapsed*1.0)*.03 + (angerFactor>0.35?Math.sin(elapsed*45)*0.015:0);
-     const floatZ=Math.sin(elapsed*0.8)*.02;
-     object.position.set(floatX,floatY,floatZ);
-     object.rotation.z=Math.sin(elapsed*1.2)*.025;
-     object.rotation.x=Math.cos(elapsed*0.9)*.02 + userDragRotX;
-     object.rotation.y=-.15+autoSpinTime*(lite?.08:.14) + userDragRotY;
-     if(!isDragging){
-      userDragRotX*=0.91;
-      userDragRotY*=0.91;
-     }
-     const orbitAngle=progress*Math.PI*2;
-     camera.position.x=Math.sin(orbitAngle)*currentDist;
-     camera.position.z=Math.cos(orbitAngle)*currentDist;
-     camera.position.y=0.06+Math.sin(progress*Math.PI)*0.2;
-     camera.lookAt(0,floatY*.2,0);
-    }else{
-     object.rotation.y=-.55+elapsed*(lite?.12:.18)+progress*1.1;
-     const angle=(progress-.5)*.32;
-     camera.position.x=Math.sin(angle)*7.2;
-     camera.position.z=Math.cos(angle)*7.2*(canvas.closest('.gallery-object')?1-Math.sin(progress*Math.PI)*.38:1);
-     camera.position.y=(progress-.5)*(lite?.28:.65);camera.lookAt(0,0,0);
-     object.rotation.x=.38+progress*.18;
-     object.rotation.z=.025;
-    }
+    // Idle yaw sway: sin(t * 0.35) * 0.2618 rad (max +-15 deg, ~18s period)
+    const idleYaw=Math.sin(elapsed*0.35)*SWAY_MAX;
+
+    // Scroll response (first 100vh): scale 1 to 0.8, translateY up 8%, yaw +0.6 rad
+    const scrollClamped=Math.min(1,Math.max(0,progress));
+    const scrollScale=1.0-scrollClamped*0.2;
+    const scrollY=scrollClamped*0.08;
+    const scrollYaw=scrollClamped*0.6;
+
+    object.scale.setScalar(scrollScale);
+    object.position.set(0,floatY+scrollY,0);
+    object.rotation.x=currentMousePitch+userDragRotX;
+    object.rotation.y=idleYaw+currentMouseYaw+scrollYaw+userDragRotY;
+    object.rotation.z=0;
+   }else if(model==='cube'){
+    object.rotation.y=-.55+elapsed*(lite?.12:.18)+progress*1.1;
+    object.rotation.x=.38+progress*.18;
+    object.rotation.z=.025;
+   }
+
    if(instances){
     const scatter=Math.pow(1-Math.min(1,elapsed/.88),3);
-    const nudge=Math.max(0,1-(elapsed-pulse)/.75);
     cells.forEach(([x,y,z],i)=>{
-     const moved=i%7===0?Math.sin(nudge*Math.PI)*.2:0;
-     transforms.position.set(x*.68+Math.sin(i*17)*scatter*2.4+x*moved,y*.68+Math.cos(i*11)*scatter*2.1+y*moved,z*.68+Math.sin(i*7)*scatter*1.8);
+     transforms.position.set(x*.68+Math.sin(i*17)*scatter*2.4,y*.68+Math.cos(i*11)*scatter*2.1,z*.68+Math.sin(i*7)*scatter*1.8);
      transforms.rotation.set(scatter*i*.17,scatter*i*.12,0);transforms.updateMatrix();instances!.setMatrixAt(i,transforms.matrix);
     });
     instances.instanceMatrix.needsUpdate=true;
    }
+
    try{renderer.render(scene,camera);ready();}catch{stop();suspended=true;failed();return;}
   }
   frame=requestAnimationFrame(frameLoop);
  }
+
  const start=()=>{if(!frame&&!disposed&&loaded&&visible&&!suspended&&!document.hidden)frame=requestAnimationFrame(frameLoop);};
  const visibility=()=>{if(document.hidden)stop();else start();};
- const updateDist=(w:number,h:number)=>{if(model==='cube'){currentDist=7.2;return;}const asp=w>0&&h>0?w/h:1;const zoom=asp<1?Math.max(1,0.95/asp):1;currentDist=(model==='eva'?4.2:4.6)*zoom;};
- const resize=new ResizeObserver(()=>{const {width,height}=canvas.getBoundingClientRect();if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();updateDist(width,height);}});
- const view=new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible)start();else stop();});
- let holdAngryTimer:any=undefined;let dragDistance=0;
- const onPointerEnter=()=>{isHovered=true;pulse=elapsed;if(mood!=='angry')mood='happy';};
- const onPointerLeave=()=>{
-  if(isDragging){
-   isDragging=false;
-   pauseResumeElapsed=elapsed+2.0;
+
+ const resize=new ResizeObserver(()=>{
+  const {width,height}=canvas.getBoundingClientRect();
+  if(width&&height){
+   renderer.setSize(Math.round(width),Math.round(height),false);
+   camera.aspect=width/height;
+   camera.updateProjectionMatrix();
   }
-  isHovered=false;
-  if(holdAngryTimer){clearTimeout(holdAngryTimer);holdAngryTimer=undefined;}
-  if(mood!=='angry')mood='idle';
+ });
+
+ const view=new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible)start();else stop();});
+
+ const onPointerMoveWindow=(e:PointerEvent)=>{
+  if(isMobile)return;
+  const nx=(e.clientX/(window.innerWidth||1))*2-1;
+  const ny=(e.clientY/(window.innerHeight||1))*2-1;
+  mouseTargetYaw=Math.max(-MAX_MOUSE_YAW,Math.min(MAX_MOUSE_YAW,nx*MAX_MOUSE_YAW));
+  mouseTargetPitch=Math.max(-MAX_MOUSE_PITCH,Math.min(MAX_MOUSE_PITCH,-ny*MAX_MOUSE_PITCH));
  };
+
  const onPointerDown=(e:PointerEvent)=>{
-  isDragging=true;dragStartX=e.clientX;dragStartY=e.clientY;dragDistance=0;
-  if(holdAngryTimer)clearTimeout(holdAngryTimer);
-  // Only trigger angry state if clicked/held for a full 4 seconds
-  holdAngryTimer=setTimeout(()=>{
-   mood='angry';pulse=elapsed;
-   window.dispatchEvent(new CustomEvent('hd:bot-mood',{detail:{mood:'angry'}}));
-   setTimeout(()=>{if(mood==='angry'){mood=isHovered?'happy':'idle';window.dispatchEvent(new CustomEvent('hd:bot-mood',{detail:{mood}}));}},5000);
-  },4000);
+  isDragging=true;dragStartX=e.clientX;dragStartY=e.clientY;
  };
  const onPointerMove=(e:PointerEvent)=>{
   if(!isDragging)return;
-  const dx=e.clientX-dragStartX;const dy=e.clientY-dragStartY;
-  dragDistance+=Math.abs(dx)+Math.abs(dy);
-  // If user is swiping/dragging, cancel 4s static angry timer
-  if(dragDistance>6&&holdAngryTimer){clearTimeout(holdAngryTimer);holdAngryTimer=undefined;}
+  const dx=e.clientX-dragStartX,dy=e.clientY-dragStartY;
   dragStartX=e.clientX;dragStartY=e.clientY;
-  userDragRotY+=dx*0.009;userDragRotX+=dy*0.009;
+  userDragRotY+=dx*0.007;userDragRotX+=dy*0.007;
  };
- const onPointerUp=()=>{
-  if(isDragging){
-   isDragging=false;
-   pauseResumeElapsed=elapsed+2.0; // Pause auto-rotation for 2 seconds after cursor drag
-  }
-  if(holdAngryTimer){clearTimeout(holdAngryTimer);holdAngryTimer=undefined;}
-  if(mood!=='angry')mood=isHovered?'happy':'idle';
+ const onPointerUp=()=>{isDragging=false;};
+
+ const onScroll=(e:Event)=>{
+  const detail=(e as CustomEvent<{hero:number,gallery:number,crystal:number,page:number}>).detail;
+  targetProgress=detail.hero||detail.page||0;
  };
- const onMoodEvent=(e:Event)=>{
-  const m=(e as CustomEvent<{mood:'idle'|'happy'|'angry'}>).detail?.mood;
-  if(m)mood=m;
- };
- const onScroll=(e:Event)=>{const detail=(e as CustomEvent<{hero:number,gallery:number,crystal:number,page:number}>).detail;targetProgress=canvas.closest('.stationary-mobile-crystal')?(detail.hero||0):model==='cube'?detail.hero:(model==='fixer'||model==='eva')?(detail.hero||detail.gallery||detail.page||0):detail.gallery;};
+
  function lost(e:Event){e.preventDefault();suspended=true;stop();failed();}
  function restore(){suspended=false;start();}
+
  function dispose(){
   if(disposed)return;disposed=true;stop();resize.disconnect();view.disconnect();
-  document.removeEventListener('visibilitychange',visibility);window.removeEventListener('hd:scroll',onScroll);window.removeEventListener('hd:bot-mood',onMoodEvent);
-  canvas.removeEventListener('pointerenter',onPointerEnter);canvas.removeEventListener('pointerleave',onPointerLeave);canvas.removeEventListener('pointerdown',onPointerDown);canvas.removeEventListener('pointermove',onPointerMove);canvas.removeEventListener('pointerup',onPointerUp);canvas.removeEventListener('pointercancel',onPointerUp);canvas.removeEventListener('hd:recompute',onPointerEnter);
-  canvas.removeEventListener('webglcontextlost',lost);canvas.removeEventListener('webglcontextrestored',restore);
-  cleanGeometry();instances?.dispose();mixer?.stopAllAction();mixer=undefined;surface.dispose();metal.dispose();core.dispose();environment.dispose();renderer.dispose();renderer.forceContextLoss();
+  document.removeEventListener('visibilitychange',visibility);
+  window.removeEventListener('hd:scroll',onScroll);
+  window.removeEventListener('pointermove',onPointerMoveWindow);
+  canvas.removeEventListener('pointerdown',onPointerDown);
+  canvas.removeEventListener('pointermove',onPointerMove);
+  canvas.removeEventListener('pointerup',onPointerUp);
+  canvas.removeEventListener('pointercancel',onPointerUp);
+  canvas.removeEventListener('webglcontextlost',lost);
+  canvas.removeEventListener('webglcontextrestored',restore);
+  cleanGeometry();
+  instances?.dispose();
+  mixer?.stopAllAction();mixer=undefined;
+  surface.dispose();metal.dispose();coreFallback.dispose();
+  chromeShellMat.dispose();visorGlassMat.dispose();visorScreenMat.dispose();grokEyeMat.dispose();coreMat.dispose();bezelMat.dispose();
+  envTexture.dispose();
+  renderer.dispose();renderer.forceContextLoss();
   signal.removeEventListener('abort',dispose);
  }
+
  signal.addEventListener('abort',dispose,{once:true});
+
  try{
   if(signal.aborted){dispose();return;}
-  resize.observe(canvas);view.observe(canvas);document.addEventListener('visibilitychange',visibility);window.addEventListener('hd:scroll',onScroll);window.addEventListener('hd:bot-mood',onMoodEvent);
-  canvas.addEventListener('pointerenter',onPointerEnter);canvas.addEventListener('pointerleave',onPointerLeave);canvas.addEventListener('pointerdown',onPointerDown);canvas.addEventListener('pointermove',onPointerMove);canvas.addEventListener('pointerup',onPointerUp);canvas.addEventListener('pointercancel',onPointerUp);canvas.addEventListener('hd:recompute',onPointerEnter);
-  canvas.addEventListener('webglcontextlost',lost);canvas.addEventListener('webglcontextrestored',restore);
+  resize.observe(canvas);
+  view.observe(canvas);
+  document.addEventListener('visibilitychange',visibility);
+  window.addEventListener('hd:scroll',onScroll);
+  window.addEventListener('pointermove',onPointerMoveWindow,{passive:true});
+  canvas.addEventListener('pointerdown',onPointerDown);
+  canvas.addEventListener('pointermove',onPointerMove);
+  canvas.addEventListener('pointerup',onPointerUp);
+  canvas.addEventListener('pointercancel',onPointerUp);
+  canvas.addEventListener('webglcontextlost',lost);
+  canvas.addEventListener('webglcontextrestored',restore);
+
   if(model==='cube'){
    const cell=new RoundedBoxGeometry(.63,.63,.63,lite?1:2,.065);
    instances=new THREE.InstancedMesh(cell,surface,26);instances.frustumCulled=false;
-   object.add(instances,new THREE.Mesh(cell,core));
+   object.add(instances,new THREE.Mesh(cell,coreFallback));
   }else{
    const deadline=typeof AbortSignal.any==="function"?AbortSignal.any([signal,AbortSignal.timeout(15000)]):signal;
    const modelUrl=model==='fixer'?'/models/fixer_robot.glb':'/models/eva_robot.glb';
@@ -265,99 +336,50 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     action.play();
    }
 
-   // Identify Grok-bot Eye nodes
    eyeLeft=robot.getObjectByName('Eye_Left')||undefined;
    eyeRight=robot.getObjectByName('Eye_Right')||undefined;
    if(eyeLeft){baseLeftEyeX=eyeLeft.position.x;baseEyeY=eyeLeft.position.y;baseEyeZ=eyeLeft.position.z;}
    if(eyeRight){baseRightEyeX=eyeRight.position.x;}
 
-   grokEyeMat=new THREE.MeshStandardMaterial({
-    color:new THREE.Color('#00f0ff'),
-    emissive:new THREE.Color('#00f0ff'),
-    emissiveIntensity:4.5,
-    roughness:0.1,
-    metalness:0.1
-   });
+   // Add pulsing Coral Chest Core reactor
+   const coreGroup=new THREE.Group();
+   const bezel=new THREE.Mesh(new THREE.CylinderGeometry(0.24,0.24,0.04,32),bezelMat);
+   bezel.rotation.x=Math.PI/2;
+   coreGroup.add(bezel);
+
+   const coreDisk=new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.18,0.05,32),coreMat);
+   coreDisk.rotation.x=Math.PI/2;
+   coreGroup.add(coreDisk);
+
+   corePointLight=new THREE.PointLight(new THREE.Color('#FF5A3C'),2.0,4);
+   coreGroup.add(corePointLight);
+
+   coreGroup.position.set(0,2.05,0.88);
+   robot.add(coreGroup);
 
    robot.traverse(child=>{
     if(child instanceof THREE.Mesh){
      if(child.name==='Eye_Left'||child.name==='Eye_Right'){
-      child.material=grokEyeMat!;
+      child.material=grokEyeMat;
       return;
      }
      const mats=Array.isArray(child.material)?child.material:[child.material];
      mats.forEach(m=>{
       if(!m)return;
       if(m.name==='GrokEye'){
-       child.material=grokEyeMat!;
+       child.material=grokEyeMat;
       }else if(m.name==='Putih'){
-       m.color=new THREE.Color('#edf2fa');
-       m.roughness=0.18;
-       m.metalness=0.15;
+       child.material=chromeShellMat;
       }else if(m.name==='Material.006'){
-       // Visor screen - deep glossy black
-       m.color=new THREE.Color('#040711');
-       m.roughness=0.08;
-       m.metalness=0.2;
+       child.material=visorScreenMat;
       }else if(m.name==='Material.001'){
-       // Visor glass cover
-       m.color=new THREE.Color('#041028');
-       m.roughness=0.06;
-       m.metalness=0.1;
-       m.transparent=true;
-       m.opacity=0.52;
-       m.depthWrite=false;
+       child.material=visorGlassMat;
       }
      });
     }
    });
+
    if(disposed)return;
-
-   // Add tiny Hash Decode logo to the chest of the robot
-   if(model==='eva'||model==='fixer'){
-    const logoCanvas=document.createElement('canvas');
-    logoCanvas.width=128;logoCanvas.height=128;
-    const ctx=logoCanvas.getContext('2d');
-    if(ctx){
-     ctx.clearRect(0,0,128,128);
-     ctx.beginPath();
-     ctx.arc(64,64,54,0,Math.PI*2);
-     ctx.fillStyle='rgba(37,99,235,0.18)';
-     ctx.fill();
-     ctx.lineWidth=4;
-     ctx.strokeStyle='rgba(37,99,235,0.6)';
-     ctx.stroke();
-
-     ctx.strokeStyle='#ffffff';
-     ctx.lineWidth=11;
-     ctx.lineCap='round';
-     ctx.beginPath();
-     ctx.moveTo(48,22);ctx.lineTo(40,106);
-     ctx.moveTo(88,22);ctx.lineTo(80,106);
-     ctx.moveTo(22,48);ctx.lineTo(106,48);
-     ctx.moveTo(18,80);ctx.lineTo(102,80);
-     ctx.stroke();
-    }
-    const logoTexture=new THREE.CanvasTexture(logoCanvas);
-    logoTexture.needsUpdate=true;
-    const logoMat=new THREE.MeshStandardMaterial({
-     map:logoTexture,
-     transparent:true,
-     roughness:0.2,
-     metalness:0.3,
-     emissive:new THREE.Color('#2563eb'),
-     emissiveIntensity:0.65,
-     depthWrite:false,
-     polygonOffset:true,
-     polygonOffsetFactor:-2,
-     polygonOffsetUnits:-2
-    });
-    const chestLogo=new THREE.Mesh(new THREE.PlaneGeometry(0.38,0.38),logoMat);
-    chestLogo.position.set(0,2.15,0.86);
-    chestLogo.rotation.x=-0.08;
-    robot.add(chestLogo);
-   }
-
    object.add(robot);
    if(deadline.aborted)throw Error('Model timed out');
    const bounds=new THREE.Box3().setFromObject(robot),size=bounds.getSize(new THREE.Vector3()),centre=bounds.getCenter(new THREE.Vector3());
@@ -365,9 +387,14 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    robot.scale.multiplyScalar(scale);
    robot.position.sub(centre.multiplyScalar(scale));
   }
+
   loaded=true;
   const {width,height}=canvas.getBoundingClientRect();
-  if(width&&height){renderer.setSize(Math.round(width),Math.round(height),false);camera.aspect=width/height;camera.updateProjectionMatrix();updateDist(width,height);}
+  if(width&&height){
+   renderer.setSize(Math.round(width),Math.round(height),false);
+   camera.aspect=width/height;
+   camera.updateProjectionMatrix();
+  }
   try{renderer.render(scene,camera);ready();}catch(e){}
   window.dispatchEvent(new Event('hd:measure'));start();
  }catch(error){dispose();if(!signal.aborted)throw error;}
