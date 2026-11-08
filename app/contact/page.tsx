@@ -39,8 +39,8 @@ export default async function Contact({ searchParams }: { searchParams: Query })
       <div className="contact-main-grid">
         <aside className="contact-sidebar">
           <header className="page-intro compact">
-            <p className="kicker"><span className="key-line" />Direct Inquiry</p>
-            <h1>Start a conversation.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>Let&apos;s build it.</span></h1>
+            <p className="kicker"><span className="key-line" /> ( CONTACT ) [ INTAKE ]</p>
+            <h1><span className="title-bold">START A</span> <em className="title-serif">conversation.</em><br /><span className="text-coral" style={{ color: 'var(--coral)' }}><span className="title-bold">LET&apos;S BUILD</span> <em className="title-serif">intent.</em></span></h1>
             <p className="lead-text">
               Tell us about the people using your software and the problem you want to solve.
               We reply within 24 hours with practical advice and a clear estimate.
@@ -69,7 +69,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
               </a>
             )}
             <a className="contact-channel-pill" href="mailto:hello@hashdecode.com">
-              <Mail className="icon-azure" size={20} />
+              <Mail className="icon-coral" size={20} />
               <div>
                 <strong>Email the Team</strong>
                 <span>hello@hashdecode.com</span>

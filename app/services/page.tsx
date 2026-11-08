@@ -26,8 +26,8 @@ export default function Services() {
   return (
     <div className="wrap interior page-services-content">
       <header className="page-intro">
-        <p className="kicker"><span className="key-line" />Services</p>
-        <h1>What we build.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>How we help.</span></h1>
+        <p className="kicker"><span className="key-line" /> ( CAPABILITIES ) [ SERVICES ]</p>
+        <h1><span className="title-bold">WHAT WE</span> <em className="title-serif">build.</em><br /><span className="text-coral" style={{ color: 'var(--coral)' }}><span className="title-bold">HOW WE</span> <em className="title-serif">help.</em></span></h1>
         <p className="lead-text">
           Software designed for the people who use it, and practical security reviews for the teams who maintain it.
           No jargon, no bloated teams—just direct engineering that solves real business problems.
@@ -38,8 +38,8 @@ export default function Services() {
       <section className="service-catalog-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />Core Capabilities</p>
-            <h2>What We <span style={{ color: 'var(--coral)' }}>Specialize In</span></h2>
+            <p className="eyebrow"><i /> ( SPECIALIZATION ) [ VERIFIED ]</p>
+            <h2><span className="title-bold">WHAT WE</span> <em className="title-serif">specialize in.</em></h2>
           </div>
         </div>
         <div className="service-index">

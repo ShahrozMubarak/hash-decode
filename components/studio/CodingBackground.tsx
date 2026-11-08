@@ -87,7 +87,7 @@ export default function CodingBackground() {
       lastTime = time;
 
       // Dark background trail persistence for liquid neon blur
-      ctx.fillStyle = 'rgba(2, 8, 23, 0.22)';
+      ctx.fillStyle = 'rgba(5, 5, 5, 0.25)';
       ctx.fillRect(0, 0, width, height);
 
       cols.forEach((col) => {
@@ -106,7 +106,7 @@ export default function CodingBackground() {
           col.chars[randIdx] = CYBER_GLYPHS[Math.floor(Math.random() * CYBER_GLYPHS.length)];
         }
 
-        ctx.font = `600 ${col.fontSize}px var(--mono, "JetBrains Mono", monospace)`;
+        ctx.font = `600 ${col.fontSize}px var(--mono, "Space Mono", monospace)`;
 
         for (let j = 0; j < col.length; j++) {
           const charY = col.y - j * col.fontSize + (col.dir === -1 ? osc : 0);
@@ -115,15 +115,15 @@ export default function CodingBackground() {
           const char = col.chars[j];
 
           if (j === 0) {
-            // Bright luminous head
+            // Bright luminous head (Frozen White with Coral Red Glow)
             ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = '#38bdf8';
+            ctx.shadowColor = '#FD614B';
             ctx.shadowBlur = col.layer === 'fore' ? 16 : 8;
             ctx.fillText(char, col.x, charY);
           } else if (j < 4) {
-            // Neon cyan aura
-            ctx.fillStyle = '#67e8f9';
-            ctx.shadowColor = '#0284c7';
+            // Neon Coral Aura
+            ctx.fillStyle = '#FD614B';
+            ctx.shadowColor = '#FF553E';
             ctx.shadowBlur = col.layer === 'fore' ? 10 : 4;
             ctx.fillText(char, col.x, charY);
           } else {
@@ -133,7 +133,7 @@ export default function CodingBackground() {
             const alpha = col.layer === 'fore'
               ? Math.max(0.08, fade * 0.85)
               : Math.max(0.04, fade * 0.55);
-            ctx.fillStyle = `rgba(14, 165, 233, ${alpha.toFixed(3)})`;
+            ctx.fillStyle = `rgba(253, 97, 75, ${alpha.toFixed(3)})`;
             ctx.fillText(char, col.x, charY);
           }
         }

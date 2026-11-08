@@ -38,7 +38,16 @@ export default function TypingSecure() {
 
   return (
     <span className="typing-secure-word" aria-label="Secure it.">
-      <span className="typing-letters">{text}</span>
+      <span className="typing-letters">
+        {text === 'Secure it.' ? (
+          <>
+            <span className="title-bold" style={{ color: 'var(--coral)' }}>SECURE</span>{' '}
+            <em className="title-serif" style={{ color: 'var(--coral)' }}>it.</em>
+          </>
+        ) : (
+          <span className="title-bold" style={{ color: 'var(--coral)' }}>{text.toUpperCase()}</span>
+        )}
+      </span>
       <span className="typing-cursor" aria-hidden="true">|</span>
     </span>
   );

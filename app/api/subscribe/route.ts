@@ -48,3 +48,4 @@ export async function POST(req: Request) {
     return Response.json({error: 'Unable to subscribe. Please try again.'}, {status: 400});
   }
 }
+

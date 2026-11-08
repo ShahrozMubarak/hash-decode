@@ -5,7 +5,7 @@ import {ArrowUpRight,Menu,X,Pause,Play} from 'lucide-react';
 import {Chat} from './Chat';
 import FooterSubscribe from './FooterSubscribe';
 
-const links=[['Work','/portfolio'],['Services','/services'],['About','/about'],['Contact','/contact']];
+const links=[['work','/portfolio'],['services','/services'],['about','/about'],['contact','/contact']];
 
 export function Brand(){
  const [word,setWord]=useState('DECODE'),timer=useRef(null);
@@ -16,7 +16,12 @@ export function Brand(){
   const frames=['D3C0D3','DEC0DE','DECODE'];let i=0;
   timer.current=setInterval(()=>{setWord(frames[i++]);if(i===frames.length){clearInterval(timer.current);timer.current=null;}},55);
  }
- return <a className="brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}><img src="/logo.png" alt="Hash Decode" className="brand-logo" width="34" height="34" /><strong>HASH<span>{word}</span></strong></a>;
+ return (
+  <a className="brand iris-brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}>
+   <span className="brand-iris-tag">( HASH_{word} )</span>
+   <span className="brand-iris-ver">[ v02b ]</span>
+  </a>
+ );
 }
 export function Header(){
  const [open,setOpen]=useState(false),[paused,setPaused]=useState(false),toggle=useRef(null),menu=useRef(null);
@@ -37,9 +42,9 @@ export function Header(){
    document.documentElement.dataset.motion=next?'off':'on';setPaused(next);window.dispatchEvent(new Event('hd:motion'));window.dispatchEvent(new Event('hd:skip'));
  }
  return <header className="site-header" onKeyDown={e=>{if(open&&e.key==='Escape')closeMenu();}}><a className="skip" href="#main">Skip to content</a><div className="wrap nav"><Brand/>
- <nav id="site-links" className="site-links" aria-label="Main navigation">{links.map(([name,url])=><a href={url} aria-current={path===url?'page':undefined} key={url} onClick={()=>setOpen(false)}>{name}</a>)}</nav>
- <div className="nav-actions"><button type="button" className="icon-btn motion-toggle" onClick={pause} aria-pressed={paused} title={paused?'Resume motion':'Pause motion'} aria-label={paused?'Resume motion':'Pause motion'}>{paused?<Play size={16}/>:<Pause size={16}/>}</button><a className="nav-contact" href="/contact">Get in touch <ArrowUpRight size={15}/></a>
- <button className="icon-btn nav-toggle" ref={toggle} aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} aria-controls="studio-menu" onClick={openMenu}>{open?<X size={22}/>:<Menu size={22}/>}</button></div></div><dialog ref={menu} id="studio-menu" className="studio-menu" aria-label="Explore Hash Decode" onClose={()=>{setOpen(false);toggle.current?.focus();}} onClick={e=>{if(e.target===menu.current)closeMenu();}}><div className="menu-panel"><div className="menu-top"><span className="kicker">HASH DECODE / INDEX</span><button className="icon-btn" onClick={closeMenu} aria-label="Close menu"><X size={22}/></button></div><nav aria-label="Studio navigation">{links.map(([name,url],i)=><a href={url} key={url} aria-current={path===url?'page':undefined} onClick={closeMenu}><small>0{i+1}</small><span>{name}</span><ArrowUpRight size={24}/></a>)}</nav><div className="menu-bottom"><p>Software. Security. Digital craft.</p><a className="cta" href="/contact">Start a project <ArrowUpRight size={17}/></a></div><span className="menu-ghost" aria-hidden="true">DECODE</span></div></dialog></header>;
+ <nav id="site-links" className="site-links iris-nav-links" aria-label="Main navigation">{links.map(([name,url])=><a href={url} aria-current={path===url?'page':undefined} key={url} onClick={()=>setOpen(false)} className="iris-nav-item"><span>{name}</span> <ArrowUpRight size={13} className="iris-nav-arrow"/></a>)}</nav>
+ <div className="nav-actions"><button type="button" className="icon-btn motion-toggle" onClick={pause} aria-pressed={paused} title={paused?'Resume motion':'Pause motion'} aria-label={paused?'Resume motion':'Pause motion'}>{paused?<Play size={16}/>:<Pause size={16}/>}</button><a className="nav-contact iris-pill-nav" href="/contact">start a project ↗</a>
+ <button className="icon-btn nav-toggle" ref={toggle} aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} aria-controls="studio-menu" onClick={openMenu}>{open?<X size={22}/>:<Menu size={22}/>}</button></div></div><dialog ref={menu} id="studio-menu" className="studio-menu" aria-label="Explore Hash Decode" onClose={()=>{setOpen(false);toggle.current?.focus();}} onClick={e=>{if(e.target===menu.current)closeMenu();}}><div className="menu-panel"><div className="menu-top"><span className="kicker">( HASH_DECODE ) [ INDEX ]</span><button className="icon-btn" onClick={closeMenu} aria-label="Close menu"><X size={22}/></button></div><nav aria-label="Studio navigation">{links.map(([name,url],i)=><a href={url} key={url} aria-current={path===url?'page':undefined} onClick={closeMenu}><small>[ 00{i+1} ]</small><span>{name}</span><ArrowUpRight size={20}/></a>)}</nav><div className="menu-bottom"><p>Software. Security. Digital craft.</p><a className="cta" href="/contact">start a project ↗</a></div><span className="menu-ghost" aria-hidden="true">DECODE</span></div></dialog></header>;
 }
 export function Footer(){
   return (

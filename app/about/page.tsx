@@ -45,8 +45,8 @@ export default async function About() {
   return (
     <div className="wrap interior page-about-content">
       <header className="page-intro">
-        <p className="kicker"><span className="key-line" />About Hash Decode</p>
-        <h1>Inside Hash Decode.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>Crafted with intent.</span></h1>
+        <p className="kicker"><span className="key-line" /> ( HASH_DECODE ) [ STUDIO ]</p>
+        <h1><span className="title-bold">INSIDE</span> <em className="title-serif">Hash Decode.</em><br /><span className="text-coral" style={{ color: 'var(--coral)' }}><span className="title-bold">CRAFTED</span> <em className="title-serif">with intent.</em></span></h1>
         <p className="lead-text">
           {copy.about || 'An independent software studio founded by Shahroz Dogar. We build custom web platforms, digital tools, and secure cloud systems for growing companies.'}
         </p>
@@ -61,8 +61,8 @@ export default async function About() {
       <section className="about-principles-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i /> Core Values</p>
-            <h2>How We <span style={{ color: 'var(--coral)' }}>Operate</span></h2>
+            <p className="eyebrow"><i /> ( VALUES ) [ PRINCIPLES ]</p>
+            <h2><span className="title-bold">HOW WE</span> <em className="title-serif">operate.</em></h2>
           </div>
         </div>
         <div className="principles-grid-4">
@@ -71,7 +71,7 @@ export default async function About() {
             return (
               <article key={p.title} className="principle-card">
                 <div className="principle-card-head">
-                  <Icon className="icon-azure" size={24} />
+                  <Icon className="icon-coral" size={24} />
                 </div>
                 <h3>{p.title}</h3>
                 <p>{p.desc}</p>
@@ -85,8 +85,8 @@ export default async function About() {
       <section className="about-tech-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i /> Tools of the Craft</p>
-            <h2>Our Technology <span style={{ color: 'var(--coral)' }}>Stack</span></h2>
+            <p className="eyebrow"><i /> ( TOOLS ) [ ARSENAL ]</p>
+            <h2><span className="title-bold">OUR TECHNOLOGY</span> <em className="title-serif">stack.</em></h2>
           </div>
           <span className="count-pill">Modern &amp; battle-tested</span>
         </div>
@@ -104,34 +104,34 @@ export default async function About() {
       <section className="about-guarantee-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i /> Peace of Mind</p>
-            <h2>The Hash Decode <span style={{ color: 'var(--coral)' }}>Guarantee</span></h2>
+            <p className="eyebrow"><i /> ( ASSURANCE ) [ GUARANTEE ]</p>
+            <h2><span className="title-bold">THE HASH DECODE</span> <em className="title-serif">guarantee.</em></h2>
           </div>
         </div>
         <div className="guarantee-grid">
           <div className="guarantee-item">
-            <CheckCircle className="icon-azure" size={22} />
+            <CheckCircle className="icon-coral" size={22} />
             <div>
               <strong>Mutual NDA Protected</strong>
               <p>Your ideas, code, and customer data are fully protected before we write a single line of code.</p>
             </div>
           </div>
           <div className="guarantee-item">
-            <CheckCircle className="icon-azure" size={22} />
+            <CheckCircle className="icon-coral" size={22} />
             <div>
               <strong>Transparent Fixed Pricing</strong>
               <p>Clear, agreed milestones with zero surprise billing or hidden hourly charges.</p>
             </div>
           </div>
           <div className="guarantee-item">
-            <CheckCircle className="icon-azure" size={22} />
+            <CheckCircle className="icon-coral" size={22} />
             <div>
               <strong>30-Day Post-Launch Support</strong>
               <p>We monitor your production application and fix any warranty bugs free of charge.</p>
             </div>
           </div>
           <div className="guarantee-item">
-            <CheckCircle className="icon-azure" size={22} />
+            <CheckCircle className="icon-coral" size={22} />
             <div>
               <strong>Full Codebase Transfer</strong>
               <p>Everything is committed to your own private GitHub or cloud account from day one.</p>

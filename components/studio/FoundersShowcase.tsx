@@ -12,12 +12,12 @@ function BotFaceCursor() {
     <span className="ai-bot-avatar-cursor" aria-hidden="true" title="Hash streaming">
       <svg viewBox="0 0 24 24" width="20" height="20" className="mini-bot-face">
         {/* White glossy rounded head */}
-        <rect x="2" y="3" width="20" height="18" rx="7" fill="#ffffff" stroke="#0A2540" strokeWidth="1.6" />
+        <rect x="2" y="3" width="20" height="18" rx="7" fill="#ffffff" stroke="#000000" strokeWidth="1.6" />
         {/* Dark Visor */}
-        <rect x="5" y="7" width="14" height="8" rx="4" fill="#040914" />
-        {/* Cyan Glowing Eyes */}
-        <circle cx="8.5" cy="11" r="1.6" fill="#00f0ff" className="bot-eye-pulse" />
-        <circle cx="15.5" cy="11" r="1.6" fill="#00f0ff" className="bot-eye-pulse" />
+        <rect x="5" y="7" width="14" height="8" rx="4" fill="#050505" />
+        {/* Coral Glowing Eyes */}
+        <circle cx="8.5" cy="11" r="1.6" fill="#FD614B" className="bot-eye-pulse" />
+        <circle cx="15.5" cy="11" r="1.6" fill="#FD614B" className="bot-eye-pulse" />
       </svg>
     </span>
   );

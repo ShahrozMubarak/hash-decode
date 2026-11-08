@@ -16,8 +16,8 @@ export default async function Portfolio() {
   return (
     <div className="wrap interior page-work-content">
       <header className="page-intro">
-        <p className="kicker"><span className="key-line" />Our Work</p>
-        <h1>Software that works.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>Built right.</span></h1>
+        <p className="kicker"><span className="key-line" /> ( PORTFOLIO ) [ RELEASES ]</p>
+        <h1><span className="title-bold">SOFTWARE THAT</span> <em className="title-serif">works.</em><br /><span className="text-coral" style={{ color: 'var(--coral)' }}><span className="title-bold">BUILT</span> <em className="title-serif">right.</em></span></h1>
         <p className="lead-text">
           Explore real systems, web platforms, and security audits built by Hash Decode.
           Every project is built for speed, clean architecture, and reliable long-term security.
@@ -28,8 +28,8 @@ export default async function Portfolio() {
       <section className="work-showcase-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />Selected Releases</p>
-            <h2>Featured <span style={{ color: 'var(--coral)' }}>Projects</span></h2>
+            <p className="eyebrow"><i /> ( CASE_STUDIES ) [ VERIFIED ]</p>
+            <h2><span className="title-bold">FEATURED</span> <em className="title-serif">projects.</em></h2>
           </div>
           <span className="count-pill">{projects.length} Published Case Studies</span>
         </div>
@@ -45,13 +45,13 @@ export default async function Portfolio() {
       <section className="work-outcomes-band">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />Engineering Standards</p>
-            <h2>What Every Build <span style={{ color: 'var(--coral)' }}>Includes</span></h2>
+            <p className="eyebrow"><i /> ( STANDARDS ) [ ZERO_DEFECT ]</p>
+            <h2><span className="title-bold">WHAT EVERY BUILD</span> <em className="title-serif">includes.</em></h2>
           </div>
         </div>
         <div className="outcomes-grid">
           <div className="outcome-card">
-            <Zap className="icon-azure" size={28} />
+            <Zap className="icon-coral" size={28} />
             <h3>Sub-Second Speed</h3>
             <p>Every page and API route is optimized to load under 150ms. Fast software means higher customer conversion.</p>
           </div>
@@ -61,7 +61,7 @@ export default async function Portfolio() {
             <p>We test our own code against real-world attack vectors before launch. No open doors or data leaks.</p>
           </div>
           <div className="outcome-card">
-            <CheckCircle2 className="icon-azure" size={28} />
+            <CheckCircle2 className="icon-coral" size={28} />
             <h3>Complete Ownership</h3>
             <p>You own 100% of the repository, accounts, database credentials, and documentation. No vendor lock-in.</p>
           </div>
