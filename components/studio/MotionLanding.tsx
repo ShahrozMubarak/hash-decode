@@ -25,6 +25,7 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
 
         <figure className="hero-object">
           <div className="hero-robot-glow" aria-hidden="true"/>
+          <div className="hero-robot-shadow" aria-hidden="true"/>
           <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
           <div className="specimen-visual" id="hero-model-anchor">
             <div className="hero-blueprint-lines" aria-hidden="true"/>
@@ -39,8 +40,7 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
             building their next release.
           </p>
           <div className="actions">
-            <a className="cta" href="#brief">Create project <ArrowUpRight size={18}/></a>
-            <a className="text-link" href="#showcase">Explore agent <ArrowDown size={15}/></a>
+            <a className="cta hero-create-cta" href="#brief">Create project <ArrowUpRight size={22}/></a>
           </div>
         </div>
       </div>

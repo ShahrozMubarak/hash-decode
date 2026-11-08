@@ -1,11 +1,17 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import {usePathname} from 'next/navigation';
-import {ArrowUpRight,Menu,X,Pause,Play} from 'lucide-react';
+import {ArrowUpRight,Menu,X,Pause,Play,Briefcase,Cpu,Users,Mail,ShieldCheck,Search,ShoppingBag,Terminal} from 'lucide-react';
 import {Chat} from './Chat';
 import FooterSubscribe from './FooterSubscribe';
 
-const links=[['Work','/portfolio'],['Services','/services'],['About','/about'],['Contact','/contact']];
+const links=[
+  {name:'Work',url:'/portfolio',icon:Briefcase},
+  {name:'Services',url:'/services',icon:Cpu},
+  {name:'About',url:'/about',icon:Users},
+  {name:'Contact',url:'/contact',icon:Mail},
+  {name:'Admin',url:'/admin',icon:ShieldCheck}
+];
 
 export function Brand(){
  const [word,setWord]=useState('DECODE'),timer=useRef(null);
@@ -37,35 +43,31 @@ export function Header(){
    document.documentElement.dataset.motion=next?'off':'on';setPaused(next);window.dispatchEvent(new Event('hd:motion'));window.dispatchEvent(new Event('hd:skip'));
  }
  return (
-  <header className="site-header" onKeyDown={e=>{if(open&&e.key==='Escape')closeMenu();}}>
-    <div className="top-utility-bar">
-      <div className="wrap utility-content">
-        <div className="utility-badge">
-          <span className="utility-pulse" />
-          <span>⚡ Next-Gen Digital Engineering · Custom Web Platforms · Full-Stack Architectures · 24/7 Cryptographic Security Audits</span>
-        </div>
-        <div className="utility-links">
-          <a href="/tools/security-check" className="utility-link">Live Vulnerability Scanner</a>
-          <span className="utility-sep">/</span>
-          <a href="/about" className="utility-link">Founders</a>
-          <span className="utility-sep">/</span>
-          <a href="/admin" className="utility-link admin-pill">Admin Portal</a>
-        </div>
-      </div>
-    </div>
+  <header className="site-header ronin-header" onKeyDown={e=>{if(open&&e.key==='Escape')closeMenu();}}>
     <a className="skip" href="#main">Skip to content</a>
-    <div className="wrap nav">
-      <Brand/>
-      <nav id="site-links" className="site-links" aria-label="Main navigation">
-        {links.map(([name,url])=><a href={url} aria-current={path===url?'page':undefined} key={url} onClick={()=>setOpen(false)}>{name}</a>)}
+    <div className="wrap nav ronin-nav">
+      <div className="ronin-brand-wrap">
+        <Brand/>
+      </div>
+      <nav id="site-links" className="site-links ronin-links" aria-label="Main navigation">
+        {links.map(({name,url,icon:Icon})=>(
+          <a href={url} aria-current={path===url?'page':undefined} key={url} className="ronin-nav-item" onClick={()=>setOpen(false)}>
+            <Icon size={15} className="ronin-nav-icon" aria-hidden="true" />
+            <strong className="ronin-nav-text">{name}</strong>
+          </a>
+        ))}
       </nav>
-      <div className="nav-actions">
-        <button type="button" className="icon-btn motion-toggle" onClick={pause} aria-pressed={paused} title={paused?'Resume motion':'Pause motion'} aria-label={paused?'Resume motion':'Pause motion'}>
-          {paused?<Play size={16}/>:<Pause size={16}/>}
+      <div className="nav-actions ronin-actions">
+        <button type="button" className="icon-btn motion-toggle ronin-icon-btn" onClick={pause} aria-pressed={paused} title={paused?'Resume motion':'Pause motion'} aria-label={paused?'Resume motion':'Pause motion'}>
+          {paused?<Play size={15}/>:<Pause size={15}/>}
         </button>
-        <a className="nav-contact" href="/contact">Get in touch <ArrowUpRight size={15}/></a>
-        <button className="icon-btn nav-toggle" ref={toggle} aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} aria-controls="studio-menu" onClick={openMenu}>
-          {open?<X size={22}/>:<Menu size={22}/>}
+        <a className="nav-contact ronin-cta-pill" href="/contact">
+          <Terminal size={14} aria-hidden="true" />
+          <span>Get in touch</span>
+          <ArrowUpRight size={14}/>
+        </a>
+        <button className="icon-btn nav-toggle ronin-icon-btn" ref={toggle} aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} aria-controls="studio-menu" onClick={openMenu}>
+          {open?<X size={20}/>:<Menu size={20}/>}
         </button>
       </div>
     </div>
@@ -76,7 +78,14 @@ export function Header(){
           <button className="icon-btn" onClick={closeMenu} aria-label="Close menu"><X size={22}/></button>
         </div>
         <nav aria-label="Studio navigation">
-          {links.map(([name,url],i)=><a href={url} key={url} aria-current={path===url?'page':undefined} onClick={closeMenu}><small>0{i+1}</small><span>{name}</span><ArrowUpRight size={24}/></a>)}
+          {links.map(({name,url,icon:Icon},i)=>(
+            <a href={url} key={url} aria-current={path===url?'page':undefined} onClick={closeMenu}>
+              <small>0{i+1}</small>
+              <Icon size={16} style={{marginRight:8}}/>
+              <strong>{name}</strong>
+              <ArrowUpRight size={24}/>
+            </a>
+          ))}
         </nav>
         <div className="menu-bottom">
           <p>Software. Security. Digital craft.</p>

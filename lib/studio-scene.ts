@@ -50,12 +50,17 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  let grokEyeMat:THREE.MeshStandardMaterial|undefined;
  let isHovered=false,angerFactor=0,happyFactor=0,mood:'idle'|'happy'|'angry'='idle';
  let isDragging=false,dragStartX=0,dragStartY=0,userDragRotX=0,userDragRotY=0;
+ let pauseResumeElapsed=0;
+ let autoSpinTime=0;
  const cleanGeometry=()=>{const geometries=new Set<THREE.BufferGeometry>();object.traverse(node=>{if(node instanceof THREE.Mesh)geometries.add(node.geometry);});geometries.forEach(g=>g.dispose());};
  const stop=()=>{cancelAnimationFrame(frame);frame=0;last=0;};
  function frameLoop(now:number){
   frame=0;if(disposed||suspended||!loaded||!visible||document.hidden)return;
   if(!last||now-last>=1000/fps){
    const delta=last?Math.min((now-last)/1000,.1):0;elapsed+=delta;last=now;mixer?.update(delta);
+   if(!isDragging&&elapsed>=pauseResumeElapsed){
+    autoSpinTime+=delta;
+   }
    progress+=(targetProgress-progress)*.14;
 
    // Grok-bot Eye Animations (Blinking & Organic Saccades)
@@ -142,7 +147,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
      object.position.set(floatX,floatY,floatZ);
      object.rotation.z=Math.sin(elapsed*1.2)*.025;
      object.rotation.x=Math.cos(elapsed*0.9)*.02 + userDragRotX;
-     object.rotation.y=-.15+elapsed*(lite?.08:.14) + userDragRotY;
+     object.rotation.y=-.15+autoSpinTime*(lite?.08:.14) + userDragRotY;
      if(!isDragging){
       userDragRotX*=0.91;
       userDragRotY*=0.91;
@@ -182,7 +187,15 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const view=new IntersectionObserver(entries=>{visible=!!entries[0]?.isIntersecting;if(visible)start();else stop();});
  let holdAngryTimer:any=undefined;let dragDistance=0;
  const onPointerEnter=()=>{isHovered=true;pulse=elapsed;if(mood!=='angry')mood='happy';};
- const onPointerLeave=()=>{isHovered=false;isDragging=false;if(holdAngryTimer){clearTimeout(holdAngryTimer);holdAngryTimer=undefined;}if(mood!=='angry')mood='idle';};
+ const onPointerLeave=()=>{
+  if(isDragging){
+   isDragging=false;
+   pauseResumeElapsed=elapsed+2.0;
+  }
+  isHovered=false;
+  if(holdAngryTimer){clearTimeout(holdAngryTimer);holdAngryTimer=undefined;}
+  if(mood!=='angry')mood='idle';
+ };
  const onPointerDown=(e:PointerEvent)=>{
   isDragging=true;dragStartX=e.clientX;dragStartY=e.clientY;dragDistance=0;
   if(holdAngryTimer)clearTimeout(holdAngryTimer);
@@ -203,7 +216,10 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   userDragRotY+=dx*0.009;userDragRotX+=dy*0.009;
  };
  const onPointerUp=()=>{
-  isDragging=false;
+  if(isDragging){
+   isDragging=false;
+   pauseResumeElapsed=elapsed+2.0; // Pause auto-rotation for 2 seconds after cursor drag
+  }
   if(holdAngryTimer){clearTimeout(holdAngryTimer);holdAngryTimer=undefined;}
   if(mood!=='angry')mood=isHovered?'happy':'idle';
  };
