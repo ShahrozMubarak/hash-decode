@@ -126,7 +126,8 @@ export function Footer(){
       <div className="wrap footer-row">
         <Brand/>
         <nav className="footer-nav" aria-label="Footer navigation">
-          {[...links,['Privacy','/privacy']].map(([n,u])=><a key={u} href={u}>{n}</a>)}
+          {links.map(({name,url})=><a key={url} href={url}>{name}</a>)}
+          <a key="/privacy" href="/privacy">Privacy</a>
         </nav>
         <p className="developed-by">Developed by <strong>Shahroz Dogar</strong></p>
         <Chat/>
