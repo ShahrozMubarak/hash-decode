@@ -26,8 +26,11 @@ export default function MotionLanding({projects,links,intro}:{projects:Project[]
         <figure className="hero-object">
           <div className="hero-robot-glow" aria-hidden="true"/>
           <div className="hero-robot-shadow" aria-hidden="true"/>
-          <div className="hero-glass-watermark" aria-hidden="true">
-            <span className="hero-glass-watermark-text">DECODE</span>
+          <div className="hero-flank-watermark hero-flank-left" aria-hidden="true">
+            <span className="hero-watermark-hash">HASH</span>
+          </div>
+          <div className="hero-flank-watermark hero-flank-right" aria-hidden="true">
+            <span className="hero-watermark-decode">DECODE</span>
           </div>
           <span className="corner corner-a"/><span className="corner corner-b"/><span className="corner corner-c"/><span className="corner corner-d"/>
           <div className="specimen-visual" id="hero-model-anchor">
