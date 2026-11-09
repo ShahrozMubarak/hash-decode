@@ -241,7 +241,7 @@ main{position:relative}.inline-dotted{position:relative;width:100%;height:100%;t
 .inner-experience{position:absolute;top:clamp(1rem,2vw,2.5rem);right:clamp(1.5rem,4vw,5rem);width:clamp(224px,21vw,304px);height:clamp(224px,21vw,304px);background:transparent!important;border:none!important;box-shadow:none!important;pointer-events:none;z-index:10;transition:transform .4s ease;overflow:visible!important}
 .inner-experience canvas{pointer-events:auto}
 .inner-experience .scene-poster{display:none!important}
-.inner-experience.page-contact{display:none!important}
+.inner-experience.page-contact,.inner-experience.page-about{display:none!important}
 .inner-ghost,.inner-caption,.tab-warp-trail{display:none!important}
 .inner-model-wrapper{width:100%;height:100%;position:relative}
 .inner-experience.robot-tab-shifting{animation:robotTabShift .95s cubic-bezier(.16,1,.3,1) both}

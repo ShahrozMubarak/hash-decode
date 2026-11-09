@@ -38,7 +38,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  // Intro dolly: FOV 40 to target over 1800ms ease-out
  const targetFov = 32;
  const camera=new THREE.PerspectiveCamera(prefersReducedMotion ? targetFov : 40, 1, 0.1, 50);
- camera.position.set(0, isMobile ? 0.0 : 0.15, isMobile ? 4.5 : 5.6);
+ camera.position.set(0, isMobile ? 0.0 : 0.15, isMobile ? 5.2 : 5.6);
  camera.lookAt(0, 0, 0);
 
  // 7.3 Environment (RoomEnvironment through PMREMGenerator, intensity 1.0)
@@ -334,9 +334,9 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     eyeRight.position.y=baseEyeY+cursorEyeY+happyAmount*0.040;
    }
 
-   // Mobile touch look-around (when not on pointer)
+   // Mobile touch look-around: keep centered facing user
    if(isMobile&&!isDragging){
-    mouseTargetYaw=Math.sin(elapsed*(Math.PI*2/10))*(8*Math.PI/180);
+    mouseTargetYaw=0;
     mouseTargetPitch=0;
    }
 
@@ -374,8 +374,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
      // Idle float: sin(t * 0.9) * 0.06 (~7s period)
      const floatY=Math.sin(elapsed*0.9)*0.06;
 
-     // Idle yaw sway: sin(t * 0.35) * 0.2618 rad (max +-15 deg, ~18s period)
-     const idleYaw=Math.sin(elapsed*0.35)*SWAY_MAX;
+     // Idle yaw sway: gentle subtle sway on mobile so it stays dead-centered facing user
+     const idleYaw=isMobile?Math.sin(elapsed*0.25)*0.04:Math.sin(elapsed*0.35)*SWAY_MAX;
 
      // Scroll response (first 100vh): scale 1 -> 0.82, translateY -6vh, rotateY 0 -> +25 degrees
      const scrollScale=1.0-scrollClamped*0.18;
@@ -445,9 +445,9 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    const vFovRad=(camera.fov*Math.PI)/180;
    const hFovRad=2*Math.atan(Math.tan(vFovRad/2)*camera.aspect);
    const minFovRad=Math.min(vFovRad,hFovRad);
-   const targetFraction=0.62*0.70*0.80; // 30% then 20% smaller on mobile
+   const targetFraction=0.62*0.70*0.80*0.80; // 30% then 20% then another 20% smaller on mobile
    const d=robotRadius/Math.sin(minFovRad/2)/targetFraction;
-   camera.position.set(0,0.0,Math.max(4.2,d));
+   camera.position.set(0,0.0,Math.max(5.0,d));
    camera.lookAt(0,0,0);
   }else{
    camera.position.set(0,0.15,5.6);

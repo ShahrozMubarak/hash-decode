@@ -31,12 +31,12 @@ export default function TeleportBot({ className = '' }: Props) {
     const onError = (e: Event) => {
       setMood('error');
       const detail = (e as CustomEvent).detail;
-      const msg = detail?.error || 'Please review your details and send again.';
-      setThoughtText(msg);
+      const msg = detail?.error || 'Please review details & retry.';
+      setThoughtText(msg && msg.length > 45 ? msg.slice(0, 42) + '...' : msg);
       setTimeout(() => {
         setMood('idle');
         setThoughtText('Greetings, I am Hash. Submit your brief below.');
-      }, 6000);
+      }, 5000);
     };
 
     const onBotMood = (e: Event) => {
