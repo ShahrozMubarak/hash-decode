@@ -4,10 +4,13 @@ import { useEffect } from 'react';
 
 export default function RevealObserver() {
   useEffect(() => {
-    // 1. Mark document as JS-enabled
-    if (typeof document !== 'undefined') {
-      document.documentElement.classList.add('js');
+    if (typeof document === 'undefined') return;
 
+    // 1. Mark document as JS-enabled
+    document.documentElement.classList.add('js');
+
+    let observer: IntersectionObserver | null = null;
+    const timer = setTimeout(() => {
       // 2. Setup stagger delays for parents with data-stagger
       const staggeredParents = document.querySelectorAll<HTMLElement>('[data-stagger]');
       staggeredParents.forEach((parent) => {
@@ -24,7 +27,7 @@ export default function RevealObserver() {
       });
 
       // 3. ONE IntersectionObserver (threshold 0.15, rootMargin "0px 0px -8% 0px")
-      const observer = new IntersectionObserver(
+      observer = new IntersectionObserver(
         (entries, obs) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -45,12 +48,13 @@ export default function RevealObserver() {
       );
 
       const elements = document.querySelectorAll('[data-reveal]');
-      elements.forEach((el) => observer.observe(el));
+      elements.forEach((el) => observer?.observe(el));
+    }, 100);
 
-      return () => {
-        observer.disconnect();
-      };
-    }
+    return () => {
+      clearTimeout(timer);
+      observer?.disconnect();
+    };
   }, []);
 
   return null;
