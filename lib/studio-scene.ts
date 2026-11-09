@@ -9,7 +9,8 @@ import {cubeCells,sceneBudget} from './scene-settings';
 import type {PosterModel} from '@/components/studio/ModelPoster';
 
 export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,signal:AbortSignal,ready:()=>void,failed:()=>void){
- const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+ const getIsMobile = () => (typeof window !== 'undefined' && window.innerWidth <= 850) || (canvas && canvas.clientWidth > 0 && canvas.clientWidth <= 640);
+ const isMobile = getIsMobile();
  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const {lite,dpr,fps}=sceneBudget(innerWidth,navigator.hardwareConcurrency,(navigator as Navigator&{deviceMemory?:number}).deviceMemory||0,devicePixelRatio);
  const css=getComputedStyle(document.documentElement);
@@ -33,11 +34,11 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
  const scene=new THREE.Scene(),object=new THREE.Group();
 
- // 7.2 Camera (FOV 32 desktop & mobile, position (0, 0.15, 5.6) / mobile responsive (0, 0.08, 4.9))
+ // 7.2 Camera (FOV 32 desktop & mobile, position (0, 0.15, 5.6) / mobile responsive (0, 0.04, 4.3))
  // Intro dolly: FOV 40 to target over 1800ms ease-out
  const targetFov = 32;
  const camera=new THREE.PerspectiveCamera(prefersReducedMotion ? targetFov : 40, 1, 0.1, 50);
- camera.position.set(0, isMobile ? 0.08 : 0.15, isMobile ? 4.9 : 5.6);
+ camera.position.set(0, isMobile ? 0.04 : 0.15, isMobile ? 4.3 : 5.6);
  camera.lookAt(0, 0, 0);
 
  // 7.3 Environment (RoomEnvironment through PMREMGenerator, intensity 1.0)
@@ -441,6 +442,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     composer.setSize(Math.round(width),Math.round(height));
    }
    camera.aspect=width/height;
+   const isMob = width <= 640 || (typeof window !== 'undefined' && window.innerWidth <= 850);
+   camera.position.set(0, isMob ? 0.04 : 0.15, isMob ? 4.3 : 5.6);
    camera.updateProjectionMatrix();
   }
  });
@@ -620,8 +623,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    object.add(robot);
    if(deadline.aborted)throw Error('Model timed out');
    const bounds=new THREE.Box3().setFromObject(robot),size=bounds.getSize(new THREE.Vector3()),centre=bounds.getCenter(new THREE.Vector3());
-   // Robot scaled to hero height (scale 2.55 desktop / 2.95 mobile for prominent responsive sizing)
-   const mobileScale = isMobile ? 2.95 : 2.55;
+   // Robot scaled to hero height (scale 2.55 desktop / 3.15 mobile for prominent responsive sizing)
+   const mobileScale = isMobile ? 3.15 : 2.55;
    const scale=(model==='fixer'?2.5:mobileScale)/Math.max(size.x,size.y,size.z);
    robot.scale.multiplyScalar(scale);
    robot.position.sub(centre.multiplyScalar(scale));
