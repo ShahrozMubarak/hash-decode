@@ -2068,6 +2068,61 @@ table {
   padding-bottom: max(3.5rem, env(safe-area-inset-bottom)) !important;
 }
 
+/* Mobile spacing & breathing room (PC stays unchanged) */
+@media (max-width: 850px) {
+  /* 2-line space after each tab bar, filter, and segmented control */
+  .tabs,
+  .work-filter-wrap,
+  .admin-dashboard .tabs,
+  .editorial-admin .tabs,
+  .tabs-container {
+    margin-bottom: 2rem !important;
+    margin-top: 0.75rem !important;
+  }
+
+  /* Spacious breathing room between sections and card elements */
+  .section,
+  .section-rule-block,
+  .interior {
+    padding-block: clamp(2.5rem, 7vw, 4rem) !important;
+  }
+  .section-head-rule,
+  .section-head,
+  .page-intro {
+    margin-bottom: 1.75rem !important;
+  }
+  .service-tri-card,
+  .step-card,
+  .principle-card,
+  .tool-card,
+  .outcome-card,
+  .article-card {
+    margin-bottom: 1.25rem !important;
+  }
+
+  /* Concise copy on mobile (keep full text on PC) */
+  .service-card-desc,
+  .service-tri-card p,
+  .tool-card p,
+  .step-card p,
+  .case-detail-card p,
+  .section-rule-lead,
+  .page-intro > p:last-child {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  /* Hide non-essential secondary fluff in mobile */
+  .footer-col-desc,
+  .tech-badge-cloud small,
+  .case-detail-card small,
+  .mobile-hide-meta {
+    display: none !important;
+  }
+}
+
 /* Tap targets minimum 44x44 */
 a.card-arrow-link,
 a.hd-text-link,

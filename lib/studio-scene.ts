@@ -441,12 +441,13 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   const isMob=w<=640||(typeof window!=='undefined'&&window.innerWidth<=850);
   if(isMob){
    // Mathematical robot fit from bounding sphere:
-   // d = r / sin(min(vFov, hFov) / 2) / 0.62 so robot fills at most 62% width, centered
+   // Decreased by 30% on mobile as requested (occupying ~43% canvas width, centered)
    const vFovRad=(camera.fov*Math.PI)/180;
    const hFovRad=2*Math.atan(Math.tan(vFovRad/2)*camera.aspect);
    const minFovRad=Math.min(vFovRad,hFovRad);
-   const d=robotRadius/Math.sin(minFovRad/2)/0.62;
-   camera.position.set(0,0.0,Math.max(2.8,d));
+   const targetFraction=0.62*0.70; // 30% smaller on mobile
+   const d=robotRadius/Math.sin(minFovRad/2)/targetFraction;
+   camera.position.set(0,0.0,Math.max(3.6,d));
    camera.lookAt(0,0,0);
   }else{
    camera.position.set(0,0.15,5.6);
