@@ -65,7 +65,7 @@ export default function PageExperience() {
     }
   }, [path]);
 
-  if (path === '/' || path.startsWith('/admin')) return null;
+  if (path === '/' || path.startsWith('/admin') || path === '/contact') return null;
 
   const pageClass = 'page-' + (path.replace('/', '').split('/')[0] || 'root');
 

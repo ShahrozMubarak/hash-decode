@@ -112,7 +112,7 @@ const blankProject = (): Project => ({
   url: '',
   image: '',
   art: 'grid',
-  status: 'draft',
+  status: 'published',
   position: 30,
   kind: 'Studio project',
 });
@@ -2648,8 +2648,8 @@ export default function FoolishAdminDashboard({
                       )
                     }
                   >
-                    <option value="draft">Draft (Private)</option>
                     <option value="published">Published (Public)</option>
+                    <option value="draft">Draft (Private)</option>
                   </select>
                 </div>
               </div>
