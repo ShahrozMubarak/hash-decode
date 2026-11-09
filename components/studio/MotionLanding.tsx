@@ -4,7 +4,6 @@ import { WorkCard } from './Work';
 import ContactForm from './ContactForm';
 import ResponsiveStage from './ResponsiveStage';
 import SceneSurface from './SceneSurface';
-import HeroModelContainer from './HeroModelContainer';
 import TypingSecure from './TypingSecure';
 import TeleportBot from './TeleportBot';
 import HeroDustMotes from './HeroDustMotes';
@@ -121,7 +120,13 @@ export default function MotionLanding({
               </h1>
             </div>
 
-            <HeroModelContainer />
+            <figure className="hero-object">
+              <div className="hero-robot-glow" aria-hidden="true" />
+              <div className="hero-robot-shadow" aria-hidden="true" />
+              <div className="specimen-visual" id="hero-model-anchor">
+                <SceneSurface model="eva" autoMobile={true} />
+              </div>
+            </figure>
 
             <div className="hero-cta-block">
               <p className="hero-cta-subtext">
@@ -239,55 +244,6 @@ export default function MotionLanding({
                 </a>
               </article>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 1.5. DESKTOP-ONLY NOVA MODEL SHOWCASE */}
-      <section className="desktop-nova-showcase section-rule-block" id="specimen" data-station="Specimen">
-        <div className="wrap">
-          <div className="section-head-rule section-head-with-action">
-            <div className="section-head-text">
-              <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
-                Studio Specimen
-              </span>
-              <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-                Intelligent systems. <span className="highlight-word">Precision visualised.</span>
-              </h2>
-              <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-                High-performance computing interfaces, dynamic data engines, and fluid 3D visual architectures engineered to scale.
-              </p>
-            </div>
-            <div className="section-head-link-wrap" data-reveal="fade" data-reveal-delay="200">
-              <a className="hd-text-link" href="#brief">
-                <span>Request a build</span>
-                <span className="link-arrow">
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </span>
-              </a>
-            </div>
-          </div>
-
-          <div className="nova-stage-card hd-card" data-reveal="up" data-reveal-delay="280">
-            <div className="nova-card-inner">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                poster="/models/novaai/hero-poster.jpg"
-                src="/models/novaai/hero.mp4"
-                className="nova-full-video"
-              />
-              <div className="nova-overlay-scrim" />
-              <div className="nova-meta-bar">
-                <span className="nova-status-indicator">
-                  <span className="nova-status-pulse" />
-                  <span>Nova AI Model · Autonomous Core</span>
-                </span>
-                <span className="nova-spec-tag">60 FPS · Hardware Accelerated</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>
