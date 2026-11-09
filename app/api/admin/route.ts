@@ -217,7 +217,7 @@ export async function POST(req: Request) {
       const solution = bounded(p.solution, 2500);
       const url = httpsUrl(p.url ?? '');
       const image = imageOrUrl(p.image ?? '');
-      const status = p.status === 'published' ? 'published' : 'draft';
+      const status = p.status === 'draft' ? 'draft' : 'published';
       const art = ['orbit', 'relay', 'grid'].includes(String(p.art)) ? String(p.art) : 'grid';
       const position = Number(p.position !== undefined ? p.position : 30);
       if (!Number.isInteger(position) || position < 0 || position > 9999) {
@@ -240,24 +240,25 @@ export async function POST(req: Request) {
         position,
         kind,
       };
-      if (isNew && !existing) {
-        const result = await db
-          .insert(projects)
-          .values(row)
-          .onConflictDoNothing()
-          .returning({ slug: projects.slug });
-        if (!result.length) {
-          return Response.json(
-            { error: 'That address is reserved. Choose another.' },
-            { status: 409 }
-          );
-        }
-      } else {
-        await db.insert(projects).values(row).onConflictDoUpdate({ target: projects.slug, set: row });
-      }
+      await db
+        .insert(projects)
+        .values(row)
+        .onConflictDoUpdate({ target: projects.slug, set: row });
+
       await saveProjectToMongo(row).catch((err) =>
         console.warn('[MongoDB] Project sync note:', err)
       );
+
+      try {
+        const nextCache = await import('next/cache').catch(() => null);
+        if (nextCache?.revalidatePath) {
+          nextCache.revalidatePath('/portfolio');
+          nextCache.revalidatePath('/work');
+          nextCache.revalidatePath('/');
+          if (slug) nextCache.revalidatePath(`/portfolio/${slug}`);
+        }
+      } catch {}
+
       await recordAuditLog({
         action: isNew ? 'project_created' : 'project_updated',
         target: slug,
@@ -280,6 +281,15 @@ export async function POST(req: Request) {
       await saveProjectToMongo({ ...row, status: 'deleted' }).catch((err) =>
         console.warn('[MongoDB] Project delete sync note:', err)
       );
+      try {
+        const nextCache = await import('next/cache').catch(() => null);
+        if (nextCache?.revalidatePath) {
+          nextCache.revalidatePath('/portfolio');
+          nextCache.revalidatePath('/work');
+          nextCache.revalidatePath('/');
+          if (slug) nextCache.revalidatePath(`/portfolio/${slug}`);
+        }
+      } catch {}
       await recordAuditLog({
         action: 'project_deleted',
         target: slug,

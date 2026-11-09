@@ -25,7 +25,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   powerPreference:'high-performance',
   preserveDrawingBuffer:false
  });
- const initialDpr = isMobile ? 1.5 : Math.min(dpr, 2);
+ const initialDpr = isMobile ? Math.min(dpr, 1.5) : Math.min(dpr, 2);
  renderer.setPixelRatio(initialDpr);
  renderer.setClearColor(navy,0);
  renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -34,11 +34,11 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
  const scene=new THREE.Scene(),object=new THREE.Group();
 
- // 7.2 Camera (FOV 32 desktop & mobile, position (0, 0.15, 5.6) / mobile responsive (0, 0.04, 4.3))
+ // 7.2 Camera (FOV 32 desktop & mobile, position (0, 0.15, 5.6) / mobile responsive fitted distance)
  // Intro dolly: FOV 40 to target over 1800ms ease-out
  const targetFov = 32;
  const camera=new THREE.PerspectiveCamera(prefersReducedMotion ? targetFov : 40, 1, 0.1, 50);
- camera.position.set(0, isMobile ? 0.04 : 0.15, isMobile ? 4.3 : 5.6);
+ camera.position.set(0, isMobile ? 0.0 : 0.15, isMobile ? 4.5 : 5.6);
  camera.lookAt(0, 0, 0);
 
  // 7.3 Environment (RoomEnvironment through PMREMGenerator, intensity 1.0)
@@ -142,9 +142,10 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  let contactShadowMesh:THREE.Mesh|undefined;
  let eyeLeft:THREE.Object3D|undefined;
  let eyeRight:THREE.Object3D|undefined;
- let baseLeftEyeX=-0.27,baseRightEyeX=0.27,baseEyeY=3.08,baseEyeZ=0.355;
+ let baseLeftEyeX=-0.27,baseRightEyeX=0.27,baseEyeY=3.08;
  let blinkTimer=0,nextBlink=4.5,blinkProgress=0;
  let isHovered=false,happyAmount=0,happyTouchTimer:NodeJS.Timeout|undefined;
+ let robotRadius=1.0;
 
  // Contact shadow texture (22% black radial fade)
  const shadowCanvas=typeof document!=='undefined'?document.createElement('canvas'):null;
@@ -434,6 +435,27 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const start=()=>{if(!frame&&!disposed&&loaded&&visible&&!suspended&&!document.hidden)frame=requestAnimationFrame(frameLoop);};
  const visibility=()=>{if(document.hidden)stop();else start();};
 
+ function fitCamera(w:number,h:number){
+  if(!w||!h)return;
+  camera.aspect=w/h;
+  const isMob=w<=640||(typeof window!=='undefined'&&window.innerWidth<=850);
+  if(isMob){
+   // Mathematical robot fit from bounding sphere:
+   // Decreased by another 20% on mobile as requested (occupying ~35% canvas width, centered)
+   const vFovRad=(camera.fov*Math.PI)/180;
+   const hFovRad=2*Math.atan(Math.tan(vFovRad/2)*camera.aspect);
+   const minFovRad=Math.min(vFovRad,hFovRad);
+   const targetFraction=0.62*0.70*0.80; // 30% then 20% smaller on mobile
+   const d=robotRadius/Math.sin(minFovRad/2)/targetFraction;
+   camera.position.set(0,0.0,Math.max(4.2,d));
+   camera.lookAt(0,0,0);
+  }else{
+   camera.position.set(0,0.15,5.6);
+   camera.lookAt(0,0,0);
+  }
+  camera.updateProjectionMatrix();
+ }
+
  const resize=new ResizeObserver(()=>{
   const {width,height}=canvas.getBoundingClientRect();
   if(width&&height){
@@ -441,10 +463,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    if(composer&&bloomPass){
     composer.setSize(Math.round(width),Math.round(height));
    }
-   camera.aspect=width/height;
-   const isMob = width <= 640 || (typeof window !== 'undefined' && window.innerWidth <= 850);
-   camera.position.set(0, isMob ? 0.04 : 0.15, isMob ? 4.3 : 5.6);
-   camera.updateProjectionMatrix();
+   fitCamera(width,height);
   }
  });
 
@@ -567,7 +586,6 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     eyeLeft.renderOrder=99;
     baseLeftEyeX=eyeLeft.position.x;
     baseEyeY=eyeLeft.position.y;
-    baseEyeZ=eyeLeft.position.z;
    }
    if(eyeRight){
     eyeRight.renderOrder=99;
@@ -623,11 +641,14 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    object.add(robot);
    if(deadline.aborted)throw Error('Model timed out');
    const bounds=new THREE.Box3().setFromObject(robot),size=bounds.getSize(new THREE.Vector3()),centre=bounds.getCenter(new THREE.Vector3());
-   // Robot scaled to hero height (scale 2.55 desktop / 3.15 mobile for prominent responsive sizing)
-   const mobileScale = isMobile ? 3.15 : 2.55;
-   const scale=(model==='fixer'?2.5:mobileScale)/Math.max(size.x,size.y,size.z);
+   // Standard desktop scale 2.55; mobile camera distance adapts via bounding sphere fit
+   const scale=(model==='fixer'?2.5:2.55)/Math.max(size.x,size.y,size.z);
    robot.scale.multiplyScalar(scale);
    robot.position.sub(centre.multiplyScalar(scale));
+
+   const scaledBounds=new THREE.Box3().setFromObject(robot);
+   const scaledSphere=scaledBounds.getBoundingSphere(new THREE.Sphere());
+   robotRadius=Math.max(0.75,scaledSphere.radius);
   }
 
   loaded=true;
@@ -637,8 +658,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    if(composer&&bloomPass){
     composer.setSize(Math.round(width),Math.round(height));
    }
-   camera.aspect=width/height;
-   camera.updateProjectionMatrix();
+   fitCamera(width,height);
   }
   try{
    if(composer&&useBloom){
@@ -647,7 +667,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     renderer.render(scene,camera);
    }
    ready();
-  }catch(e){}
+  }catch{}
   window.dispatchEvent(new Event('hd:measure'));start();
  }catch(error){dispose();if(!signal.aborted)throw error;}
 }
