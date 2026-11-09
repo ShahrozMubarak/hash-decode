@@ -122,7 +122,7 @@ export async function POST(req: Request) {
       if (!result.success || result.hostname !== new URL(req.url).hostname) {
         return Response.json({ error: 'Complete the verification again.' }, { status: 422 });
       }
-    } else {
+    } else if (d.challenge || d.answer) {
       const cid = String(d.challenge || '');
       const ans = String(d.answer || '').trim();
       if (cid.length !== 36 && cid !== 'auto-check') {

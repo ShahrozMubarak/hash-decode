@@ -170,12 +170,12 @@ html[data-motion=off] .stack-set[aria-hidden=true]{display:none}html[data-motion
  .hero-spotlight-cone{animation:none!important;transform:none!important;opacity:0.65!important}
  .hero-grid-floor{animation:none!important;background-position:0 0!important;height:35%!important}
  .original-composition .hero-grid{min-height:auto!important;padding-top:1rem!important;flex-direction:column!important;position:static!important;gap:1.5rem!important;padding-inline:var(--gutter)!important}
- .hero-heading-block{position:static!important;max-width:100%!important;align-items:center!important;text-align:center!important;margin-bottom:0!important;order:1}
+ .hero-heading-block{position:static!important;max-width:100%!important;align-items:center!important;text-align:center!important;margin-bottom:0.25rem!important;order:1!important}
  .hero-heading-block h1{font-size:clamp(30px,8vw,44px)!important;text-align:center!important}
- .hero-cta-block{position:static!important;max-width:100%!important;align-items:center!important;text-align:center!important;margin-bottom:0!important;order:2}
+ .original-composition .hero-object{width:100%!important;max-width:min(480px,94vw)!important;height:clamp(350px,72vw,440px)!important;margin:0.25rem auto 0.75rem!important;order:2!important}
+ .hero-cta-block{position:static!important;max-width:100%!important;align-items:center!important;text-align:center!important;margin-bottom:0!important;order:3!important}
  .hero-cta-subtext{font-family:var(--font-body),sans-serif!important;text-align:center!important;font-size:0.95rem!important;letter-spacing:-0.01em!important;color:#0B1F3A!important;margin:0 auto 0.75rem!important;max-width:32ch!important}
  .hero-cta-block .actions{justify-content:center!important}
- .original-composition .hero-object{max-width:380px!important;height:clamp(280px,50vw,380px)!important;margin:0.5rem auto 1rem!important;order:3}
  .hero-robot-glow{width:300px;height:300px;filter:blur(24px)}
  .hero-robot-shadow{bottom:2%;width:160px;height:16px}
  .hero-wordmark-backdrop{position:relative!important;top:auto!important;left:auto!important;transform:none!important;width:100%!important;max-width:100%!important;padding:0!important;margin:0.5rem auto 1rem!important;order:4;height:clamp(45px,22vw,85px)!important}
@@ -1839,9 +1839,9 @@ html[data-motion=off] .original-composition .story-security,html[data-motion=off
 
 .inner-hero-h1 {
   font-family: var(--font-body, 'Inter', sans-serif) !important;
-  font-size: clamp(2.5rem, 6vw, 5rem) !important;
+  font-size: clamp(1.75rem, 4.2vw, 3.5rem) !important;
   font-weight: 800 !important;
-  line-height: 1.05 !important;
+  line-height: 1.08 !important;
   letter-spacing: -0.03em !important;
   color: var(--ink, #0B1F3A) !important;
   margin: 0 0 1rem 0 !important;

@@ -33,11 +33,11 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
  const scene=new THREE.Scene(),object=new THREE.Group();
 
- // 7.2 Camera (FOV 32 desktop / 38 mobile, position (0, 0.15, 5.6) / (0, 0.15, 6.2))
+ // 7.2 Camera (FOV 32 desktop & mobile, position (0, 0.15, 5.6) / mobile responsive (0, 0.08, 4.9))
  // Intro dolly: FOV 40 to target over 1800ms ease-out
- const targetFov = isMobile ? 38 : 32;
+ const targetFov = 32;
  const camera=new THREE.PerspectiveCamera(prefersReducedMotion ? targetFov : 40, 1, 0.1, 50);
- camera.position.set(0, 0.15, isMobile ? 6.2 : 5.6);
+ camera.position.set(0, isMobile ? 0.08 : 0.15, isMobile ? 4.9 : 5.6);
  camera.lookAt(0, 0, 0);
 
  // 7.3 Environment (RoomEnvironment through PMREMGenerator, intensity 1.0)
@@ -80,49 +80,52 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const coreFallback=new THREE.MeshStandardMaterial({color:coral,emissive:coral,emissiveIntensity:1.5,roughness:.26});
  const metal=new THREE.MeshStandardMaterial({color:snow,metalness:.83,roughness:.27});
 
- // 7.5 Materials for Robot
+ // 7.5 Materials for Robot (Bright titanium ceramic chrome shell, glowing cyan eyes, clear visor)
  const chromeShellMat=new THREE.MeshPhysicalMaterial({
-  color:new THREE.Color('#e6ebef'),
-  metalness:0.9,
-  roughness:0.12,
+  color:new THREE.Color('#f8fafc'), // pure bright radiant ceramic / light chrome
+  metalness:0.85,
+  roughness:0.08,
   clearcoat:1.0,
-  clearcoatRoughness:0.08,
-  envMapIntensity:1.2
+  clearcoatRoughness:0.04,
+  envMapIntensity:1.4
  });
 
  const visorGlassMat=(isMobile||lite)?new THREE.MeshStandardMaterial({
-  color:new THREE.Color('#0b1220'),
-  metalness:0.95,
-  roughness:0.1
- }):new THREE.MeshPhysicalMaterial({
-  color:new THREE.Color('#0b1220'),
-  metalness:0.1,
+  color:new THREE.Color('#0b162c'),
+  metalness:0.2,
   roughness:0.05,
-  transmission:0.9,
-  ior:1.45,
-  thickness:1.2,
   transparent:true,
-  depthWrite:true
+  opacity:0.35,
+  depthWrite:false
+ }):new THREE.MeshPhysicalMaterial({
+  color:new THREE.Color('#0b162c'),
+  metalness:0.1,
+  roughness:0.04,
+  transmission:0.86,
+  ior:1.42,
+  transparent:true,
+  opacity:0.42,
+  depthWrite:false
  });
 
  const visorScreenMat=new THREE.MeshStandardMaterial({
-  color:new THREE.Color('#040711'),
-  roughness:0.08,
-  metalness:0.2
+  color:new THREE.Color('#030712'),
+  roughness:0.1,
+  metalness:0.15
  });
 
  const grokEyeMat=new THREE.MeshStandardMaterial({
-  color:new THREE.Color('#3de0d0'),
-  emissive:new THREE.Color('#3de0d0'),
-  emissiveIntensity:1.5,
-  roughness:0.1,
-  metalness:0.1
+  color:new THREE.Color('#00f0ff'),
+  emissive:new THREE.Color('#00f0ff'),
+  emissiveIntensity:3.8,
+  roughness:0.06,
+  metalness:0.05
  });
 
  const coreMat=new THREE.MeshStandardMaterial({
   color:new THREE.Color('#FF5A3C'),
   emissive:new THREE.Color('#FF5A3C'),
-  emissiveIntensity:1.5,
+  emissiveIntensity:1.6,
   roughness:0.15,
   metalness:0.1
  });
@@ -140,6 +143,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  let eyeRight:THREE.Object3D|undefined;
  let baseLeftEyeX=-0.27,baseRightEyeX=0.27,baseEyeY=3.08,baseEyeZ=0.355;
  let blinkTimer=0,nextBlink=4.5,blinkProgress=0;
+ let isHovered=false,happyAmount=0,happyTouchTimer:NodeJS.Timeout|undefined;
 
  // Contact shadow texture (22% black radial fade)
  const shadowCanvas=typeof document!=='undefined'?document.createElement('canvas'):null;
@@ -281,16 +285,23 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     camera.updateProjectionMatrix();
    }
 
-   // Core pulse: 2.4s period, emissive 1.2 to 2.2, point light 1.2 to 3.0
+   // Happy emotion interpolation (0 -> 1 on hover)
+   happyAmount+=((isHovered?1:0)-happyAmount)*0.12;
+   const happyHeartbeat=Math.sin(elapsed*5.2)*0.8*happyAmount;
+
+   // Core pulse: 2.4s period, emissive 1.2 to 2.2, point light 1.2 to 3.0 + happy heartbeat
    const corePulse=(Math.sin(elapsed*(Math.PI*2/2.4))+1)*0.5; // 0.0 to 1.0
    const scrollClamped=Math.min(1,Math.max(0,progress));
    const coreBrightnessBoost=scrollClamped*0.6; // Core brightens on scroll
 
-   coreMat.emissiveIntensity=1.2+corePulse*1.0+coreBrightnessBoost;
-   if(corePointLight)corePointLight.intensity=1.2+corePulse*1.8+coreBrightnessBoost*1.2;
-   if(coralGlowSprite)coralGlowSprite.material.opacity=0.55+corePulse*0.35;
+   coreMat.emissiveIntensity=1.4+corePulse*1.0+coreBrightnessBoost+happyHeartbeat;
+   if(corePointLight)corePointLight.intensity=1.5+corePulse*1.8+coreBrightnessBoost*1.2+happyHeartbeat*1.4;
+   if(coralGlowSprite)coralGlowSprite.material.opacity=0.55+corePulse*0.35+happyAmount*0.2;
 
-   // Eye Blink (every 4-6s, 120ms duration)
+   // Glowing cyan eyes brighten excitedly when happy
+   grokEyeMat.emissiveIntensity=3.6+happyAmount*2.0;
+
+   // Eye Blink and Happy Arcs (^ ^)
    if(eyeLeft&&eyeRight){
     blinkTimer+=delta;
     if(blinkTimer>nextBlink){
@@ -300,14 +311,25 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
      }
     }
     const blinkScaleY=blinkProgress>0?Math.max(0.1,1.0-Math.sin(blinkProgress*Math.PI)*0.9):1.0;
-    eyeLeft.scale.y=blinkScaleY;
-    eyeRight.scale.y=blinkScaleY;
 
-    // Subtle eye shift toward cursor
-    eyeLeft.position.x=baseLeftEyeX+(currentMouseYaw/MAX_MOUSE_YAW)*0.035;
-    eyeRight.position.x=baseRightEyeX+(currentMouseYaw/MAX_MOUSE_YAW)*0.035;
-    eyeLeft.position.y=baseEyeY+(currentMousePitch/MAX_MOUSE_PITCH)*0.025;
-    eyeRight.position.y=baseEyeY+(currentMousePitch/MAX_MOUSE_PITCH)*0.025;
+    // Happy eye shaping: eyes curve into cute upward inverted arcs (^ ^)
+    const happyArcSquish=1.0-happyAmount*0.50;
+    eyeLeft.scale.y=blinkScaleY*happyArcSquish;
+    eyeRight.scale.y=blinkScaleY*happyArcSquish;
+    eyeLeft.scale.x=1.0+happyAmount*0.20;
+    eyeRight.scale.x=1.0+happyAmount*0.20;
+
+    // Cute outward tilt for happy expression (^ ^)
+    eyeLeft.rotation.z=happyAmount*0.40;
+    eyeRight.rotation.z=-happyAmount*0.40;
+
+    // Subtle eye shift toward cursor + slight happy upward perk
+    const cursorEyeX=(currentMouseYaw/MAX_MOUSE_YAW)*0.035;
+    const cursorEyeY=(currentMousePitch/MAX_MOUSE_PITCH)*0.025;
+    eyeLeft.position.x=baseLeftEyeX+cursorEyeX;
+    eyeRight.position.x=baseRightEyeX+cursorEyeX;
+    eyeLeft.position.y=baseEyeY+cursorEyeY+happyAmount*0.040;
+    eyeRight.position.y=baseEyeY+cursorEyeY+happyAmount*0.040;
    }
 
    // Mobile touch look-around (when not on pointer)
@@ -362,11 +384,16 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
      const rawYaw=idleYaw+currentMouseYaw+scrollYaw+userDragRotY;
      const clampedYaw=Math.max(-0.48,Math.min(0.48,rawYaw));
 
+     // Happy animation: gentle joyful bob, curious upward pitch tilt, cute head roll
+     const happyBob=Math.sin(elapsed*4.2)*0.035*happyAmount;
+     const happyPitch=-0.07*happyAmount; // looks up curiously toward the user
+     const happyRoll=Math.sin(elapsed*2.6)*0.03*happyAmount; // playful head tilt
+
      object.scale.setScalar(introScale*scrollScale);
-     object.position.set(0,dropY+floatY+scrollY,0);
-     object.rotation.x=currentMousePitch+userDragRotX;
+     object.position.set(0,dropY+floatY+scrollY+happyBob,0);
+     object.rotation.x=currentMousePitch+userDragRotX+happyPitch;
      object.rotation.y=clampedYaw;
-     object.rotation.z=0;
+     object.rotation.z=happyRoll;
 
      // Contact shadow scales inversely with float height and shrinks on scroll
      if(contactShadowMesh){
@@ -428,8 +455,17 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   mouseTargetPitch=Math.max(-MAX_MOUSE_PITCH,Math.min(MAX_MOUSE_PITCH,-ny*MAX_MOUSE_PITCH));
  };
 
+ const onPointerEnter=()=>{isHovered=true;};
+ const onPointerLeave=()=>{isHovered=false;};
+ const onTouchHappy=()=>{
+  isHovered=true;
+  if(happyTouchTimer)clearTimeout(happyTouchTimer);
+  happyTouchTimer=setTimeout(()=>{isHovered=false;},3000);
+ };
+
  const onPointerDown=(e:PointerEvent)=>{
   isDragging=true;dragStartX=e.clientX;dragStartY=e.clientY;
+  onTouchHappy();
  };
  const onPointerMove=(e:PointerEvent)=>{
   if(!isDragging)return;
@@ -447,17 +483,26 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  function lost(e:Event){e.preventDefault();suspended=true;stop();failed();}
  function restore(){suspended=false;start();}
 
+ const heroContainer = typeof canvas !== 'undefined' ? (canvas.closest('.hero-object') || canvas) : null;
+
  function dispose(){
   if(disposed)return;disposed=true;stop();resize.disconnect();view.disconnect();
   document.removeEventListener('visibilitychange',visibility);
   window.removeEventListener('hd:scroll',onScroll);
   window.removeEventListener('pointermove',onPointerMoveWindow);
+  if(heroContainer){
+   heroContainer.removeEventListener('pointerenter',onPointerEnter);
+   heroContainer.removeEventListener('pointerleave',onPointerLeave);
+  }
+  canvas.removeEventListener('pointerenter',onPointerEnter);
+  canvas.removeEventListener('pointerleave',onPointerLeave);
   canvas.removeEventListener('pointerdown',onPointerDown);
   canvas.removeEventListener('pointermove',onPointerMove);
   canvas.removeEventListener('pointerup',onPointerUp);
   canvas.removeEventListener('pointercancel',onPointerUp);
   canvas.removeEventListener('webglcontextlost',lost);
   canvas.removeEventListener('webglcontextrestored',restore);
+  if(happyTouchTimer)clearTimeout(happyTouchTimer);
   cleanGeometry();
   instances?.dispose();
   mixer?.stopAllAction();mixer=undefined;
@@ -479,6 +524,12 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   document.addEventListener('visibilitychange',visibility);
   window.addEventListener('hd:scroll',onScroll);
   window.addEventListener('pointermove',onPointerMoveWindow,{passive:true});
+  if(heroContainer){
+   heroContainer.addEventListener('pointerenter',onPointerEnter);
+   heroContainer.addEventListener('pointerleave',onPointerLeave);
+  }
+  canvas.addEventListener('pointerenter',onPointerEnter);
+  canvas.addEventListener('pointerleave',onPointerLeave);
   canvas.addEventListener('pointerdown',onPointerDown);
   canvas.addEventListener('pointermove',onPointerMove);
   canvas.addEventListener('pointerup',onPointerUp);
@@ -509,8 +560,16 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
    eyeLeft=robot.getObjectByName('Eye_Left')||undefined;
    eyeRight=robot.getObjectByName('Eye_Right')||undefined;
-   if(eyeLeft){baseLeftEyeX=eyeLeft.position.x;baseEyeY=eyeLeft.position.y;baseEyeZ=eyeLeft.position.z;}
-   if(eyeRight){baseRightEyeX=eyeRight.position.x;}
+   if(eyeLeft){
+    eyeLeft.renderOrder=99;
+    baseLeftEyeX=eyeLeft.position.x;
+    baseEyeY=eyeLeft.position.y;
+    baseEyeZ=eyeLeft.position.z;
+   }
+   if(eyeRight){
+    eyeRight.renderOrder=99;
+    baseRightEyeX=eyeRight.position.x;
+   }
 
    // Add pulsing Coral Chest Core reactor (approx 0.22 wide x 0.06 high rounded panel)
    const coreGroup=new THREE.Group();
@@ -537,6 +596,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     if(child instanceof THREE.Mesh){
      if(child.name==='Eye_Left'||child.name==='Eye_Right'){
       child.material=grokEyeMat;
+      child.renderOrder=99;
       return;
      }
      const mats=Array.isArray(child.material)?child.material:[child.material];
@@ -544,6 +604,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
       if(!m)return;
       if(m.name==='GrokEye'){
        child.material=grokEyeMat;
+       child.renderOrder=99;
       }else if(m.name==='Putih'){
        child.material=chromeShellMat;
       }else if(m.name==='Material.006'){
@@ -559,8 +620,9 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    object.add(robot);
    if(deadline.aborted)throw Error('Model timed out');
    const bounds=new THREE.Box3().setFromObject(robot),size=bounds.getSize(new THREE.Vector3()),centre=bounds.getCenter(new THREE.Vector3());
-   // Robot scaled to 55-60% of hero height (scale 2.55)
-   const scale=(model==='fixer'?2.5:2.55)/Math.max(size.x,size.y,size.z);
+   // Robot scaled to hero height (scale 2.55 desktop / 2.95 mobile for prominent responsive sizing)
+   const mobileScale = isMobile ? 2.95 : 2.55;
+   const scale=(model==='fixer'?2.5:mobileScale)/Math.max(size.x,size.y,size.z);
    robot.scale.multiplyScalar(scale);
    robot.position.sub(centre.multiplyScalar(scale));
   }

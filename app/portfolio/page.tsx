@@ -19,8 +19,7 @@ export default async function Portfolio() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Our work</p>
         <h1 className="inner-hero-h1">
-          Software that works.<br />
-          <span style={{ color: '#1E40AF' }}>Built right.</span>
+          Our Selected <span style={{ color: '#1E40AF' }}>Work.</span>
         </h1>
         <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
           Explore real systems, web platforms, and security audits built by Hash Decode.

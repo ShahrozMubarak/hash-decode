@@ -48,8 +48,7 @@ export default async function About() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">About Hash Decode</p>
         <h1 className="inner-hero-h1">
-          Inside Hash Decode.<br />
-          <span style={{ color: '#1E40AF' }}>Crafted with intent.</span>
+          About <span style={{ color: '#1E40AF' }}>Hash Decode.</span>
         </h1>
         <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
           {copy.about ||

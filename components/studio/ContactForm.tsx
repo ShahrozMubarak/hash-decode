@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useRef, useState, useCallback } from 'react';
-import HumanCheck from './HumanCheck';
 import { ArrowUpRight, AlertCircle } from 'lucide-react';
 import { showToast } from './ToastManager';
 
@@ -354,7 +353,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
           placeholder="Who is it for, and what should it help them do?"
           minLength={12}
           maxLength={3000}
-          rows={5}
+          rows={4}
           required
           className={`form-textarea ${fieldErrors.brief ? 'is-invalid' : ''}`}
           aria-invalid={Boolean(fieldErrors.brief)}
@@ -374,8 +373,6 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         Website
         <input name="website" tabIndex={-1} autoComplete="off" />
       </label>
-
-      <HumanCheck key={revision} revision={revision} />
 
       <p className="form-helper-text">
         Your details are used strictly to reply to this project inquiry.
