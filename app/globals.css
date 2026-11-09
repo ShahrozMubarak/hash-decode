@@ -1886,3 +1886,41 @@ textarea.is-invalid {
   color: rgba(255, 255, 255, 0.6);
   margin: 0;
 }
+
+/* 5. CHAT WIDGET ("Studio chat") */
+.chat-panel {
+  transform-origin: bottom right !important;
+  animation: chatPanelOpen 240ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(11, 31, 58, 0.14) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 16px 48px rgba(11, 31, 58, 0.2) !important;
+  font-family: var(--font-body), Inter, system-ui, sans-serif !important;
+}
+
+@keyframes chatPanelOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .chat-panel {
+    bottom: 80px !important;
+    right: 16px !important;
+    left: 16px !important;
+    width: auto !important;
+    max-height: 70svh !important;
+  }
+  .chat-wrap .chat-trigger {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+}
