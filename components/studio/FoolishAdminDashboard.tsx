@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import type { Project, Founder } from '@/lib/studio-data';
 import type { Entry } from '@/lib/cms';
 import {
@@ -216,6 +216,7 @@ export default function FoolishAdminDashboard({
   const [copy, setCopy] = useState(initialCopy);
   const [links, setLinks] = useState(initialLinks);
   const [chatThreads] = useState<ChatThread[]>(initialChatThreads);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(initialAuditLogs);
   const [mongoStatus, setMongoStatus] = useState<MongoStatus>(initialMongoStatus);
 
   // Global Search & Filters
@@ -245,6 +246,8 @@ export default function FoolishAdminDashboard({
   const [pwdNext, setPwdNext] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastRefreshedAt, setLastRefreshedAt] = useState<number>(Date.now());
   const [showTableAlt, setShowTableAlt] = useState(false);
 
   // Unsaved changes detection for settings
@@ -261,6 +264,46 @@ export default function FoolishAdminDashboard({
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 3500);
   };
+
+  const refreshData = useCallback(async (silent = false) => {
+    if (!silent) setIsRefreshing(true);
+    try {
+      const res = await fetch('/api/admin', {
+        headers: { 'Cache-Control': 'no-cache' },
+      });
+      if (res.status === 401 || res.status === 403) {
+        window.dispatchEvent(new Event('hd:session-expired'));
+        return;
+      }
+      if (!res.ok) throw new Error('Could not refresh data.');
+      const data = await res.json();
+      if (data.ok) {
+        if (Array.isArray(data.messages)) setMessages(data.messages);
+        if (Array.isArray(data.projects)) setProjects(data.projects);
+        if (Array.isArray(data.founders)) setFounders(data.founders);
+        if (Array.isArray(data.subscribers)) setSubscribers(data.subscribers);
+        if (Array.isArray(data.entries)) setEntries(data.entries);
+        if (Array.isArray(data.auditLogs)) setAuditLogs(data.auditLogs);
+        if (data.copy) setCopy(data.copy);
+        if (data.links) setLinks(data.links);
+        if (data.mongo) setMongoStatus(data.mongo);
+        setLastRefreshedAt(Date.now());
+        if (!silent) showToast('Dashboard synced with latest data.');
+      }
+    } catch {
+      if (!silent) showToast('Sync failed. Please check connection.');
+    } finally {
+      if (!silent) setIsRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Poll every 30 seconds for live updates (e.g. newly submitted inquiries)
+    const interval = setInterval(() => {
+      refreshData(true);
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [refreshData]);
 
   const submitAPI = async (payload: Record<string, unknown>): Promise<any> => {
     setIsSaving(true);
@@ -502,19 +545,21 @@ export default function FoolishAdminDashboard({
     e.preventDefault();
     if (!editingFounder) return;
     try {
-      await submitAPI({ action: 'founder', founder: editingFounder });
+      const res = await submitAPI({ action: 'founder', founder: editingFounder });
+      const saved = (res && res.founder ? res.founder : editingFounder) as Founder;
       setFounders((prev) => {
-        const idx = prev.findIndex((f) => f.id === editingFounder.id);
+        const idx = prev.findIndex((f) => f.id === saved.id || f.id === editingFounder.id);
         if (idx >= 0) {
           const next = [...prev];
-          next[idx] = editingFounder;
+          next[idx] = saved;
           return next;
         }
-        return [...prev, editingFounder];
+        return [...prev, saved];
       });
       showToast('Founder profile saved.');
       setFounderModalOpen(false);
       setEditingFounder(null);
+      refreshData(true);
     } catch (err: any) {
       showToast(err.message);
     }
@@ -526,6 +571,7 @@ export default function FoolishAdminDashboard({
       await submitAPI({ action: 'delete_founder', id });
       setFounders((prev) => prev.filter((f) => f.id !== id));
       showToast('Founder profile removed.');
+      refreshData(true);
     } catch (err: any) {
       showToast(err.message);
     }
@@ -838,6 +884,19 @@ export default function FoolishAdminDashboard({
                 <option value="Last 30 Days">Last 30 Days</option>
                 <option value="Last 14 Days">Last 14 Days</option>
               </select>
+
+              {/* Live Data Sync Button */}
+              <button
+                type="button"
+                className="fd-topbar-btn"
+                onClick={() => refreshData(false)}
+                disabled={isRefreshing}
+                title={`Last synced: ${new Date(lastRefreshedAt).toLocaleTimeString()}`}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+              >
+                <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} />
+                <span>{isRefreshing ? 'Syncing...' : 'Sync Data'}</span>
+              </button>
 
               {/* Primary action shortcut */}
               {activeTab === 'projects' && (
@@ -1539,14 +1598,26 @@ export default function FoolishAdminDashboard({
                   )}
                 </div>
 
-                <button
-                  type="button"
-                  className="fd-topbar-btn primary"
-                  onClick={handleExportInquiriesCSV}
-                >
-                  <Download size={14} />
-                  <span>Export CSV</span>
-                </button>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <button
+                    type="button"
+                    className="fd-topbar-btn"
+                    onClick={() => refreshData(false)}
+                    disabled={isRefreshing}
+                    title="Refresh client inquiries from server"
+                  >
+                    <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} />
+                    <span>{isRefreshing ? 'Refreshing...' : 'Refresh Inbox'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="fd-topbar-btn primary"
+                    onClick={handleExportInquiriesCSV}
+                  >
+                    <Download size={14} />
+                    <span>Export CSV</span>
+                  </button>
+                </div>
               </div>
 
               {/* Inquiries Table */}
@@ -2826,6 +2897,58 @@ export default function FoolishAdminDashboard({
               </div>
 
               <div className="fd-form-group">
+                <label>Portrait photo (URL or upload)</label>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    value={editingFounder.image || ''}
+                    placeholder="/team/shahroz.svg or https://..."
+                    onChange={(e) =>
+                      setEditingFounder((f) => (f ? { ...f, image: e.target.value } : null))
+                    }
+                  />
+                  <label
+                    className="fd-topbar-btn"
+                    style={{
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      margin: 0,
+                      padding: '0.4rem 0.75rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                    }}
+                  >
+                    <Upload size={14} />
+                    <span>Upload</span>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      style={{ display: 'none' }}
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        try {
+                          const formData = new FormData();
+                          formData.append('file', file);
+                          const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                          const data = await res.json();
+                          if (data.ok && data.url) {
+                            setEditingFounder((f) => (f ? { ...f, image: data.url } : null));
+                            showToast('Photo uploaded.');
+                          } else {
+                            showToast(data.error || 'Upload failed.');
+                          }
+                        } catch {
+                          showToast('Upload failed.');
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="fd-form-group">
                 <label>Bio narrative</label>
                 <textarea
                   rows={3}
@@ -2835,6 +2958,40 @@ export default function FoolishAdminDashboard({
                     setEditingFounder((f) => (f ? { ...f, bio: e.target.value } : null))
                   }
                 />
+              </div>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '0.75rem',
+                }}
+              >
+                <div className="fd-form-group">
+                  <label>Display order</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="999"
+                    value={editingFounder.position || 10}
+                    onChange={(e) =>
+                      setEditingFounder((f) =>
+                        f ? { ...f, position: Number(e.target.value) || 10 } : null
+                      )
+                    }
+                  />
+                </div>
+                <div className="fd-form-group">
+                  <label>Profile link (optional)</label>
+                  <input
+                    type="url"
+                    value={editingFounder.url || ''}
+                    placeholder="https://..."
+                    onChange={(e) =>
+                      setEditingFounder((f) => (f ? { ...f, url: e.target.value } : null))
+                    }
+                  />
+                </div>
               </div>
 
               <div

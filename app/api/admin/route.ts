@@ -27,7 +27,7 @@ import {
   getAuditLogs,
 } from '@/lib/mongodb';
 import { getPlatformDb } from '@/lib/platform-db';
-import { clearRateLimits, getClientIp } from '@/lib/abuse';
+import { clearRateLimits, getClientIp, trafficSince } from '@/lib/abuse';
 import {
   verifyPassword,
   hashPasswordPbkdf2,
@@ -84,6 +84,101 @@ export async function loadInquiryNotesMap(): Promise<Map<string, string>> {
   return map;
 }
 
+export async function GET(req: Request) {
+  if (!(await adminAccess(req)).allowed) {
+    return Response.json({ error: 'Sign in to continue.' }, { status: 401 });
+  }
+
+  const db = getDb();
+  const platformDb = getPlatformDb();
+
+  const [
+    projectsList,
+    d1Messages,
+    mongoMessages,
+    notesMap,
+    copy,
+    founders,
+    subscribers,
+    auditLogs,
+    chatThreadsRes,
+    stats,
+    mongo,
+    contentEntries,
+    links,
+  ] = await Promise.all([
+    listProjects(true).catch(() => []),
+    db
+      .select()
+      .from(inquiries)
+      .orderBy(desc(inquiries.created))
+      .limit(200)
+      .catch(() => []),
+    getMongoInquiries(200).catch(() => []),
+    loadInquiryNotesMap().catch(() => new Map<string, string>()),
+    studioCopy().catch(() => ({ intro: '', about: '' })),
+    listFounders(true).catch(() => []),
+    loadSubscribersList(500).catch(() => []),
+    getAuditLogs(80).catch(() => []),
+    platformDb
+      .prepare('SELECT id,name,email,updated FROM chat_threads ORDER BY updated DESC LIMIT 100')
+      .all<{ id: string; name: string; email: string; updated: number }>()
+      .catch(() => ({ results: [] })),
+    platformDb
+      .prepare(
+        'SELECT source,SUM(views) AS n FROM traffic_totals WHERE day>=? GROUP BY source ORDER BY n DESC'
+      )
+      .bind(trafficSince())
+      .all<{ source: string; n: number }>()
+      .catch(() => ({ results: [] })),
+    getMongoSyncStatus().catch(() => ({
+      configured: false,
+      connected: false,
+      dbName: '',
+    })),
+    entries(undefined, true).catch(() => []),
+    getLinks().catch(() => ({ whatsapp: '', booking: '' })),
+  ]);
+
+  const messagesMap = new Map();
+  for (const m of mongoMessages) {
+    messagesMap.set(m.id, { ...m, notes: notesMap.get(m.id) || m.notes || '' });
+  }
+  for (const m of d1Messages) {
+    const existing = messagesMap.get(m.id);
+    messagesMap.set(m.id, {
+      ...m,
+      status: m.status || existing?.status || 'new',
+      notes: notesMap.get(m.id) || existing?.notes || '',
+    });
+  }
+  const messages = Array.from(messagesMap.values()).sort((a, b) => b.created - a.created);
+  const views = (stats.results || []).reduce((v: number, r: { n: number }) => v + r.n, 0);
+
+  return Response.json(
+    {
+      ok: true,
+      messages,
+      projects: projectsList,
+      founders,
+      subscribers,
+      copy,
+      links,
+      entries: contentEntries,
+      auditLogs,
+      chatThreads: chatThreadsRes?.results || [],
+      mongo,
+      stats,
+      totalViews: views,
+    },
+    {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      },
+    }
+  );
+}
+
 export async function POST(req: Request) {
   if (!sameOrigin(req)) return Response.json({ error: 'Untrusted request.' }, { status: 403 });
   if (!(await adminAccess(req)).allowed) {
@@ -104,29 +199,31 @@ export async function POST(req: Request) {
       return await manageContent(d);
     }
 
-    if (d.action === 'saveProject') {
-      const slug = bounded(d.slug, 80, 1);
+    if (d.action === 'saveProject' || d.action === 'project') {
+      const p = (d.project && typeof d.project === 'object' ? d.project : d) as Record<string, unknown>;
+      const slug = bounded(p.slug, 80, 1);
       if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
         throw Error('Use lowercase words and hyphens for the project address.');
       }
-      const existing = (await listProjects(true)).find((p) => p.slug === slug);
+      const existing = (await listProjects(true)).find((x) => x.slug === slug);
+      const isNew = d.isNew !== undefined ? Boolean(d.isNew) : !existing;
       if (d.isNew && existing) {
         return Response.json({ error: 'That project address is already in use.' }, { status: 409 });
       }
-      const title = bounded(d.title, 90, 2);
-      const category = bounded(d.category, 45, 2);
-      const summary = bounded(d.summary, 240, 8);
-      const challenge = bounded(d.challenge, 2500);
-      const solution = bounded(d.solution, 2500);
-      const url = httpsUrl(d.url ?? '');
-      const image = imageOrUrl(d.image ?? '');
-      const status = d.status === 'published' ? 'published' : 'draft';
-      const art = ['orbit', 'relay', 'grid'].includes(String(d.art)) ? String(d.art) : 'grid';
-      const position = Number(d.position);
+      const title = bounded(p.title, 90, 2);
+      const category = bounded(p.category, 45, 2);
+      const summary = bounded(p.summary, 240, 8);
+      const challenge = bounded(p.challenge, 2500);
+      const solution = bounded(p.solution, 2500);
+      const url = httpsUrl(p.url ?? '');
+      const image = imageOrUrl(p.image ?? '');
+      const status = p.status === 'published' ? 'published' : 'draft';
+      const art = ['orbit', 'relay', 'grid'].includes(String(p.art)) ? String(p.art) : 'grid';
+      const position = Number(p.position !== undefined ? p.position : 30);
       if (!Number.isInteger(position) || position < 0 || position > 9999) {
         throw Error('Position must be between 0 and 9999.');
       }
-      const kind = d.kind === 'Studio concept' ? 'Studio concept' : 'Studio project';
+      const kind = p.kind === 'Studio concept' ? 'Studio concept' : 'Studio project';
       const row = {
         slug,
         title,
@@ -134,8 +231,8 @@ export async function POST(req: Request) {
         summary,
         challenge,
         solution,
-        tech: bounded(d.tech || '', 300),
-        result: bounded(d.result || '', 2000),
+        tech: bounded(p.tech || '', 300),
+        result: bounded(p.result || '', 2000),
         url,
         image,
         art,
@@ -143,7 +240,7 @@ export async function POST(req: Request) {
         position,
         kind,
       };
-      if (d.isNew) {
+      if (isNew && !existing) {
         const result = await db
           .insert(projects)
           .values(row)
@@ -162,12 +259,13 @@ export async function POST(req: Request) {
         console.warn('[MongoDB] Project sync note:', err)
       );
       await recordAuditLog({
-        action: d.isNew ? 'project_created' : 'project_updated',
+        action: isNew ? 'project_created' : 'project_updated',
         target: slug,
         detail: `${status} · ${title}`,
         ip,
       });
-    } else if (d.action === 'deleteProject') {
+      return Response.json({ ok: true, project: row }, { headers: { 'Cache-Control': 'no-store' } });
+    } else if (d.action === 'deleteProject' || d.action === 'delete_project') {
       const slug = bounded(d.slug, 80, 1);
       const row = (await listProjects(true)).find((p) => p.slug === slug);
       if (!row) return Response.json({ error: 'Project not found.' }, { status: 404 });
@@ -188,7 +286,72 @@ export async function POST(req: Request) {
         detail: row.title,
         ip,
       });
-    } else if (d.action === 'inquiryStatus') {
+      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
+    } else if (d.action === 'founder' || d.action === 'saveFounder') {
+      const f = (d.founder && typeof d.founder === 'object' ? d.founder : d) as Record<string, unknown>;
+      const rawId = bounded(String(f.id || `founder-${Date.now()}`), 80, 1)
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]/g, '-');
+      const id = rawId.replace(/^-+|-+$/g, '') || `founder-${Date.now()}`;
+      const title = bounded(f.name, 100, 2);
+      const label = bounded(f.role, 120, 2);
+      const body = bounded(f.bio, 7000, 4);
+      const image = f.image ? imageOrUrl(f.image) : '/team/shahroz.svg';
+      const url = f.url ? httpsUrl(f.url) : '';
+      const position = Number.isInteger(Number(f.position)) ? Number(f.position) : 99;
+      const row = {
+        id,
+        kind: 'team',
+        title,
+        label,
+        body,
+        image,
+        url,
+        status: 'published',
+        updated: Date.now(),
+      };
+      await db.insert(content).values(row).onConflictDoUpdate({ target: content.id, set: row });
+      await saveContentToMongo(row).catch((err) =>
+        console.warn('[MongoDB] Founder sync note:', err)
+      );
+      await recordAuditLog({
+        action: 'founder_saved',
+        target: id,
+        detail: `${title} · ${label}`,
+        ip,
+      });
+      return Response.json(
+        { ok: true, founder: { ...f, id, image, position } },
+        { headers: { 'Cache-Control': 'no-store' } }
+      );
+    } else if (d.action === 'delete_founder' || d.action === 'deleteFounder') {
+      const id = bounded(String(d.id), 80, 1);
+      const deletedRow = {
+        id,
+        kind: 'team',
+        title: '',
+        label: '',
+        body: '',
+        image: '',
+        url: '',
+        status: 'deleted',
+        updated: Date.now(),
+      };
+      await db
+        .insert(content)
+        .values(deletedRow)
+        .onConflictDoUpdate({ target: content.id, set: { status: 'deleted', updated: deletedRow.updated } });
+      await saveContentToMongo(deletedRow).catch((err) =>
+        console.warn('[MongoDB] Founder delete sync note:', err)
+      );
+      await recordAuditLog({
+        action: 'founder_deleted',
+        target: id,
+        detail: `Removed founder ${id}`,
+        ip,
+      });
+      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
+    } else if (d.action === 'inquiryStatus' || d.action === 'message_status') {
       const status = String(d.status || '');
       if (!VALID_INQUIRY_STATUSES.includes(status)) {
         throw Error('Invalid inquiry status.');
@@ -209,7 +372,8 @@ export async function POST(req: Request) {
         detail: `Status -> ${status}${notes !== undefined ? ' (notes updated)' : ''}`,
         ip,
       });
-    } else if (d.action === 'inquiryNotes') {
+      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
+    } else if (d.action === 'inquiryNotes' || d.action === 'inquiry_notes') {
       const id = bounded(d.id, 80, 1);
       const notes = bounded(String(d.notes ?? ''), 2000, 0);
       const status = VALID_INQUIRY_STATUSES.includes(String(d.status)) ? String(d.status) : 'read';
@@ -224,7 +388,8 @@ export async function POST(req: Request) {
         detail: `Saved internal notes (${notes.length} chars)`,
         ip,
       });
-    } else if (d.action === 'inquiryDelete') {
+      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
+    } else if (d.action === 'inquiryDelete' || d.action === 'delete_inquiry') {
       const id = bounded(d.id, 80, 1);
       await db.delete(inquiries).where(eq(inquiries.id, id));
       await db.delete(settings).where(eq(settings.id, `note:${id}`)).catch(() => {});
@@ -235,6 +400,7 @@ export async function POST(req: Request) {
         detail: 'Removed inquiry from inbox',
         ip,
       });
+      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
     } else if (d.action === 'bulkInquiryStatus') {
       const targetStatus = String(d.status || 'read');
       if (!VALID_INQUIRY_STATUSES.includes(targetStatus)) {
@@ -287,7 +453,7 @@ export async function POST(req: Request) {
         detail: 'Removed subscriber from dispatch list',
         ip,
       });
-    } else if (d.action === 'settings') {
+    } else if (d.action === 'settings' || d.action === 'copy') {
       const value = JSON.stringify({
         intro: bounded(d.intro, 240, 10),
         about: bounded(d.about, 1200, 10),
@@ -321,9 +487,10 @@ export async function POST(req: Request) {
         detail: 'Revoked all other active owner sessions',
         ip,
       });
-    } else if (d.action === 'changePassword') {
+    } else if (d.action === 'changePassword' || d.action === 'rotate_password') {
       const currentPassword = String(d.currentPassword || '');
-      const newPassword = bounded(d.newPassword, 256, 8);
+      const rawNew = d.newPassword !== undefined ? d.newPassword : d.nextPassword;
+      const newPassword = bounded(rawNew, 256, 8);
       if (!(await verifyPassword(currentPassword))) {
         throw Error('Check your current password and try again.');
       }
