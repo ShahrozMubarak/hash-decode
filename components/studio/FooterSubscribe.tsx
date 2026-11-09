@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef } from 'react';
 import { ArrowUpRight, Check, Send } from 'lucide-react';
+import { showToast } from './ToastManager';
 
 export default function FooterSubscribe() {
   const [email, setEmail] = useState('');
@@ -27,9 +28,20 @@ export default function FooterSubscribe() {
       }
       setStatus('success');
       setEmail('');
+      showToast({
+        type: 'success',
+        title: 'Subscribed',
+        message: "You're subscribed to the engineering dispatch.",
+      });
     } catch (err: any) {
+      const msg = err.message || 'Could not subscribe. Please try again.';
       setStatus('error');
-      setErrorMsg(err.message || 'Could not subscribe. Please try again.');
+      setErrorMsg(msg);
+      showToast({
+        type: 'error',
+        title: 'Subscription issue',
+        message: msg,
+      });
     } finally {
       lock.current = false;
     }

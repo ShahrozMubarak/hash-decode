@@ -2,6 +2,7 @@
 import {useEffect,useRef,useState} from 'react';
 import SceneSurface from './SceneSurface';
 import ContactForm from './ContactForm';
+import Modal from './Modal';
 
 const models=[
  {id:'eva',name:'Eva Autonomous Agent',note:'Autonomous studio agent featuring animated Grok-bot visor eyes, organic floating physics, and 360-degree interactive camera orbit.'}
@@ -29,8 +30,19 @@ export function Gallery(){
   </div></div></>;
 }
 export function BriefDialog(){
- const dialog=useRef<HTMLDialogElement>(null),[open,setOpen]=useState(false);
- return <><button className="text-link brief-dialog-btn" onClick={()=>{setOpen(true);dialog.current?.showModal();}}>Open brief in a dialog ↗</button><dialog ref={dialog} aria-label="Project brief" onClose={()=>setOpen(false)}><button className="outline" onClick={()=>dialog.current?.close()}>Close</button>{open&&<ContactForm/>}</dialog></>;
+ const [open,setOpen]=useState(false);
+ const triggerRef=useRef<HTMLButtonElement>(null);
+ return (
+  <>
+   <button ref={triggerRef} className="hd-text-link brief-dialog-btn" onClick={()=>setOpen(true)}>
+     <span>Open brief in a dialog</span>
+     <span className="link-arrow">↗</span>
+   </button>
+   <Modal open={open} onClose={()=>setOpen(false)} title="Project brief" triggerRef={triggerRef}>
+     <ContactForm/>
+   </Modal>
+  </>
+ );
 }
 export function IntroDecode(){
  const [label,setLabel]=useState('');

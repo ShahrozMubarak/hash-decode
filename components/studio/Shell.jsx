@@ -26,7 +26,22 @@ export function Brand(){
 export function Header(){
  const [open,setOpen]=useState(false),[paused,setPaused]=useState(false),toggle=useRef(null),menu=useRef(null);
  const path=usePathname();
- useEffect(()=>{if(!open)return;const previous=document.body.style.overflow;document.body.style.overflow='hidden';return()=>{document.body.style.overflow=previous;};},[open]);
+
+ useEffect(()=>{
+   if(!open)return;
+   const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+   const previousOverflow = document.body.style.overflow;
+   const previousPadding = document.body.style.paddingRight;
+   document.body.style.overflow = 'hidden';
+   if (scrollbarWidth > 0) {
+     document.body.style.paddingRight = `${scrollbarWidth}px`;
+   }
+   return () => {
+     document.body.style.overflow = previousOverflow;
+     document.body.style.paddingRight = previousPadding;
+   };
+ },[open]);
+
  function openMenu(){menu.current?.showModal();setOpen(true);}
  function closeMenu(){menu.current?.close();setOpen(false);toggle.current?.focus();}
 
@@ -66,33 +81,63 @@ export function Header(){
             <span>Get in touch</span>
             <ArrowUpRight size={14}/>
           </a>
-          <button className="icon-btn nav-toggle ronin-icon-btn" ref={toggle} aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} aria-controls="studio-menu" onClick={openMenu}>
-            {open?<X size={20}/>:<Menu size={20}/>}
+          <button
+            className={`icon-btn nav-toggle ronin-icon-btn ${open ? 'is-active' : ''}`}
+            ref={toggle}
+            aria-label={open ? 'Close navigation' : 'Open navigation'}
+            aria-expanded={open}
+            aria-controls="studio-menu"
+            onClick={open ? closeMenu : openMenu}
+          >
+            <span className="nav-toggle-burger" aria-hidden="true">
+              <span className="burger-bar bar-1" />
+              <span className="burger-bar bar-2" />
+              <span className="burger-bar bar-3" />
+            </span>
           </button>
         </div>
       </nav>
     </div>
-    <dialog ref={menu} id="studio-menu" className="studio-menu" aria-label="Explore Hash Decode" onClose={()=>{setOpen(false);toggle.current?.focus();}} onClick={e=>{if(e.target===menu.current)closeMenu();}}>
+    <dialog
+      ref={menu}
+      id="studio-menu"
+      className={`studio-menu ${open ? 'is-open' : ''}`}
+      aria-label="Explore Hash Decode"
+      onClose={()=>{setOpen(false);toggle.current?.focus();}}
+      onClick={e=>{if(e.target===menu.current)closeMenu();}}
+    >
       <div className="menu-panel">
         <div className="menu-top">
-          <span className="kicker">HASH DECODE / INDEX</span>
-          <button className="icon-btn" onClick={closeMenu} aria-label="Close menu"><X size={22}/></button>
+          <span className="menu-brand-kicker">HASH DECODE</span>
+          <button className="hd-icon-btn menu-close-btn" onClick={closeMenu} aria-label="Close menu">
+            <X size={22}/>
+          </button>
         </div>
-        <nav aria-label="Studio navigation">
+        <nav aria-label="Studio navigation" className="mobile-nav-list">
           {links.map(({name,url,icon:Icon},i)=>(
-            <a href={url} key={url} aria-current={path===url?'page':undefined} onClick={closeMenu}>
-              <small>0{i+1}</small>
-              <Icon size={16} style={{marginRight:8}}/>
-              <strong>{name}</strong>
-              <ArrowUpRight size={24}/>
+            <a
+              href={url}
+              key={url}
+              aria-current={path===url?'page':undefined}
+              className="mobile-nav-link"
+              style={{ animationDelay: `${(i + 1) * 70}ms` }}
+              onClick={closeMenu}
+            >
+              <span className="mobile-nav-link-num">0{i+1}</span>
+              <span className="mobile-nav-link-title">{name}</span>
+              <ArrowUpRight size={22} className="mobile-nav-link-arrow" aria-hidden="true" />
             </a>
           ))}
         </nav>
         <div className="menu-bottom">
-          <p>Software. Security. Digital craft.</p>
-          <a className="cta" href="/contact">Start a project <ArrowUpRight size={17}/></a>
+          <p className="menu-subtext">Software engineering &amp; digital resilience.</p>
+          <a className="hd-btn-primary" href="/contact" onClick={closeMenu}>
+            <span className="btn-label">Start a project</span>
+            <span className="btn-arrow-circle" aria-hidden="true">
+              <ArrowUpRight size={15}/>
+            </span>
+          </a>
         </div>
-        <span className="menu-ghost" aria-hidden="true">DECODE</span>
       </div>
     </dialog>
   </header>
