@@ -7,6 +7,7 @@ import ToastManager from '@/components/studio/ToastManager';
 import type {Metadata} from 'next';
 import './globals.css';
 import './motion-ui.css';
+import './motion.css';
 import {Header,Footer} from '@/components/studio/Shell';
 import {origin} from '@/lib/meta';
 

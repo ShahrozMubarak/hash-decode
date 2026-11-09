@@ -1,2 +1,32 @@
-import {meta} from '@/lib/meta';export const metadata=meta('Privacy','How Hash Decode handles project inquiries, anonymous traffic counts, and optional external services.','/privacy');
-export default function Privacy(){return <article className="wrap interior"><header className="page-intro"><p className="eyebrow"><i/> Studio information</p><h1>Privacy <em>notice.</em></h1></header><div className="article-copy"><h2>Project inquiries</h2><p>We store the name, email, budget and project details you submit so the studio owner can review and respond. When email notifications are configured, a copy is sent to the designated studio inbox via Resend. Chat messages, your chat contact details and studio replies are also stored so the conversation can continue while the panel is open. The visitor access token stays in session storage in your tab. Avoid including passwords, API keys or sensitive client data.</p><h2>Traffic and abuse prevention</h2><p>We count page views by day, page section and broad referral category. These are aggregate counts, not unique visitor profiles. The counter uses no advertising cookies and respects Do Not Track and Global Privacy Control. Short-lived hashed network identifiers help rate-limit requests.</p><h2>Preferences and external providers</h2><p>Your motion preference is saved on your device. Owner sign-in uses a secure, time-limited session cookie. If enabled, Cloudflare Turnstile processes a verification challenge. Using the security checker sends the public hostname to Mozilla Observatory. Booking, WhatsApp and live-project links open their respective providers.</p><h2>Contact and deletion</h2><p>Use the <a href="/contact">contact form</a> to ask about or request deletion of an inquiry. Include your reference and the email used to submit it.</p></div></article>;}
+import { meta } from '@/lib/meta';
+import PrivacyDocument from '@/components/studio/PrivacyDocument';
+
+export const dynamic = 'force-dynamic';
+
+export const metadata = meta(
+  'Privacy Notice | Hash Decode',
+  'How Hash Decode handles project inquiries, aggregate traffic counts, security scans, and third-party integrations.',
+  '/privacy'
+);
+
+export default function Privacy() {
+  return (
+    <article className="wrap interior page-privacy-content">
+      {/* Inner Hero */}
+      <header className="page-intro" data-reveal="fade">
+        <p className="section-rule-label">Studio policy</p>
+        <h1 className="inner-hero-h1">
+          Privacy <span style={{ color: '#1E40AF' }}>notice.</span>
+        </h1>
+        <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
+          Honest data practices. No advertising cookies, no behavioural profiling, and complete client ownership over your project information.
+        </p>
+      </header>
+
+      {/* Main Document with Sticky Desktop TOC */}
+      <div data-reveal="up">
+        <PrivacyDocument />
+      </div>
+    </article>
+  );
+}
