@@ -102,7 +102,7 @@ h1{font-size:clamp(3.25rem,8vw,7.5rem);line-height:0.98;letter-spacing:-.05em}
 h2{font-size:clamp(2rem,4.8vw,4.25rem);line-height:1.05;letter-spacing:-.04em}
 h3{font-size:1.5rem;line-height:1.2;letter-spacing:-.03em}
 small{font-size:0.875rem;line-height:1.5}
-.page-intro h1,.inner-hero h1{font-size:clamp(1.75rem,4.2vw,3.5rem);line-height:1.06}
+.page-intro h1,.inner-hero h1{font-size:clamp(1.25rem,2.9vw,2.45rem);line-height:1.12}
 em{font-style:normal;color:var(--deep)}
 img,svg,canvas{max-width:100%}
 img{object-fit:cover}
@@ -168,8 +168,10 @@ html.header-compressed .ronin-nav{
   background:rgba(255,255,255,0.08)!important;
   border:1px solid rgba(255,255,255,0.15)!important;
   color:#ffffff!important;
-  width:38px!important;
-  height:38px!important;
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  min-height:44px!important;
 }
 .ronin-icon-btn:hover{
   background:rgba(255,255,255,0.18)!important;
@@ -1939,5 +1941,153 @@ textarea.is-invalid {
   .chat-wrap .chat-trigger {
     bottom: 16px !important;
     right: 16px !important;
+  }
+}
+
+/* ========================================================================
+   PROMPT A: STEP 2 RESPONSIVE ENHANCEMENTS
+   ======================================================================== */
+
+/* Header un-squashed controls down to 320px */
+@media (max-width: 400px) {
+  .ronin-header {
+    padding: 0.35rem 0.5rem 0 !important;
+  }
+  .ronin-nav {
+    padding: 0.2rem 0.4rem !important;
+    gap: 0.35rem !important;
+    height: 48px !important;
+  }
+  .brand strong {
+    font-size: 0.92rem !important;
+  }
+  .brand .brand-logo {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .ronin-actions {
+    gap: 0.35rem !important;
+  }
+}
+
+/* Grids: 2-column sections stack under 800px */
+@media (max-width: 800px) {
+  .contact-grid,
+  .tool-grid,
+  .faq-section,
+  .studio-manifest,
+  .dashboard-kpis,
+  .team-grid,
+  .form-row,
+  .work-grid,
+  .principles,
+  .note-list,
+  .service-alternating-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Card grids: 1 column under 700px */
+@media (max-width: 700px) {
+  .service-grid,
+  .portfolio-grid,
+  .blog-grid,
+  .tool-cards,
+  .services-tri-grid,
+  .security-steps-wrapper,
+  .work-duo-grid,
+  .home-services-grid,
+  .process-list,
+  .principles {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Tables scroll inside their container & words wrap */
+table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+* {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Forms: full width, 52px fields, 16px font to prevent iOS zoom */
+@media (max-width: 850px) {
+  input:not([type=checkbox]):not([type=radio]),
+  select {
+    min-height: 52px !important;
+    height: 52px !important;
+    font-size: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  textarea {
+    font-size: 16px !important;
+    min-height: 120px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Modals: bottom sheets under 640px */
+@media (max-width: 640px) {
+  dialog:not(.studio-menu) {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: auto 0 0 0 !important;
+    border-radius: 24px 24px 0 0 !important;
+    max-height: 86svh !important;
+    border-bottom: none !important;
+    padding: 1.5rem 1rem max(1.5rem, env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Hide interactive HUD & journey rail on short viewports (< 700px) */
+@media (max-height: 700px) {
+  .journey-rail,
+  .interactive-hud,
+  .scene-hud,
+  .journey-control {
+    display: none !important;
+  }
+}
+
+/* Safe-area padding for fixed bars and bottom items */
+.site-footer {
+  padding-bottom: max(3.5rem, env(safe-area-inset-bottom)) !important;
+}
+
+/* Tap targets minimum 44x44 */
+a.card-arrow-link,
+a.hd-text-link,
+.hero-explore-link,
+.footer-link,
+.work-filter-chip,
+.about-bio-toggle-btn {
+  min-height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Touch devices: disable hover-only transitions on touch */
+@media (hover: none) or (pointer: coarse) {
+  .cta:hover,
+  .hd-btn-primary:hover,
+  .outline:hover,
+  .icon-btn:hover,
+  .ronin-cta-pill:hover {
+    transform: none !important;
+    box-shadow: none !important;
   }
 }
