@@ -121,13 +121,19 @@ button:disabled{opacity:.65;cursor:wait}
   border:1px solid rgba(255,255,255,0.14);
   box-shadow:0 12px 36px -8px rgba(3,27,56,0.35), 0 0 0 1px rgba(255,255,255,0.06) inset;
   border-radius:999px;
-  height:62px!important;
+  height:64px!important;
   padding:0.35rem 0.85rem 0.35rem 1.15rem!important;
   color:#ffffff;
   display:flex;
   align-items:center;
   justify-content:space-between;
   width:100%;
+  transition:height 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), padding 0.25s cubic-bezier(0.16, 1, 0.3, 1)!important;
+}
+html.header-compressed .ronin-nav{
+  height:54px!important;
+  padding:0.25rem 0.85rem 0.25rem 1.15rem!important;
+  box-shadow:0 16px 42px -6px rgba(3,27,56,0.48), 0 0 0 1px rgba(255,255,255,0.1) inset!important;
 }
 .ronin-brand-wrap .brand strong{color:#ffffff!important}
 .ronin-brand-wrap .brand strong span{color:#93c5fd!important}

@@ -127,3 +127,4 @@ export default function HeroDustMotes() {
 
   return <canvas ref={canvasRef} className="hero-dust-canvas" aria-hidden="true" />;
 }
+

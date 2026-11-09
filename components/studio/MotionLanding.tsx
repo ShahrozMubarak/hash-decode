@@ -102,7 +102,11 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
       <div className="wrap hero-grid">
         <div className="hero-heading-block">
           <div className="hero-pill-badge">SECURE SOFTWARE STUDIO</div>
-          <h1>Build it.<br/>Break it.<br/><TypingSecure /></h1>
+          <h1 aria-label="Build it. Break it. Secure it.">
+            <span className="hero-h1-mask"><span className="hero-h1-line hero-h1-line-1">Build it.</span></span>
+            <span className="hero-h1-mask"><span className="hero-h1-line hero-h1-line-2">Break it.</span></span>
+            <span className="hero-h1-mask"><span className="hero-h1-line hero-h1-line-3"><TypingSecure /></span></span>
+          </h1>
         </div>
 
         <figure className="hero-object">
@@ -128,6 +132,40 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
 
       <div className="wrap hero-baseline">
         <a href="#showcase" className="hero-explore-link">Explore the studio <ArrowDown size={14}/></a>
+      </div>
+
+      {/* Extra Proof Row: Technologies slow marquee */}
+      <div className="hero-tech-strip" aria-label="Technologies used by Hash Decode">
+        <div className="hero-tech-track">
+          <div className="hero-tech-list">
+            <span>React</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>Next.js</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>Node</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>Python</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>TypeScript</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>Cloudflare</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+          </div>
+          <div className="hero-tech-list" aria-hidden="true">
+            <span>React</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>Next.js</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>Node</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>Python</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>TypeScript</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+            <span>Cloudflare</span>
+            <span className="hero-tech-dot" aria-hidden="true">·</span>
+          </div>
+        </div>
       </div>
     </div>
    </section>

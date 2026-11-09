@@ -81,6 +81,9 @@ export default function HeroParallaxManager() {
       // L4 Dust: scroll 0.3x
       hero.style.setProperty('--dust-scroll-y', `${(scrollY * 0.3).toFixed(2)}px`);
 
+      // Header compression after 40px scroll
+      document.documentElement.classList.toggle('header-compressed', scrollY > 40);
+
       rafId = requestAnimationFrame(update);
     };
 
@@ -89,6 +92,7 @@ export default function HeroParallaxManager() {
     return () => {
       cancelAnimationFrame(rafId);
       observer.disconnect();
+      document.documentElement.classList.remove('header-compressed');
       window.removeEventListener('mousemove', handlePointerMove);
       window.removeEventListener('mouseleave', handlePointerLeave);
     };
