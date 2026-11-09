@@ -677,12 +677,12 @@ button,.cta,.outline,.nav-contact,.icon-btn,.brief-dialog-btn,a.cta,a.outline{to
 }
 
 .whatsapp-contact-link, .whatsapp-channel {
-  color: #25d366 !important;
+  color: var(--ink, #0B1F3A);
   font-weight: 600;
 }
 
 .whatsapp-contact-link:hover, .whatsapp-channel:hover {
-  text-shadow: 0 0 12px rgba(37, 211, 102, 0.5);
+  color: #1E40AF;
 }
 
 @media (max-width: 820px) {
