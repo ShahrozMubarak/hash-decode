@@ -38,7 +38,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  // Intro dolly: FOV 40 to target over 1800ms ease-out
  const targetFov = 32;
  const camera=new THREE.PerspectiveCamera(prefersReducedMotion ? targetFov : 40, 1, 0.1, 50);
- camera.position.set(0, isMobile ? 0.0 : 0.15, isMobile ? 5.2 : 5.6);
+ camera.position.set(0, isMobile ? 0.0 : 0.15, isMobile ? 2.8 : 5.6);
  camera.lookAt(0, 0, 0);
 
  // 7.3 Environment (RoomEnvironment through PMREMGenerator, intensity 1.0)
@@ -445,9 +445,9 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    const vFovRad=(camera.fov*Math.PI)/180;
    const hFovRad=2*Math.atan(Math.tan(vFovRad/2)*camera.aspect);
    const minFovRad=Math.min(vFovRad,hFovRad);
-   const targetFraction=0.62*0.70*0.80*0.80; // 30% then 20% then another 20% smaller on mobile
+   const targetFraction=0.82; // 3x prominent scale on mobile
    const d=robotRadius/Math.sin(minFovRad/2)/targetFraction;
-   camera.position.set(0,0.0,Math.max(5.0,d));
+   camera.position.set(0,0.0,Math.max(2.2,d));
    camera.lookAt(0,0,0);
   }else{
    camera.position.set(0,0.15,5.6);
