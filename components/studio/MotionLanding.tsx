@@ -9,6 +9,9 @@ import TypingSecure from './TypingSecure';
 import CodingBackground from './CodingBackground';
 import HackerCoder from './HackerCoder';
 import TeleportBot from './TeleportBot';
+import HeroDustMotes from './HeroDustMotes';
+import HeroWordmark from './HeroWordmark';
+import HeroParallaxManager from './HeroParallaxManager';
 import {ArrowUpRight,ArrowDown,AppWindow,Braces,ShieldCheck,CheckCircle2,Compass,Terminal,Lock,FileCheck} from 'lucide-react';
 
 const homeServices=[
@@ -75,6 +78,27 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
    <div className="story-backdrop" aria-hidden="true"/><JourneyControl/><ResponsiveStage/>
    <section className="hero-runway" id="overview" data-station="Overview">
     <div className="hero-sheet">
+      <HeroParallaxManager />
+
+      {/* L1 Spotlight Cone from above the robot */}
+      <div className="hero-spotlight-cone" aria-hidden="true" />
+
+      {/* L3 Perspective Grid Floor */}
+      <div className="hero-grid-floor" aria-hidden="true" />
+
+      {/* L2 Light Pool on Floor */}
+      <div className="hero-light-pool" aria-hidden="true" />
+
+      {/* L4 Dust Motes Canvas */}
+      <HeroDustMotes />
+
+      {/* L5 Giant Wordmark "HASH DECODE" with Light Sweep */}
+      <HeroWordmark />
+
+      {/* L6 Vignette & 4% Film Grain */}
+      <div className="hero-vignette-grain" aria-hidden="true" />
+
+      {/* Hero Foreground Content */}
       <div className="wrap hero-grid">
         <div className="hero-heading-block">
           <div className="hero-pill-badge">SECURE SOFTWARE STUDIO</div>
@@ -84,24 +108,6 @@ export default function MotionLanding({projects,founders,links,intro}:{projects:
         <figure className="hero-object">
           <div className="hero-robot-glow" aria-hidden="true"/>
           <div className="hero-robot-shadow" aria-hidden="true"/>
-          <div className="hero-wordmark-backdrop" aria-hidden="true">
-            <svg viewBox="0 0 1200 130" className="hero-wordmark-svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <text
-                x="50%"
-                y="54%"
-                textAnchor="middle"
-                dominantBaseline="central"
-                textLength="1140"
-                lengthAdjust="spacing"
-                fill="rgba(255, 255, 255, 0.45)"
-                fontFamily="var(--font-body), system-ui, sans-serif"
-                fontWeight="900"
-                letterSpacing="0.1em"
-              >
-                HASH DECODE
-              </text>
-            </svg>
-          </div>
           <div className="specimen-visual" id="hero-model-anchor">
             <SceneSurface model="eva" autoMobile={true}/>
           </div>
