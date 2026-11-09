@@ -12,30 +12,30 @@ export default function TeleportBot({ className = '' }: Props) {
   const [teleported, setTeleported] = useState(false);
   const [isGlitching, setIsGlitching] = useState(false);
   const [mood, setMood] = useState<'idle' | 'happy' | 'angry' | 'success' | 'error' | 'submitting'>('idle');
-  const [thoughtText, setThoughtText] = useState('Greetings, I am Hash. Submit your brief below.');
+  const [thoughtText, setThoughtText] = useState('Greetings, I am Hash. We engineer secure software and perform deep audits. Submit your brief below.');
 
   // Listen to form lifecycle events
   useEffect(() => {
     const onSubmitting = () => {
       setMood('submitting');
-      setThoughtText('Encrypting and transmitting your brief...');
+      setThoughtText('Encrypting and transmitting your brief to Shahroz and the team...');
     };
 
     const onSuccess = (e: Event) => {
       setMood('success');
       const detail = (e as CustomEvent).detail;
       const ref = detail?.reference ? ` Ref #${detail.reference}.` : '';
-      setThoughtText(`Brief received securely.${ref} We will respond within 24 hours.`);
+      setThoughtText(`Thank you. Your project brief has been received securely.${ref} Shahroz will respond within 24 hours.`);
     };
 
     const onError = (e: Event) => {
       setMood('error');
       const detail = (e as CustomEvent).detail;
       const msg = detail?.error || 'Please review your details and send again.';
-      setThoughtText(msg);
+      setThoughtText(`Notice: ${msg}`);
       setTimeout(() => {
         setMood('idle');
-        setThoughtText('Greetings, I am Hash. Submit your brief below.');
+        setThoughtText('Greetings, I am Hash. We engineer secure software and perform deep audits. Submit your brief below.');
       }, 6000);
     };
 
@@ -43,13 +43,13 @@ export default function TeleportBot({ className = '' }: Props) {
       const m = (e as CustomEvent<{ mood: 'idle' | 'happy' | 'angry' }>).detail?.mood;
       if (m === 'angry') {
         setMood('angry');
-        setThoughtText('Security boundary scan in progress.');
+        setThoughtText('Security boundary engaged. Integrity scan in progress.');
       } else if (m === 'happy') {
         setMood('happy');
-        setThoughtText('Hash Decode engineers are ready to assist.');
+        setThoughtText('Ready to build high-availability software? Hash Decode engineers are ready to assist.');
       } else if (m === 'idle') {
         setMood('idle');
-        setThoughtText('Greetings, I am Hash. Submit your brief below.');
+        setThoughtText('Greetings, I am Hash. We engineer secure software and perform deep audits. Submit your brief below.');
       }
     };
 
@@ -92,7 +92,7 @@ export default function TeleportBot({ className = '' }: Props) {
   const handlePointerEnter = useCallback(() => {
     if (mood === 'success' || mood === 'submitting') return;
     setMood('happy');
-    setThoughtText('Hash Decode engineers are ready to assist.');
+    setThoughtText('Ready to build high-availability software or verify system security? Hash Decode engineers are ready to assist.');
     window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'happy' } }));
   }, [mood]);
 
@@ -103,7 +103,7 @@ export default function TeleportBot({ className = '' }: Props) {
       holdTimerRef.current = null;
     }
     setMood('idle');
-    setThoughtText('Greetings, I am Hash. Submit your brief below.');
+    setThoughtText('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
     window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'idle' } }));
   }, [mood]);
 
@@ -112,11 +112,11 @@ export default function TeleportBot({ className = '' }: Props) {
     if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
     holdTimerRef.current = setTimeout(() => {
       setMood('angry');
-      setThoughtText('Security boundary scan in progress.');
+      setThoughtText('Security boundary engaged. Integrity scan in progress.');
       window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'angry' } }));
       setTimeout(() => {
         setMood('idle');
-        setThoughtText('Greetings, I am Hash. Submit your brief below.');
+        setThoughtText('Greetings, I am Hash. Hash Decode develops secure, mission-critical software and conducts deep security audits. Submit your brief below to initiate a review.');
         window.dispatchEvent(new CustomEvent('hd:bot-mood', { detail: { mood: 'idle' } }));
       }, 5000);
     }, 4000);
@@ -147,15 +147,12 @@ export default function TeleportBot({ className = '' }: Props) {
         <div className="teleport-ring" />
       </div>
 
-      {/* Sleek, minimalistic status & error notification */}
-      <div className={`bot-speech-card mood-${mood}`} role="status" aria-live="polite">
-        <div className="bot-status-header">
-          <span className={`bot-status-dot dot-${mood}`} aria-hidden="true" />
-          <span className="bot-status-tag">
-            {mood === 'error' ? 'Notice' : mood === 'submitting' ? 'Transmitting' : mood === 'success' ? 'Confirmed' : 'Hash Bot'}
-          </span>
-        </div>
+      {/* Unified Bot Speech Card with pointer to robot head */}
+      <div className={`bot-speech-card mood-${mood}`}>
         <p className="bot-speech-text">{thoughtText}</p>
+        <span className="bot-speech-hint">
+          {mood === 'angry' ? 'Security posture engaged' : mood === 'happy' ? 'Studio model active' : 'Drag to rotate · Hold 4s for security mode'}
+        </span>
       </div>
 
       {/* 3D Bot Specimen Surface */}
