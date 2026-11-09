@@ -203,7 +203,7 @@ export default function MotionLanding({
               <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
                 Capabilities
               </span>
-              <h2 className="section-rule-heading" data-reveal="mask" data-reveal-delay="80">
+              <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
                 Engineered for <span className="highlight-word">performance.</span>
               </h2>
               <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
@@ -255,7 +255,7 @@ export default function MotionLanding({
             <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
               Security assurance
             </span>
-            <h2 className="section-rule-heading" data-reveal="mask" data-reveal-delay="80">
+            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
               Tested before <span className="highlight-word">launch.</span>
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
@@ -326,7 +326,7 @@ export default function MotionLanding({
             <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
               Selected concepts
             </span>
-            <h2 className="section-rule-heading" data-reveal="mask" data-reveal-delay="80">
+            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
               Proven software <span className="highlight-word">concepts.</span>
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
@@ -358,7 +358,7 @@ export default function MotionLanding({
             <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
               Delivery lifecycle
             </span>
-            <h2 className="section-rule-heading" data-reveal="mask" data-reveal-delay="80">
+            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
               From brief to <span className="highlight-word">handover.</span>
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
@@ -386,7 +386,7 @@ export default function MotionLanding({
             <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
               Leadership
             </span>
-            <h2 className="section-rule-heading" data-reveal="mask" data-reveal-delay="80">
+            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
               Senior engineering <span className="highlight-word">talent.</span>
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
@@ -414,7 +414,7 @@ export default function MotionLanding({
             <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
               Common questions
             </span>
-            <h2 className="section-rule-heading" data-reveal="mask" data-reveal-delay="80">
+            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
               Everything you need to <span className="highlight-word">know.</span>
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
@@ -444,7 +444,7 @@ export default function MotionLanding({
             </span>
             <h2
               className="section-rule-heading cta-heading"
-              data-reveal="mask"
+              data-reveal="fade"
               data-reveal-delay="80"
               style={{ margin: '0.6rem 0 1rem' }}
             >
