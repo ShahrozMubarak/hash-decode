@@ -104,3 +104,4 @@ export default function AboutTeamGrid({ founders }: { founders: Founder[] }) {
     </div>
   );
 }
+

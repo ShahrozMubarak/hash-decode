@@ -16,7 +16,7 @@ import { loadSubscribersList, loadInquiryNotesMap } from '@/app/api/admin/route'
 export const dynamic = 'force-dynamic';
 export const metadata = {
   title: 'Studio Command | Hash Decode Atelier',
-  robots: { index: false, follow: false },
+  robots: { index: false, follow: false, nocache: true },
 };
 
 export default async function AdminPage() {
@@ -46,22 +46,35 @@ export default async function AdminPage() {
 
   const db = getDb();
   const platformDb = getPlatformDb();
-  const [projects, d1Messages, mongoMessages, notesMap, copy, founders, subscribers, auditLogs] =
-    await Promise.all([
-      listProjects(true).catch(() => []),
-      db
-        .select()
-        .from(inquiries)
-        .orderBy(desc(inquiries.created))
-        .limit(200)
-        .catch(() => []),
-      getMongoInquiries(200).catch(() => []),
-      loadInquiryNotesMap().catch(() => new Map<string, string>()),
-      studioCopy().catch(() => ({ intro: '', about: '' })),
-      listFounders(true).catch(() => []),
-      loadSubscribersList(500).catch(() => []),
-      getAuditLogs(80).catch(() => []),
-    ]);
+  const [
+    projects,
+    d1Messages,
+    mongoMessages,
+    notesMap,
+    copy,
+    founders,
+    subscribers,
+    auditLogs,
+    chatThreadsRes,
+  ] = await Promise.all([
+    listProjects(true).catch(() => []),
+    db
+      .select()
+      .from(inquiries)
+      .orderBy(desc(inquiries.created))
+      .limit(200)
+      .catch(() => []),
+    getMongoInquiries(200).catch(() => []),
+    loadInquiryNotesMap().catch(() => new Map<string, string>()),
+    studioCopy().catch(() => ({ intro: '', about: '' })),
+    listFounders(true).catch(() => []),
+    loadSubscribersList(500).catch(() => []),
+    getAuditLogs(80).catch(() => []),
+    platformDb
+      .prepare('SELECT id,name,email,updated FROM chat_threads ORDER BY updated DESC LIMIT 100')
+      .all<{ id: string; name: string; email: string; updated: number }>()
+      .catch(() => ({ results: [] })),
+  ]);
 
   const messagesMap = new Map();
   for (const m of mongoMessages) {
@@ -95,6 +108,7 @@ export default async function AdminPage() {
   ]);
 
   const views = stats.results.reduce((v: number, r: { n: number }) => v + r.n, 0);
+  const chatThreads = chatThreadsRes?.results || [];
 
   return (
     <>
@@ -109,6 +123,7 @@ export default async function AdminPage() {
         initialMongoStatus={mongo}
         initialEntries={content}
         initialLinks={links}
+        initialChatThreads={chatThreads}
         trafficStats={stats}
         totalViews={views}
       />

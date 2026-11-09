@@ -27,6 +27,8 @@ export function Header(){
  const [open,setOpen]=useState(false),[paused,setPaused]=useState(false),toggle=useRef(null),menu=useRef(null);
  const path=usePathname();
 
+ if(path&&path.startsWith('/admin'))return null;
+
  useEffect(()=>{
    if(!open)return;
    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -144,6 +146,9 @@ export function Header(){
  );
 }
 export function Footer(){
+  const path = usePathname();
+  if (path && path.startsWith('/admin')) return null;
+
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
