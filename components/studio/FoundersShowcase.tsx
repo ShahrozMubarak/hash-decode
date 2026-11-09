@@ -242,7 +242,7 @@ function FounderCard({
                 href={founder.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="founder-link-pill"
+                className="hd-btn-secondary founder-link-pill"
               >
                 <span>Connect with {founder.name.split(' ')[0]}</span>
                 <ArrowUpRight size={15} />

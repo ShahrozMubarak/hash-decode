@@ -7,7 +7,7 @@ export default function ContactForm({initial='',initialBrief=''}:{initial?:strin
  const lock=useRef(false),last=useRef({signature:"",id:""});
  const [revision,setRevision]=useState(0);
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[receipt,setReceipt]=useState('');
- if(receipt)return <section className="form-panel confirmation" role="status"><Check size={32}/><p className="eyebrow">Brief received / {receipt}</p><h2>Thanks for the brief.</h2><p>Your inquiry is in the studio inbox. We can follow up at the email address you provided.</p><a className="text-link" href="/portfolio">Explore the work ↗</a></section>;
+ if(receipt)return <section className="form-panel confirmation" role="status"><Check size={32}/><p className="eyebrow">Brief received / {receipt}</p><h2>Thanks for the brief.</h2><p>Your inquiry is in the studio inbox. We can follow up at the email address you provided.</p><a className="hd-text-link" href="/portfolio"><span>Explore the work</span><span className="link-arrow">↗</span></a></section>;
  return <form className="form-panel" aria-busy={busy} onSubmit={async event=>{
   event.preventDefault();if(lock.current)return;
   const data=Object.fromEntries(new FormData(event.currentTarget));
@@ -37,5 +37,5 @@ export default function ContactForm({initial='',initialBrief=''}:{initial?:strin
  <label>Budget range<select name="budget" defaultValue="Still exploring" required>{['Under US$2,500','US$2,500–7,500','US$7,500–20,000','US$20,000+','Still exploring'].map(b=><option key={b}>{b}</option>)}</select></label>
  <label>Project details<textarea defaultValue={initialBrief.slice(0,1200)} name="brief" placeholder="Who is it for, and what should it help them do?" minLength={12} maxLength={3000} rows={5} required/></label>
  <label className="honeypot" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off"/></label>
- <HumanCheck key={revision} revision={revision}/><p className="form-note">Your details are used to respond to this project inquiry.</p><div role="status" aria-live="polite">{error|| (busy?"Sending your brief…":"")}</div><button id="send-brief-btn" className="cta send-brief-btn" disabled={busy}>{busy?'Sending brief…':'Send project brief'} <ArrowUpRight size={17}/></button></form>;
+ <HumanCheck key={revision} revision={revision}/><p className="form-note">Your details are used to respond to this project inquiry.</p><div role="status" aria-live="polite">{error|| (busy?"Sending your brief…":"")}</div><button id="send-brief-btn" className={`hd-btn-primary send-brief-btn cta-magnetic ${busy ? 'is-loading' : ''}`} disabled={busy} aria-busy={busy} type="submit"><span className="btn-label">{busy?'Sending brief…':'Send project brief'}</span><span className="btn-arrow-circle" aria-hidden="true"><span className="btn-arrow-track"><span className="btn-arrow-icon btn-arrow-primary"><ArrowUpRight size={15}/></span><span className="btn-arrow-icon btn-arrow-clone"><ArrowUpRight size={15}/></span></span></span><span className="btn-spinner" aria-hidden="true"/></button></form>;
 }

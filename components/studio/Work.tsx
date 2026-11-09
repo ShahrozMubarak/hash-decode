@@ -1,5 +1,4 @@
 'use client';
-import { useRef, useCallback } from 'react';
 import type {Project} from '@/lib/studio-data';
 import {ArrowUpRight} from 'lucide-react';
 
@@ -11,42 +10,13 @@ export function Artwork({project:p}:{project:Project}){
 }
 
 export function WorkCard({project:p,index}:{project:Project,index:number}){
- const cardRef = useRef<HTMLAnchorElement>(null);
-
- const handlePointerMove = useCallback((e: React.PointerEvent<HTMLAnchorElement>) => {
-  const card = cardRef.current;
-  if (!card) return;
-  const rect = card.getBoundingClientRect();
-  const px = (e.clientX - rect.left) / rect.width;
-  const py = (e.clientY - rect.top) / rect.height;
-  const rotY = (px - 0.5) * 22; // Tilt left / right (-11 to +11 deg)
-  const rotX = (0.5 - py) * 16; // Tilt up / down (-8 to +8 deg)
-  card.style.setProperty('--card-rx', `${rotX.toFixed(2)}deg`);
-  card.style.setProperty('--card-ry', `${rotY.toFixed(2)}deg`);
-  card.style.setProperty('--card-px', `${(px * 100).toFixed(1)}%`);
-  card.style.setProperty('--card-py', `${(py * 100).toFixed(1)}%`);
-  card.style.setProperty('--card-ty', '-8px');
-  card.style.setProperty('--card-scale', '1.025');
- }, []);
-
- const handlePointerLeave = useCallback(() => {
-  const card = cardRef.current;
-  if (!card) return;
-  card.style.setProperty('--card-rx', '0deg');
-  card.style.setProperty('--card-ry', '0deg');
-  card.style.setProperty('--card-ty', '0px');
-  card.style.setProperty('--card-scale', '1');
- }, []);
-
  return (
   <a
-   ref={cardRef}
    className="work-card"
    href={'/portfolio/'+p.slug}
    data-reveal
-   onPointerMove={handlePointerMove}
-   onPointerLeave={handlePointerLeave}
   >
+   <div className="card-glare" aria-hidden="true" />
    <Artwork project={p}/>
    <div className="work-caption">
     <div>
@@ -71,7 +41,7 @@ export function SectionTitle({index,kicker,title,href,link}:{index:string,kicker
     <p className="eyebrow"><i/>{index} &nbsp;/&nbsp; {kicker}</p>
     <h2>{title}</h2>
    </div>
-   {href&&<a className="text-link" href={href}>{link}<ArrowUpRight size={16}/></a>}
+   {href&&<a className="hd-text-link" href={href}><span>{link}</span><span className="link-arrow"><ArrowUpRight size={16}/></span></a>}
   </div>
  );
 }
