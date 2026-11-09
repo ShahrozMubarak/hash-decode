@@ -8,17 +8,17 @@ export default function JourneyControl() {
     const root = document.documentElement, landing = document.querySelector<HTMLElement>('.landing'), track = rail.current;
     if (!landing || !track) return;
     const stations = Array.from(landing.querySelectorAll<HTMLElement>('[data-station]'));
-    const showcase = landing.querySelector<HTMLElement>('#showcase')!, process = landing.querySelector<HTMLElement>('#process')!;
-    const heroAnchor = landing.querySelector<HTMLElement>('#hero-model-anchor')!;
-    const headings = Array.from(landing.querySelectorAll<HTMLElement>('.band h2'));
+    const showcase = landing.querySelector<HTMLElement>('#showcase'), process = landing.querySelector<HTMLElement>('#process');
+    const heroAnchor = landing.querySelector<HTMLElement>('#hero-model-anchor');
+    const headings = Array.from(landing.querySelectorAll<HTMLElement>('.band h2, .section-rule-heading'));
     const label = track.querySelector<HTMLElement>('.rail-label')!, dots = Array.from(track.querySelectorAll<SVGCircleElement>('.journey-rail circle'));
     let offsets: number[] = [], headingTops: number[] = [], height = 0, heroDistance = 1, processTop = 0, processHeight = 1, tick = 0, dirty = true;
     let hero = { x: 0, y: 0, width: 0, height: 0 };
-    const measureBox = (element: HTMLElement, y: number) => { const r = element.getBoundingClientRect(); return { x: r.left, y: r.top + y, width: r.width, height: r.height }; };
+    const measureBox = (element: HTMLElement | null, y: number) => { if (!element) return { x: 0, y: 0, width: 0, height: 0 }; const r = element.getBoundingClientRect(); return { x: r.left, y: r.top + y, width: r.width, height: r.height }; };
     const update = () => {
       tick = 0; const y = window.scrollY, v = window.innerHeight, w = window.innerWidth, mobile = w <= 850, motion = root.dataset.motion === 'on';
       if (dirty) {
-        height = root.scrollHeight; offsets = stations.map(el => el.getBoundingClientRect().top + y); headingTops = headings.map(el => el.getBoundingClientRect().top + y); heroDistance = Math.max(v * .45, stations[0].offsetHeight - v); processTop = process.getBoundingClientRect().top + y; processHeight = process.offsetHeight;
+        height = root.scrollHeight; offsets = stations.map(el => el.getBoundingClientRect().top + y); headingTops = headings.map(el => el.getBoundingClientRect().top + y); heroDistance = Math.max(v * .45, (stations[0]?.offsetHeight || v) - v); processTop = process ? process.getBoundingClientRect().top + y : 0; processHeight = process?.offsetHeight || 1;
         hero = measureBox(heroAnchor, y);
         dirty = false;
       }
@@ -26,27 +26,32 @@ export default function JourneyControl() {
       landing.style.setProperty('--hero-y', '0px'); landing.style.setProperty('--hero-scale', '1');
       const pProgress = motion ? state.process : 1;
       landing.style.setProperty('--process-progress', String(pProgress));
-      const processItems = process.querySelectorAll<HTMLElement>('.process-list li');
-      processItems.forEach((item, idx) => {
-        const threshold = idx / Math.max(1, processItems.length - 1);
-        const isActive = pProgress >= threshold - 0.05;
-        item.classList.toggle('step-active', isActive);
-        item.classList.toggle('step-current', Math.abs(pProgress - threshold) < 0.12);
-      });
+      if (process) {
+        const processItems = process.querySelectorAll<HTMLElement>('.process-list li');
+        processItems.forEach((item, idx) => {
+          const threshold = idx / Math.max(1, processItems.length - 1);
+          const isActive = pProgress >= threshold - 0.05;
+          item.classList.toggle('step-active', isActive);
+          item.classList.toggle('step-current', Math.abs(pProgress - threshold) < 0.12);
+        });
+      }
       landing.style.setProperty('--scene-tint', (mobile ? 0 : Math.sin(state.page * Math.PI * 4) ** 2 * 100).toFixed(2) + '%');
-      const showcaseTop = offsets[1], showcaseBottom = offsets[2] || (offsets[1] + showcase.offsetHeight);
+      const showcaseHeight = showcase?.offsetHeight || 0;
+      const showcaseTop = offsets[1] || 0, showcaseBottom = offsets[2] || (offsets[1] ? offsets[1] + showcaseHeight : 0);
       const enterDark = ease((y + v * .45 - showcaseTop) / (v * .45));
       const exitDark = ease((y + v * .1 - showcaseBottom) / (v * .25));
-      const dark = mobile ? 0 : Math.max(0, Math.min(1, enterDark * (1 - exitDark)));
+      const dark = mobile || !showcase ? 0 : Math.max(0, Math.min(1, enterDark * (1 - exitDark)));
       landing.style.setProperty('--story-dark', dark.toFixed(3));
       landing.style.setProperty('--ghost-x', (-state.page * 220) + 'px');
       track.querySelectorAll('.mobile-checkpoint').forEach((dot, i) => { dot.classList.toggle('active', i <= state.current); dot.classList.toggle('current', i === state.current); });
-      const gallery = clampUnit((y - offsets[1]) / Math.max(1, showcase.offsetHeight - v * .9));
+      const gallery = showcase ? clampUnit((y - offsets[1]) / Math.max(1, showcaseHeight - v * .9)) : 0;
       landing.style.setProperty('--collection-depth', (mobile ? 0 : gallery * 100) + '%');
       // Slower, smooth progress that doesn't jump 20% ahead
       const progressVal = Math.min(1, Math.max(0, Math.pow(state.page, 0.95) * 1.05));
       track.style.setProperty('--progress', progressVal.toFixed(4));
-      label.textContent = stations[state.current].dataset.station + ' · ' + Math.round(state.page * 100) + '%';
+      if (stations[state.current]) {
+        label.textContent = (stations[state.current].dataset.station || '') + ' · ' + Math.round(state.page * 100) + '%';
+      }
       dots.forEach((dot, i) => { const p = clampUnit((offsets[i] - v * .38) / Math.max(1, height - v)); dot.setAttribute('cy', String(4 + 192 * p)); dot.classList.toggle('active', i <= state.current); });
 
       // Subtle background variable
