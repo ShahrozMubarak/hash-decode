@@ -17,7 +17,7 @@ export default async function Portfolio() {
     <div className="wrap interior page-work-content">
       <header className="page-intro">
         <p className="kicker"><span className="key-line" />Our Work</p>
-        <h1>Software that works.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>Built right.</span></h1>
+        <h1>Software that works.<br /><span style={{ color: 'var(--highlight)' }}>Built right.</span></h1>
         <p className="lead-text">
           Explore real systems, web platforms, and security audits built by Hash Decode.
           Every project is built for speed, clean architecture, and reliable long-term security.
@@ -28,8 +28,8 @@ export default async function Portfolio() {
       <section className="work-showcase-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />Selected Releases</p>
-            <h2>Featured <span style={{ color: 'var(--coral)' }}>Projects</span></h2>
+            <p className="eyebrow"><i />Selected releases</p>
+            <h2>Featured <span style={{ color: 'var(--highlight)' }}>projects</span></h2>
           </div>
           <span className="count-pill">{projects.length} Published Case Studies</span>
         </div>
@@ -45,8 +45,8 @@ export default async function Portfolio() {
       <section className="work-outcomes-band">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />Engineering Standards</p>
-            <h2>What Every Build <span style={{ color: 'var(--coral)' }}>Includes</span></h2>
+            <p className="eyebrow"><i />Engineering standards</p>
+            <h2>What every build <span style={{ color: 'var(--highlight)' }}>includes</span></h2>
           </div>
         </div>
         <div className="outcomes-grid">
@@ -56,7 +56,7 @@ export default async function Portfolio() {
             <p>Every page and API route is optimized to load under 150ms. Fast software means higher customer conversion.</p>
           </div>
           <div className="outcome-card">
-            <ShieldCheck className="icon-coral" size={28} />
+            <ShieldCheck className="icon-azure" size={28} />
             <h3>Penetration Tested</h3>
             <p>We test our own code against real-world attack vectors before launch. No open doors or data leaks.</p>
           </div>
@@ -66,7 +66,7 @@ export default async function Portfolio() {
             <p>You own 100% of the repository, accounts, database credentials, and documentation. No vendor lock-in.</p>
           </div>
           <div className="outcome-card">
-            <Layers className="icon-coral" size={28} />
+            <Layers className="icon-azure" size={28} />
             <h3>Clean Architecture</h3>
             <p>Built with modern TypeScript, clean database models, and clear documentation your team can maintain easily.</p>
           </div>
@@ -77,7 +77,7 @@ export default async function Portfolio() {
       <section className="work-cta-card">
         <div className="cta-content">
           <p className="kicker"><span className="key-line" />Ready to build?</p>
-          <h2>Have a project <span style={{ color: 'var(--coral)' }}>in mind?</span></h2>
+          <h2>Have a project <span style={{ color: 'var(--highlight)' }}>in mind?</span></h2>
           <p>Tell us what you want to build. We reply within 24 hours with honest advice and a clear estimate.</p>
         </div>
         <div className="cta-actions">

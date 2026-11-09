@@ -167,7 +167,7 @@ function FounderCard({
           />
           <div className="founder-badge-pill">
             <span className="founder-dot" />
-            <span>( 0{index + 1} ) [ FOUNDING_PARTNER ]</span>
+            <span>Co-founder</span>
           </div>
         </div>
       </div>
@@ -229,7 +229,7 @@ function FounderCard({
             <div className="founder-skills-cloud">
               {founder.skills.map((skill) => (
                 <span key={skill} className="founder-skill-chip">
-                  <Check size={13} className="text-coral" />
+                  <Check size={13} style={{ color: 'var(--highlight)' }} />
                   {skill}
                 </span>
               ))}
@@ -261,9 +261,9 @@ export default function FoundersShowcase({ founders }: Props) {
   return (
     <div className="founders-showcase-container">
       <div className="founders-header-block">
-        <span className="iris-pill-badge">[ v01b // FOUNDING_TEAM ]</span>
+        <span className="iris-pill-badge">Founding Team</span>
         <h2 className="founders-section-heading">
-          The Minds Behind <span className="text-coral" style={{ color: 'var(--coral)' }}>Hash Decode</span>
+          The minds behind <span style={{ color: 'var(--highlight)' }}>Hash Decode</span>
         </h2>
         <p className="founders-lead-subtext">
           Four founders with deep backgrounds in distributed systems, product design, penetration testing, and edge infrastructure. We build software engineered for resilience from day one.

@@ -1,0 +1,77 @@
+/* Motion UI Utility System
+   Attribute API:
+   data-reveal="up|fade|scale|mask|left|right"
+   data-reveal-delay="ms"
+   data-stagger on a parent container
+*/
+
+/* Hidden initial states apply ONLY under html.js (added by JS) so content is visible without JavaScript */
+html.js [data-reveal] {
+  opacity: 0;
+  will-change: opacity, transform, clip-path;
+  transition-property: opacity, transform, clip-path;
+  transition-duration: var(--duration-700, 700ms);
+  transition-timing-function: var(--ease-out, cubic-bezier(.2, .8, .2, 1));
+}
+
+html.js [data-reveal="up"] {
+  transform: translateY(28px);
+}
+
+html.js [data-reveal="fade"] {
+  transform: none;
+}
+
+html.js [data-reveal="scale"] {
+  transform: scale(0.96);
+}
+
+html.js [data-reveal="mask"] {
+  clip-path: inset(0 0 100% 0);
+  transition-duration: var(--duration-900, 900ms);
+}
+
+html.js [data-reveal="left"] {
+  transform: translateX(-40px);
+}
+
+html.js [data-reveal="right"] {
+  transform: translateX(40px);
+}
+
+/* Revealed active states */
+html.js [data-reveal].is-in {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+  clip-path: inset(0 0 0% 0);
+}
+
+/* Explicit delay classes/attributes */
+html.js [data-reveal-delay="80"] { transition-delay: 80ms; }
+html.js [data-reveal-delay="120"] { transition-delay: 120ms; }
+html.js [data-reveal-delay="200"] { transition-delay: 200ms; }
+html.js [data-reveal-delay="320"] { transition-delay: 320ms; }
+html.js [data-reveal-delay="440"] { transition-delay: 440ms; }
+
+/* Order for "late-coming" content inside a section */
+html.js [data-reveal-role="eyebrow"] { transition-delay: 0ms; }
+html.js [data-reveal-role="heading"] { transition-delay: 80ms; }
+html.js [data-reveal-role="sentence"] { transition-delay: 200ms; }
+html.js [data-reveal-role="content"] { transition-delay: 320ms; }
+html.js [data-reveal-role="button"] { transition-delay: 440ms; }
+
+/* Accessibility: prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal],
+  html.js [data-reveal="up"],
+  html.js [data-reveal="scale"],
+  html.js [data-reveal="left"],
+  html.js [data-reveal="right"],
+  html.js [data-reveal="mask"] {
+    transform: none !important;
+    clip-path: none !important;
+    transition-property: opacity !important;
+    transition-duration: 150ms !important;
+    transition-delay: 0ms !important;
+  }
+}

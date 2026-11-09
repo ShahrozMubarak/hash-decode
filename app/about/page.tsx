@@ -46,7 +46,7 @@ export default async function About() {
     <div className="wrap interior page-about-content">
       <header className="page-intro">
         <p className="kicker"><span className="key-line" />About Hash Decode</p>
-        <h1>Inside Hash Decode.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>Crafted with intent.</span></h1>
+        <h1>Inside Hash Decode.<br /><span style={{ color: 'var(--highlight)' }}>Crafted with intent.</span></h1>
         <p className="lead-text">
           {copy.about || 'An independent software studio founded by Shahroz Dogar. We build custom web platforms, digital tools, and secure cloud systems for growing companies.'}
         </p>
@@ -61,8 +61,8 @@ export default async function About() {
       <section className="about-principles-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i /> Core Values</p>
-            <h2>How We <span style={{ color: 'var(--coral)' }}>Operate</span></h2>
+            <p className="eyebrow"><i /> Core values</p>
+            <h2>How we <span style={{ color: 'var(--highlight)' }}>operate</span></h2>
           </div>
         </div>
         <div className="principles-grid-4">
@@ -85,8 +85,8 @@ export default async function About() {
       <section className="about-tech-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i /> Tools of the Craft</p>
-            <h2>Our Technology <span style={{ color: 'var(--coral)' }}>Stack</span></h2>
+            <p className="eyebrow"><i /> Tools of the craft</p>
+            <h2>Our technology <span style={{ color: 'var(--highlight)' }}>stack</span></h2>
           </div>
           <span className="count-pill">Modern &amp; battle-tested</span>
         </div>
@@ -104,8 +104,8 @@ export default async function About() {
       <section className="about-guarantee-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i /> Peace of Mind</p>
-            <h2>The Hash Decode <span style={{ color: 'var(--coral)' }}>Guarantee</span></h2>
+            <p className="eyebrow"><i /> Peace of mind</p>
+            <h2>The Hash Decode <span style={{ color: 'var(--highlight)' }}>guarantee</span></h2>
           </div>
         </div>
         <div className="guarantee-grid">
@@ -144,7 +144,7 @@ export default async function About() {
       <section className="work-cta-card">
         <div className="cta-content">
           <p className="kicker"><span className="key-line" />Get in touch</p>
-          <h2>Let&apos;s build something <span style={{ color: 'var(--coral)' }}>remarkable.</span></h2>
+          <h2>Let&apos;s build something <span style={{ color: 'var(--highlight)' }}>remarkable.</span></h2>
           <p>Whether you need an MVP in weeks or a comprehensive security audit, we are ready.</p>
         </div>
         <div className="cta-actions">

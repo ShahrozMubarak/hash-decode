@@ -662,7 +662,7 @@ export default function Admin({
                   <span className="status-pill published">Founder {i + 1}</span>
                 </div>
                 <div className="admin-card-body">
-                  <small className="eyebrow" style={{ color: 'var(--coral)' }}>
+                  <small className="eyebrow" style={{ color: 'var(--ink)' }}>
                     {f.role}
                   </small>
                   <h3>{f.name}</h3>

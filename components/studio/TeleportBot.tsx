@@ -151,7 +151,7 @@ export default function TeleportBot({ className = '' }: Props) {
       <div className={`bot-speech-card mood-${mood}`}>
         <p className="bot-speech-text">{thoughtText}</p>
         <span className="bot-speech-hint">
-          {mood === 'angry' ? '⚡ Security posture engaged' : mood === 'happy' ? '✨ Hash online' : 'Drag to rotate · Hold 4s for security mode'}
+          {mood === 'angry' ? 'Security posture engaged' : mood === 'happy' ? 'Studio model active' : 'Drag to rotate · Hold 4s for security mode'}
         </span>
       </div>
 

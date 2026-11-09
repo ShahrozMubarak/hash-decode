@@ -1,7 +1,7 @@
 import { getLinks } from '@/lib/cms';
 import ContactForm from '@/components/studio/ContactForm';
 import { meta } from '@/lib/meta';
-import { ArrowUpRight, MessageSquare, Calendar, Mail, Clock, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { ArrowUpRight, Calendar, Mail, Clock, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export const metadata = meta(
   'Start a Software Project | Hash Decode',
@@ -40,7 +40,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
         <aside className="contact-sidebar">
           <header className="page-intro compact">
             <p className="kicker"><span className="key-line" />Direct Inquiry</p>
-            <h1>Start a conversation.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>Let&apos;s build it.</span></h1>
+            <h1>Start a conversation.<br /><span style={{ color: 'var(--highlight)' }}>Let&apos;s build it.</span></h1>
             <p className="lead-text">
               Tell us about the people using your software and the problem you want to solve.
               We reply within 24 hours with practical advice and a clear estimate.
@@ -60,7 +60,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
             </a>
             {links.booking && (
               <a className="contact-channel-pill" href={links.booking} target="_blank" rel="noopener noreferrer">
-                <Calendar className="icon-coral" size={20} />
+                <Calendar className="icon-azure" size={20} />
                 <div>
                   <strong>Book a 15-Min Call</strong>
                   <span>Pick a time that fits your calendar</span>
@@ -107,8 +107,8 @@ export default async function Contact({ searchParams }: { searchParams: Query })
       <section className="contact-next-steps-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />Next Steps</p>
-            <h2>What Happens <span style={{ color: 'var(--coral)' }}>After You Reach Out?</span></h2>
+            <p className="eyebrow"><i />Next steps</p>
+            <h2>What happens <span style={{ color: 'var(--highlight)' }}>after you reach out?</span></h2>
           </div>
         </div>
         <div className="steps-row-3">
@@ -134,8 +134,8 @@ export default async function Contact({ searchParams }: { searchParams: Query })
       <section className="contact-faq-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />Common Questions</p>
-            <h2>Frequently Asked <span style={{ color: 'var(--coral)' }}>Questions</span></h2>
+            <p className="eyebrow"><i />Common questions</p>
+            <h2>Frequently asked <span style={{ color: 'var(--highlight)' }}>questions</span></h2>
           </div>
         </div>
         <div className="contact-faq-list">

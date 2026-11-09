@@ -1,6 +1,6 @@
 import { services } from '@/lib/studio-data';
 import { meta } from '@/lib/meta';
-import { ArrowUpRight, AppWindow, Shield, Cpu, RefreshCw, Check, Clock, Code2 } from 'lucide-react';
+import { ArrowUpRight, AppWindow, Shield, Cpu, Check, Code2 } from 'lucide-react';
 
 export const metadata = meta(
   'Services & Engineering Solutions | Hash Decode',
@@ -27,7 +27,7 @@ export default function Services() {
     <div className="wrap interior page-services-content">
       <header className="page-intro">
         <p className="kicker"><span className="key-line" />Services</p>
-        <h1>What we build.<br /><span className="text-coral" style={{ color: 'var(--coral)' }}>How we help.</span></h1>
+        <h1>What we build.<br /><span style={{ color: 'var(--highlight)' }}>How we help.</span></h1>
         <p className="lead-text">
           Software designed for the people who use it, and practical security reviews for the teams who maintain it.
           No jargon, no bloated teams—just direct engineering that solves real business problems.
@@ -38,8 +38,8 @@ export default function Services() {
       <section className="service-catalog-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />Core Capabilities</p>
-            <h2>What We <span style={{ color: 'var(--coral)' }}>Specialize In</span></h2>
+            <p className="eyebrow"><i />Core capabilities</p>
+            <h2>What we <span style={{ color: 'var(--highlight)' }}>specialise in</span></h2>
           </div>
         </div>
         <div className="service-index">
@@ -73,8 +73,8 @@ export default function Services() {
       <section className="service-process-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />Transparent Delivery</p>
-            <h2><span style={{ color: 'var(--azure)' }}>How We Build</span> <span style={{ color: 'var(--coral)' }}>Together</span></h2>
+            <p className="eyebrow"><i />Transparent delivery</p>
+            <h2>How we build <span style={{ color: 'var(--highlight)' }}>together</span></h2>
           </div>
           <span className="count-pill">From brief to live release</span>
         </div>
@@ -106,8 +106,8 @@ export default function Services() {
       <section className="service-comparison-section">
         <div className="section-head">
           <div>
-            <p className="eyebrow"><i />The Hash Decode Difference</p>
-            <h2><span style={{ color: 'var(--azure)' }}>Why Teams</span> <span style={{ color: 'var(--coral)' }}>Choose Us</span></h2>
+            <p className="eyebrow"><i />The Hash Decode difference</p>
+            <h2>Why teams <span style={{ color: 'var(--highlight)' }}>choose us</span></h2>
           </div>
         </div>
         <div className="comparison-table-wrapper">
@@ -154,7 +154,7 @@ export default function Services() {
       <section className="work-cta-card">
         <div className="cta-content">
           <p className="kicker"><span className="key-line" />Get started</p>
-          <h2><span style={{ color: 'var(--azure)' }}>Ready to build</span> <span style={{ color: 'var(--coral)' }}>your next release?</span></h2>
+          <h2>Ready to build <span style={{ color: 'var(--highlight)' }}>your next release?</span></h2>
           <p>Book a 15-minute introductory call or send your brief. We reply within 24 hours.</p>
         </div>
         <div className="cta-actions">

@@ -438,14 +438,14 @@ export default function FoolishAdminDashboard({
                 <span className="fd-brand-name">HASH DECODE</span>
                 <span className="fd-brand-sub">
                   <span className="fd-pulse-dot" />
-                  v2.4 // STUDIO COMMAND
+                  Studio Command
                 </span>
               </div>
             </div>
 
             {/* Navigation Groups */}
             <div className="fd-nav-group">
-              <span className="fd-nav-label">Telemetry</span>
+              <span className="fd-nav-label">Overview</span>
               <button
                 className={`fd-nav-btn ${activeTab === 'overview' ? 'active' : ''}`}
                 onClick={() => { setActiveTab('overview'); setIsMobileMenuOpen(false); }}
@@ -633,7 +633,7 @@ export default function FoolishAdminDashboard({
           </header>
 
           {/* =================================================================
-              TAB 1: OVERVIEW & TELEMETRY
+              TAB 1: OVERVIEW & ANALYTICS
               ================================================================= */}
           {activeTab === 'overview' && (
             <div className="fd-workspace-body">
@@ -658,8 +658,8 @@ export default function FoolishAdminDashboard({
                   </div>
                   <div className="fd-kpi-val">{publishedCount}</div>
                   <div className="fd-kpi-bottom">
-                    <span className="fd-delta-pill">100% online</span>
-                    <span className="fd-kpi-period">{projects.length - publishedCount} drafts in lab</span>
+                    <span className="fd-delta-pill">Active</span>
+                    <span className="fd-kpi-period">{projects.length - publishedCount} drafts</span>
                   </div>
                 </div>
 
@@ -668,10 +668,9 @@ export default function FoolishAdminDashboard({
                     <span className="fd-kpi-title">Page Views</span>
                     <div className="fd-kpi-icon"><LayoutDashboard size={18} /></div>
                   </div>
-                  <div className="fd-kpi-val">{totalViews || 1420}</div>
+                  <div className="fd-kpi-val">{totalViews || 0}</div>
                   <div className="fd-kpi-bottom">
-                    <span className="fd-delta-pill">+24.5%</span>
-                    <span className="fd-kpi-period">30-day verified traffic</span>
+                    <span className="fd-kpi-period">Total page views</span>
                   </div>
                 </div>
 
@@ -682,8 +681,7 @@ export default function FoolishAdminDashboard({
                   </div>
                   <div className="fd-kpi-val">{subscribers.length}</div>
                   <div className="fd-kpi-bottom">
-                    <span className="fd-delta-pill">+18.2%</span>
-                    <span className="fd-kpi-period">Engineering newsletter</span>
+                    <span className="fd-kpi-period">Newsletter subscribers</span>
                   </div>
                 </div>
               </div>
@@ -697,8 +695,8 @@ export default function FoolishAdminDashboard({
                       <h3 className="fd-card-heading">Acquisition &amp; Inquiries Volume</h3>
                       <p className="fd-card-sub">Daily brief submissions and traffic pacing</p>
                     </div>
-                    <span style={{ fontFamily: 'var(--mono)', fontSize: '0.74rem', color: '#1D70F5', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1D70F5' }} /> Live Ingestion Active
+                    <span style={{ fontFamily: 'var(--font-body), Inter, sans-serif', fontSize: '0.74rem', color: '#1D70F5', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1D70F5' }} /> Activity status
                     </span>
                   </div>
                   {/* High fidelity SVG Performance Chart */}
@@ -1209,8 +1207,8 @@ export default function FoolishAdminDashboard({
                           <img src={f.image} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                         <div>
-                          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.68rem', color: '#1D70F5', fontWeight: 600 }}>
-                            ( 0{i + 1} ) [ FOUNDING_PARTNER ]
+                          <span style={{ fontFamily: 'var(--font-body), Inter, sans-serif', fontSize: '0.72rem', color: '#1D70F5', fontWeight: 600 }}>
+                            Co-founder
                           </span>
                           <h4 style={{ fontSize: '1.2rem', fontWeight: 750, color: '#0F172A', margin: '0.2rem 0' }}>{f.name}</h4>
                           <small style={{ color: '#64748B' }}>{f.role}</small>

@@ -47,7 +47,7 @@ export default function FooterSubscribe() {
 
       {status === 'success' ? (
         <div className="footer-subscribe-success" role="status">
-          <Check size={18} className="text-coral" />
+          <Check size={18} style={{ color: 'var(--highlight)' }} />
           <span>You&apos;re subscribed. We&apos;ll keep you posted.</span>
         </div>
       ) : (

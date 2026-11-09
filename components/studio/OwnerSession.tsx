@@ -92,7 +92,7 @@ export default function OwnerSession({logout=false}:{logout?:boolean}){
   {busy?(success || 'Please wait…'):logout?'Sign out':'Sign in'}
   {success ? <Check size={17}/> : logout ? <LogOut size={16}/> : <ArrowUpRight size={17}/>}
  </button>
- {success && <p className="form-status" style={{ color: 'var(--coral)', fontWeight: 600 }}>{success}</p>}
+ {success && <p className="form-status" style={{ color: 'var(--highlight)', fontWeight: 600 }}>{success}</p>}
  <p id={logout?undefined:'login-status'} className={error?'form-error':'form-status'} role="status" aria-live="polite">{error}</p>
  </form>;
 }
