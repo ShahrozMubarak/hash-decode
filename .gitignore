@@ -51,3 +51,8 @@ yarn-error.log*
 
 .env
 .dev.vars
+
+# Incoming integration archives and staging
+/_incoming/
+_incoming/
+
