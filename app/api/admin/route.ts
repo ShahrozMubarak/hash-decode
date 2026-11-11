@@ -134,7 +134,7 @@ export async function POST(req: Request) {
       if (!result.matchedCount) throw new HttpError(404, 'NOT_FOUND', 'Record not found.');
       await audit(req, 'archived', collection + ':' + id);
     } else throw new HttpError(400, 'INPUT', 'Unknown action.');
-    for (const path of ['/', '/admin', '/about', '/portfolio', '/blog', '/contact', '/sitemap.xml']) revalidatePath(path, 'layout');
+    for (const path of ['/', '/shahroz', '/about', '/portfolio', '/blog', '/contact', '/sitemap.xml']) revalidatePath(path, 'layout');
     return ok({});
   } catch (error) { return failure(error); }
 }

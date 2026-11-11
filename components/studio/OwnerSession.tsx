@@ -11,7 +11,7 @@ export default function OwnerSession() {
       if (!response.ok) throw Error(result.error?.message || 'Sign-in failed.');
       // Remove tokens stored by the previous release; current credentials are cookie-only.
       localStorage.removeItem('hashdecode_owner_session');
-      window.location.replace('/admin');
+      window.location.replace('/shahroz');
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Sign-in unavailable.'); }
     finally { setBusy(false); }
   }

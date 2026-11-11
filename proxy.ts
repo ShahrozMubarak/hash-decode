@@ -9,7 +9,7 @@ export function proxy(request: NextRequest) {
   headers.set('Content-Security-Policy', policy);
   const response = NextResponse.next({ request: { headers } });
   response.headers.set('Content-Security-Policy-Report-Only', policy);
-  if (/^\/(admin|portal|api)(\/|$)/.test(request.nextUrl.pathname)) {
+  if (/^\/(shahroz|admin|portal|api)(\/|$)/.test(request.nextUrl.pathname)) {
     response.headers.set('Cache-Control', 'no-store'); response.headers.set('X-Robots-Tag', 'noindex, nofollow');
   }
   return response;

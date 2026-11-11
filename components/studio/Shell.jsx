@@ -63,7 +63,7 @@ export function Header(){
    window.dispatchEvent(new Event('hd:motion'));
    window.dispatchEvent(new Event('hd:skip'));
  }
- if(path&&((path.startsWith('/admin') || path.startsWith('/portal'))||path.startsWith('/portal')))return null;
+ if(path&&(path.startsWith('/shahroz') || path.startsWith('/admin') || path.startsWith('/portal')))return null;
  return (
   <header className="site-header ronin-header" onKeyDown={e=>{if(open&&e.key==='Escape')closeMenu();}}>
     <a className="skip" href="#main">Skip to content</a>
@@ -153,7 +153,7 @@ export function Header(){
 }
 export function Footer(){
   const path = usePathname();
-  if (path && (path.startsWith('/admin') || path.startsWith('/portal'))) return null;
+  if (path && (path.startsWith('/shahroz') || path.startsWith('/admin') || path.startsWith('/portal'))) return null;
 
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {
@@ -183,7 +183,6 @@ export function Footer(){
             <li><a href="/about" className="footer-link">About Hash Decode</a></li>
             <li><a href="/portfolio" className="footer-link">Selected Concepts</a></li>
             <li><a href="/blog" className="footer-link">Engineering Dispatch</a></li>
-            <li><a href="/admin" className="footer-link">Admin</a></li>
           </ul>
         </div>
 

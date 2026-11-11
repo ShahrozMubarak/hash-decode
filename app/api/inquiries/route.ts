@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       try { await db.collection('inquiries').updateOne({ id }, { $set: { ...mail, updatedAt: new Date() } }); }
       catch { console.error(JSON.stringify({ requestId: id, code: 'EMAIL_STATUS_WRITE_FAILED' })); }
     }
-    revalidatePath('/admin');
+    revalidatePath('/shahroz');
     return Response.json({ ok: true, data: { id }, reference: id.slice(0, 8).toUpperCase() }, { status: saved ? 200 : 201, headers: privateHeaders });
   } catch (error) { return failure(error); }
 }
