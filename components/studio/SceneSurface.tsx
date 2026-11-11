@@ -6,27 +6,24 @@ import SceneBoundary from './SceneBoundary';
 let activeScenes = 0;
 function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
  const mount=useRef<HTMLDivElement>(null),canvas=useRef<HTMLCanvasElement>(null);
- const [near,setNear]=useState(false);
- const [allowed,setAllowed]=useState(true);
+ const [near,setNear]=useState(true);
  const [status,setStatus]=useState<'poster'|'loading'|'live'|'failed'|'unavailable'>('loading');
 
  useEffect(()=>{
-  const sync=()=>setAllowed(!matchMedia('(prefers-reduced-motion: reduce)').matches && document.documentElement.dataset.motion !== 'off');
-  sync();window.addEventListener('hd:motion',sync);
   const observer=new IntersectionObserver(entries=>{
-   setNear(Boolean(entries[0]?.isIntersecting));
-  },{rootMargin:'100px 0px'});
+   if(entries[0]) setNear(entries[0].isIntersecting);
+  },{rootMargin:'200px 0px'});
   if(mount.current)observer.observe(mount.current);
-  return()=>{observer.disconnect();window.removeEventListener('hd:motion',sync);};
+  return()=>{observer.disconnect();};
  },[]);
 
- const active=near&&allowed;
+ const active=near;
  const isMobile=typeof window!=='undefined'&&window.innerWidth<=850;
  const targetModel=(isMobile&&model==='fixer')?'eva':model;
 
  useEffect(()=>{
   if(!active||!canvas.current)return;
-  if(activeScenes >= 2) return;
+  if(activeScenes >= 4) return;
   activeScenes++;
   const node=canvas.current,controller=new AbortController();let lastState='';
   const update=(state:'loading'|'live'|'failed')=>{if(!controller.signal.aborted&&lastState!==state){lastState=state;setStatus(state);}};

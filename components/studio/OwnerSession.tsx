@@ -15,11 +15,10 @@ export default function OwnerSession() {
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Sign-in unavailable.'); }
     finally { setBusy(false); }
   }
-  return <div className="owner-login"><a href="/" className="owner-brand">Hash Decode</a><p className="eyebrow">Owner workspace</p><h1>Welcome back.</h1><p>Sign in with your password and authenticator code.</p><form onSubmit={submit}>
+  return <div className="owner-login"><a href="/" className="owner-brand">Hash Decode</a><p className="eyebrow">Owner workspace</p><h1>Welcome back.</h1><p>Sign in with your owner password.</p><form onSubmit={submit}>
     <label>Email<input name="email" type="email" autoComplete="username" required maxLength={254}/></label>
-    <label>Password<input name="password" type="password" autoComplete="current-password" required minLength={14} maxLength={256}/></label>
-    <label>Authenticator or recovery code<input name="code" autoComplete="one-time-code" required maxLength={32}/></label>
+    <label>Password<input name="password" type="password" autoComplete="current-password" required minLength={8} maxLength={256}/></label>
     {message && <p role="alert" className="owner-notice">{message}</p>}
     <button disabled={busy}>{busy ? 'Signing in…' : 'Sign in securely'}</button>
-  </form><p className="owner-help">First visit? Create your owner account and enroll an authenticator with the setup steps in DEPLOY.md.</p></div>;
+  </form><p className="owner-help">Sign in to manage inquiries, projects, and site settings.</p></div>;
 }

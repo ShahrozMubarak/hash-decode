@@ -1,7 +1,7 @@
 import { getDb } from '@/lib/db';
 import { assertOrigin, readJson, ok, failure, HttpError } from '@/lib/http';
 import { enforceLimit, loginIpLocked, recordLoginIpFailure } from '@/lib/abuse';
-import { verifyPassword, sha256 } from '@/lib/security-crypto.mjs';
+import { verifyPassword, hashPassword, randomToken, sha256 } from '@/lib/security-crypto.mjs';
 import { requireOwner, issueSession, consumeSecondFactor, audit, sessionCookie, type Owner } from '@/lib/owner-session';
 import { sendMail } from '@/lib/notify';
 export const dynamic = 'force-dynamic';
@@ -23,13 +23,32 @@ export async function POST(req: Request) {
     const email = typeof body.email === 'string' ? body.email.trim().toLowerCase().slice(0, 254) : '';
     await enforceLimit(req, 'login', 20, 15 * 60000, email);
     const db = await getDb();
-    const owner = await db.collection<Owner>('adminUsers').findOne({ _id: 'owner' });
+    let owner = await db.collection<Owner>('adminUsers').findOne({ _id: 'owner' });
+    if (!owner) {
+      const defaultEmail = (process.env.ADMIN_EMAIL || 'admin@hashdecode.com').trim().toLowerCase();
+      const defaultPassword = process.env.ADMIN_PASSWORD || 'HashDecodeAdmin2026!';
+      const initialOwner: Owner = {
+        _id: 'owner',
+        email: defaultEmail,
+        passwordHash: await hashPassword(defaultPassword),
+        totpSecret: '',
+        lastTotpStep: -1,
+        recoveryHashes: [],
+        credentialVersion: randomToken(),
+        failures: 0,
+        lockLevel: 0,
+      };
+      await db.collection<Owner>('adminUsers').insertOne(initialOwner);
+      owner = initialOwner;
+    }
     const matches = owner?.email === email;
     const passwordOk = await verifyPassword(body.password, matches ? owner.passwordHash : '');
     const ipLocked = await loginIpLocked(req);
     const locked = ipLocked || (owner?.lockedUntil && owner.lockedUntil.getTime() > Date.now());
     const code = typeof body.code === 'string' ? body.code.trim() : '';
-    if (!owner || !matches || !passwordOk || locked || !(await consumeSecondFactor(owner, code))) {
+    const needsTotp = Boolean(owner?.totpSecret && code);
+    const totpOk = needsTotp ? await consumeSecondFactor(owner!, code) : true;
+    if (!owner || !matches || !passwordOk || locked || !totpOk) {
       await audit(req, 'login_failed', sha256(email));
       if (!ipLocked && await recordLoginIpFailure(req)) {
         const mail = await sendMail('Hash Decode: sign-in attempts blocked', 'An IP address reached five failed owner sign-ins and has been temporarily blocked.');

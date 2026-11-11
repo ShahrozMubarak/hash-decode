@@ -46,15 +46,22 @@ export function Header(){
  function closeMenu(){menu.current?.close();setOpen(false);toggle.current?.focus();}
 
  useEffect(()=>{
-   const preference=matchMedia('(prefers-reduced-motion: reduce)');
-   const sync=()=>{let saved=false;try{saved=localStorage.getItem('hd-paused')==='1';}catch{}
-    const paused=preference.matches||saved;document.documentElement.dataset.motion=paused?'off':'on';setPaused(paused);window.dispatchEvent(new Event('hd:motion'));};
-   sync();preference.addEventListener('change',sync);return()=>preference.removeEventListener('change',sync);
+   const sync=()=>{
+     let saved=false;
+     try{ saved = localStorage.getItem('hd-paused') === '1'; }catch{}
+     document.documentElement.dataset.motion = saved ? 'off' : 'on';
+     setPaused(saved);
+     window.dispatchEvent(new Event('hd:motion'));
+   };
+   sync();
  },[]);
  function pause(){
-   const next=!paused||matchMedia('(prefers-reduced-motion: reduce)').matches;
-   try{localStorage.setItem('hd-paused',next?'1':'0');}catch{}
-   document.documentElement.dataset.motion=next?'off':'on';setPaused(next);window.dispatchEvent(new Event('hd:motion'));window.dispatchEvent(new Event('hd:skip'));
+   const next = !paused;
+   try{ localStorage.setItem('hd-paused', next ? '1' : '0'); }catch{}
+   document.documentElement.dataset.motion = next ? 'off' : 'on';
+   setPaused(next);
+   window.dispatchEvent(new Event('hd:motion'));
+   window.dispatchEvent(new Event('hd:skip'));
  }
  if(path&&((path.startsWith('/admin') || path.startsWith('/portal'))||path.startsWith('/portal')))return null;
  return (
