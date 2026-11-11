@@ -32,3 +32,4 @@ The following files are preserved in the repository in accordance with the safe-
 - `components/studio/HumanCheck.tsx` (Turnstile arithmetic challenge disabled)
 - `lib/platform-db.ts` (local SQLite/Map store replaced by MongoDB)
 - `lib/cloudflare-shim.ts` (mock Cloudflare bindings)
+

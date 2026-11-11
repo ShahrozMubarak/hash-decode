@@ -256,7 +256,10 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
    if(delta > 1/24) veryLowFpsDuration += delta;
    else veryLowFpsDuration = 0;
-   if(veryLowFpsDuration >= 3) { failed(); dispose(); return; }
+   if(veryLowFpsDuration >= 3) {
+    console.warn('Scene disposed: very low FPS for 3s');
+    failed(); dispose(); return;
+   }
    if(delta > .025 && qualityTier < 3) {
     lowFpsDuration += delta;
     if(lowFpsDuration >= 2) {
@@ -426,7 +429,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
      renderer.render(scene,camera);
     }
     ready();
-   }catch{
+   }catch(err){
+    console.error('frameLoop render error:', err);
     stop();suspended=true;failed();return;
    }
   }
@@ -668,7 +672,13 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     renderer.render(scene,camera);
    }
    ready();
-  }catch{}
+  }catch(err){
+   console.error('Initial render error:', err);
+  }
   window.dispatchEvent(new Event('hd:measure'));start();
- }catch(error){dispose();if(!signal.aborted)throw error;}
+ }catch(error){
+  console.error('mountScene uncaught error:', error);
+  dispose();
+  if(!signal.aborted)throw error;
+ }
 }

@@ -38,7 +38,7 @@ function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
     }
    })
    .catch((err)=>{
-    void err;
+    console.error('SceneSurface mount error:', err);
     update('failed');
    });
   return()=>{controller.abort();activeScenes--;};
