@@ -1,0 +1,80 @@
+[
+  {
+    "route": "/",
+    "status": 200,
+    "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+    "robots": null,
+    "cspNonce": true
+  },
+  {
+    "route": "/portfolio",
+    "status": 200,
+    "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+    "robots": null,
+    "cspNonce": true
+  },
+  {
+    "route": "/about",
+    "status": 200,
+    "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+    "robots": null,
+    "cspNonce": true
+  },
+  {
+    "route": "/contact",
+    "status": 200,
+    "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+    "robots": null,
+    "cspNonce": true
+  },
+  {
+    "route": "/blog",
+    "status": 200,
+    "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+    "robots": null,
+    "cspNonce": true
+  },
+  {
+    "route": "/admin",
+    "status": 200,
+    "cacheControl": "no-store",
+    "robots": "noindex, nofollow",
+    "cspNonce": true
+  },
+  {
+    "route": "/robots.txt",
+    "status": 200,
+    "cacheControl": "s-maxage=31536000",
+    "robots": null,
+    "cspNonce": true
+  },
+  {
+    "route": "/sitemap.xml",
+    "status": 200,
+    "cacheControl": "public, max-age=60",
+    "robots": null,
+    "cspNonce": true
+  },
+  {
+    "route": "/.well-known/security.txt",
+    "status": 200,
+    "cacheControl": "public, max-age=300",
+    "robots": null,
+    "cspNonce": true
+  },
+  {
+    "ownerLogin": true,
+    "cookieFlags": [
+      " Secure",
+      " HttpOnly",
+      " SameSite=Strict",
+      " Path=/",
+      " Max-Age=43200"
+    ],
+    "isolatedDashboard": true,
+    "contactToInbox": true,
+    "exportRequiresReauth": true,
+    "logoutRevokes": true,
+    "visualChecks": "NOT RUN: Chromium launch previously blocked by socket() Operation not permitted"
+  }
+]

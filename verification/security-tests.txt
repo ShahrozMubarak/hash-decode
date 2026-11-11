@@ -1,0 +1,21 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> hash-decode-studio@0.1.0 test:security
+> node --import ./tests/security-register.mjs --test tests/security.test.mjs
+
+✔ password hashing rejects weak input; wrong password and dummy checks reject (1291.879945ms)
+✔ RFC 6238 SHA1 vector, wrong code, reuse and +/-1 window (2.611814ms)
+✔ AES-GCM authentication and hashed recovery codes (1.677421ms)
+✔ cookie flags, no legacy cookie/bearer, absolute and idle expiry (0.480041ms)
+✔ strict origin rejects cross-origin, missing origin and forwarded-host spoofing (1.787474ms)
+✔ body limit and Mongo operator injection (4.969031ms)
+✔ preview database guard rejects production names (0.361505ms)
+✔ email escapes HTML, strips subject newlines and exposes provider rejection (1.809788ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1572.461566

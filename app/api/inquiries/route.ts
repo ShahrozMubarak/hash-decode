@@ -1,224 +1,32 @@
-import { getDb } from '@/db';
-import { inquiries } from '@/db/schema';
-import { eq } from 'drizzle-orm';
-import { bounded, readSmall, sameOrigin } from '@/lib/studio-security';
-import { quota, runtime, getClientIp } from '@/lib/abuse';
+import { getDb } from '@/lib/db';
+import { assertOrigin, readJson, failure, HttpError, privateHeaders } from '@/lib/http';
+import { enforceLimit, ipHash } from '@/lib/abuse';
+import { inquirySchema, humanTiming } from '@/lib/form-validation';
 import { mailBrief } from '@/lib/notify';
-import { saveInquiryToMongo, getMongoDb, recordAuditLog } from '@/lib/mongodb';
-import { getPlatformDb } from '@/lib/platform-db';
-import {
-  verifySignedChallengeId,
-  wasChallengeIssuedHere,
-  isChallengeConsumed,
-  markChallengeConsumed,
-} from '@/app/api/challenge/route';
-
+import { revalidatePath } from 'next/cache';
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
-  if (!sameOrigin(req)) return Response.json({ error: 'Untrusted request.' }, { status: 403 });
-  let d: Record<string, unknown>;
-  let entry: typeof inquiries.$inferSelect;
   try {
-    d = await readSmall(req);
-    if (d.website) {
-      return Response.json({ error: 'Unable to accept this submission.' }, { status: 400 });
+    assertOrigin(req);
+    const parsed = inquirySchema.safeParse(await readJson(req));
+    if (!parsed.success) throw new HttpError(400, 'INPUT', 'Check your name, email and project details.');
+    const { submissionId: id, startedAt, website: _w, ...fields } = parsed.data;
+    void _w;
+    if (!humanTiming(startedAt) || (fields.brief.match(/https?:\/\//gi) || []).length > 3) throw new HttpError(400, 'SPAM_CHECK', 'Please take a moment to review your details, then submit again.');
+    await enforceLimit(req, 'inquiry', 5, 3600000, fields.email);
+    const db = await getDb();
+    const now = new Date();
+    const row = { id, ...fields, status: 'new', createdAt: now, updatedAt: now, created: now.getTime(), ipHash: ipHash(req), userAgent: (req.headers.get('user-agent') || '').slice(0, 160), emailStatus: 'pending', emailError: '', emailSentAt: null };
+    const saved = await db.collection('inquiries').findOneAndUpdate({ id }, { $setOnInsert: row }, { upsert: true, returnDocument: 'before' });
+    if (saved && Object.entries(fields).some(([key, value]) => saved[key] !== value)) throw new HttpError(409, 'CONFLICT', 'Please refresh and try again.');
+    if (!saved) {
+      // Save first. A failed notification cannot erase the accepted inquiry.
+      const mail = await mailBrief(row);
+      try { await db.collection('inquiries').updateOne({ id }, { $set: { ...mail, updatedAt: new Date() } }); }
+      catch { console.error(JSON.stringify({ requestId: id, code: 'EMAIL_STATUS_WRITE_FAILED' })); }
     }
-    const email = bounded(d.email, 254, 3).toLowerCase();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      throw Error('Enter a valid email address.');
-    }
-    const rawTopic = bounded(d.topic, 60, 1);
-    const validTopics = ['Digital product', 'Web platform', 'Business system', 'Security audit', 'Something else'];
-    const topic = validTopics.find(
-      (t) => t.toLowerCase() === rawTopic.toLowerCase()
-    ) || 'Web platform';
-
-    const rawBudget = bounded(d.budget, 60, 1);
-    const normBudget = rawBudget.replace(/[\u2010\u2011\u2012\u2013\u2014\u2212]/g, '-').toLowerCase();
-    const budgetMap: Record<string, string> = {
-      'under us$2,500': 'Under US$2,500',
-      'us$2,500-7,500': 'US$2,500–7,500',
-      'us$7,500-20,000': 'US$7,500–20,000',
-      'us$20,000+': 'US$20,000+',
-      'still exploring': 'Still exploring',
-    };
-    const budget =
-      budgetMap[normBudget] ||
-      Object.entries(budgetMap).find(([k]) => normBudget.includes(k.slice(0, 8)))?.[1] ||
-      'Still exploring';
-    const id = d.submissionId === undefined ? crypto.randomUUID() : bounded(d.submissionId, 36, 36);
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
-      throw Error();
-    }
-    entry = {
-      id,
-      name: bounded(d.name, 100, 2),
-      email,
-      topic,
-      budget,
-      brief: bounded(d.brief, 3000, 12),
-      status: 'new',
-      mail: 'pending',
-      created: Date.now(),
-    };
-  } catch {
-    return Response.json(
-      { error: 'Check your name, email, project details and field lengths.' },
-      { status: 400 }
-    );
-  }
-
-  try {
-    if (!(await quota(req, 'brief-attempt', 500, 10 * 60 * 1000))) {
-      return Response.json({ error: 'Please wait before trying again.' }, { status: 429 });
-    }
-
-    // Idempotent retry check across both SQLite/D1 and MongoDB
-    if (d.submissionId) {
-      try {
-        let saved = await getDb()
-          .select()
-          .from(inquiries)
-          .where(eq(inquiries.id, entry.id))
-          .get();
-        if (!saved) {
-          const mongo = await getMongoDb();
-          if (mongo) {
-            const doc = await mongo.collection('inquiries').findOne({ id: entry.id });
-            if (doc) {
-              saved = {
-                id: String(doc.id),
-                name: String(doc.name),
-                email: String(doc.email),
-                topic: String(doc.topic),
-                budget: String(doc.budget),
-                brief: String(doc.brief),
-                status: String(doc.status || 'new'),
-                mail: String(doc.mail || 'not configured'),
-                created: Number(doc.created || Date.now()),
-              };
-            }
-          }
-        }
-        if (saved) {
-          const matches = (['name', 'email', 'topic', 'budget', 'brief'] as const).every(
-            (k) => entry[k] === saved![k]
-          );
-          return matches
-            ? Response.json({ ok: true, reference: saved.id.slice(0, 8).toUpperCase() }, { status: 200 })
-            : Response.json({ error: 'Please refresh and retry.' }, { status: 409 });
-        }
-      } catch {}
-    }
-
-    const db = getPlatformDb();
-    if (runtime('TURNSTILE_SITE_KEY') && runtime('TURNSTILE_SECRET')) {
-      const token = bounded(d.token, 2048, 1);
-      const reply = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-        method: 'POST',
-        signal: AbortSignal.timeout(6000),
-        body: new URLSearchParams({ secret: runtime('TURNSTILE_SECRET'), response: token }),
-      });
-      const result = (await reply.json()) as { success?: boolean; hostname?: string };
-      if (!result.success || result.hostname !== new URL(req.url).hostname) {
-        return Response.json({ error: 'Complete the verification again.' }, { status: 422 });
-      }
-    } else if (d.challenge || d.answer) {
-      const cid = String(d.challenge || '');
-      const ans = String(d.answer || '').trim();
-      if (cid.length !== 36 && cid !== 'auto-check') {
-        return Response.json({ error: 'Complete the human check.' }, { status: 422 });
-      }
-      if (cid === 'auto-check') {
-        const num = Number(ans);
-        if (!ans || !Number.isInteger(num) || num < 2 || num > 30) {
-          return Response.json(
-            { error: 'The human check expired or was incorrect. Try the new question.' },
-            { status: 422 }
-          );
-        }
-      } else {
-        if (isChallengeConsumed(cid)) {
-          return Response.json(
-            { error: 'The human check expired or was incorrect. Try the new question.' },
-            { status: 422 }
-          );
-        }
-
-        const check = await db
-          .prepare('DELETE FROM human_challenges WHERE id=? RETURNING answer,expires')
-          .bind(cid)
-          .first<{ answer: string; expires: number }>();
-
-        let verified = false;
-        if (check) {
-          markChallengeConsumed(cid);
-          if (check.expires >= Date.now() && check.answer === ans) {
-            verified = true;
-          }
-        } else if (!wasChallengeIssuedHere(cid)) {
-          // Multi-instance / serverless cold-start fallback: check MongoDB or signed HMAC token
-          try {
-            const mongo = await getMongoDb();
-            if (mongo) {
-              const mDoc = await mongo.collection('human_challenges').findOneAndDelete({ id: cid });
-              const docVal = (mDoc as any)?.value ?? mDoc;
-              if (docVal && Number(docVal.expires) >= Date.now() && String(docVal.answer) === ans) {
-                verified = true;
-              }
-            }
-          } catch {}
-
-          if (!verified && (await verifySignedChallengeId(cid, ans))) {
-            verified = true;
-          }
-          if (verified) {
-            markChallengeConsumed(cid);
-          }
-        }
-
-        if (!verified) {
-          return Response.json(
-            { error: 'The human check expired or was incorrect. Try the new question.' },
-            { status: 422 }
-          );
-        }
-      }
-    }
-
-    if (!(await quota(req, 'brief', 120, 60 * 60 * 1000))) {
-      return Response.json({ error: 'Please wait before submitting another brief.' }, { status: 429 });
-    }
-
-    const mail = await mailBrief(entry);
-    entry.mail = mail;
-
-    try {
-      await getDb().insert(inquiries).values(entry);
-    } catch (err) {
-      console.warn('[DB insert error]:', err);
-    }
-
-    await saveInquiryToMongo(entry).catch((err) =>
-      console.warn('[MongoDB] Inquiry sync note:', err)
-    );
-
-    await recordAuditLog({
-      action: 'inquiry_submitted',
-      actor: entry.email,
-      target: entry.id,
-      detail: `${entry.topic} · ${entry.budget} · mail:${mail}`,
-      ip: getClientIp(req),
-    });
-
-    return Response.json(
-      { ok: true, reference: entry.id.slice(0, 8).toUpperCase() },
-      { status: 201 }
-    );
-  } catch (err) {
-    console.error('[Inquiries submit error]:', err);
-    return Response.json(
-      { error: 'Submission unavailable. Please check your connection and try again.' },
-      { status: 503 }
-    );
-  }
+    revalidatePath('/admin');
+    return Response.json({ ok: true, data: { id }, reference: id.slice(0, 8).toUpperCase() }, { status: saved ? 200 : 201, headers: privateHeaders });
+  } catch (error) { return failure(error); }
 }

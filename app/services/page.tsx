@@ -241,7 +241,7 @@ export default function Services() {
             <div className="card-glare" aria-hidden="true" />
             <span className="process-step-pill">04</span>
             <h3>Launch &amp; handover</h3>
-            <p>We deploy to your cloud, verify security, and transfer 100% of the repository and credentials. Plus 30 days of free support.</p>
+            <p>We deploy to your cloud, verify security, and transfer the repository and credentials with the agreed handover documentation.</p>
           </div>
         </div>
       </section>
@@ -279,7 +279,7 @@ export default function Services() {
               </tr>
               <tr>
                 <td><strong>Code Ownership</strong></td>
-                <td className="highlight-col"><Check size={16} /> 100% client-owned code &amp; keys</td>
+                <td className="highlight-col"><Check size={16} /> Client-owned code &amp; keys</td>
                 <td>Complex IP retention clauses</td>
                 <td>Unclear license terms</td>
               </tr>

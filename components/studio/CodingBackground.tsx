@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 const CYBER_GLYPHS = [
   '⬡', '◈', '₿', 'Ξ', 'Ł', '⬢', 'λ', '⏣', '⌖', '⚡', '✦',
   '0', '1', 'B', 'D', 'X', 'E', 'C', 'O', 'D', 'E',
-  '0x', 'FF', '::', '&&', '=>', '{ }', '</>', '🔒', 'λ',
+  '0x', 'FF', '::', '&&', '=>', '{ }', '</>', 'λ',
   '10', '01', 'HEX', 'SYS', 'NET', 'API', 'KEY', 'BOT',
   'SHA', 'AES', 'RSA', 'HASH', 'SEED', 'NODE', 'FLOW', 'G', 'K'
 ];

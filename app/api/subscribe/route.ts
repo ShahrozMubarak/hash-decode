@@ -1,57 +1,17 @@
-import { bounded, readSmall, sameOrigin } from '@/lib/studio-security';
-import { quota, getClientIp } from '@/lib/abuse';
-import { mailSubscriber } from '@/lib/notify';
-import { saveSubscriberToMongo, recordAuditLog } from '@/lib/mongodb';
-import { getPlatformDb } from '@/lib/platform-db';
-
+import { getDb } from '@/lib/db';
+import { assertOrigin, readJson, ok, failure, HttpError } from '@/lib/http';
+import { enforceLimit, ipHash } from '@/lib/abuse';
+import { subscriberSchema, humanTiming } from '@/lib/form-validation';
+export const runtime = 'nodejs';
 export async function POST(req: Request) {
-  if (!sameOrigin(req)) return Response.json({ error: 'Untrusted request.' }, { status: 403 });
   try {
-    const data = await readSmall(req);
-    const email = bounded(data.email, 254, 3).toLowerCase();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return Response.json({ error: 'Please enter a valid email address.' }, { status: 400 });
-    }
-
-    if (!(await quota(req, 'subscribe', 15))) {
-      return Response.json({ error: 'Please wait before subscribing again.' }, { status: 429 });
-    }
-
-    const now = Date.now();
-
-    // Save to local SQLite / D1
-    try {
-      const db = getPlatformDb();
-      await db
-        .prepare(
-          "CREATE TABLE IF NOT EXISTS subscribers (email text PRIMARY KEY NOT NULL, status text DEFAULT 'active' NOT NULL, created integer NOT NULL)"
-        )
-        .run()
-        .catch(() => {});
-      await db
-        .prepare('INSERT OR REPLACE INTO subscribers (email, created) VALUES (?, ?)')
-        .bind(email, now)
-        .run();
-    } catch (e) {
-      console.warn('[Subscribers DB note]:', e);
-    }
-
-    // Save to MongoDB Atlas
-    await saveSubscriberToMongo(email, 'active');
-
-    // Send email notification to studio owner
-    await mailSubscriber(email).catch(() => {});
-
-    await recordAuditLog({
-      action: 'newsletter_subscribed',
-      actor: email,
-      target: email,
-      detail: 'Footer dispatch subscription',
-      ip: getClientIp(req),
-    });
-
-    return Response.json({ ok: true, message: 'Subscribed successfully.' }, { status: 200 });
-  } catch {
-    return Response.json({ error: 'Unable to subscribe. Please try again.' }, { status: 400 });
-  }
+    assertOrigin(req);
+    const parsed = subscriberSchema.safeParse(await readJson(req));
+    if (!parsed.success || !humanTiming(parsed.data.startedAt)) throw new HttpError(400, 'INPUT', 'Check your email and take a moment before submitting.');
+    const { email } = parsed.data;
+    await enforceLimit(req, 'subscribe', 5, 3600000, email);
+    const now = new Date();
+    await (await getDb()).collection('subscribers').updateOne({ email }, { $setOnInsert: { email, status: 'active', createdAt: now, updatedAt: now, ipHash: ipHash(req), userAgent: (req.headers.get('user-agent') || '').slice(0, 160) } }, { upsert: true });
+    return ok({ message: 'Your subscription request has been received.' });
+  } catch (error) { return failure(error); }
 }

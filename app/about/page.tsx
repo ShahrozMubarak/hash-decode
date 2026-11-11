@@ -22,7 +22,7 @@ const principles = [
     icon: ShieldCheck,
   },
   {
-    title: '100% Client ownership',
+    title: 'Client ownership',
     desc: 'You own every line of code, every repository, and every cloud credential. We never lock you in, and we provide clean documentation so any engineer can continue our work.',
     icon: HeartHandshake,
   },

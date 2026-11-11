@@ -1,4 +1,4 @@
-import { ArrowUpRight, ArrowLeft, Briefcase, Cpu, Mail, Compass } from 'lucide-react';
+import { ArrowUpRight, ArrowLeft, Briefcase, Cpu, Mail } from 'lucide-react';
 import { meta } from '@/lib/meta';
 
 export const metadata = meta(

@@ -8,14 +8,12 @@ const models=[
  {id:'eva',name:'Eva Autonomous Agent',note:'Autonomous studio agent featuring animated Grok-bot visor eyes, organic floating physics, and 360-degree interactive camera orbit.'}
 ] as const;
 export function Gallery(){
- const [mobile,setMobile]=useState<boolean|null>(null);
- useEffect(()=>{const query=matchMedia('(max-width:850px)');const sync=()=>setMobile(query.matches);sync();query.addEventListener('change',sync);return()=>query.removeEventListener('change',sync);},[]);
  const [selected,setSelected]=useState(0),tabs=useRef<(HTMLButtonElement|null)[]>([]);
  const manual=useRef<number|null>(null);
  useEffect(()=>{
   const scroll=(event:Event)=>{
    if(document.documentElement.dataset.motion!=='on'||!matchMedia('(min-width:981px) and (min-height:700px)').matches)return;
-   const {gallery,position}=(event as CustomEvent<{gallery:number,position:number}>).detail;
+   const {position}=(event as CustomEvent<{gallery:number,position:number}>).detail;
    if(manual.current!==null&&Math.abs(position-manual.current)<innerHeight*.4)return;
    manual.current=null;setSelected(0);
   };

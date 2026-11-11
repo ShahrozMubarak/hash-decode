@@ -3,49 +3,6 @@
 import { useState } from 'react';
 import type { Founder } from '@/lib/studio-data';
 
-const fallbackFounders: Founder[] = [
-  {
-    id: 'shahroz-dogar',
-    name: 'Shahroz Dogar',
-    role: 'Founder & Principal Systems Architect',
-    image: '/team/shahroz.svg',
-    bio: '',
-    url: '',
-    skills: ['Distributed Systems', 'Security Audits'],
-    position: 1,
-  },
-  {
-    id: 'hamza-malik',
-    name: 'Hamza Malik',
-    role: 'Head of Product Design',
-    image: '/team/hamza.svg',
-    bio: '',
-    url: '',
-    skills: ['Product Design', 'WebGL'],
-    position: 2,
-  },
-  {
-    id: 'zainab-tariq',
-    name: 'Zainab Tariq',
-    role: 'Director of Security Audits',
-    image: '/team/zainab.svg',
-    bio: '',
-    url: '',
-    skills: ['Penetration Testing', 'Threat Modelling'],
-    position: 3,
-  },
-  {
-    id: 'daniyal-khan',
-    name: 'Daniyal Khan',
-    role: 'Lead Frontend Engineer',
-    image: '/team/daniyal.svg',
-    bio: '',
-    url: '',
-    skills: ['React', 'TypeScript'],
-    position: 4,
-  },
-];
-
 function FounderAvatar({ name, image }: { name: string; image?: string }) {
   const [imgError, setImgError] = useState(false);
 
@@ -59,7 +16,7 @@ function FounderAvatar({ name, image }: { name: string; image?: string }) {
       .toUpperCase();
   };
 
-  if (!image || imgError) {
+  if (!image || image.endsWith('.svg') || imgError) {
     return (
       <div className="team-monogram-avatar" aria-label={`Monogram avatar for ${name}`}>
         <span className="team-monogram-initials">{getInitials(name)}</span>
@@ -83,11 +40,11 @@ function FounderAvatar({ name, image }: { name: string; image?: string }) {
 }
 
 export default function TeamStrip({ founders }: { founders?: Founder[] }) {
-  const list = founders && founders.length > 0 ? founders.slice(0, 4) : fallbackFounders;
+  const list = (founders || []).slice(0, 4);
 
   return (
     <div className="team-strip-grid" data-stagger>
-      {list.map((f, i) => (
+      {list.map((f) => (
         <article key={f.id || f.name} className="team-strip-card hd-card" data-reveal="up">
           <div className="card-glare" aria-hidden="true" />
           <FounderAvatar name={f.name} image={f.image} />

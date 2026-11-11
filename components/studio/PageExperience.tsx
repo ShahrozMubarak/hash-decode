@@ -3,24 +3,13 @@ import { useEffect, useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import SceneSurface from './SceneSurface';
 
-const TAB_TITLES: Record<string, string> = {
-  '/services': 'Work',
-  '/portfolio': 'Portfolio',
-  '/about': 'About',
-  '/contact': 'Contact',
-  '/privacy': 'Privacy',
-  '/blog': 'Journal',
-  '/tools': 'Tools',
-};
-
 export default function PageExperience() {
   const path = usePathname();
   const prevPathRef = useRef<string>(path);
   const [shifting, setShifting] = useState<boolean>(false);
-  const [currentTab, setCurrentTab] = useState<string>(TAB_TITLES[path] || 'Studio');
 
   useEffect(() => {
-    if (path === '/') return;
+    if (path === '/' || path.startsWith('/admin') || path.startsWith('/portal')) return;
     let reveal: IntersectionObserver | null = null;
     let elements: HTMLElement[] = [];
     const timer = setTimeout(() => {
@@ -54,8 +43,6 @@ export default function PageExperience() {
 
   useEffect(() => {
     if (path !== prevPathRef.current) {
-      const nextTab = TAB_TITLES[path] || path.replace('/', '').toUpperCase() || 'Studio';
-      setCurrentTab(nextTab);
       setShifting(true);
       const timer = setTimeout(() => {
         setShifting(false);

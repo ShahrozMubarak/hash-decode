@@ -72,13 +72,14 @@ export default function SecurityChecker() {
         }),
       });
 
-      const data = (await response.json()) as Scan & { error?: string };
+      const data = (await response.json()) as { data?: Scan; error?: { message?: string } };
 
       if (!response.ok) {
-        throw new Error(data.error || 'The security scan could not be completed.');
+        throw new Error(data.error?.message || 'The security scan could not be completed.');
       }
 
-      setResult(data);
+      if (!data.data) throw new Error('The scanner returned an incomplete response.');
+      setResult(data.data);
       setStatus('done');
     } catch (err: unknown) {
       const message =

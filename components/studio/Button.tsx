@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Check } from 'lucide-react';
 
@@ -27,7 +27,7 @@ export default function Button({
   onClick,
   ...rest
 }: ButtonProps) {
-  const [internalSuccess, setInternalSuccess] = useState(success);
+  const internalSuccess = success;
 
   const baseClass =
     variant === 'primary'

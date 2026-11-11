@@ -1,7 +1,8 @@
+import '@/app/owner.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Studio Command | Hash Decode Atelier',
+  title: 'Owner workspace | Hash Decode',
   robots: {
     index: false,
     follow: false,

@@ -1,98 +1,25 @@
 'use client';
-import {useState,useRef,useEffect} from 'react';
-import {ArrowUpRight,Eye,EyeOff,LogOut,LockKeyhole,Check} from 'lucide-react';
-
-export default function OwnerSession({logout=false}:{logout?:boolean}){
- const locked=useRef(false);
- const [busy,setBusy]=useState(false);
- const [error,setError]=useState('');
- const [success,setSuccess]=useState('');
- const [visible,setVisible]=useState(false);
-
- useEffect(()=>{
-  if(logout)return;
-  try{
-    const stored=localStorage.getItem('hashdecode_owner_session');
-    if(stored){
-      const {token,time}=JSON.parse(stored);
-      if(token && Date.now() - Number(time) < 14400000){
-        const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
-        document.cookie=`studio-session=${token}; Path=/; SameSite=Lax; Max-Age=14400${isSecure ? '; Secure' : ''}`;
-        fetch('/api/session', { headers: { 'Authorization': `Bearer ${token}` } })
-          .then(r => {
-            if(r.ok) {
-              window.location.replace('/admin?auth=' + Date.now());
-            }
-          })
-          .catch(()=>{});
-      }
-    }
-  }catch{}
- },[logout]);
-
- return <form className={logout?'owner-logout':'form-panel owner-login'} aria-busy={busy} onSubmit={async event=>{
-  event.preventDefault();if(locked.current)return;
-  const formData=new FormData(event.currentTarget);
-  const email=formData.get('email');
-  const password=formData.get('password');
-  locked.current=true;setBusy(true);setError('');setSuccess('');
-  try{
-   const response=await fetch('/api/session',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:logout?'logout':'login',email,password}),signal:AbortSignal.timeout(12000)});
-   if(!response.ok){
-     const msg = response.status===429
-       ? 'Too many attempts. Try again in a few minutes.'
-       : response.status===503
-       ? 'Sign-in is temporarily unavailable. Please try again.'
-       : 'Unable to sign in. Check your email & password and try again.';
-     setError(msg);
-     return;
-   }
-   const data=await response.json().catch(()=>({}));
-   if(!logout&&data?.token){
-     setSuccess('Signed in. Opening dashboard…');
-     try{
-       localStorage.setItem('hashdecode_owner_session',JSON.stringify({token:data.token,email,time:Date.now()}));
-       const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
-       document.cookie=`studio-session=${data.token}; Path=/; SameSite=Lax; Max-Age=14400${isSecure ? '; Secure' : ''}`;
-     }catch{}
-     setTimeout(()=>{
-       window.location.replace('/admin?auth=' + Date.now());
-     },80);
-     return;
-   }else if(logout){
-     try{
-       localStorage.removeItem('hashdecode_owner_session');
-       document.cookie='studio-session=; Path=/; SameSite=Lax; Max-Age=0';
-       document.cookie='__Host-studio-session=; Path=/; SameSite=Lax; Max-Age=0';
-     }catch{}
-     setTimeout(()=>{
-       window.location.replace('/admin?logged_out=' + Date.now());
-     },80);
-     return;
-   }
-   window.location.replace('/admin?auth=' + Date.now());
-  }catch{setError('Connection interrupted. Please try again.');}finally{locked.current=false;setBusy(false);}
- }}>
- {!logout&&<>
-  <span className="login-mark"><LockKeyhole size={24}/></span>
-  <h2>Welcome back.</h2>
-  <p>Sign in to manage your projects, content and studio briefs.</p>
-  <label htmlFor="owner-email">Owner email</label>
-  <input id="owner-email" name="email" type="email" required defaultValue="shaahrozdogar@gmail.com" autoComplete="username" style={{marginBottom:'1rem'}}/>
-  <label htmlFor="owner-password">Owner password</label>
-  <div className="password-field">
-    <input id="owner-password" name="password" type={visible?'text':'password'} required minLength={4} maxLength={256} autoComplete="current-password" aria-describedby="login-help login-status"/>
-    <button type="button" className="password-toggle" onClick={()=>setVisible(!visible)} aria-label={visible?'Hide password':'Show password'} aria-pressed={visible}>
-      {visible?<EyeOff size={18}/>:<Eye size={18}/>}
-    </button>
-  </div>
-  <p className="tiny" id="login-help">Sign in using your email and owner password.</p>
- </>}
- <button className={logout?'outline':'cta'} disabled={busy}>
-  {busy?(success || 'Please wait…'):logout?'Sign out':'Sign in'}
-  {success ? <Check size={17}/> : logout ? <LogOut size={16}/> : <ArrowUpRight size={17}/>}
- </button>
- {success && <p className="form-status" style={{ color: 'var(--highlight)', fontWeight: 600 }}>{success}</p>}
- <p id={logout?undefined:'login-status'} className={error?'form-error':'form-status'} role="status" aria-live="polite">{error}</p>
- </form>;
+import { useState, type FormEvent } from 'react';
+export default function OwnerSession() {
+  const [busy, setBusy] = useState(false), [message, setMessage] = useState('');
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); setBusy(true); setMessage('');
+    const fields = Object.fromEntries(new FormData(event.currentTarget));
+    try {
+      const response = await fetch('/api/session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'login', ...fields }) });
+      const result = await response.json();
+      if (!response.ok) throw Error(result.error?.message || 'Sign-in failed.');
+      // Remove tokens stored by the previous release; current credentials are cookie-only.
+      localStorage.removeItem('hashdecode_owner_session');
+      window.location.replace('/admin');
+    } catch (error) { setMessage(error instanceof Error ? error.message : 'Sign-in unavailable.'); }
+    finally { setBusy(false); }
+  }
+  return <div className="owner-login"><a href="/" className="owner-brand">Hash Decode</a><p className="eyebrow">Owner workspace</p><h1>Welcome back.</h1><p>Sign in with your password and authenticator code.</p><form onSubmit={submit}>
+    <label>Email<input name="email" type="email" autoComplete="username" required maxLength={254}/></label>
+    <label>Password<input name="password" type="password" autoComplete="current-password" required minLength={14} maxLength={256}/></label>
+    <label>Authenticator or recovery code<input name="code" autoComplete="one-time-code" required maxLength={32}/></label>
+    {message && <p role="alert" className="owner-notice">{message}</p>}
+    <button disabled={busy}>{busy ? 'Signing in…' : 'Sign in securely'}</button>
+  </form><p className="owner-help">First visit? Create your owner account and enroll an authenticator with the setup steps in DEPLOY.md.</p></div>;
 }

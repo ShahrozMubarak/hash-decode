@@ -8,6 +8,7 @@ export default function TypingSecure() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'off') return;
     let timer: NodeJS.Timeout;
 
     if (!isDeleting) {

@@ -5,7 +5,6 @@ export default function HackerCoder() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isTypingFast, setIsTypingFast] = useState(false);
-  const [activeTab, setActiveTab] = useState<'exploit' | 'audit' | 'build'>('audit');
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {

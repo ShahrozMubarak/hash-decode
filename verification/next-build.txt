@@ -1,0 +1,66 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> hash-decode-studio@0.1.0 build
+> node scripts/run-framework.mjs build
+
+▲ Next.js 16.4.3 (Turbopack)
+✓ Running next.config.ts took 38ms
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1002ms
+  Running TypeScript ...
+  Finished TypeScript in 6.0s ...
+  Collecting page data using 8 workers ...
+  Generating static pages using 8 workers (0/10) ...
+  Generating static pages using 8 workers (2/10) 
+  Generating static pages using 8 workers (4/10) 
+  Generating static pages using 8 workers (7/10) 
+✓ Generating static pages using 8 workers (10/10) in 128ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /.well-known/security.txt
+├ ƒ /about
+├ ƒ /admin
+├ ƒ /api/admin
+├ ƒ /api/challenge
+├ ƒ /api/chat
+├ ƒ /api/check
+├ ƒ /api/csp-report
+├ ƒ /api/inquiries
+├ ƒ /api/metrics
+├ ƒ /api/session
+├ ƒ /api/subscribe
+├ ƒ /api/upload
+├ ƒ /blog
+├ ƒ /blog/[slug]
+├ ƒ /contact
+├ ƒ /expertise
+├ ƒ /lab/[slug]
+├ ○ /manifest.webmanifest
+├ ƒ /portfolio
+├ ƒ /portfolio/[slug]
+├ ƒ /privacy
+├ ○ /robots.txt
+├ ƒ /services
+├ ƒ /sitemap.xml
+├ ƒ /studio
+├ ƒ /tools
+├ ƒ /tools/estimate
+├ ƒ /tools/security-check
+├ ƒ /work
+└ ƒ /work/[slug]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

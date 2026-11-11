@@ -1,0 +1,39 @@
+{"requestId":"ea322c4f-6fb8-4ccd-bacb-db0c9f8977c6","code":"UNAUTHORIZED","status":401}
+{"requestId":"e5dfcfd8-1b82-4c71-b896-53d027f164e9","code":"UNAUTHORIZED","status":401}
+{"requestId":"b422f833-fe66-4a2f-951d-7326d20b53eb","code":"UNAUTHORIZED","status":401}
+{"requestId":"9a6702f8-e840-41ab-ad32-89c162d44856","code":"UNAUTHORIZED","status":401}
+▶ MongoDB route integration (isolated disposable database)
+  ✔ every private API rejects unauthenticated reads and mutations; page guard rejects (8.85014ms)
+{"requestId":"797847ab-566f-46c0-8f40-e485b188263f","code":"LOGIN_FAILED","status":401}
+{"requestId":"96a2e47d-bd2a-4a9e-a2a0-32173831515c","code":"LOGIN_FAILED","status":401}
+{"requestId":"b045d154-7b30-4b1a-86eb-303754f996f8","code":"LOGIN_FAILED","status":401}
+{"requestId":"b0af7e29-7490-4a15-bc4e-6616d1379fe9","code":"LOGIN_FAILED","status":401}
+{"requestId":"011fdf95-39e8-4801-b7f5-3d3434fae638","code":"LOGIN_FAILED","status":401}
+{"requestId":"c2961281-91c5-43a8-a077-7128f0f1b5a9","code":"LOGIN_FAILED","status":401}
+  ✔ wrong password, wrong code, five failures and persistent lockout (2727.601001ms)
+{"requestId":"44e37ea5-9225-4741-b9e9-27354456b23b","code":"LOGIN_FAILED","status":401}
+  ✔ TOTP login, cookie only, no bearer token response, replay rejected (718.894934ms)
+{"requestId":"50eaa6d2-a568-4a1c-be6f-9cc9f820dd71","code":"CSRF","status":403}
+{"requestId":"c8fc4178-05b0-4a84-92c4-4c3fd996c759","code":"ORIGIN","status":403}
+{"requestId":"6d5d68aa-d81a-4d86-85d0-b87db35f0040","code":"REAUTH_REQUIRED","status":403}
+  ✔ CSRF, cross-origin POST and export without reauthentication rejected (10.706537ms)
+{"requestId":"0bfa9480-06ff-4ab6-bdc9-c36298bb3009","code":"INPUT","status":400}
+  ✔ inquiry persists first; notification failure remains visible; duplicate retry is idempotent (32.9681ms)
+  ✔ newsletter is unique and duplicate response is indistinguishable (21.40537ms)
+  ✔ founder edits persist and draft records stay private (44.418704ms)
+  ✔ published blog post visible; future post remains private (26.238115ms)
+{"requestId":"670eef02-2ce9-4c6f-b69e-94731c63601e","code":"UNAUTHORIZED","status":401}
+{"requestId":"246e3424-cd86-47a3-8f92-54a175d22f67","code":"UNAUTHORIZED","status":401}
+{"requestId":"f79084df-a24a-4e1c-96f1-328a85d5ef31","code":"UNAUTHORIZED","status":401}
+  ✔ idle/absolute expiry and logout kill sessions (16.36286ms)
+{"requestId":"d8ea50f8-d5ff-40f7-9081-761ec0ad393d","code":"LOGIN_FAILED","status":401}
+  ✔ recovery code is single use (908.329371ms)
+✔ MongoDB route integration (isolated disposable database) (5404.560246ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5854.430398

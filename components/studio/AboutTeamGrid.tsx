@@ -16,7 +16,7 @@ function FounderAvatar({ name, image }: { name: string; image?: string }) {
       .slice(0, 2)
       .toUpperCase();
 
-  if (!image || imgError) {
+  if (!image || image.endsWith('.svg') || imgError) {
     return (
       <div className="about-monogram-avatar" aria-label={`Monogram avatar for ${name}`}>
         <span className="about-monogram-initials">{getInitials(name)}</span>
@@ -59,7 +59,7 @@ function FounderGridCard({ founder, index }: { founder: Founder; index: number }
 
       {founder.quote && (
         <blockquote className="about-founder-quote">
-          <p>&ldquo;{founder.quote}&rdquo;</p>
+          <p>{founder.quote}</p>
         </blockquote>
       )}
 

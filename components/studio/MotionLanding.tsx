@@ -66,11 +66,14 @@ export default function MotionLanding({
   projects,
   founders,
   links,
+  intro,
+  availability,
 }: {
   projects: Project[];
   founders?: Founder[];
   links: { whatsapp: string; booking: string };
   intro: string;
+  availability?: string;
 }) {
   return (
     <div className="landing original-composition">
@@ -104,7 +107,8 @@ export default function MotionLanding({
           {/* Hero Foreground Content */}
           <div className="wrap hero-grid">
             <div className="hero-heading-block">
-              <div className="hero-pill-badge">SECURE SOFTWARE STUDIO</div>
+              <div className="hero-pill-badge">Secure software studio</div>
+              {availability && <p className="availability-note">{availability}</p>}
               <h1 aria-label="Build it. Break it. Secure it.">
                 <span className="hero-h1-mask">
                   <span className="hero-h1-line hero-h1-line-1">Build it.</span>
@@ -130,7 +134,7 @@ export default function MotionLanding({
 
             <div className="hero-cta-block">
               <p className="hero-cta-subtext">
-                Custom software, web platforms and security reviews for teams building their next release.
+                {intro}
               </p>
               <div className="actions">
                 <a className="hd-btn-primary hero-start-cta cta-magnetic" href="#brief">
@@ -327,7 +331,7 @@ export default function MotionLanding({
               Selected concepts
             </span>
             <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Proven software <span className="highlight-word">concepts.</span>
+              Studio <span className="highlight-word">concepts.</span>
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
               Explore working architectures, reactive tools, and real-time operational interfaces.
@@ -335,6 +339,7 @@ export default function MotionLanding({
           </div>
 
           <div className="work-duo-grid" data-stagger data-reveal="up" data-reveal-delay="320">
+            {projects.length === 0 && <p className="empty-content">Portfolio updates are on their way.</p>}
             {projects.slice(0, 2).map((project, index) => (
               <WorkCard key={project.slug} project={project} index={index} />
             ))}

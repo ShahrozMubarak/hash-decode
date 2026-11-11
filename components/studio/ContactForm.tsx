@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { ArrowUpRight, AlertCircle } from 'lucide-react';
 import { showToast } from './ToastManager';
 
@@ -28,9 +28,13 @@ interface ContactFormProps {
 export default function ContactForm({ initial = '', initialBrief = '' }: ContactFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const lock = useRef(false);
+  const startedAt = useRef('');
+  useEffect(() => {
+    startedAt.current = String(Date.now());
+  }, []);
   const last = useRef({ signature: '', id: '' });
 
-  const [revision, setRevision] = useState(0);
+  
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [receipt, setReceipt] = useState('');
@@ -176,20 +180,15 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               ...data,
+              startedAt: startedAt.current,
               ...(last.current.id ? { submissionId: last.current.id } : {}),
             }),
             signal: AbortSignal.timeout(18000),
           });
 
           if (!r.ok) {
-            const msg =
-              r.status === 429
-                ? 'Too many attempts. Please wait a minute and retry.'
-                : r.status === 422
-                ? 'Please answer the quick verification question and send again.'
-                : r.status === 400
-                ? 'Check the required fields and try again.'
-                : 'Your brief could not be confirmed. Please try again.';
+            const payload = await r.json().catch(() => null);
+            const msg = payload?.error?.message || 'Your brief could not be confirmed. Please try again.';
 
             setError(msg);
             showToast({
@@ -202,7 +201,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
             if (typeof window !== 'undefined') {
               window.dispatchEvent(new CustomEvent('hd:form-error', { detail: { error: msg } }));
             }
-            setRevision((x) => x + 1);
+            
             return;
           }
 
@@ -230,7 +229,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
             message: msg,
           });
           triggerShake();
-          setRevision((x) => x + 1);
+          
 
           if (typeof window !== 'undefined') {
             window.dispatchEvent(new CustomEvent('hd:form-error', { detail: { error: msg } }));

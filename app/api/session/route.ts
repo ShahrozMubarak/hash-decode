@@ -1,119 +1,59 @@
-import { quota, getClientIp } from '@/lib/abuse';
-import { readSmall, sameOrigin } from '@/lib/studio-security';
-import {
-  issueSession,
-  revokeSession,
-  sessionCookie,
-  verifyPassword,
-  sessionValid,
-} from '@/lib/owner-session';
-import { recordAuditLog } from '@/lib/mongodb';
-
-function isHttpsRequest(req: Request): boolean {
-  try {
-    const u = new URL(req.url);
-    if (u.protocol === 'https:') return true;
-    const proto = req.headers.get('x-forwarded-proto')?.split(',')[0]?.trim();
-    return proto === 'https';
-  } catch {
-    return true;
-  }
-}
-
-export async function POST(req: Request) {
-  const isSecure = isHttpsRequest(req);
-  const reply = (status: number, error?: string, cookie?: string) =>
-    Response.json(error ? { error } : { ok: true }, {
-      status,
-      headers: {
-        'Cache-Control': 'no-store',
-        ...(cookie ? { 'Set-Cookie': cookie } : {}),
-      },
-    });
-  if (!sameOrigin(req)) return reply(403, 'Request denied.');
-  let body: Record<string, unknown>;
-  try {
-    body = await readSmall(req);
-  } catch {
-    return reply(400, 'Invalid request.');
-  }
-  const authHeader = req.headers.get('authorization') || '';
-  const directToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
-  const ip = getClientIp(req);
-
-  try {
-    if (body.action === 'logout') {
-      await revokeSession(req.headers.get('cookie'), directToken);
-      await recordAuditLog({ action: 'owner_logout', actor: 'owner', ip });
-      const headers = new Headers();
-      headers.set('Cache-Control', 'no-store');
-      headers.append('Set-Cookie', 'studio-session=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0');
-      headers.append('Set-Cookie', '__Host-studio-session=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0');
-      return Response.json({ ok: true }, { status: 200, headers });
-    }
-    if (body.action !== 'login') return reply(400, 'Invalid request.');
-    if (!(await quota(req, 'owner-login', 8, 15 * 60 * 1000))) {
-      await recordAuditLog({
-        action: 'owner_login_throttled',
-        actor: String(body.email || 'unknown'),
-        ip,
-        detail: 'Rate limit exceeded (8 attempts / 15m)',
-      });
-      return reply(429, 'Please try again in 15 minutes.');
-    }
-    if (!(await verifyPassword(body.password, body.email))) {
-      await recordAuditLog({
-        action: 'owner_login_failed',
-        actor: String(body.email || 'unknown'),
-        ip,
-        detail: 'Invalid credentials',
-      });
-      return reply(401, 'Sign-in failed.');
-    }
-    const session = await issueSession(isSecure);
-    await recordAuditLog({
-      action: 'owner_login_success',
-      actor: String(body.email || 'owner'),
-      ip,
-      detail: 'Authenticated owner session issued',
-    });
-    const headers = new Headers();
-    headers.set('Cache-Control', 'no-store');
-    headers.append(
-      'Set-Cookie',
-      `studio-session=${session.token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=14400${isSecure ? '; Secure' : ''}`
-    );
-    if (isSecure) {
-      headers.append(
-        'Set-Cookie',
-        `__Host-studio-session=${session.token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=14400`
-      );
-    }
-    return Response.json(
-      { ok: true, token: session.token },
-      {
-        status: 200,
-        headers,
-      }
-    );
-  } catch {
-    return reply(503, 'Sign-in is temporarily unavailable.');
-  }
-}
-
+import { getDb } from '@/lib/db';
+import { assertOrigin, readJson, ok, failure, HttpError } from '@/lib/http';
+import { enforceLimit, loginIpLocked, recordLoginIpFailure } from '@/lib/abuse';
+import { verifyPassword, sha256 } from '@/lib/security-crypto.mjs';
+import { requireOwner, issueSession, consumeSecondFactor, audit, sessionCookie, type Owner } from '@/lib/owner-session';
+import { sendMail } from '@/lib/notify';
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 export async function GET(req: Request) {
+  try { const session = await requireOwner(req); return ok({ csrf: session.csrf }); } catch (error) { return failure(error); }
+}
+export async function POST(req: Request) {
   try {
-    const authHeader = req.headers.get('authorization') || '';
-    const directToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
-    const ok = await sessionValid(req.headers.get('cookie'), directToken);
-    return Response.json(
-      { ok },
-      { status: ok ? 200 : 401, headers: { 'Cache-Control': 'no-store' } }
-    );
-  } catch {
-    return Response.json(
-      { error: 'Session check unavailable.' },
-      { status: 503, headers: { 'Cache-Control': 'no-store' } }
-    );
-  }
+    assertOrigin(req);
+    const body = await readJson(req);
+    if (body.action === 'logout' || body.action === 'logoutAll') {
+      const session = await requireOwner(req, true);
+      await audit(req, body.action);
+      await (await getDb()).collection('sessions').deleteMany(body.action === 'logoutAll' ? { ownerId: session.ownerId } : { tokenHash: session.tokenHash });
+      return ok({}, 200, { 'Set-Cookie': sessionCookie('', 0) });
+    }
+    if (body.action !== 'login') throw new HttpError(400, 'INPUT', 'Invalid request.');
+    const email = typeof body.email === 'string' ? body.email.trim().toLowerCase().slice(0, 254) : '';
+    await enforceLimit(req, 'login', 20, 15 * 60000, email);
+    const db = await getDb();
+    const owner = await db.collection<Owner>('adminUsers').findOne({ _id: 'owner' });
+    const matches = owner?.email === email;
+    const passwordOk = await verifyPassword(body.password, matches ? owner.passwordHash : '');
+    const ipLocked = await loginIpLocked(req);
+    const locked = ipLocked || (owner?.lockedUntil && owner.lockedUntil.getTime() > Date.now());
+    const code = typeof body.code === 'string' ? body.code.trim() : '';
+    if (!owner || !matches || !passwordOk || locked || !(await consumeSecondFactor(owner, code))) {
+      await audit(req, 'login_failed', sha256(email));
+      if (!ipLocked && await recordLoginIpFailure(req)) {
+        const mail = await sendMail('Hash Decode: sign-in attempts blocked', 'An IP address reached five failed owner sign-ins and has been temporarily blocked.');
+        await audit(req, 'ip_login_lockout', '', mail.emailStatus);
+      }
+      if (owner && matches && !locked) {
+        const now = new Date();
+        const row = await db.collection<Owner>('adminUsers').findOneAndUpdate({ _id: 'owner' }, [
+          { $set: { failures: { $add: [{ $cond: [{ $gt: ['$lastFailureAt', new Date(Date.now() - 900000)] }, { $ifNull: ['$failures', 0] }, 0] }, 1] }, lastFailureAt: now } },
+          { $set: { lockedUntil: { $cond: [{ $gte: ['$failures', 5] }, { $add: [now, { $multiply: [900000, { $pow: [2, { $min: [{ $ifNull: ['$lockLevel', 0] }, 4] }] }] }] }, '$lockedUntil'] }, lockLevel: { $cond: [{ $gte: ['$failures', 5] }, { $add: [{ $ifNull: ['$lockLevel', 0] }, 1] }, { $ifNull: ['$lockLevel', 0] }] } } }
+        ], { returnDocument: 'after' });
+        if (row?.failures === 5) {
+          const mail = await sendMail('Hash Decode: owner sign-in locked', 'Repeated sign-in failures temporarily locked your owner account. Use admin:reset with database access if necessary.');
+          await audit(req, 'login_lockout', 'owner', mail.emailStatus);
+        }
+      }
+      throw new HttpError(401, 'LOGIN_FAILED', 'Sign-in failed. Check your details or try again later.');
+    }
+    await db.collection<Owner>('adminUsers').updateOne({ _id: 'owner' }, { $set: { failures: 0, lockLevel: 0, lockedUntil: new Date(0) } });
+    const session = await issueSession(req, owner);
+    await audit(req, 'login_success');
+    // Notify on every login; user-agent fingerprints cannot reliably identify physical devices.
+    const mail = await sendMail('Hash Decode: new owner sign-in', 'A new owner session was created. If this was not you, reset your credentials with admin:reset.');
+    await audit(req, 'login_notification', 'owner', mail.emailStatus);
+    return ok({ csrf: session.session.csrf }, 200, { 'Set-Cookie': session.cookie });
+  } catch (error) { return failure(error); }
 }

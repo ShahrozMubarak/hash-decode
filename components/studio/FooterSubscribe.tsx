@@ -1,6 +1,6 @@
 'use client';
-import { useState, useRef } from 'react';
-import { ArrowUpRight, Check, Send } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { ArrowUpRight, Check } from 'lucide-react';
 import { showToast } from './ToastManager';
 
 export default function FooterSubscribe() {
@@ -8,6 +8,11 @@ export default function FooterSubscribe() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const lock = useRef(false);
+  const startedAt = useRef('');
+  useEffect(() => {
+    startedAt.current = String(Date.now());
+  }, []);
+  const honeypot = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,11 +25,11 @@ export default function FooterSubscribe() {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: email.trim(), startedAt: startedAt.current, website: honeypot.current?.value || '' }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to subscribe.');
+        throw new Error(data.error?.message || 'Failed to subscribe.');
       }
       setStatus('success');
       setEmail('');
@@ -33,8 +38,8 @@ export default function FooterSubscribe() {
         title: 'Subscribed',
         message: "You're subscribed to the engineering dispatch.",
       });
-    } catch (err: any) {
-      const msg = err.message || 'Could not subscribe. Please try again.';
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Could not subscribe. Please try again.';
       setStatus('error');
       setErrorMsg(msg);
       showToast({
@@ -64,6 +69,7 @@ export default function FooterSubscribe() {
         </div>
       ) : (
         <form className="footer-subscribe-form" onSubmit={handleSubmit} aria-busy={status === 'loading'}>
+          <label className="honeypot" aria-hidden="true">Website<input ref={honeypot} tabIndex={-1} autoComplete="off"/></label>
           <div className="footer-input-group">
             <input
               type="email"

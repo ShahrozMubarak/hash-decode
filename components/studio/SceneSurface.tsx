@@ -3,18 +3,19 @@ import {useEffect,useRef,useState} from 'react';
 import ModelPoster,{type PosterModel} from './ModelPoster';
 import SceneBoundary from './SceneBoundary';
 
-function SceneViewport({model,autoMobile=false}:{model:PosterModel,autoMobile?:boolean}){
+let activeScenes = 0;
+function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
  const mount=useRef<HTMLDivElement>(null),canvas=useRef<HTMLCanvasElement>(null);
- const [near,setNear]=useState(true);
+ const [near,setNear]=useState(false);
  const [allowed,setAllowed]=useState(true);
  const [status,setStatus]=useState<'poster'|'loading'|'live'|'failed'|'unavailable'>('loading');
 
  useEffect(()=>{
-  const sync=()=>setAllowed(!matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const sync=()=>setAllowed(!matchMedia('(prefers-reduced-motion: reduce)').matches && document.documentElement.dataset.motion !== 'off');
   sync();window.addEventListener('hd:motion',sync);
   const observer=new IntersectionObserver(entries=>{
-   if(entries[0]?.isIntersecting) setNear(true);
-  },{rootMargin:'600px 0px'});
+   setNear(Boolean(entries[0]?.isIntersecting));
+  },{rootMargin:'100px 0px'});
   if(mount.current)observer.observe(mount.current);
   return()=>{observer.disconnect();window.removeEventListener('hd:motion',sync);};
  },[]);
@@ -25,6 +26,8 @@ function SceneViewport({model,autoMobile=false}:{model:PosterModel,autoMobile?:b
 
  useEffect(()=>{
   if(!active||!canvas.current)return;
+  if(activeScenes >= 2) return;
+  activeScenes++;
   const node=canvas.current,controller=new AbortController();let lastState='';
   const update=(state:'loading'|'live'|'failed')=>{if(!controller.signal.aborted&&lastState!==state){lastState=state;setStatus(state);}};
   update('loading');
@@ -35,10 +38,10 @@ function SceneViewport({model,autoMobile=false}:{model:PosterModel,autoMobile?:b
     }
    })
    .catch((err)=>{
-    console.error('mountScene error:',err);
+    void err;
     update('failed');
    });
-  return()=>controller.abort();
+  return()=>{controller.abort();activeScenes--;};
  },[active,targetModel]);
 
  const live=active&&status==='live';

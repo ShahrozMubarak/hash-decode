@@ -1,630 +1,140 @@
-import { getDb } from '@/db';
-import { projects, inquiries, settings, content } from '@/db/schema';
-import { eq, desc } from 'drizzle-orm';
-import { concepts, listProjects, studioCopy, listFounders } from '@/lib/studio-data';
-import { manageContent, entries, getLinks } from '@/lib/cms';
-import {
-  adminAccess,
-  bounded,
-  readSmall,
-  sameOrigin,
-  httpsUrl,
-  imageOrUrl,
-} from '@/lib/studio-security';
-import {
-  saveProjectToMongo,
-  saveInquiryToMongo,
-  updateInquiryStatusInMongo,
-  deleteInquiryFromMongo,
-  saveSettingToMongo,
-  saveContentToMongo,
-  saveSubscriberToMongo,
-  removeSubscriberFromMongo,
-  getMongoSubscribers,
-  getMongoInquiries,
-  getMongoSyncStatus,
-  recordAuditLog,
-  getAuditLogs,
-} from '@/lib/mongodb';
-import { getPlatformDb } from '@/lib/platform-db';
-import { clearRateLimits, getClientIp, trafficSince } from '@/lib/abuse';
-import {
-  verifyPassword,
-  hashPasswordPbkdf2,
-  setCustomCredentialHash,
-  revokeOtherSessions,
-} from '@/lib/owner-session';
-
-const VALID_INQUIRY_STATUSES = ['new', 'in_progress', 'read', 'completed', 'archived'];
-
-export async function loadSubscribersList(limit = 500) {
-  const platformDb = getPlatformDb();
-  const map = new Map<string, { email: string; status: string; created: number }>();
-
-  try {
-    const mongoSubs = await getMongoSubscribers(limit);
-    for (const s of mongoSubs) {
-      map.set(s.email.toLowerCase(), s);
-    }
-  } catch {}
-
-  try {
-    await platformDb
-      .prepare(
-        "CREATE TABLE IF NOT EXISTS subscribers (email text PRIMARY KEY NOT NULL, status text DEFAULT 'active' NOT NULL, created integer NOT NULL)"
-      )
-      .run()
-      .catch(() => {});
-    const localSubs = await platformDb
-      .prepare('SELECT email, created FROM subscribers ORDER BY created DESC LIMIT ?')
-      .bind(limit)
-      .all<{ email: string; created: number }>();
-    for (const s of localSubs.results || []) {
-      const key = String(s.email || '').toLowerCase();
-      if (key && !map.has(key)) {
-        map.set(key, { email: key, status: 'active', created: Number(s.created || Date.now()) });
-      }
-    }
-  } catch {}
-
-  return Array.from(map.values()).sort((a, b) => b.created - a.created);
-}
-
-export async function loadInquiryNotesMap(): Promise<Map<string, string>> {
-  const map = new Map<string, string>();
-  try {
-    const platformDb = getPlatformDb();
-    const res = await platformDb
-      .prepare("SELECT id, value FROM settings WHERE id LIKE 'note:%'")
-      .all<{ id: string; value: string }>();
-    for (const r of res.results || []) {
-      map.set(r.id.slice(5), r.value);
-    }
-  } catch {}
-  return map;
-}
-
+import { revalidatePath } from 'next/cache';
+import { getDb } from '@/lib/db';
+import { requireOwner, requireRecent, consumeSecondFactor, audit, sessionCookie, type Owner } from '@/lib/owner-session';
+import { readJson, ok, failure, HttpError } from '@/lib/http';
+import { enforceLimit } from '@/lib/abuse';
+import { projectSchema, founderSchema, postSchema, settingsSchema } from '@/lib/content-models';
+import { emailConfigured, mailBrief, sendMail } from '@/lib/notify';
+import { hashPassword, recoveryCodes, sha256, randomToken } from '@/lib/security-crypto.mjs';
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+const editable = ['projects', 'founders', 'posts'] as const;
+function field(value: unknown, max = 100) { if (typeof value !== 'string' || value.length > max) throw new HttpError(400, 'INPUT', 'Invalid field.'); return value; }
 export async function GET(req: Request) {
-  if (!(await adminAccess(req)).allowed) {
-    return Response.json({ error: 'Sign in to continue.' }, { status: 401 });
-  }
-
-  const db = getDb();
-  const platformDb = getPlatformDb();
-
-  const [
-    projectsList,
-    d1Messages,
-    mongoMessages,
-    notesMap,
-    copy,
-    founders,
-    subscribers,
-    auditLogs,
-    chatThreadsRes,
-    stats,
-    mongo,
-    contentEntries,
-    links,
-  ] = await Promise.all([
-    listProjects(true).catch(() => []),
-    db
-      .select()
-      .from(inquiries)
-      .orderBy(desc(inquiries.created))
-      .limit(200)
-      .catch(() => []),
-    getMongoInquiries(200).catch(() => []),
-    loadInquiryNotesMap().catch(() => new Map<string, string>()),
-    studioCopy().catch(() => ({ intro: '', about: '' })),
-    listFounders(true).catch(() => []),
-    loadSubscribersList(500).catch(() => []),
-    getAuditLogs(80).catch(() => []),
-    platformDb
-      .prepare('SELECT id,name,email,updated FROM chat_threads ORDER BY updated DESC LIMIT 100')
-      .all<{ id: string; name: string; email: string; updated: number }>()
-      .catch(() => ({ results: [] })),
-    platformDb
-      .prepare(
-        'SELECT source,SUM(views) AS n FROM traffic_totals WHERE day>=? GROUP BY source ORDER BY n DESC'
-      )
-      .bind(trafficSince())
-      .all<{ source: string; n: number }>()
-      .catch(() => ({ results: [] })),
-    getMongoSyncStatus().catch(() => ({
-      configured: false,
-      connected: false,
-      dbName: '',
-    })),
-    entries(undefined, true).catch(() => []),
-    getLinks().catch(() => ({ whatsapp: '', booking: '' })),
-  ]);
-
-  const messagesMap = new Map();
-  for (const m of mongoMessages) {
-    messagesMap.set(m.id, { ...m, notes: notesMap.get(m.id) || m.notes || '' });
-  }
-  for (const m of d1Messages) {
-    const existing = messagesMap.get(m.id);
-    messagesMap.set(m.id, {
-      ...m,
-      status: m.status || existing?.status || 'new',
-      notes: notesMap.get(m.id) || existing?.notes || '',
-    });
-  }
-  const messages = Array.from(messagesMap.values()).sort((a, b) => b.created - a.created);
-  const views = (stats.results || []).reduce((v: number, r: { n: number }) => v + r.n, 0);
-
-  return Response.json(
-    {
-      ok: true,
-      messages,
-      projects: projectsList,
-      founders,
-      subscribers,
-      copy,
-      links,
-      entries: contentEntries,
-      auditLogs,
-      chatThreads: chatThreadsRes?.results || [],
-      mongo,
-      stats,
-      totalViews: views,
-    },
-    {
-      headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate',
-      },
+  try {
+    const session = await requireOwner(req);
+    const db = await getDb();
+    const action = new URL(req.url).searchParams.get('view') || 'overview';
+    if (action === 'health') {
+      await db.command({ ping: 1 });
+      const counts = Object.fromEntries(await Promise.all(['inquiries', 'projects', 'founders', 'posts', 'subscribers'].map(async name => [name, await db.collection(name).countDocuments()])));
+      return ok({ connected: true, database: db.databaseName, counts, emailConfigured: emailConfigured() });
     }
-  );
+    if (action === 'security') {
+      const sessions = await db.collection('sessions').find({ ownerId: session.ownerId, expiresAt: { $gt: new Date() }, lastSeenAt: { $gt: new Date(Date.now() - 1800000) } }, { projection: { _id: 0, createdAt: 1, lastSeenAt: 1, expiresAt: 1, tokenHash: 1 } }).toArray();
+      const logs = await db.collection('auditLogs').find({}, { projection: { _id: 0 } }).sort({ createdAt: -1 }).limit(100).toArray();
+      return ok({ sessions: sessions.map(s => ({ ...s, current: s.tokenHash === session.tokenHash })), logs, twoFactor: true });
+    }
+    if (action === 'settings') return ok({ site: await db.collection('settings').findOne({ id: 'site' }, { projection: { _id: 0 } }), emailConfigured: emailConfigured() });
+    if (['inquiries', 'projects', 'founders', 'posts', 'subscribers'].includes(action)) {
+      const page = Math.max(1, Math.min(10000, Number(new URL(req.url).searchParams.get('page')) || 1));
+      const filter = { status: { $ne: 'deleted' } };
+      const [rows, total] = await Promise.all([db.collection(action).find(filter, { projection: { _id: 0 } }).sort({ createdAt: -1 }).skip((page - 1) * 50).limit(50).toArray(), db.collection(action).countDocuments(filter)]);
+      return ok({ rows, total, page });
+    }
+    if (action !== 'overview') throw new HttpError(400, 'INPUT', 'Unknown view.');
+    const since = new Date(Date.now() - 30 * 86400000);
+    const [newInquiries, projects, published, drafts, failedEmails, subscribers, attention, activity] = await Promise.all([
+      db.collection('inquiries').countDocuments({ createdAt: { $gte: since }, status: { $ne: 'deleted' } }),
+      db.collection('projects').countDocuments({ status: { $ne: 'deleted' } }),
+      db.collection('posts').countDocuments({ status: 'published', $or: [{ publishAt: null }, { publishAt: { $lte: new Date() } }] }),
+      db.collection('posts').countDocuments({ status: 'draft' }),
+      db.collection('inquiries').countDocuments({ emailStatus: { $in: ['failed', 'skipped', 'pending'] }, status: { $ne: 'deleted' } }),
+      db.collection('subscribers').countDocuments({ status: 'active' }),
+      db.collection('inquiries').find({ status: { $ne: 'deleted' }, $or: [{ status: 'new' }, { emailStatus: { $in: ['failed', 'skipped', 'pending'] } }] }, { projection: { _id: 0, name: 1, topic: 1, emailStatus: 1 } }).sort({ createdAt: -1 }).limit(10).toArray(),
+      db.collection('auditLogs').find({}, { projection: { _id: 0 } }).sort({ createdAt: -1 }).limit(10).toArray(),
+    ]);
+    return ok({ counts: { 'Inquiries in 30 days': newInquiries, 'Portfolio projects': projects, 'Published posts': published, 'Draft posts': drafts, 'Emails needing attention': failedEmails, Subscribers: subscribers }, attention, activity });
+  } catch (error) { return failure(error); }
 }
-
 export async function POST(req: Request) {
-  if (!sameOrigin(req)) return Response.json({ error: 'Untrusted request.' }, { status: 403 });
-  if (!(await adminAccess(req)).allowed) {
-    return Response.json({ error: 'Sign in to continue.' }, { status: 401 });
-  }
-  let d: Record<string, unknown>;
   try {
-    d = await readSmall(req);
-  } catch {
-    return Response.json({ error: 'Invalid request.' }, { status: 400 });
-  }
-  const db = getDb();
-  const platformDb = getPlatformDb();
-  const ip = getClientIp(req);
-
-  try {
-    if (['contentSave', 'contentRemove', 'connections'].includes(String(d.action))) {
-      return await manageContent(d);
+    const session = await requireOwner(req, true);
+    await enforceLimit(req, 'admin-write', 120, 60000);
+    const d = await readJson(req), db = await getDb();
+    const action = field(d.action);
+    if (action === 'reauth') {
+      await enforceLimit(req, 'reauth', 5, 15 * 60000);
+      const owner = await db.collection<Owner>('adminUsers').findOne({ _id: 'owner' });
+      if (!owner || !(await consumeSecondFactor(owner, field(d.code), false))) throw new HttpError(401, 'REAUTH_FAILED', 'Verification failed. Use a fresh authenticator code.');
+      await db.collection('sessions').updateOne({ tokenHash: session.tokenHash }, { $set: { reauthenticatedAt: new Date() } });
+      await audit(req, 'reauthenticated'); return ok({});
     }
-
-    if (d.action === 'saveProject' || d.action === 'project') {
-      const p = (d.project && typeof d.project === 'object' ? d.project : d) as Record<string, unknown>;
-      const slug = bounded(p.slug, 80, 1);
-      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
-        throw Error('Use lowercase words and hyphens for the project address.');
-      }
-      const existing = (await listProjects(true)).find((x) => x.slug === slug);
-      const isNew = d.isNew !== undefined ? Boolean(d.isNew) : !existing;
-      if (d.isNew && existing) {
-        return Response.json({ error: 'That project address is already in use.' }, { status: 409 });
-      }
-      const title = bounded(p.title, 90, 2);
-      const category = bounded(p.category, 45, 2);
-      const summary = bounded(p.summary, 240, 8);
-      const challenge = bounded(p.challenge, 2500);
-      const solution = bounded(p.solution, 2500);
-      const url = httpsUrl(p.url ?? '');
-      const image = imageOrUrl(p.image ?? '');
-      const status = p.status === 'draft' ? 'draft' : 'published';
-      const art = ['orbit', 'relay', 'grid'].includes(String(p.art)) ? String(p.art) : 'grid';
-      const position = Number(p.position !== undefined ? p.position : 30);
-      if (!Number.isInteger(position) || position < 0 || position > 9999) {
-        throw Error('Position must be between 0 and 9999.');
-      }
-      const kind = p.kind === 'Studio concept' ? 'Studio concept' : 'Studio project';
-      const row = {
-        slug,
-        title,
-        category,
-        summary,
-        challenge,
-        solution,
-        tech: bounded(p.tech || '', 300),
-        result: bounded(p.result || '', 2000),
-        url,
-        image,
-        art,
-        status,
-        position,
-        kind,
-      };
-      await db
-        .insert(projects)
-        .values(row)
-        .onConflictDoUpdate({ target: projects.slug, set: row });
-
-      await saveProjectToMongo(row).catch((err) =>
-        console.warn('[MongoDB] Project sync note:', err)
-      );
-
-      try {
-        const nextCache = await import('next/cache').catch(() => null);
-        if (nextCache?.revalidatePath) {
-          nextCache.revalidatePath('/portfolio');
-          nextCache.revalidatePath('/work');
-          nextCache.revalidatePath('/');
-          if (slug) nextCache.revalidatePath(`/portfolio/${slug}`);
-        }
-      } catch {}
-
-      await recordAuditLog({
-        action: isNew ? 'project_created' : 'project_updated',
-        target: slug,
-        detail: `${status} · ${title}`,
-        ip,
-      });
-      return Response.json({ ok: true, project: row }, { headers: { 'Cache-Control': 'no-store' } });
-    } else if (d.action === 'deleteProject' || d.action === 'delete_project') {
-      const slug = bounded(d.slug, 80, 1);
-      const row = (await listProjects(true)).find((p) => p.slug === slug);
-      if (!row) return Response.json({ error: 'Project not found.' }, { status: 404 });
-      if (concepts.some((p) => p.slug === slug)) {
-        await db
-          .insert(projects)
-          .values({ ...row, status: 'deleted' })
-          .onConflictDoUpdate({ target: projects.slug, set: { status: 'deleted' } });
+    if (action === 'revokeSession') {
+      await db.collection('sessions').deleteOne({ tokenHash: field(d.tokenHash), ownerId: session.ownerId });
+      await audit(req, 'session_revoked'); return ok({});
+    }
+    if (action === 'password') {
+      requireRecent(session);
+      const password = field(d.password, 256);
+      if (password.length < 14) throw new HttpError(400, 'INPUT', 'Use at least 14 characters.');
+      const passwordHash = await hashPassword(password);
+      await db.collection<Owner>('adminUsers').updateOne({ _id: 'owner' }, { $set: { passwordHash, credentialVersion: randomToken(), updatedAt: new Date() } });
+      await db.collection('sessions').deleteMany({ ownerId: session.ownerId });
+      const mail = await sendMail('Hash Decode: password changed', 'Your owner password changed. All owner sessions were revoked.');
+      await audit(req, 'password_changed', 'owner', mail.emailStatus);
+      return ok({}, 200, { 'Set-Cookie': sessionCookie('', 0) });
+    }
+    if (action === 'recovery') {
+      requireRecent(session); const codes = recoveryCodes();
+      await db.collection<Owner>('adminUsers').updateOne({ _id: 'owner' }, { $set: { recoveryHashes: codes.map(sha256) } });
+      const mail = await sendMail('Hash Decode: recovery codes changed', 'Your previous recovery codes were replaced.');
+      await audit(req, 'recovery_codes_changed', 'owner', mail.emailStatus); return ok({ codes });
+    }
+    if (action === 'testEmail') { const result = await sendMail('Hash Decode: email configuration test', 'This is the test requested in your owner settings.'); await audit(req, 'email_test', '', result.emailStatus); return ok(result); }
+    if (action === 'resend') {
+      const id = field(d.id);
+      const row = await db.collection<{ id: string; name: string; email: string; topic: string; budget: string; brief: string }>('inquiries').findOne({ id });
+      if (!row) throw new HttpError(404, 'NOT_FOUND', 'Inquiry not found.');
+      const result = await mailBrief(row, randomToken());
+      await db.collection('inquiries').updateOne({ id }, { $set: { ...result, updatedAt: new Date() } });
+      await audit(req, 'email_resent', id, result.emailStatus); return ok(result);
+    }
+    if (action === 'export') {
+      requireRecent(session);
+      const rows = await db.collection('inquiries').find({ status: { $ne: 'deleted' } }).limit(5000).toArray();
+      const cols = ['id', 'name', 'email', 'topic', 'budget', 'brief', 'status'];
+      const cell = (value: unknown) => '"' + String(value ?? '').replace(/^[=+@\-\t\r]/, "'$&").replace(/"/g, '""') + '"';
+      const csv = [cols.join(','), ...rows.map(row => cols.map(c => cell(row[c])).join(','))].join('\r\n');
+      await audit(req, 'inquiries_exported'); return ok({ csv, limit: 5000 });
+    }
+    if (action === 'inquiry') {
+      const id = field(d.id), status = field(d.status);
+      if (!['new', 'contacted', 'qualified', 'won', 'lost'].includes(status)) throw new HttpError(400, 'INPUT', 'Invalid status.');
+      const notes = field(d.notes, 4000);
+      const result = await db.collection<{ id: string; status: string; notes: string; updatedAt: Date; statusHistory: { status: string; at: Date }[] }>('inquiries').updateOne({ id }, { $set: { status, notes, updatedAt: new Date() }, $push: { statusHistory: { status, at: new Date() } } });
+      if (!result.matchedCount) throw new HttpError(404, 'NOT_FOUND', 'Inquiry not found.');
+      await audit(req, 'inquiry_updated', id);
+    } else if (action === 'settings') {
+      const parsed = settingsSchema.safeParse(d.data); if (!parsed.success) throw new HttpError(400, 'INPUT', parsed.error.issues[0].message);
+      await db.collection('settings').updateOne({ id: 'site' }, { $set: { ...parsed.data, updatedAt: new Date() }, $setOnInsert: { createdAt: new Date() } }, { upsert: true });
+      await audit(req, 'settings_changed', 'site');
+    } else if (action === 'save') {
+      const collection = field(d.collection);
+      if (!(editable as readonly string[]).includes(collection)) throw new HttpError(400, 'INPUT', 'Invalid collection.');
+      const schema = collection === 'projects' ? projectSchema : collection === 'founders' ? founderSchema : postSchema;
+      const parsed = schema.safeParse(d.data);
+      if (!parsed.success) throw new HttpError(400, 'INPUT', parsed.error.issues[0].message);
+      const value = parsed.data;
+      const key = 'slug' in value ? { slug: value.slug } : { id: value.id };
+      const row = { ...value, ...('publishAt' in value ? { publishAt: value.publishAt ? new Date(value.publishAt) : null, slug: value.id, kind: 'post', updated: Date.now() } : {}), updatedAt: new Date() };
+      if (d.isNew === true) {
+        try { await db.collection(collection).insertOne({ ...row, createdAt: new Date() }); }
+        catch (error) { if ((error as { code?: number }).code === 11000) throw new HttpError(409, 'CONFLICT', 'That address already exists.'); throw error; }
       } else {
-        await db.delete(projects).where(eq(projects.slug, slug));
+        const result = await db.collection(collection).updateOne(key, { $set: row });
+        if (!result.matchedCount) throw new HttpError(404, 'NOT_FOUND', 'Record not found.');
       }
-      await saveProjectToMongo({ ...row, status: 'deleted' }).catch((err) =>
-        console.warn('[MongoDB] Project delete sync note:', err)
-      );
-      try {
-        const nextCache = await import('next/cache').catch(() => null);
-        if (nextCache?.revalidatePath) {
-          nextCache.revalidatePath('/portfolio');
-          nextCache.revalidatePath('/work');
-          nextCache.revalidatePath('/');
-          if (slug) nextCache.revalidatePath(`/portfolio/${slug}`);
-        }
-      } catch {}
-      await recordAuditLog({
-        action: 'project_deleted',
-        target: slug,
-        detail: row.title,
-        ip,
-      });
-      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
-    } else if (d.action === 'founder' || d.action === 'saveFounder') {
-      const f = (d.founder && typeof d.founder === 'object' ? d.founder : d) as Record<string, unknown>;
-      const rawId = bounded(String(f.id || `founder-${Date.now()}`), 80, 1)
-        .toLowerCase()
-        .replace(/[^a-z0-9_-]/g, '-');
-      const id = rawId.replace(/^-+|-+$/g, '') || `founder-${Date.now()}`;
-      const title = bounded(f.name, 100, 2);
-      const label = bounded(f.role, 120, 2);
-      const body = bounded(f.bio, 7000, 4);
-      const image = f.image ? imageOrUrl(f.image) : '/team/shahroz.svg';
-      const url = f.url ? httpsUrl(f.url) : '';
-      const position = Number.isInteger(Number(f.position)) ? Number(f.position) : 99;
-      const row = {
-        id,
-        kind: 'team',
-        title,
-        label,
-        body,
-        image,
-        url,
-        status: 'published',
-        updated: Date.now(),
-      };
-      await db.insert(content).values(row).onConflictDoUpdate({ target: content.id, set: row });
-      await saveContentToMongo(row).catch((err) =>
-        console.warn('[MongoDB] Founder sync note:', err)
-      );
-      await recordAuditLog({
-        action: 'founder_saved',
-        target: id,
-        detail: `${title} · ${label}`,
-        ip,
-      });
-      return Response.json(
-        { ok: true, founder: { ...f, id, image, position } },
-        { headers: { 'Cache-Control': 'no-store' } }
-      );
-    } else if (d.action === 'delete_founder' || d.action === 'deleteFounder') {
-      const id = bounded(String(d.id), 80, 1);
-      const deletedRow = {
-        id,
-        kind: 'team',
-        title: '',
-        label: '',
-        body: '',
-        image: '',
-        url: '',
-        status: 'deleted',
-        updated: Date.now(),
-      };
-      await db
-        .insert(content)
-        .values(deletedRow)
-        .onConflictDoUpdate({ target: content.id, set: { status: 'deleted', updated: deletedRow.updated } });
-      await saveContentToMongo(deletedRow).catch((err) =>
-        console.warn('[MongoDB] Founder delete sync note:', err)
-      );
-      await recordAuditLog({
-        action: 'founder_deleted',
-        target: id,
-        detail: `Removed founder ${id}`,
-        ip,
-      });
-      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
-    } else if (d.action === 'inquiryStatus' || d.action === 'message_status') {
-      const status = String(d.status || '');
-      if (!VALID_INQUIRY_STATUSES.includes(status)) {
-        throw Error('Invalid inquiry status.');
-      }
-      const id = bounded(d.id, 80, 1);
-      const notes = d.notes !== undefined ? bounded(String(d.notes), 2000, 0) : undefined;
-      await db.update(inquiries).set({ status }).where(eq(inquiries.id, id));
-      if (notes !== undefined) {
-        await db
-          .insert(settings)
-          .values({ id: `note:${id}`, value: notes })
-          .onConflictDoUpdate({ target: settings.id, set: { value: notes } });
-      }
-      await updateInquiryStatusInMongo(id, status, notes);
-      await recordAuditLog({
-        action: 'inquiry_status_updated',
-        target: id,
-        detail: `Status -> ${status}${notes !== undefined ? ' (notes updated)' : ''}`,
-        ip,
-      });
-      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
-    } else if (d.action === 'inquiryNotes' || d.action === 'inquiry_notes') {
-      const id = bounded(d.id, 80, 1);
-      const notes = bounded(String(d.notes ?? ''), 2000, 0);
-      const status = VALID_INQUIRY_STATUSES.includes(String(d.status)) ? String(d.status) : 'read';
-      await db
-        .insert(settings)
-        .values({ id: `note:${id}`, value: notes })
-        .onConflictDoUpdate({ target: settings.id, set: { value: notes } });
-      await updateInquiryStatusInMongo(id, status, notes);
-      await recordAuditLog({
-        action: 'inquiry_notes_saved',
-        target: id,
-        detail: `Saved internal notes (${notes.length} chars)`,
-        ip,
-      });
-      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
-    } else if (d.action === 'inquiryDelete' || d.action === 'delete_inquiry') {
-      const id = bounded(d.id, 80, 1);
-      await db.delete(inquiries).where(eq(inquiries.id, id));
-      await db.delete(settings).where(eq(settings.id, `note:${id}`)).catch(() => {});
-      await deleteInquiryFromMongo(id);
-      await recordAuditLog({
-        action: 'inquiry_deleted',
-        target: id,
-        detail: 'Removed inquiry from inbox',
-        ip,
-      });
-      return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
-    } else if (d.action === 'bulkInquiryStatus') {
-      const targetStatus = String(d.status || 'read');
-      if (!VALID_INQUIRY_STATUSES.includes(targetStatus)) {
-        throw Error('Invalid inquiry status.');
-      }
-      const fromStatus = d.fromStatus ? String(d.fromStatus) : 'new';
-      const allInquiries = await db.select().from(inquiries).catch(() => []);
-      for (const item of allInquiries) {
-        if (fromStatus === 'all' || item.status === fromStatus) {
-          await db.update(inquiries).set({ status: targetStatus }).where(eq(inquiries.id, item.id));
-          await updateInquiryStatusInMongo(item.id, targetStatus);
-        }
-      }
-      await recordAuditLog({
-        action: 'inquiries_bulk_updated',
-        target: fromStatus,
-        detail: `Marked ${fromStatus} inquiries as ${targetStatus}`,
-        ip,
-      });
-    } else if (d.action === 'subscriberAdd') {
-      const email = bounded(d.email, 254, 3).toLowerCase();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        throw Error('Enter a valid subscriber email address.');
-      }
-      const now = Date.now();
-      await platformDb
-        .prepare(
-          "CREATE TABLE IF NOT EXISTS subscribers (email text PRIMARY KEY NOT NULL, status text DEFAULT 'active' NOT NULL, created integer NOT NULL)"
-        )
-        .run()
-        .catch(() => {});
-      await platformDb
-        .prepare('INSERT OR REPLACE INTO subscribers (email, created) VALUES (?, ?)')
-        .bind(email, now)
-        .run();
-      await saveSubscriberToMongo(email, 'active');
-      await recordAuditLog({
-        action: 'subscriber_added_by_admin',
-        target: email,
-        detail: 'Added subscriber manually',
-        ip,
-      });
-    } else if (d.action === 'subscriberRemove') {
-      const email = bounded(d.email, 254, 3).toLowerCase();
-      await platformDb.prepare('DELETE FROM subscribers WHERE email=?').bind(email).run().catch(() => {});
-      await removeSubscriberFromMongo(email);
-      await recordAuditLog({
-        action: 'subscriber_removed',
-        target: email,
-        detail: 'Removed subscriber from dispatch list',
-        ip,
-      });
-    } else if (d.action === 'settings' || d.action === 'copy') {
-      const value = JSON.stringify({
-        intro: bounded(d.intro, 240, 10),
-        about: bounded(d.about, 1200, 10),
-      });
-      await db
-        .insert(settings)
-        .values({ id: 'public', value })
-        .onConflictDoUpdate({ target: settings.id, set: { value } });
-      await saveSettingToMongo('public', value);
-      await recordAuditLog({
-        action: 'studio_copy_updated',
-        target: 'public',
-        detail: 'Updated homepage intro and studio about copy',
-        ip,
-      });
-    } else if (d.action === 'clearRateLimits') {
-      await clearRateLimits();
-      await recordAuditLog({
-        action: 'rate_limits_cleared',
-        target: 'submission_limits',
-        detail: 'Cleared active rate-limit counters',
-        ip,
-      });
-    } else if (d.action === 'revokeOtherSessions') {
-      const authHeader = req.headers.get('authorization') || '';
-      const directToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
-      await revokeOtherSessions(req.headers.get('cookie'), directToken);
-      await recordAuditLog({
-        action: 'sessions_revoked',
-        target: 'owner_sessions',
-        detail: 'Revoked all other active owner sessions',
-        ip,
-      });
-    } else if (d.action === 'changePassword' || d.action === 'rotate_password') {
-      const currentPassword = String(d.currentPassword || '');
-      const rawNew = d.newPassword !== undefined ? d.newPassword : d.nextPassword;
-      const newPassword = bounded(rawNew, 256, 8);
-      if (!(await verifyPassword(currentPassword))) {
-        throw Error('Check your current password and try again.');
-      }
-      const newHash = await hashPasswordPbkdf2(newPassword);
-      setCustomCredentialHash(newHash);
-      await db
-        .insert(settings)
-        .values({ id: 'owner_password_hash', value: newHash })
-        .onConflictDoUpdate({ target: settings.id, set: { value: newHash } });
-      await saveSettingToMongo('owner_password_hash', newHash);
-      await recordAuditLog({
-        action: 'owner_password_rotated',
-        target: 'owner_credentials',
-        detail: 'Rotated owner PBKDF2 password verifier',
-        ip,
-      });
-    } else if (d.action === 'syncMongo') {
-      const [allProjects, d1Inquiries, mongoInq, allContent, copy, links, subs] = await Promise.all([
-        listProjects(true),
-        db.select().from(inquiries).orderBy(desc(inquiries.created)).limit(200).catch(() => []),
-        getMongoInquiries(200).catch(() => []),
-        entries(undefined, true),
-        studioCopy(),
-        getLinks(),
-        loadSubscribersList(500),
-      ]);
-      const notesMap = await loadInquiryNotesMap();
-
-      // Sync projects to Mongo & local
-      for (const p of allProjects) {
-        await saveProjectToMongo(p);
-        await db.insert(projects).values(p).onConflictDoUpdate({ target: projects.slug, set: p }).catch(() => {});
-      }
-      // Sync inquiries to Mongo & local
-      const mergedInq = new Map<string, any>();
-      for (const m of mongoInq) mergedInq.set(m.id, m);
-      for (const m of d1Inquiries) mergedInq.set(m.id, { ...m, notes: notesMap.get(m.id) || '' });
-      for (const m of mergedInq.values()) {
-        await saveInquiryToMongo(m);
-        const { notes: _notes, ...d1Row } = m;
-        await db.insert(inquiries).values(d1Row).onConflictDoUpdate({ target: inquiries.id, set: d1Row }).catch(() => {});
-      }
-      // Sync CMS content (posts, founders, reviews)
-      for (const c of allContent) {
-        await saveContentToMongo(c);
-        await db.insert(content).values(c).onConflictDoUpdate({ target: content.id, set: c }).catch(() => {});
-      }
-      // Sync settings
-      await saveSettingToMongo('public', JSON.stringify(copy));
-      await saveSettingToMongo('connections', JSON.stringify(links));
-      // Sync subscribers
-      for (const s of subs) {
-        await saveSubscriberToMongo(s.email, s.status);
-      }
-
-      const status = await getMongoSyncStatus();
-      await recordAuditLog({
-        action: 'mongodb_manual_sync',
-        target: status.dbName || 'hash_decode',
-        detail: `Connected: ${status.connected} · Projects: ${allProjects.length} · Inquiries: ${mergedInq.size} · Subscribers: ${subs.length}`,
-        ip,
-      });
-      return Response.json(
-        { ok: true, mongo: status },
-        { headers: { 'Cache-Control': 'no-store' } }
-      );
-    } else if (d.action === 'exportData') {
-      const [allProjects, d1Inquiries, mongoInq, allContent, founders, copy, links, subs, logs, mongo] =
-        await Promise.all([
-          listProjects(true),
-          db.select().from(inquiries).orderBy(desc(inquiries.created)).limit(500).catch(() => []),
-          getMongoInquiries(500).catch(() => []),
-          entries(undefined, true),
-          listFounders(true),
-          studioCopy(),
-          getLinks(),
-          loadSubscribersList(1000),
-          getAuditLogs(200),
-          getMongoSyncStatus(),
-        ]);
-      const notesMap = await loadInquiryNotesMap();
-      const inqMap = new Map<string, any>();
-      for (const m of mongoInq) inqMap.set(m.id, m);
-      for (const m of d1Inquiries) {
-        inqMap.set(m.id, { ...m, notes: notesMap.get(m.id) || inqMap.get(m.id)?.notes || '' });
-      }
-      await recordAuditLog({
-        action: 'studio_backup_exported',
-        target: 'full_snapshot',
-        detail: 'Exported studio JSON backup',
-        ip,
-      });
-      return Response.json(
-        {
-          ok: true,
-          snapshot: {
-            exportedAt: new Date().toISOString(),
-            mongo,
-            copy,
-            links,
-            projects: allProjects,
-            founders,
-            content: allContent,
-            inquiries: Array.from(inqMap.values()),
-            subscribers: subs,
-            auditLogs: logs,
-          },
-        },
-        { headers: { 'Cache-Control': 'no-store' } }
-      );
-    } else {
-      return Response.json({ error: 'Unknown operation.' }, { status: 400 });
-    }
-
-    return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : '';
-    return Response.json(
-      {
-        error: /^(Use |Enter |Check |Position |Invalid |Only )/.test(msg)
-          ? msg
-          : 'The change could not be saved. Check the fields and try again.',
-      },
-      { status: 400 }
-    );
-  }
+      await audit(req, d.isNew === true ? 'created' : 'updated', collection + ':' + Object.values(key)[0]);
+    } else if (action === 'archive') {
+      const collection = field(d.collection);
+      if (!['inquiries', ...editable].includes(collection)) throw new HttpError(400, 'INPUT', 'Invalid collection.');
+      const id = field(d.id); const key = collection === 'projects' ? { slug: id } : { id };
+      const result = await db.collection(collection).updateOne(key, { $set: { status: 'deleted', updatedAt: new Date() } });
+      if (!result.matchedCount) throw new HttpError(404, 'NOT_FOUND', 'Record not found.');
+      await audit(req, 'archived', collection + ':' + id);
+    } else throw new HttpError(400, 'INPUT', 'Unknown action.');
+    for (const path of ['/', '/admin', '/about', '/portfolio', '/blog', '/contact', '/sitemap.xml']) revalidatePath(path, 'layout');
+    return ok({});
+  } catch (error) { return failure(error); }
 }

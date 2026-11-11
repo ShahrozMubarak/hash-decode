@@ -10,6 +10,8 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import './motion-ui.css';
 import './motion.css';
+import './refinements.css';
+export const dynamic = 'force-dynamic';
 import { Header, Footer } from '@/components/studio/Shell';
 import { origin } from '@/lib/meta';
 
@@ -25,7 +27,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: origin ? new URL(origin) : undefined,
   title: 'Hash Decode | Software Design & Engineering',
-  description: 'An independent software studio for web platforms, digital products and business tools.',
+  description: 'Custom software, web platforms and security reviews for teams building their next release.',
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
@@ -45,11 +47,11 @@ const organizationJsonLd = {
   name: 'Hash Decode',
   url: origin || 'https://hashdecode.com',
   logo: (origin || 'https://hashdecode.com') + '/logo.png',
-  description: 'An independent software studio for web platforms, digital products and business tools.',
+  description: 'Custom software, web platforms and security reviews for teams building their next release.',
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
-    email: 'shaahrozdogar@gmail.com',
+
   },
 };
 

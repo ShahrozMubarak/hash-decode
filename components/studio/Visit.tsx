@@ -1,3 +1,1 @@
-'use client';
-import {useEffect} from 'react';import {usePathname} from 'next/navigation';
-export default function Visit(){const path=usePathname();useEffect(()=>{if(path.startsWith('/admin')||navigator.doNotTrack==='1'||(navigator as Navigator&{globalPrivacyControl?:boolean}).globalPrivacyControl)return;let source='Direct';try{if(document.referrer){const u=new URL(document.referrer);source=u.origin===location.origin?'Internal':/(^|\.)(google\.[a-z.]+|bing\.com|duckduckgo\.com|yahoo\.[a-z.]+)$/.test(u.hostname)?'Search':/(^|\.)(linkedin\.com|instagram\.com|facebook\.com|x\.com|t\.co)$/.test(u.hostname)?'Social':'Referral';}}catch{};fetch('/api/metrics',{method:'POST',signal:AbortSignal.timeout(6000),headers:{'Content-Type':'application/json'},body:JSON.stringify({page:path,source}),keepalive:true}).catch(()=>{});},[path]);return null;}
+export default function Visit() { return null; }

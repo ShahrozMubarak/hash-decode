@@ -2,7 +2,6 @@
 import {useEffect,useRef,useState} from 'react';
 import {usePathname} from 'next/navigation';
 import {ArrowUpRight,ArrowUp,Menu,X,Pause,Play,Briefcase,Cpu,Users,Mail,ShieldCheck,Search,ShoppingBag,Terminal} from 'lucide-react';
-import {Chat} from './Chat';
 import FooterSubscribe from './FooterSubscribe';
 
 const links=[
@@ -27,7 +26,6 @@ export function Header(){
  const [open,setOpen]=useState(false),[paused,setPaused]=useState(false),toggle=useRef(null),menu=useRef(null);
  const path=usePathname();
 
- if(path&&path.startsWith('/admin'))return null;
 
  useEffect(()=>{
    if(!open)return;
@@ -58,6 +56,7 @@ export function Header(){
    try{localStorage.setItem('hd-paused',next?'1':'0');}catch{}
    document.documentElement.dataset.motion=next?'off':'on';setPaused(next);window.dispatchEvent(new Event('hd:motion'));window.dispatchEvent(new Event('hd:skip'));
  }
+ if(path&&((path.startsWith('/admin') || path.startsWith('/portal'))||path.startsWith('/portal')))return null;
  return (
   <header className="site-header ronin-header" onKeyDown={e=>{if(open&&e.key==='Escape')closeMenu();}}>
     <a className="skip" href="#main">Skip to content</a>
@@ -147,7 +146,7 @@ export function Header(){
 }
 export function Footer(){
   const path = usePathname();
-  if (path && path.startsWith('/admin')) return null;
+  if (path && (path.startsWith('/admin') || path.startsWith('/portal'))) return null;
 
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {
@@ -226,7 +225,7 @@ export function Footer(){
             <ArrowUp size={14} aria-hidden="true" />
           </button>
         </div>
-        <Chat/>
+        
       </div>
     </footer>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createDottedRenderer, DottedRenderer } from '@/lib/dotted-models';
 
 export type DottedFormKey = 0 | 1 | 2 | 3 | 'hash' | 'knot' | 'sphere' | 'torus';
