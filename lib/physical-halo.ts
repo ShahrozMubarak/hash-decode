@@ -2,21 +2,9 @@ import * as THREE from 'three';
 
 const TAU = Math.PI * 2;
 
-function clamp(x: number, a = 0, b = 1): number {
-  return Math.max(a, Math.min(b, x));
-}
-
 function normalize(v: number[]): number[] {
   const k = Math.hypot(...v) || 1;
   return v.map((x) => x / k);
-}
-
-function cross(a: number[], b: number[]): number[] {
-  return [
-    a[1] * b[2] - a[2] * b[1],
-    a[2] * b[0] - a[0] * b[2],
-    a[0] * b[1] - a[1] * b[0],
-  ];
 }
 
 /**

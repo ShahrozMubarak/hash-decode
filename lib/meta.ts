@@ -1,12 +1,11 @@
 import type {Metadata} from 'next';
-import {env} from 'cloudflare:workers';
 export function validOrigin(value:unknown){
   try{
     const url=new URL(String(value));
     return url.protocol==='https:' && !url.username && !url.password && url.pathname==='/' && !url.search && !url.hash ? url.origin : '';
   }catch{return '';}
 }
-export const origin=validOrigin((env as unknown as Record<string,string>).SITE_ORIGIN || process.env.SITE_ORIGIN);
+export const origin=validOrigin(process.env.SITE_ORIGIN);
 export function meta(title:string,description:string,path:string):Metadata {
  const fullTitle=title.length<=44 ? title+' | Hash Decode' : title.slice(0,59);
  const summary=description.trim().slice(0,159);

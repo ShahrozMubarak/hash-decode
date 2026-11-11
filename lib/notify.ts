@@ -1,102 +1,20 @@
-import { runtime } from '@/lib/abuse';
-
-const DEFAULT_OWNER_EMAIL = 'shaahrozdogar@gmail.com';
-
-function cleanEnvEmail(val: string | undefined): string {
-  if (!val) return '';
-  return val.replace(/^['"]|['"]$/g, '').trim();
-}
-
-export async function mailBrief(m: {
-  id: string;
-  name: string;
-  email: string;
-  topic: string;
-  budget: string;
-  brief: string;
-}) {
-  const key = runtime('RESEND_API_KEY');
-  const configuredFrom = cleanEnvEmail(runtime('RESEND_FROM')) || cleanEnvEmail(runtime('MAIL_FROM'));
-  // Use formatted sender with verified domain fallback
-  const from = configuredFrom && configuredFrom.includes('@')
-    ? (configuredFrom.includes('<') ? configuredFrom : `Hash Decode <${configuredFrom}>`)
-    : 'Hash Decode <onboarding@resend.dev>';
-
-  const to =
-    cleanEnvEmail(runtime('ADMIN_NOTIFICATION_EMAIL')) ||
-    cleanEnvEmail(runtime('MAIL_TO')) ||
-    cleanEnvEmail(runtime('STUDIO_OWNER_EMAIL')) ||
-    DEFAULT_OWNER_EMAIL;
-
-  if (!key) {
-    console.warn('[Resend] RESEND_API_KEY is not configured.');
-    return 'not configured';
-  }
-
+export type MailResult = { emailStatus: 'sent' | 'failed' | 'skipped'; emailError: string; emailSentAt: Date | null; providerId: string };
+const escapeHtml = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+export function emailConfigured() { return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM && process.env.EMAIL_TO); }
+export async function sendMail(subject: string, text: string, replyTo?: string, idempotencyKey?: string): Promise<MailResult> {
+  const result: MailResult = { emailStatus: 'skipped', emailError: '', emailSentAt: null, providerId: '' };
+  if (!emailConfigured()) return { ...result, emailError: 'Set RESEND_API_KEY, EMAIL_FROM and EMAIL_TO.' };
   try {
-    const r = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      redirect: 'error',
-      signal: AbortSignal.timeout(7000),
-      headers: {
-        Authorization: 'Bearer ' + key,
-        'Content-Type': 'application/json',
-        'Idempotency-Key': 'brief-' + m.id,
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        reply_to: m.email,
-        subject: `Hash Decode · New project brief ${m.id.slice(0, 8)} (${m.name})`,
-        text: `New Project Inquiry received on Hash Decode Studio:\n\nName: ${m.name}\nEmail: ${m.email}\nService: ${m.topic}\nBudget: ${m.budget}\n\nBrief:\n${m.brief}\n\nReference ID: ${m.id}`,
-      }),
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST', redirect: 'error', signal: AbortSignal.timeout(8000),
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json', ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}) },
+      body: JSON.stringify({ from: process.env.EMAIL_FROM, to: [process.env.EMAIL_TO], ...(replyTo ? { reply_to: replyTo } : {}), subject: subject.replace(/[\r\n]/g, ' ').slice(0, 180), text, html: `<div style="white-space:pre-wrap">${escapeHtml(text)}</div>` }),
     });
-    const result = (await r.json().catch(() => ({}))) as Record<string, unknown>;
-    if (!r.ok) {
-      console.error('[Resend Error]:', r.status, result);
-      return 'failed';
-    }
-    console.log('[Resend Success]: Brief notification delivered to', to, 'ID:', result.id);
-    return 'accepted';
-  } catch (err) {
-    console.error('[Resend Exception]:', err);
-    return 'failed';
-  }
+    const body = await response.json() as { id?: string; message?: string };
+    if (!response.ok || !body.id) return { ...result, emailStatus: 'failed', emailError: (body.message || `Provider returned HTTP ${response.status}`).slice(0, 300) };
+    return { ...result, emailStatus: 'sent', emailSentAt: new Date(), providerId: body.id };
+  } catch { return { ...result, emailStatus: 'failed', emailError: 'Email provider could not be reached.' }; }
 }
-
-export async function mailSubscriber(email: string) {
-  const key = runtime('RESEND_API_KEY');
-  const configuredFrom = cleanEnvEmail(runtime('RESEND_FROM')) || cleanEnvEmail(runtime('MAIL_FROM'));
-  const from = configuredFrom && configuredFrom.includes('@')
-    ? (configuredFrom.includes('<') ? configuredFrom : `Hash Decode <${configuredFrom}>`)
-    : 'Hash Decode <onboarding@resend.dev>';
-
-  const to =
-    cleanEnvEmail(runtime('ADMIN_NOTIFICATION_EMAIL')) ||
-    cleanEnvEmail(runtime('MAIL_TO')) ||
-    cleanEnvEmail(runtime('STUDIO_OWNER_EMAIL')) ||
-    DEFAULT_OWNER_EMAIL;
-
-  if (!key) return false;
-  try {
-    const r = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      redirect: 'error',
-      signal: AbortSignal.timeout(7000),
-      headers: {
-        Authorization: 'Bearer ' + key,
-        'Content-Type': 'application/json',
-        'Idempotency-Key': 'sub-' + Date.now() + '-' + email.slice(0, 10),
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        subject: `Hash Decode · New subscriber: ${email}`,
-        text: `A visitor subscribed to updates on Hash Decode Studio:\n\nSubscriber Email: ${email}\nTime: ${new Date().toISOString()}`,
-      }),
-    });
-    return r.ok;
-  } catch {
-    return false;
-  }
+export async function mailBrief(m: { id: string; name: string; email: string; topic: string; budget: string; brief: string }, attempt = 'initial') {
+  return sendMail(`Hash Decode: project brief from ${m.name}`, `Name: ${m.name}\nEmail: ${m.email}\nService: ${m.topic}\nBudget: ${m.budget}\n\n${m.brief}\n\nReference: ${m.id}`, m.email, `brief-${m.id}-${attempt}`);
 }

@@ -1,33 +1,8 @@
-import { headers, cookies } from 'next/headers';
-import { sessionValid } from './owner-session';
-
+import { requireOwner } from './owner-session';
+import { assertOrigin, readJson } from './http';
 export async function adminAccess(request?: Request) {
-  let directToken: string | null = null;
-  let cookieHeader: string | null = null;
-
-  if (request) {
-    const authHeader = request.headers.get('authorization') || '';
-    if (authHeader.startsWith('Bearer ')) directToken = authHeader.slice(7).trim();
-    cookieHeader = request.headers.get('cookie');
-  } else {
-    try {
-      const cookieStore = await cookies();
-      const studioCookie = cookieStore.get('studio-session')?.value || cookieStore.get('__Host-studio-session')?.value;
-      if (studioCookie && /^[a-f0-9]{64}$/.test(studioCookie)) {
-        directToken = studioCookie;
-      }
-    } catch {}
-
-    try {
-      const h = await headers();
-      const authHeader = h.get('authorization') || '';
-      if (authHeader.startsWith('Bearer ')) directToken = authHeader.slice(7).trim();
-      if (!cookieHeader) cookieHeader = h.get('cookie');
-    } catch {}
-  }
-  return { allowed: await sessionValid(cookieHeader, directToken) };
+ try { await requireOwner(request); return { allowed: true }; } catch { return { allowed: false }; }
 }
-
 export function bounded(value: unknown, max: number, min = 0) {
   if (typeof value !== 'string') {
     throw new Error('Check the required fields and their lengths.');
@@ -75,92 +50,5 @@ export function imageOrUrl(value: unknown) {
   return httpsUrl(s);
 }
 
-const isLoopback = (host: string) =>
-  host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host === '[::1]';
-
-export function sameOrigin(req: Request) {
-  const originHeader = req.headers.get('origin');
-  if (!originHeader) return false;
-  let originUrl: URL;
-  let reqUrl: URL;
-  try {
-    originUrl = new URL(originHeader);
-    reqUrl = new URL(req.url);
-  } catch {
-    return false;
-  }
-  if (originUrl.origin === reqUrl.origin) return true;
-
-  const cleanHost = (h: string) => h.toLowerCase().replace(/^www\./, '');
-  if (
-    originUrl.protocol === reqUrl.protocol &&
-    cleanHost(originUrl.host) === cleanHost(reqUrl.host)
-  ) {
-    return true;
-  }
-
-  // Handle reverse-proxy / TLS-termination / local dev port forwarding safely
-  const forwardedHost = req.headers.get('x-forwarded-host')?.split(',')[0]?.trim();
-  const hostHeader = req.headers.get('host')?.trim();
-  const forwardedProto = req.headers.get('x-forwarded-proto')?.split(',')[0]?.trim();
-
-  if (isLoopback(reqUrl.hostname)) {
-    if (isLoopback(originUrl.hostname) && (originUrl.port === reqUrl.port || !reqUrl.port)) {
-      return true;
-    }
-    if (forwardedHost && (originUrl.host === forwardedHost || cleanHost(originUrl.host) === cleanHost(forwardedHost))) return true;
-    if (hostHeader && !isLoopback(hostHeader.split(':')[0]) && (originUrl.host === hostHeader || cleanHost(originUrl.host) === cleanHost(hostHeader))) return true;
-  }
-
-  if (
-    (originUrl.host === reqUrl.host || cleanHost(originUrl.host) === cleanHost(reqUrl.host)) &&
-    forwardedProto &&
-    originUrl.protocol === `${forwardedProto}:`
-  ) {
-    return true;
-  }
-
-  return false;
-}
-
-function sanitizeJsonObject(obj: unknown): Record<string, unknown> {
-  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
-    throw new Error('Invalid request.');
-  }
-  const clean: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
-    if (k === '__proto__' || k === 'constructor' || k === 'prototype' || k.startsWith('$')) {
-      continue;
-    }
-    clean[k] = v;
-  }
-  return clean;
-}
-
-export async function readSmall(req: Request) {
-  if (!req.headers.get('content-type')?.toLowerCase().startsWith('application/json')) {
-    throw new Error('Expected a JSON request.');
-  }
-  const reader = req.body?.getReader();
-  if (!reader) throw new Error('Missing request body.');
-  const chunks: Uint8Array[] = [];
-  let size = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    size += value.byteLength;
-    if (size > 6 * 1024 * 1024) {
-      await reader.cancel();
-      throw new Error('Request is too large.');
-    }
-    chunks.push(value);
-  }
-  const data = new Uint8Array(size);
-  let pos = 0;
-  for (const c of chunks) {
-    data.set(c, pos);
-    pos += c.length;
-  }
-  const parsed = JSON.parse(new TextDecoder().decode(data));
-  return sanitizeJsonObject(parsed);
-}
+export function sameOrigin(req: Request) { try { assertOrigin(req); return true; } catch { return false; } }
+export const readSmall = readJson;

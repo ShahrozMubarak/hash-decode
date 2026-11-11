@@ -418,7 +418,7 @@ export interface DottedRenderer {
 }
 
 export function createDottedRenderer(canvas:HTMLCanvasElement,count=9000):DottedRenderer{
- const gl=canvas.getContext('webgl',{alpha:true,antialias:false,premultipliedAlpha:false,powerPreference:'low-power'});
+ const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false,powerPreference:'low-power'});
  if(!gl)throw Error('WebGL unavailable');
  const shaders:WebGLShader[]=[],buffers:WebGLBuffer[]=[];
  const program=gl.createProgram();if(!program)throw Error('Renderer unavailable');

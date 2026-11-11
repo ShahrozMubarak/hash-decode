@@ -12,7 +12,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const getIsMobile = () => (typeof window !== 'undefined' && window.innerWidth <= 850) || (canvas && canvas.clientWidth > 0 && canvas.clientWidth <= 640);
  const isMobile = getIsMobile();
  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- const {lite,dpr,fps}=sceneBudget(innerWidth,navigator.hardwareConcurrency,(navigator as Navigator&{deviceMemory?:number}).deviceMemory||0,devicePixelRatio);
+ const {lite}=sceneBudget(innerWidth,navigator.hardwareConcurrency,(navigator as Navigator&{deviceMemory?:number}).deviceMemory||0,devicePixelRatio);
+ const fps=60;
  const css=getComputedStyle(document.documentElement);
  const shade=(key:string)=>new THREE.Color(css.getPropertyValue(key).trim()||'#0B1F3A');
  const navy=shade('--ink');
@@ -21,11 +22,11 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const renderer=new THREE.WebGLRenderer({
   canvas,
   alpha:true,
-  antialias:!lite,
+  antialias:true,
   powerPreference:'high-performance',
   preserveDrawingBuffer:false
  });
- const initialDpr = isMobile ? Math.min(dpr, 1.5) : Math.min(dpr, 2);
+ const initialDpr = Math.min(devicePixelRatio || 1, 2);
  renderer.setPixelRatio(initialDpr);
  renderer.setClearColor(navy,0);
  renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -178,7 +179,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
  if(useBloom){
   try{
-   composer=new EffectComposer(renderer);
+   const target=new THREE.WebGLRenderTarget(1,1,{samples:4});
+   composer=new EffectComposer(renderer,target);
    composer.addPass(new RenderPass(scene,camera));
    bloomPass=new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth,window.innerHeight),
@@ -236,7 +238,8 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
  // Dynamic Quality Tracker: drop DPR to 1 and disable bloom if FPS < 40 for 2s
  let lowFpsDuration=0;
- let dynamicQualityTriggered=false;
+ let qualityTier=0;
+ let veryLowFpsDuration=0;
 
  const cleanGeometry=()=>{
   const geometries=new Set<THREE.BufferGeometry>();
@@ -251,20 +254,18 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    const delta=last?Math.min((now-last)/1000,.1):0;elapsed+=delta;last=now;mixer?.update(delta);
    progress+=(targetProgress-progress)*.14;
 
-   // Dynamic Quality check: if delta > 0.025s (FPS < 40) for 2s, scale back
-   if(!dynamicQualityTriggered&&delta>0.025){
-    lowFpsDuration+=delta;
-    if(lowFpsDuration>2.0){
-     dynamicQualityTriggered=true;
-     renderer.setPixelRatio(1.0);
-     if(composer){
-      composer=undefined;
-      useBloom=false;
-     }
+   if(delta > 1/24) veryLowFpsDuration += delta;
+   else veryLowFpsDuration = 0;
+   if(veryLowFpsDuration >= 3) { failed(); dispose(); return; }
+   if(delta > .025 && qualityTier < 3) {
+    lowFpsDuration += delta;
+    if(lowFpsDuration >= 2) {
+     qualityTier++; lowFpsDuration=0;
+     if(qualityTier === 1) renderer.setPixelRatio(Math.max(1, initialDpr * .75));
+     if(qualityTier === 2 && composer) { bloomPass?.dispose(); composer.dispose(); composer=undefined; useBloom=false; }
+     if(qualityTier === 3 && instances) instances.count=Math.max(1,Math.floor(instances.count*.5));
     }
-   }else if(delta<=0.025){
-    lowFpsDuration=Math.max(0,lowFpsDuration-delta*0.5);
-   }
+   } else if(delta <= .025) lowFpsDuration=0;
 
    // Rotate environment: 0 -> 2*PI over 120s so reflections drift across chrome
    if(scene.environmentRotation){
@@ -532,7 +533,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   chromeShellMat.dispose();visorGlassMat.dispose();visorScreenMat.dispose();grokEyeMat.dispose();coreMat.dispose();bezelMat.dispose();
   envTexture.dispose();
   shadowTexture?.dispose();
-  composer=undefined;
+  bloomPass?.dispose(); composer?.dispose(); composer=undefined;
   renderer.dispose();renderer.forceContextLoss();
   signal.removeEventListener('abort',dispose);
  }
