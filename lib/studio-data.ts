@@ -4,16 +4,33 @@ import { requireOwner } from './owner-session';
 export type Project = ProjectRecord;
 export type Founder = Omit<FounderRecord, 'status'>;
 export async function listProjects(all = false): Promise<Project[]> {
-  if (all) await requireOwner();
-  return (await getDb()).collection<ProjectRecord>('projects').find(all ? { status: { $in: ['draft', 'published'] } } : { status: 'published' }, { projection: { _id: 0 } }).sort({ position: 1, title: 1 }).toArray();
+  try {
+    if (all) await requireOwner();
+    return (await getDb()).collection<ProjectRecord>('projects').find(all ? { status: { $in: ['draft', 'published'] } } : { status: 'published' }, { projection: { _id: 0 } }).sort({ position: 1, title: 1 }).toArray();
+  } catch (err) {
+    if (all) throw err;
+    console.error('listProjects error:', err);
+    return [];
+  }
 }
 export async function listFounders(all = false): Promise<Founder[]> {
-  if (all) await requireOwner();
-  return (await getDb()).collection<FounderRecord>('founders').find(all ? { status: { $in: ['draft', 'published'] } } : { status: 'published' }, { projection: { _id: 0 } }).sort({ position: 1 }).toArray();
+  try {
+    if (all) await requireOwner();
+    return (await getDb()).collection<FounderRecord>('founders').find(all ? { status: { $in: ['draft', 'published'] } } : { status: 'published' }, { projection: { _id: 0 } }).sort({ position: 1 }).toArray();
+  } catch (err) {
+    if (all) throw err;
+    console.error('listFounders error:', err);
+    return [];
+  }
 }
 export async function studioCopy() {
-  const row = await (await getDb()).collection('settings').findOne({ id: 'site' });
-  return { intro: typeof row?.intro === 'string' ? row.intro : '', about: typeof row?.about === 'string' ? row.about : '', availability: typeof row?.availability === 'string' ? row.availability : '' };
+  try {
+    const row = await (await getDb()).collection('settings').findOne({ id: 'site' });
+    return { intro: typeof row?.intro === 'string' ? row.intro : '', about: typeof row?.about === 'string' ? row.about : '', availability: typeof row?.availability === 'string' ? row.availability : '' };
+  } catch (err) {
+    console.error('studioCopy error:', err);
+    return { intro: 'Custom software, web platforms and security reviews for teams building their next release.', about: 'Hash Decode is a software and web-security studio.', availability: 'Taking new projects' };
+  }
 }
 export const services = [
   {

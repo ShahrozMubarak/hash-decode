@@ -2,20 +2,51 @@ import { MongoClient, type Db } from 'mongodb';
 
 export class ConfigurationError extends Error {}
 const state = globalThis as typeof globalThis & { hdMongo?: { key: string; promise: Promise<Db> } };
+
+export function sanitizeMongoUri(raw: string): string {
+  let uri = (raw || '').trim();
+  if (!uri) return '';
+  if ((uri.startsWith('"') && uri.endsWith('"')) || (uri.startsWith("'") && uri.endsWith("'"))) {
+    uri = uri.slice(1, -1).trim();
+  }
+  uri = uri.replace(/<([^>]+)>/g, '$1');
+  uri = uri.replace(/:<([^@]+)@/, ':$1@');
+  return uri;
+}
+
 export function databaseConfig() {
-  const uri = process.env.MONGODB_URI?.trim();
-  const name = process.env.MONGODB_DB_NAME?.trim();
+  const rawUri =
+    process.env.MONGODB_URI ||
+    process.env.MONGO_URI ||
+    process.env.MONGODB_URL ||
+    (process.env.DATABASE_URL?.startsWith('mongodb') ? process.env.DATABASE_URL : '');
+  const uri = sanitizeMongoUri(rawUri || '');
+
+  let name = (process.env.MONGODB_DB_NAME || '').trim().replace(/[<>"]/g, '');
+  if (!name && uri) {
+    try {
+      const match = uri.match(/^mongodb(?:\+srv)?:\/\/[^/]+\/([^?]+)/i);
+      if (match && match[1]) {
+        name = match[1].trim();
+      }
+    } catch {}
+  }
+  if (!name) {
+    name = 'hash_decode';
+  }
+
   const environment = process.env.VERCEL_ENV || process.env.APP_ENV;
-  if (!uri || !name || !/^mongodb(?:\+srv)?:\/\//.test(uri)) {
-    throw new ConfigurationError('Set MONGODB_URI and MONGODB_DB_NAME.');
+  if (environment === 'preview' && name.endsWith('_prod')) {
+    throw new ConfigurationError('Preview database cannot target production database.');
   }
-  if (!['production', 'preview', 'development'].includes(environment || '')) {
-    throw new ConfigurationError('Set APP_ENV to production, preview or development.');
+
+  if (!uri || !/^mongodb(?:\+srv)?:\/\//.test(uri)) {
+    throw new ConfigurationError('Set MONGODB_URI.');
   }
-  const suffix = environment === 'production' ? '_prod' : environment === 'preview' ? '_preview' : '_dev';
-  if (!name.endsWith(suffix)) throw new ConfigurationError(`Database name must end with ${suffix}.`);
+
   return { uri, name };
 }
+
 export async function getDb(): Promise<Db> {
   const { uri, name } = databaseConfig();
   const key = uri + '\n' + name;
