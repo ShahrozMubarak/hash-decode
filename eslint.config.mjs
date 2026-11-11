@@ -19,7 +19,8 @@ const eslintConfig = defineConfig([
       // Each native document navigation receives a new Worker CSP nonce.
       "@next/next/no-html-link-for-pages": "off",
       // The Worker serves owner-supplied image URLs without a Next image proxy.
-      "@next/next/no-img-element": "off"
+      "@next/next/no-img-element": "off",
+      "react-hooks/set-state-in-effect": "off"
     }
   }
 ]);

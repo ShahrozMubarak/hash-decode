@@ -1,3 +1,7 @@
+# Updated release
+
+Start with START_HERE.md, DEPLOY.md and PROGRESS.md. Legacy auth/database instructions below are superseded and retained only as source history.
+
 # Hash Decode Studio
 
 Unpublished React/Vinext source for a software and web-security studio, using a Cloudflare Worker and D1. Read START_HERE.md before configuring hosting and DELIVERY_REPORT.md for verification results and limitations.
