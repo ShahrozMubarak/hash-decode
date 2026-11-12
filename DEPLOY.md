@@ -21,6 +21,12 @@ Read PROGRESS.md first: this is a foundation release with a functional admin/bas
 
 Copy .env.example to .env.local for CLI work. Never upload .env.local. Generate a key with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`. Back it up privately and separately from the DB. Losing it requires admin:reset and new authenticator enrollment; do not rotate it blindly.
 
+### ChatGPT Sites
+
+The hosted site reads these values at runtime from the Sites panel, not from the repository. In ChatGPT, open Sites, select this site, then More actions → Settings, and add the keys above. Never put them in `.openai/hosting.json` or commit them. Adding or removing keys requires publishing a new version; update existing values in the panel and redeploy if the live site does not pick them up.
+
+Required for the admin workspace: `MONGODB_URI`, `MONGODB_DB_NAME`, `ENCRYPTION_KEY`, and HTTPS `APP_ORIGIN`/`SITE_ORIGIN`. Email keys are optional until notifications are enabled.
+
 ## Atlas
 
 Create one least-privilege database user per environment with readWrite only on its own database. Use separate operator credentials for maintenance if appropriate. URL-encode special characters in credentials and paste the URI without angle brackets. The code does not try to repair credentials. Database names must end in `_prod`, `_preview` or `_dev` for the selected environment. Never give Preview production credentials.

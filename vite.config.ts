@@ -55,10 +55,10 @@ function collectRuntimeVars(): Record<string, string> {
 export default defineConfig(async ({ command }) => {
   configureToolEnvironment(process.cwd());
 
-  // Wrangler only receives variables baked at build time. Collect the server
-  // configuration for production builds as well, so the deployed Worker can
-  // reach MongoDB and the owner login instead of failing with a 503.
-  const runtimeVars = collectRuntimeVars();
+  // Hosted runtimes (ChatGPT Sites) inject environment values at runtime from
+  // the site's Settings panel. Only the local dev server receives variables via
+  // Wrangler so previews keep working without committing secrets.
+  const runtimeVars = command === "serve" ? collectRuntimeVars() : {};
 
   const localBindingConfig = {
     main: "./worker/index.ts",
