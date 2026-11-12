@@ -65,11 +65,13 @@ const worker = {
       if (typeof value === 'string' && process.env[key] === undefined) process.env[key] = value;
     }
     const turnstile = bindings.TURNSTILE_SECRET && bindings.TURNSTILE_SITE_KEY ? ' https://challenges.cloudflare.com' : '';
+    const extraConnect=(process.env.CSP_CONNECT_ORIGINS||'').split(',').map(s=>s.trim()).filter(Boolean).map(o=>' '+o).join('');
+    const extraImg=(process.env.CSP_IMG_ORIGINS||'').split(',').map(s=>s.trim()).filter(Boolean).map(o=>' '+o).join('');
     const newNonce=()=>btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(18))));
     const nonce=newNonce();
     const policyFor=(nonce:string)=> [ "default-src 'self'", "script-src 'self' 'nonce-"+nonce+"'"+turnstile,
-      "style-src 'self' 'unsafe-inline'", "img-src 'self' https: data:", "font-src 'self'",
-      "connect-src 'self'"+turnstile, "frame-src "+(turnstile.trim()||"'none'"),
+      "style-src 'self' 'unsafe-inline'", "img-src 'self' https: data:"+extraImg, "font-src 'self'",
+      "connect-src 'self'"+turnstile+extraConnect, "frame-src "+(turnstile.trim()||"'none'"),
       "frame-ancestors 'none'", "object-src 'none'", "base-uri 'none'", "form-action 'self'" ].join('; ');
     const policy=policyFor(nonce);
     const url=new URL(request.url);

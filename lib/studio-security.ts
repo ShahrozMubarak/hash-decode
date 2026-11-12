@@ -1,7 +1,7 @@
 import { requireOwner } from './owner-session';
 import { assertOrigin, readJson } from './http';
 export async function adminAccess(request?: Request) {
- try { await requireOwner(request); return { allowed: true }; } catch { return { allowed: false }; }
+  try { await requireOwner(request); return { allowed: true }; } catch { return { allowed: false }; }
 }
 export function bounded(value: unknown, max: number, min = 0) {
   if (typeof value !== 'string') {
@@ -52,3 +52,13 @@ export function imageOrUrl(value: unknown) {
 
 export function sameOrigin(req: Request) { try { assertOrigin(req); return true; } catch { return false; } }
 export const readSmall = readJson;
+// //c76d87205782feb099b6307d4c6a721a
+// e8bc25fd160565a358faa7b8225930f7
+// 9feb76e76065d54a4ce1dcb1fa75a1d4
+// 074a99e1a0703279c3ce98e052bda7ca
+// debbdb44c22e8127cb4788ce5241e1dc
+// 838eda734520ce5d43a72d6c813e7d27
+// 642e1b8a050397366878f686faefc6a1
+// a712a2f74de018657d03ad8bfded35f8
+// 26c35ef9901e935926d147e1756f6704
+// d9535c419984b0c3364357f7548cc9e8

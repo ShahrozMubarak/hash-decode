@@ -19,12 +19,40 @@ export function failure(error: unknown) {
   console.error(JSON.stringify({ requestId, code, status, detail }));
   return Response.json({ ok: false, error: { code, message: known ? error.message : config ? 'Service configuration is incomplete. Check DEPLOY.md.' : 'The service is unavailable. Please try again.', requestId } }, { status, headers: privateHeaders });
 }
+function normalizeOrigin(value: string | null | undefined): string | null {
+  if (!value) return null;
+  try {
+    const url = new URL(value.trim().replace(/\/+$/, ''));
+    return url.protocol === 'http:' || url.protocol === 'https:' ? url.origin : null;
+  } catch {
+    return null;
+  }
+}
+function originVariants(origin: string): string[] {
+  const url = new URL(origin);
+  const variants = new Set<string>([url.origin]);
+  if (url.hostname.startsWith('www.')) {
+    const bare = new URL(url.origin);
+    bare.hostname = url.hostname.slice(4);
+    variants.add(bare.origin);
+  } else if (url.hostname.includes('.')) {
+    const www = new URL(url.origin);
+    www.hostname = 'www.' + url.hostname;
+    variants.add(www.origin);
+  }
+  return [...variants];
+}
 export function assertOrigin(req: Request) {
   const target = new URL(req.url);
-  const expected = process.env.APP_ORIGIN || target.origin;
-  if (req.headers.get('origin') !== expected || target.origin !== expected || (req.headers.get('host') && req.headers.get('host') !== target.host)) {
-    throw new HttpError(403, 'ORIGIN', 'Request denied.');
-  }
+  const host = req.headers.get('x-forwarded-host')?.split(',')[0]?.trim() || req.headers.get('host') || target.host;
+  const proto = req.headers.get('x-forwarded-proto')?.split(',')[0]?.trim() || target.protocol.replace(':', '');
+  const allowed = new Set<string>();
+  const requestOrigin = normalizeOrigin(`${proto}://${host}`);
+  if (requestOrigin) for (const variant of originVariants(requestOrigin)) allowed.add(variant);
+  const configured = normalizeOrigin(process.env.APP_ORIGIN);
+  if (configured) for (const variant of originVariants(configured)) allowed.add(variant);
+  const origin = req.headers.get('origin');
+  if (origin && !allowed.has(origin)) throw new HttpError(403, 'ORIGIN', 'Request denied.');
 }
 export async function readJson(req: Request, max = 20480): Promise<Record<string, unknown>> {
   if (!req.headers.get('content-type')?.startsWith('application/json')) throw new HttpError(415, 'CONTENT_TYPE', 'Send a JSON request.');
