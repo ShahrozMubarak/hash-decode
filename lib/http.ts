@@ -15,7 +15,8 @@ export function failure(error: unknown) {
   const config = error instanceof ConfigurationError;
   const status = known ? error.status : 503;
   const code = known ? error.code : config ? 'CONFIGURATION' : 'UNAVAILABLE';
-  console.error(JSON.stringify({ requestId, code, status }));
+  const detail = error instanceof Error ? error.message : String(error);
+  console.error(JSON.stringify({ requestId, code, status, detail }));
   return Response.json({ ok: false, error: { code, message: known ? error.message : config ? 'Service configuration is incomplete. Check DEPLOY.md.' : 'The service is unavailable. Please try again.', requestId } }, { status, headers: privateHeaders });
 }
 export function assertOrigin(req: Request) {

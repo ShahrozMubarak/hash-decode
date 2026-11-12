@@ -18,6 +18,9 @@ if [[ ! -x "${vinext}" ]]; then
   exit 69
 fi
 
+# Never let a development NODE_ENV leak into a production bundle (jsxDEV).
+export NODE_ENV=production
+
 echo "Running bounded vinext build..."
 timeout \
   --signal=TERM \

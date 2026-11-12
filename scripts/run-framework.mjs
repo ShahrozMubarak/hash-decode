@@ -2,6 +2,8 @@ import {fileURLToPath} from "node:url";
 import {readExecutionProfile} from "./execution-profile.mjs";
 const [command,...args]=process.argv.slice(2);
 if(!["dev","build"].includes(command))throw Error("Expected dev or build.");
+// Production bundles must never be compiled with the development JSX runtime.
+if(command==="build")process.env.NODE_ENV="production";
 
 if (process.env.VERCEL && command === "build") {
   const cli = new URL("../node_modules/next/dist/bin/next", import.meta.url);

@@ -2,6 +2,40 @@ import {homeRequest,stampHtml} from './home-cache';
 import handler from "vinext/server/fetch-handler";
 import { runWithConnectorBinding } from "../lib/connector-context";
 import type { ConnectorBinding } from "../lib/connector-contract.mjs";
+import { closeRequestDbContext, createRequestDbContext, runWithRequestDbContext, type RequestDbContext } from "../lib/db/request-context";
+
+// Sockets and database clients must be closed when the response body ends.
+// Workerd rejects I/O that outlives its originating request.
+function withDbCleanup(response: Response, context: RequestDbContext): Response {
+  if (!response.body) {
+    void closeRequestDbContext(context);
+    return response;
+  }
+  const reader = response.body.getReader();
+  let closed = false;
+  const close = () => {
+    if (closed) return;
+    closed = true;
+    void closeRequestDbContext(context);
+  };
+  const body = new ReadableStream<Uint8Array>({
+    async pull(controller) {
+      try {
+        const { done, value } = await reader.read();
+        if (done) { controller.close(); close(); return; }
+        controller.enqueue(value);
+      } catch (error) {
+        close();
+        controller.error(error);
+      }
+    },
+    async cancel(reason) {
+      close();
+      await reader.cancel(reason).catch(() => undefined);
+    },
+  });
+  return new Response(body, response);
+}
 
 const worker = {
   async fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext<{ CONNECTORS?: ConnectorBinding }>) {
@@ -25,6 +59,11 @@ const worker = {
       };
     }
     const bindings = env as unknown as Record<string,string>;
+    // Wrangler variables/secrets are exposed on `env`; mirror them onto
+    // process.env so server code reads the deployed configuration.
+    for (const [key, value] of Object.entries(bindings)) {
+      if (typeof value === 'string' && process.env[key] === undefined) process.env[key] = value;
+    }
     const turnstile = bindings.TURNSTILE_SECRET && bindings.TURNSTILE_SITE_KEY ? ' https://challenges.cloudflare.com' : '';
     const newNonce=()=>btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(18))));
     const nonce=newNonce();
@@ -43,9 +82,16 @@ const worker = {
     forwarded.headers.set('Content-Security-Policy',policyFor(renderNonce));
     let original=store?await store.match(storedKey).catch(()=>undefined):undefined;
     let sourceNonce=original?.headers.get('X-Studio-Template-Nonce')||renderNonce;
+    let dbContext: RequestDbContext | undefined;
     if(!original){
-      original=await runWithConnectorBinding(binding, () => handler.fetch(forwarded, env, ctx));
-      if(!original)return new Response("Page temporarily unavailable.",{status:503});
+      dbContext=createRequestDbContext();
+      try {
+        original=await runWithRequestDbContext(dbContext, () => runWithConnectorBinding(binding, () => handler.fetch(forwarded, env, ctx)));
+      } catch (error) {
+        void closeRequestDbContext(dbContext);
+        throw error;
+      }
+      if(!original){void closeRequestDbContext(dbContext);return new Response("Page temporarily unavailable.",{status:503});}
       sourceNonce=renderNonce;
       if(store&&original.ok&&original.headers.get('Content-Type')?.includes('text/html')&&!original.headers.has('Set-Cookie')){
         const stored=new Response(original.clone().body,original);
@@ -56,7 +102,8 @@ const worker = {
       }
     }
     if(cacheHome&&original.headers.get('Content-Type')?.includes('text/html'))original=stampHtml(original,sourceNonce,nonce);
-    const response = new Response(original.body, original);
+    let response = new Response(original.body, original);
+    if (dbContext) response = withDbCleanup(response, dbContext);
     response.headers.delete("X-Studio-Template-Nonce");
     response.headers.delete("ETag");
     const path = new URL(request.url).pathname;

@@ -19,20 +19,27 @@ const FORWARDED_ENV_KEYS = [
   "MONGODB_URI",
   "MONGO_URI",
   "MONGODB_URL",
+  "DATABASE_URL",
   "MONGODB_DB_NAME",
+  "APP_ENV",
+  "ENCRYPTION_KEY",
   "OWNER_PASSWORD_HASH",
   "ADMIN_PASSWORD",
   "ADMIN_EMAIL",
   "STUDIO_OWNER_EMAIL",
   "ADMIN_NOTIFICATION_EMAIL",
   "RESEND_API_KEY",
+  "EMAIL_FROM",
+  "EMAIL_TO",
   "MAIL_FROM",
   "MAIL_TO",
   "TURNSTILE_SITE_KEY",
   "TURNSTILE_SECRET",
-  "SITE_ORIGIN",
   "SERVICE_AREA",
 ];
+// APP_ORIGIN and SITE_ORIGIN are deployment-specific. They must be supplied by
+// the hosting environment at runtime; baking a localhost value would reject
+// production logins and canonical URLs.
 
 function collectRuntimeVars(): Record<string, string> {
   const vars: Record<string, string> = {};
@@ -48,7 +55,10 @@ function collectRuntimeVars(): Record<string, string> {
 export default defineConfig(async ({ command }) => {
   configureToolEnvironment(process.cwd());
 
-  const runtimeVars = command === "serve" ? collectRuntimeVars() : {};
+  // Wrangler only receives variables baked at build time. Collect the server
+  // configuration for production builds as well, so the deployed Worker can
+  // reach MongoDB and the owner login instead of failing with a 503.
+  const runtimeVars = collectRuntimeVars();
 
   const localBindingConfig = {
     main: "./worker/index.ts",
