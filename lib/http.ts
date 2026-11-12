@@ -44,15 +44,11 @@ function originVariants(origin: string): string[] {
 }
 export function assertOrigin(req: Request) {
   const target = new URL(req.url);
-  const host = req.headers.get('x-forwarded-host')?.split(',')[0]?.trim() || req.headers.get('host') || target.host;
-  const proto = req.headers.get('x-forwarded-proto')?.split(',')[0]?.trim() || target.protocol.replace(':', '');
-  const allowed = new Set<string>();
-  const requestOrigin = normalizeOrigin(`${proto}://${host}`);
-  if (requestOrigin) for (const variant of originVariants(requestOrigin)) allowed.add(variant);
+  const allowed = new Set<string>(originVariants(target.origin));
   const configured = normalizeOrigin(process.env.APP_ORIGIN);
   if (configured) for (const variant of originVariants(configured)) allowed.add(variant);
   const origin = req.headers.get('origin');
-  if (origin && !allowed.has(origin)) throw new HttpError(403, 'ORIGIN', 'Request denied.');
+  if (!origin || !allowed.has(origin)) throw new HttpError(403, 'ORIGIN', 'Request denied.');
 }
 export async function readJson(req: Request, max = 20480): Promise<Record<string, unknown>> {
   if (!req.headers.get('content-type')?.startsWith('application/json')) throw new HttpError(415, 'CONTENT_TYPE', 'Send a JSON request.');

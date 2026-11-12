@@ -2,6 +2,10 @@
 
 Read PROGRESS.md first: this is a foundation release with a functional admin/basic blog, not the entire premium CMS/portal brief. No account access, deployment, credentials or paid service setup is included. Node 24.22.1 was used for validation; use Node 24 for the native TypeScript CLI/test runner. Framework versions and build tooling are unchanged.
 
+## Important security action before redeployment
+
+A MongoDB connection URI was found in `app/owner.css` in an earlier build. It has been removed, but treat that URI as exposed: rotate the MongoDB Atlas database user's password, update `MONGODB_URI` in the hosting panel, and redeploy. Do not continue using the old password. Keep `ENCRYPTION_KEY` unchanged unless you are intentionally resetting owner two-factor authentication; changing it without a planned reset will make the stored authenticator secret unreadable.
+
 ## Environment variables
 
 | Name | Production | Preview / development |
@@ -21,7 +25,17 @@ Read PROGRESS.md first: this is a foundation release with a functional admin/bas
 
 Copy .env.example to .env.local for CLI work. Never upload .env.local. Generate a key with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`. Back it up privately and separately from the DB. Losing it requires admin:reset and new authenticator enrollment; do not rotate it blindly.
 
-### ChatGPT Sites
+### Vercel deployment
+
+Open **Project → Settings → Environment Variables** and add the values for the correct environment. Vercel supplies `VERCEL_ENV`; keep the explicit `APP_ENV` value aligned as well.
+
+- Production: `APP_ENV=production`, `MONGODB_DB_NAME=hashdecode_prod`, `APP_ORIGIN=https://www.hashdecode.com`, and `SITE_ORIGIN=https://www.hashdecode.com`.
+- Preview: `APP_ENV=preview`, a separate `hashdecode_preview` database and user, and the exact Preview deployment origin for `APP_ORIGIN` and `SITE_ORIGIN`.
+- Local development: `APP_ENV=development` and a separate `hashdecode_dev` database.
+
+Set `MONGODB_URI` to the matching Atlas connection string and `ENCRYPTION_KEY` to the existing 64-character hex key for that environment. Do not reuse the Production database credentials in Preview. Optionally set `ADMIN_EMAIL`/`ADMIN_PASSWORD` to bootstrap the owner on the first sign-in; otherwise run `npm run admin:create` against the target database. Save the variables and redeploy the affected environment. The application rejects missing environment labels and database names whose `_prod`, `_preview`, or `_dev` suffix does not match the selected environment.
+
+### ChatGPT Sites (only if this project is hosted there)
 
 The hosted site reads these values at runtime from the Sites panel, not from the repository. In ChatGPT, open Sites, select this site, then More actions → Settings, and add the keys above. Never put them in `.openai/hosting.json` or commit them. Adding or removing keys requires publishing a new version; update existing values in the panel and redeploy if the live site does not pick them up.
 

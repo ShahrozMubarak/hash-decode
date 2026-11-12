@@ -1,4 +1,4 @@
-import { getDb } from './db';
+import { getDb, ConfigurationError } from './db';
 import { assertOrigin, HttpError } from './http';
 import { sha256, randomToken, equal, decrypt, validTotpStep } from './security-crypto.mjs';
 import { getClientIp, ipHash } from './abuse';
@@ -60,9 +60,9 @@ export function sessionCookie(token: string, age = sessionSeconds, req?: Request
     (proto === 'http' || (req?.url && req.url.startsWith('http://'))) &&
     process.env.NODE_ENV !== 'production';
   if (isHttpLocal) {
-    return `${fallbackCookieName}=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${age}`;
+    return `${fallbackCookieName}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${age}`;
   }
-  return `${cookieName}=${token}; Secure; HttpOnly; SameSite=Lax; Path=/; Max-Age=${age}`;
+  return `${cookieName}=${token}; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=${age}`;
 }
 
 export function sessionFresh(session: Session, now = Date.now()) {
@@ -109,7 +109,11 @@ export async function requireOwner(req?: Request, write = false): Promise<Sessio
 
 export async function consumeSecondFactor(owner: Owner, code: string, allowRecovery = true) {
   const db = await getDb();
-  const step = validTotpStep(decrypt(owner.totpSecret), code, owner.lastTotpStep);
+  let secret: string;
+  try { secret = decrypt(owner.totpSecret); }
+  catch { throw new ConfigurationError('ENCRYPTION_KEY is missing or does not match the owner authenticator setup.'); }
+  const normalizedCode = code.trim().toLowerCase();
+  const step = validTotpStep(secret, normalizedCode, owner.lastTotpStep);
   if (step !== null) {
     const result = await db
       .collection<Owner>('adminUsers')
@@ -119,16 +123,16 @@ export async function consumeSecondFactor(owner: Owner, code: string, allowRecov
       );
     return result.modifiedCount === 1;
   }
-  if (allowRecovery && /^[a-f0-9]{32}$/.test(code)) {
+  if (allowRecovery && /^[a-f0-9]{32}$/.test(normalizedCode)) {
     const result = await db
       .collection<Owner>('adminUsers')
       .updateOne(
         {
           _id: 'owner',
           credentialVersion: owner.credentialVersion,
-          recoveryHashes: sha256(code),
+          recoveryHashes: sha256(normalizedCode),
         },
-        { $pull: { recoveryHashes: sha256(code) } }
+        { $pull: { recoveryHashes: sha256(normalizedCode) } }
       );
     return result.modifiedCount === 1;
   }

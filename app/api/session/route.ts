@@ -55,17 +55,15 @@ export async function POST(req: Request) {
     await enforceLimit(req, 'login', 20, 15 * 60000, email);
 
     const db = await getDb();
-    const configuredEmail = (
-      cleanEnv('ADMIN_EMAIL') ||
-      cleanEnv('OWNER_EMAIL') ||
-      'admin@hashdecode.com'
-    ).toLowerCase();
-    const configuredPassword =
-      cleanEnv('ADMIN_PASSWORD') || cleanEnv('OWNER_PASSWORD') || 'HashDecodeAdmin2026!';
+    const configuredEmail = (cleanEnv('ADMIN_EMAIL') || cleanEnv('OWNER_EMAIL')).toLowerCase();
+    const configuredPassword = cleanEnv('ADMIN_PASSWORD') || cleanEnv('OWNER_PASSWORD');
 
     let owner = await db.collection<Owner>('adminUsers').findOne({ _id: 'owner' });
 
     if (!owner) {
+      if (!configuredEmail || !configuredPassword) {
+        throw new HttpError(403, 'OWNER_NOT_CONFIGURED', 'The owner account is not configured. Run npm run admin:create or set ADMIN_EMAIL and ADMIN_PASSWORD.');
+      }
       const initialOwner: Owner = {
         _id: 'owner',
         email: configuredEmail,
@@ -87,6 +85,8 @@ export async function POST(req: Request) {
       : false;
 
     const matchesEnvCredentials =
+      Boolean(configuredEmail) &&
+      Boolean(configuredPassword) &&
       email === configuredEmail &&
       Boolean(inputPassword) &&
       equal(sha256(inputPassword), sha256(configuredPassword));

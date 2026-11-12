@@ -34,12 +34,16 @@ export function databaseConfig() {
     } catch {}
   }
   if (!name) {
-    name = 'hash_decode';
+    throw new ConfigurationError('Set MONGODB_DB_NAME or include a database name in MONGODB_URI.');
   }
 
   const environment = process.env.VERCEL_ENV || process.env.APP_ENV;
-  if (environment === 'preview' && name.endsWith('_prod')) {
-    throw new ConfigurationError('Preview database cannot target production database.');
+  const suffix = environment === 'production' ? '_prod' : environment === 'preview' ? '_preview' : environment === 'development' ? '_dev' : '';
+  if (!suffix) {
+    throw new ConfigurationError('Set APP_ENV to production, preview, or development.');
+  }
+  if (!name.endsWith(suffix)) {
+    throw new ConfigurationError(`Database name must end in ${suffix} for the ${environment} environment.`);
   }
 
   if (!uri || !/^mongodb(?:\+srv)?:\/\//.test(uri)) {

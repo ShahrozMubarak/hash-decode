@@ -73,7 +73,7 @@ export async function POST(req: Request) {
       await db.collection('sessions').deleteMany({ ownerId: session.ownerId });
       const mail = await sendMail('Hash Decode: password changed', 'Your owner password changed. All owner sessions were revoked.');
       await audit(req, 'password_changed', 'owner', mail.emailStatus);
-      return ok({}, 200, { 'Set-Cookie': sessionCookie('', 0) });
+      return ok({}, 200, { 'Set-Cookie': sessionCookie('', 0, req) });
     }
     if (action === 'recovery') {
       requireRecent(session); const codes = recoveryCodes();
