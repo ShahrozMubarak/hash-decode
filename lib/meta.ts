@@ -10,13 +10,14 @@ export function meta(title:string,description:string,path:string):Metadata {
  const fullTitle=title.length<=44 ? title+' | Hash Decode' : title.slice(0,59);
  const summary=description.trim().slice(0,159);
  const canonical=origin ? new URL(path,origin).href : undefined;
+ 
  return {
    title:fullTitle,
    description:summary,
    alternates:{canonical},
    openGraph:{
-     title:fullTitle,
-     description:summary,
+      title:fullTitle,
+      description:summary,
      url:canonical,
      siteName:'Hash Decode',
      type:'website',
