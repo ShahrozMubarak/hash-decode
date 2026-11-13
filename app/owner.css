@@ -10,7 +10,7 @@
     min-height: 100svh;
     background: var(--owner-surface);
     color: var(--ink);
-    display: grid;
+    display: g.owner-workspace,.owner-content,.owner-body,.owner-toolbar,.owner-topbar{position:relative;z-index:50!important}.owner-toolbar{margin-top:1rem;margin-bottom:1.5rem;z-index:60!important}rid;
     grid-template-columns: 256px minmax(0, 1fr);
     font-family: var(--font-body), sans-serif
 }
