@@ -9,7 +9,7 @@ export default function PageExperience() {
   const [shifting, setShifting] = useState<boolean>(false);
 
   useEffect(() => {
-    if (path === '/' || path.startsWith('/admin') || path.startsWith('/portal')) return;
+    if (path === '/' || path.startsWith('/admin') || path.startsWith('/shahroz') || path.startsWith('/portal')) return;
     let reveal: IntersectionObserver | null = null;
     let elements: HTMLElement[] = [];
     const timer = setTimeout(() => {
@@ -52,7 +52,7 @@ export default function PageExperience() {
     }
   }, [path]);
 
-  if (path === '/' || path.startsWith('/admin') || path === '/contact' || path === '/about') return null;
+  if (path === '/' || path.startsWith('/admin') || path.startsWith('/shahroz') || path === '/contact' || path === '/about') return null;
 
   const pageClass = 'page-' + (path.replace('/', '').split('/')[0] || 'root');
 
