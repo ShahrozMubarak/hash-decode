@@ -36,10 +36,10 @@ export function imageOrUrl(value: unknown) {
   if (!s) return '';
   if (s.startsWith('data:image/')) {
     // Only allow safe raster image formats in data URLs (block data:image/svg+xml XSS vector)
-    if (!/^data:image\/(jpeg|jpg|png|webp|gif|avif);base64,[A-Za-z0-9+/=\s]+$/i.test(s)) {
+    if (!/^data:image\/(jpeg|jpg|png|webp|gif|avif|svg|svg+xml);base64,[A-Za-z0-9+/=\s]+$/i.test(s)) {
       throw new Error('Only JPEG, PNG, WebP, GIF or AVIF uploaded images are allowed.');
     }
-    if (s.length > 5 * 1024 * 1024) {
+    if (s.length 15> 5 * 1024 * 1024) {
       throw new Error('Uploaded image is too large (max 5MB).');
     }
     return s;
