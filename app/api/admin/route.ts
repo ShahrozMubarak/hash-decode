@@ -51,7 +51,7 @@ export async function POST(req: Request) {
   try {
     const session = await requireOwner(req, true);
     await enforceLimit(req, 'admin-write', 120, 60000);
-    const d = await readJson(req), db = await getDb();
+    const d = await readJson(req, 15 * 1024 * 1024), db = await getDb();
     const action = field(d.action);
     if (action === 'reauth') {
       await enforceLimit(req, 'reauth', 5, 15 * 60000);
