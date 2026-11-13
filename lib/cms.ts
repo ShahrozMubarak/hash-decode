@@ -13,12 +13,21 @@ export async function entries(kind = 'post', all = false): Promise<Entry[]> {
     return [];
   }
 }
-export async function getLinks(): Promise<{ whatsapp: string; booking: string }> {
+export interface SocialLinks { whatsapp: string; booking: string; instagram: string; facebook: string; youtube: string; tiktok: string; linkedin: string; }
+export async function getLinks(): Promise<SocialLinks> {
   try {
     const row = await (await getDb()).collection('settings').findOne({ id: 'site' });
-    return { whatsapp: typeof row?.whatsapp === 'string' ? row.whatsapp : '', booking: typeof row?.booking === 'string' ? row.booking : '' };
+    return {
+      whatsapp: typeof row?.whatsapp === 'string' ? row.whatsapp : '',
+      booking: typeof row?.booking === 'string' ? row.booking : '',
+      instagram: typeof row?.instagram === 'string' ? row.instagram : '',
+      facebook: typeof row?.facebook === 'string' ? row.facebook : '',
+      youtube: typeof row?.youtube === 'string' ? row.youtube : '',
+      tiktok: typeof row?.tiktok === 'string' ? row.tiktok : '',
+      linkedin: typeof row?.linkedin === 'string' ? row.linkedin : '',
+    };
   } catch (err) {
     console.error('getLinks error:', err);
-    return { whatsapp: '', booking: '' };
+    return { whatsapp: '', booking: '', instagram: '', facebook: '', youtube: '', tiktok: '', linkedin: '' };
   }
 }

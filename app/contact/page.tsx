@@ -51,7 +51,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
           <div className="contact-action-list">
             <a
               className="hd-btn-secondary whatsapp-studio-btn"
-              href={'https://wa.me/' + (links.whatsapp || '923000000000')}
+              href={links.whatsapp || 'https://wa.me/923000000000'}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp the studio"
