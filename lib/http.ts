@@ -23,7 +23,8 @@ export function failure(error: unknown) {
   const config = error instanceof ConfigurationError;
   const status = known ? error.status : 503;
   const code = known ? error.code : config ? 'CONFIGURATION' : 'UNAVAILABLE';
-  console.error(JSON.stringify({ requestId, code, status, detail: error instanceof Error ? error.message : String(error) }));
+  const detail = error instanceof Error ? error.message : String(error);
+  console.error(JSON.stringify({ requestId, code, status, detail }));
   return Response.json(
     {
       ok: false,
@@ -32,7 +33,9 @@ export function failure(error: unknown) {
         message: known
           ? error.message
           : config
-          ? 'Service configuration is incomplete. Check DEPLOY.md.'
+          ? process.env.NODE_ENV !== 'production'
+            ? `Service configuration: ${detail}. Check DEPLOY.md.`
+            : 'Service configuration is incomplete. Check DEPLOY.md.'
           : 'The service is unavailable. Please try again.',
         requestId,
       },
@@ -64,10 +67,19 @@ export function assertOrigin(req: Request) {
     'www.hashdecode.com',
     'localhost:3000',
     '127.0.0.1:3000',
+    'localhost:3001',
+    '127.0.0.1:3001',
+    'localhost:3002',
+    '127.0.0.1:3002',
+    'localhost:5000',
+    '127.0.0.1:5000',
     'localhost:5173',
     '127.0.0.1:5173',
   ]);
   if (targetHost) allowedHosts.add(targetHost);
+  if (/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(originHost)) {
+    allowedHosts.add(originHost);
+  }
 
   if (process.env.APP_ORIGIN) {
     try {

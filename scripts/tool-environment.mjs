@@ -25,8 +25,12 @@ export function loadDotEnvFiles(projectRoot) {
           loaded[key] = val;
           // NODE_ENV is owned by the build/dev command, never by dotenv files.
           // A development value here would make production builds emit jsxDEV.
-          if (key !== "NODE_ENV" && process.env[key] === undefined) {
-            process.env[key] = val;
+          if (key !== "NODE_ENV") {
+            if (process.env[key] === undefined || process.env[key] === "" || fileName === ".env.local") {
+              if (val !== "" || process.env[key] === undefined) {
+                process.env[key] = val;
+              }
+            }
           }
         }
       }
