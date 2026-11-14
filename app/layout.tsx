@@ -6,7 +6,7 @@ import CardTiltManager from '@/components/studio/CardTiltManager';
 import ToastManager from '@/components/studio/ToastManager';
 import NavigationProgressBar from '@/components/studio/NavigationProgressBar';
 import PageTransition from '@/components/studio/PageTransition';
-import MobileCircuitRail from '@/components/studio/MobileCircuitRail';
+import ScrollDots from '@/components/studio/ScrollDots';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import './motion-ui.css';
@@ -87,7 +87,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RevealObserver />
         <CardTiltManager />
         <ToastManager />
-        <MobileCircuitRail />
+        <ScrollDots />
         <Header />
         <main id="main" tabIndex={-1}>
           <PageExperience />

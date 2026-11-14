@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import {usePathname} from 'next/navigation';
-import {ArrowUpRight,ArrowUp,Menu,X,Pause,Play,Briefcase,Cpu,Users,Mail,ShieldCheck,Search,ShoppingBag,Terminal,Phone,MapPin} from 'lucide-react';
+import {ArrowUpRight,ArrowUp,Menu,X,Pause,Play,Briefcase,Cpu,Users,Mail,ShieldCheck,Search,ShoppingBag,Terminal} from 'lucide-react';
 import FooterSubscribe from './FooterSubscribe';
 
 const links=[
@@ -188,28 +188,8 @@ export function Footer(){
 
         {/* Column 3: Contact */}
         <div className="footer-col footer-col-contact">
-          <span className="footer-col-title">Contact &amp; Studio</span>
-          <p className="footer-contact-note">Software engineering, custom web platforms, and digital security.</p>
-          <div className="footer-contact-details">
-            <a href="mailto:hashdecodeofficial@gmail.com" className="footer-detail-link">
-              <Mail size={14} aria-hidden="true" />
-              <span>hashdecodeofficial@gmail.com</span>
-            </a>
-            <div className="footer-phones-row">
-              <a href="tel:+923001237124" className="footer-detail-link">
-                <Phone size={14} aria-hidden="true" />
-                <span>0300 1237124</span>
-              </a>
-              <span className="footer-separator">•</span>
-              <a href="tel:+923214866916" className="footer-detail-link">
-                <span>0321 4866916</span>
-              </a>
-            </div>
-            <div className="footer-detail-address">
-              <MapPin size={14} aria-hidden="true" />
-              <span>Johar Town, Lahore, Pakistan</span>
-            </div>
-          </div>
+          <span className="footer-col-title">Contact</span>
+          <p className="footer-contact-note">Software engineering and digital resilience for critical releases.</p>
           <div className="footer-contact-actions">
             <a
               href="https://wa.me/923001237124"
@@ -217,7 +197,7 @@ export function Footer(){
               rel="noopener noreferrer"
               className="hd-text-link footer-contact-link"
             >
-              <span>WhatsApp Studio</span>
+              <span>WhatsApp the studio</span>
               <span className="link-arrow"><ArrowUpRight size={15} /></span>
             </a>
             <a href="/contact" className="hd-text-link footer-contact-link">

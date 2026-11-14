@@ -220,75 +220,72 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 }
 
 /* ==========================================================================
-   Mobile SVG Circuit Rail with Pulsing Ambient Dots
+   Clean Side Scroll Dots Indicator (Blank White -> Active Red, No Animations)
    ========================================================================== */
+.journey-rail,
+.mobile-checkpoints,
 .mobile-circuit-rail {
-  display: none;
+  display: none !important;
+}
+
+.scroll-dots-nav {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 6px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(11, 31, 58, 0.12);
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(11, 31, 58, 0.08);
+  pointer-events: auto;
+}
+
+.scroll-dot-btn {
+  display: block;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid rgba(11, 31, 58, 0.28);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.scroll-dot-btn:hover {
+  transform: scale(1.2);
+  border-color: #D93A2F;
+}
+
+.scroll-dot-btn.is-active {
+  background: #D93A2F !important;
+  border-color: #D93A2F !important;
+  transform: scale(1.25);
+  box-shadow: 0 1px 5px rgba(217, 58, 47, 0.4);
 }
 
 @media (max-width: 768px) {
-  .mobile-circuit-rail {
-    display: block;
-    position: fixed;
-    left: 8px;
-    top: 60px;
-    bottom: 20px;
-    width: 20px;
-    z-index: 35;
-    pointer-events: none;
-    opacity: 0.85;
+  .scroll-dots-nav {
+    right: 10px;
+    gap: 10px;
+    padding: 6px 4px;
+    background: rgba(255, 255, 255, 0.55);
   }
 
-  .mobile-circuit-svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  .circuit-track {
-    stroke: rgba(11, 31, 58, 0.16);
-    stroke-width: 1.5;
-    stroke-dasharray: 4 4;
-  }
-
-  .circuit-glow-track {
-    stroke: rgba(30, 64, 175, 0.35);
-    stroke-width: 2;
-    stroke-dasharray: 40 180;
-    stroke-dashoffset: 0;
-    animation: circuitPulseFlow 6s linear infinite;
-  }
-
-  .circuit-dot {
-    fill: var(--emphasis, #1E40AF);
-    filter: drop-shadow(0 0 4px rgba(30, 64, 175, 0.8));
-    animation: circuitDotGlow 3s ease-in-out infinite alternate;
-  }
-
-  .circuit-dot-coral {
-    fill: var(--coral, #D93A2F);
-    filter: drop-shadow(0 0 5px rgba(217, 58, 47, 0.8));
-    animation: circuitDotGlow 2.5s ease-in-out infinite alternate;
-    animation-delay: 1.2s;
-  }
-}
-
-@keyframes circuitPulseFlow {
-  0% {
-    stroke-dashoffset: 220;
-  }
-  100% {
-    stroke-dashoffset: -220;
-  }
-}
-
-@keyframes circuitDotGlow {
-  0% {
-    transform: scale(0.9);
-    opacity: 0.55;
-  }
-  100% {
-    transform: scale(1.25);
-    opacity: 1;
+  .scroll-dot-btn {
+    width: 8px;
+    height: 8px;
   }
 }
 
