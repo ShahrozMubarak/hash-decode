@@ -1,9 +1,12 @@
 import { MongoClient } from 'mongodb';
 export async function connectDatabase() {
-  const uri = process.env.MONGODB_URI, name = process.env.MONGODB_DB_NAME;
-  const env = process.env.VERCEL_ENV || process.env.APP_ENV;
-  const suffix = { production: '_prod', preview: '_preview', development: '_dev' }[env];
-  if (!uri || !name || !suffix || !name.endsWith(suffix)) throw Error('Set MONGODB_URI, MONGODB_DB_NAME and APP_ENV; use an environment-specific _prod, _preview or _dev database.');
+  const uri = process.env.MONGODB_URI;
+  const name = process.env.MONGODB_DB_NAME || 'hashdecode_dev';
+  const env = process.env.VERCEL_ENV || process.env.APP_ENV || (process.env.NODE_ENV === 'production' ? 'production' : 'development');
+  if (!uri) throw Error('Set MONGODB_URI in your environment or .env.local.');
+  if (env === 'preview' && (name.endsWith('_prod') || !name.endsWith('_preview'))) {
+    throw Error('Preview database cannot target production.');
+  }
   const client = new MongoClient(uri, { serverSelectionTimeoutMS: 8000, writeConcern: { w: 'majority' } });
   await client.connect();
   return { client, db: client.db(name) };
