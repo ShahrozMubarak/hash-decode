@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { MongoClient } from 'mongodb';
 import { setup } from '../scripts/database.mjs';
 import { hashPassword, encrypt, newTotpSecret, totp, recoveryCodes, sha256, randomToken } from '../lib/security-crypto.mjs';
-import { getDb } from '../lib/db/index.ts';
+import { getDb } from '../lib/db.ts';
 import * as sessionRoute from '../app/api/session/route.ts';
 import * as adminRoute from '../app/api/admin/route.ts';
 import * as uploadRoute from '../app/api/upload/route.ts';

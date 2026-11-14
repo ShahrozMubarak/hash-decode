@@ -4,7 +4,7 @@ import { hashPassword, verifyPassword, newTotpSecret, totp, validTotpStep, encry
 import { assertOrigin, readJson } from '../lib/http.ts';
 import { getToken, sessionCookie, sessionFresh } from '../lib/owner-session.ts';
 import { inquirySchema } from '../lib/form-validation.ts';
-import { databaseConfig } from '../lib/db/index.ts';
+import { databaseConfig } from '../lib/db.ts';
 import { sendMail } from '../lib/notify.ts';
 test('password hashing rejects weak input; wrong password and dummy checks reject', async () => {
   await assert.rejects(hashPassword('short'));

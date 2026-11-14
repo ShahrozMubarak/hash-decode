@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import hostingConfig from "./.openai/hosting.json";
@@ -89,6 +90,11 @@ export default defineConfig(async ({ command }) => {
 
   return {
     define: { "import.meta.env.VITE_STUDIO_RELEASE": JSON.stringify(crypto.randomUUID()) },
+    resolve: {
+      alias: [
+        { find: /^punycode\/?$/, replacement: fileURLToPath(new URL('./node_modules/punycode/punycode.js', import.meta.url)) },
+      ],
+    },
     server: {
       ...(managedLinux
         ? { host: "0.0.0.0", allowedHosts: ["terminal.local"] }

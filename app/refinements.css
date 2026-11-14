@@ -24,7 +24,15 @@ html:not(.js) [data-reveal] {
 }
 
 html.js [data-reveal] {
-  animation: autoRevealFallback 0.3s ease 600ms forwards;
+  animation: autoRevealFallback 0.3s ease 400ms forwards;
+}
+
+/* Ensure desktop hero content is instantly solid and never visually empty */
+.hero-heading-block, .hero-cta-block, .hero-h1-line, .hero-pill-badge, .hero-cta-subtext, .hero-start-cta {
+  visibility: visible !important;
+}
+.original-composition .hero-object .scene-poster {
+  display: block !important;
 }
 
 .owner-workspace section{padding-block:28px}.owner-workspace h2{font-size:1.375rem!important}.owner-workspace .eyebrow{font-size:13px!important}

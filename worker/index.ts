@@ -2,7 +2,7 @@ import {homeRequest,stampHtml} from './home-cache';
 import handler from "vinext/server/fetch-handler";
 import { runWithConnectorBinding } from "../lib/connector-context";
 import type { ConnectorBinding } from "../lib/connector-contract.mjs";
-import { closeRequestDbContext, createRequestDbContext, runWithRequestDbContext, type RequestDbContext } from "../lib/db/request-context";
+import { closeRequestDbContext, createRequestDbContext, runWithRequestDbContext, type RequestDbContext } from "../lib/request-context";
 
 // Sockets and database clients must be closed when the response body ends.
 // Workerd rejects I/O that outlives its originating request.

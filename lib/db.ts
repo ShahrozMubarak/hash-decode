@@ -1,7 +1,15 @@
-import { MongoClient, type Db } from 'mongodb';
+import { MongoClient, type Db, type MongoClientOptions } from 'mongodb';
+import { currentRequestDbContext } from './request-context';
 
 export class ConfigurationError extends Error {}
 const state = globalThis as typeof globalThis & { hdMongo?: { key: string; promise: Promise<Db> } };
+const clientOptions: MongoClientOptions = {
+  maxPoolSize: 5,
+  serverSelectionTimeoutMS: 6000,
+  connectTimeoutMS: 6000,
+  retryWrites: true,
+  writeConcern: { w: 'majority' },
+};
 
 export function sanitizeMongoUri(raw: string): string {
   let uri = (raw || '').trim();
@@ -62,20 +70,35 @@ export function databaseConfig() {
 export async function getDb(): Promise<Db> {
   const { uri, name } = databaseConfig();
   const key = uri + '\n' + name;
+  const request = currentRequestDbContext();
+  if (request) {
+    // Worker runtime: sockets created during one request cannot be reused by
+    // another, so keep one client per request and close it with that request.
+    let pending = request.clients.get(key);
+    if (!pending) {
+      const client = new MongoClient(uri, clientOptions);
+      pending = client
+        .connect()
+        .then(() => client)
+        .catch(async (error: unknown) => {
+          request.clients.delete(key);
+          await client.close().catch(() => undefined);
+          throw error;
+        });
+      request.clients.set(key, pending);
+    }
+    return (await pending).db(name);
+  }
+
+  // Node/serverless reuses the process, so a cached client is safe.
   if (!state.hdMongo || state.hdMongo.key !== key) {
-    const client = new MongoClient(uri, {
-      maxPoolSize: 5,
-      serverSelectionTimeoutMS: 10000,
-      connectTimeoutMS: 10000,
-      retryWrites: true,
-      writeConcern: { w: 'majority' },
-    });
+    const client = new MongoClient(uri, clientOptions);
     const promise = client
       .connect()
       .then(() => client.db(name))
       .catch(async (error: unknown) => {
         if (state.hdMongo?.key === key) state.hdMongo = undefined;
-        await client.close();
+        await client.close().catch(() => undefined);
         throw error;
       });
     state.hdMongo = { key, promise };
