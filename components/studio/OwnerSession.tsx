@@ -18,6 +18,7 @@ export default function OwnerSession() {
   return <div className="owner-login"><a href="/" className="owner-brand">Hash Decode</a><p className="eyebrow">Owner workspace</p><h1>Welcome back.</h1><p>Sign in with your owner password.</p><form onSubmit={submit}>
     <label>Email<input name="email" type="email" autoComplete="username" required maxLength={254}/></label>
     <label>Password<input name="password" type="password" autoComplete="current-password" required maxLength={256}/></label>
+    <label>2FA Code (if configured)<input name="code" type="text" placeholder="6-digit authenticator or recovery code" autoComplete="one-time-code" maxLength={32}/></label>
     {message && <p role="alert" className="owner-notice">{message}</p>}
     <button disabled={busy}>{busy ? 'Signing in…' : 'Sign in securely'}</button>
   </form><p className="owner-help">Sign in to manage inquiries, projects, and site settings.</p></div>;

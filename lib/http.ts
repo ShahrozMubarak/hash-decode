@@ -43,7 +43,9 @@ export function failure(error: unknown) {
 
 export function assertOrigin(req: Request) {
   const originHeader = req.headers.get('origin');
-  if (!originHeader) return;
+  if (!originHeader) {
+    throw new HttpError(403, 'ORIGIN', 'Request denied.');
+  }
 
   let originUrl: URL;
   let targetUrl: URL;
@@ -54,15 +56,18 @@ export function assertOrigin(req: Request) {
     throw new HttpError(403, 'ORIGIN', 'Request denied.');
   }
 
-  const forwardedHost = req.headers.get('x-forwarded-host')?.split(',')[0]?.trim().toLowerCase();
-  const hostHeader = req.headers.get('host')?.split(',')[0]?.trim().toLowerCase();
-  const targetHost = targetUrl.host.toLowerCase();
   const originHost = originUrl.host.toLowerCase();
+  const targetHost = targetUrl.host.toLowerCase();
 
-  const allowedHosts = new Set<string>(['hashdecode.com', 'www.hashdecode.com', 'localhost:3000', '127.0.0.1:3000']);
+  const allowedHosts = new Set<string>([
+    'hashdecode.com',
+    'www.hashdecode.com',
+    'localhost:3000',
+    '127.0.0.1:3000',
+    'localhost:5173',
+    '127.0.0.1:5173',
+  ]);
   if (targetHost) allowedHosts.add(targetHost);
-  if (forwardedHost) allowedHosts.add(forwardedHost);
-  if (hostHeader) allowedHosts.add(hostHeader);
 
   if (process.env.APP_ORIGIN) {
     try {
@@ -76,11 +81,14 @@ export function assertOrigin(req: Request) {
     allowedHosts.add(process.env.VERCEL_PROJECT_PRODUCTION_URL.trim().toLowerCase());
   }
 
-  const isVercelPreview = originHost.endsWith('.vercel.app') && (
-    (forwardedHost && originHost === forwardedHost) ||
-    (hostHeader && originHost === hostHeader) ||
-    originHost.includes('hash-decode')
-  );
+  const forwardedHost = req.headers.get('x-forwarded-host')?.split(',')[0]?.trim().toLowerCase();
+  const hostHeader = req.headers.get('host')?.split(',')[0]?.trim().toLowerCase();
+
+  const isVercelPreview =
+    originHost.endsWith('.vercel.app') &&
+    ((forwardedHost && originHost === forwardedHost) ||
+      (hostHeader && originHost === hostHeader) ||
+      originHost.includes('hash-decode'));
 
   if (!allowedHosts.has(originHost) && !isVercelPreview) {
     throw new HttpError(403, 'ORIGIN', 'Request denied.');

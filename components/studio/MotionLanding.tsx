@@ -108,7 +108,10 @@ export default function MotionLanding({
           {/* Hero Foreground Content */}
           <div className="wrap hero-grid">
             <div className="hero-heading-block">
-              <div className="hero-pill-badge">Secure software studio</div>
+              <div className="hero-pill-badge">
+                <span className="hero-pill-dot" style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', marginRight: '8px' }} />
+                Secure software studio
+              </div>
               {availability && <p className="availability-note">{availability}</p>}
               <h1 aria-label="Build it. Break it. Secure it.">
                 <span className="hero-h1-mask">

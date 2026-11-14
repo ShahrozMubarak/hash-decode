@@ -3,8 +3,15 @@ import { sha256 } from './security-crypto.mjs';
 import { HttpError } from './http';
 export const runtime = (key: string): string => process.env[key] || '';
 export function getClientIp(req: Request): string {
-  // Only Vercel's overwritten header is trusted. Other hosts share a conservative bucket.
-  return process.env.VERCEL ? req.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() || 'unknown' : 'local';
+  const cfIp = req.headers.get('cf-connecting-ip')?.trim();
+  if (cfIp) return cfIp;
+  const vercelIp = req.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim();
+  if (vercelIp) return vercelIp;
+  const forwarded = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+  if (forwarded) return forwarded;
+  const realIp = req.headers.get('x-real-ip')?.trim();
+  if (realIp) return realIp;
+  return 'local';
 }
 export const ipHash = (req: Request) => sha256(getClientIp(req));
 export async function consumeLimit(key: string, max: number, period: number) {

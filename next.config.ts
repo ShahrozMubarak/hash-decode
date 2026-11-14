@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/teams/:path*',
+        destination: '/team/:path*',
+      },
+    ];
+  },
   async headers() {
     return [
       {

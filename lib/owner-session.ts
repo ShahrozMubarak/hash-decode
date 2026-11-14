@@ -3,7 +3,8 @@ import { assertOrigin, HttpError } from './http';
 import { sha256, randomToken, equal, decrypt, validTotpStep } from './security-crypto.mjs';
 import { getClientIp, ipHash } from './abuse';
 
-export const cookieName = process.env.NODE_ENV === 'production' ? '__Host-hd_admin' : 'hd_admin';
+export const cookieName = '__Host-hd_admin';
+export const fallbackCookieName = 'hd_admin';
 export const legacyCookieName = '__Host-hd_admin';
 export const sessionSeconds = 43200;
 
@@ -46,11 +47,15 @@ export function getToken(cookies: string | null) {
   return null;
 }
 
-export function sessionCookie(token: string, age = sessionSeconds) {
-  const isProd = process.env.NODE_ENV === 'production';
-  const name = isProd ? '__Host-hd_admin' : 'hd_admin';
-  const secureFlag = isProd ? ' Secure;' : '';
-  return `${name}=${token};${secureFlag} HttpOnly; SameSite=Lax; Path=/; Max-Age=${age}`;
+export function sessionCookie(token: string, age = sessionSeconds, req?: Request) {
+  const proto = req?.headers.get('x-forwarded-proto')?.split(',')[0]?.trim();
+  const isHttpLocal =
+    (proto === 'http' || (req?.url && req.url.startsWith('http://'))) &&
+    process.env.NODE_ENV !== 'production';
+  if (isHttpLocal) {
+    return `${fallbackCookieName}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${age}`;
+  }
+  return `${cookieName}=${token}; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=${age}`;
 }
 
 export function sessionFresh(session: Session, now = Date.now()) {
@@ -135,15 +140,19 @@ export async function issueSession(req: Request, owner: Owner) {
 }
 
 export async function audit(req: Request, action: string, target = '', detail = '') {
-  await (await getDb()).collection('auditLogs').insertOne({
-    action,
-    target,
-    detail: detail.slice(0, 300),
-    requestId: crypto.randomUUID(),
-    ipHash: ipHash(req),
-    userAgent: (req.headers.get('user-agent') || '').slice(0, 160),
-    createdAt: new Date(),
-  });
+  try {
+    await (await getDb()).collection('auditLogs').insertOne({
+      action,
+      target,
+      detail: detail.slice(0, 300),
+      requestId: crypto.randomUUID(),
+      ipHash: ipHash(req),
+      userAgent: (req.headers.get('user-agent') || '').slice(0, 160),
+      createdAt: new Date(),
+    });
+  } catch (error) {
+    console.error('Audit logging failed:', error);
+  }
 }
 
 export function requireRecent(session: Session) {

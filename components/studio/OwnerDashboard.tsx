@@ -1,5 +1,6 @@
 'use client';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
+import { normalizeImagePath } from '@/lib/content-models';
 type Row = Record<string, unknown>;
 type View = 'overview' | 'inquiries' | 'projects' | 'posts' | 'founders' | 'subscribers' | 'settings' | 'security';
 const views: { id: View; label: string; icon: string }[] = [
@@ -104,7 +105,89 @@ export default function OwnerDashboard() {
       {view === 'settings' && <section className="owner-card"><h2>Site and email</h2><p>Email configured: {data.emailConfigured ? 'Yes' : 'No — add the required environment variables in DEPLOY.md.'}</p><button onClick={() => edit((data.site as Row) || blank.settings)}>Edit site settings</button><button disabled={busy} onClick={() => void perform({ action: 'testEmail' })}>Send test email</button><button onClick={async () => { try { const r = await fetch('/api/admin?view=health', { cache: 'no-store' }); const j = await r.json(); if (!r.ok) throw Error(j.error?.message); setNotice(`Database: ${j.data.database}; connected: ${j.data.connected}. Counts: ${JSON.stringify(j.data.counts)}`); } catch { setNotice('Health check failed.'); } }}>Check connection</button></section>}
       {view === 'security' && <><section className="owner-card"><h2>Owner Security</h2><p>Update your owner password or manage active sessions.</p><form onSubmit={async e => { e.preventDefault(); try { await action({ action: 'password', ...Object.fromEntries(new FormData(e.currentTarget)) }); window.location.replace('/shahroz'); } catch (error) { setNotice(error instanceof Error ? error.message : 'Password change failed.'); } }}><label>New password<input name="password" type="password" autoComplete="new-password" minLength={8} maxLength={256} required/></label><button disabled={busy}>Change password and sign out</button></form></section>
       <section className="owner-card"><h2>Active sessions</h2>{(data.sessions as Row[] || []).map(row => <div key={string(row.tokenHash)}><p>{row.current ? 'This session' : 'Owner session'} · Last active {date(row.lastSeenAt)}</p><button disabled={busy} onClick={() => void perform({ action: 'revokeSession', tokenHash: row.tokenHash })}>Revoke</button></div>)}<button onClick={() => void logout(true)}>Sign out everywhere</button></section><section className="owner-card"><h2>Audit log</h2>{(data.logs as Row[] || []).map((row, i) => <p key={i}>{string(row.action).replaceAll('_', ' ')} · {string(row.target)}<small>{date(row.createdAt)} · Request {string(row.requestId)}</small></p>)}</section></>}
-      {editor && <section className="owner-card owner-editor" aria-label="Record editor"><h2>{isNew ? 'Create record' : 'Edit record'}</h2><form onSubmit={save}>        {Object.entries(editor).map(([key, value]) => <label key={key} className="owner-field"><span className="owner-field-badge">{brandColor[key] ? <span className="owner-brand-mark" style={{ background: brandColor[key] }}>{brandInitial[key]}</span> : ''}</span>{labels[key] || key[0].toUpperCase() + key.slice(1)}{options[key] ? <select value={string(value)} onChange={e => { setEditor({ ...editor, [key]: e.target.value }); setDirty(true); }}>{options[key].map(option => <option key={option}>{option}</option>)}</select> : ['body', 'bio', 'about', 'brief', 'summary', 'challenge', 'solution', 'result'].includes(key) ? <textarea value={string(value)} rows={key === 'body' ? 16 : 4} onChange={e => { setEditor({ ...editor, [key]: e.target.value }); setDirty(true); }}/> : <input type={key === 'position' ? 'number' : 'text'} value={Array.isArray(value) ? value.join(', ') : string(value)} disabled={!isNew && (key === 'id' || key === 'slug')} onChange={e => { setEditor({ ...editor, [key]: e.target.value }); setDirty(true); }}/>}</label>)}<p>{view === 'posts' ? 'Article text renders safely as text blocks and fenced code. Use draft until ready. A future publish date delays public visibility.' : 'Image URLs must point to raster images. Leave the team image blank to use initials.'}</p><button disabled={busy}>{busy ? 'Saving…' : 'Save changes'}</button><button type="button" className="owner-secondary" onClick={() => { if (!dirty || window.confirm('Discard unsaved changes?')) { setEditor(null); setDirty(false); } }}>Cancel</button></form></section>}
+      {editor && <section className="owner-card owner-editor" aria-label="Record editor">
+        <h2>{isNew ? 'Create record' : 'Edit record'}</h2>
+        <form onSubmit={save}>
+          {Object.entries(editor).map(([key, value]) => (
+            <div key={key} className="owner-field-group" style={{ marginBottom: '14px' }}>
+              <label className="owner-field">
+                <span className="owner-field-badge">{brandColor[key] ? <span className="owner-brand-mark" style={{ background: brandColor[key] }}>{brandInitial[key]}</span> : ''}</span>
+                {labels[key] || key[0].toUpperCase() + key.slice(1)}
+                {options[key] ? (
+                  <select value={string(value)} onChange={e => { setEditor({ ...editor, [key]: e.target.value }); setDirty(true); }}>
+                    {options[key].map(option => <option key={option}>{option}</option>)}
+                  </select>
+                ) : ['body', 'bio', 'about', 'brief', 'summary', 'challenge', 'solution', 'result'].includes(key) ? (
+                  <textarea value={string(value)} rows={key === 'body' ? 16 : 4} onChange={e => { setEditor({ ...editor, [key]: e.target.value }); setDirty(true); }}/>
+                ) : (
+                  <input
+                    type={key === 'position' ? 'number' : 'text'}
+                    value={Array.isArray(value) ? value.join(', ') : string(value)}
+                    disabled={!isNew && (key === 'id' || key === 'slug')}
+                    placeholder={key === 'image' ? 'e.g. /team/foolisharc.jpeg or https://...' : ''}
+                    onChange={e => { setEditor({ ...editor, [key]: e.target.value }); setDirty(true); }}
+                  />
+                )}
+              </label>
+
+              {key === 'image' && (
+                <div style={{ marginTop: '8px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '12px', color: '#475569', fontWeight: 600 }}>Quick select uploaded pics:</span>
+                    {[
+                      { name: 'foolisharc', path: '/team/foolisharc.jpeg' },
+                      { name: 'hashdecode', path: '/team/hashdecode.jpeg' },
+                      { name: 'shahroz', path: '/team/shahroz.jpeg' },
+                      { name: 'junaid', path: '/team/junaid.jpeg' },
+                      { name: 'shahmeer', path: '/team/shahmeer.jpeg' },
+                      { name: 'fawad', path: '/team/fawad.jpeg' },
+                    ].map(pic => (
+                      <button
+                        type="button"
+                        key={pic.path}
+                        className="owner-secondary"
+                        style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '999px', cursor: 'pointer' }}
+                        onClick={() => { setEditor({ ...editor, image: pic.path }); setDirty(true); }}
+                      >
+                        {pic.name}
+                      </button>
+                    ))}
+                  </div>
+
+                  {Boolean(value) && (
+                    <div style={{ background: '#f8fafc', padding: '10px', borderRadius: '12px', border: '1px solid #cbd5e1', maxWidth: '360px' }}>
+                      <span style={{ display: 'block', fontSize: '11px', color: '#64748b', marginBottom: '6px', fontWeight: 600 }}>Project Image Preview:</span>
+                      <img
+                        src={normalizeImagePath(string(value))}
+                        alt="Project image preview"
+                        style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '8px', display: 'block', background: '#0B1F3A' }}
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.style.display = 'none';
+                          const errNotice = target.parentElement?.querySelector('.preview-error');
+                          if (errNotice) (errNotice as HTMLElement).style.display = 'block';
+                        }}
+                        onLoad={(e) => {
+                          const target = e.currentTarget;
+                          target.style.display = 'block';
+                          const errNotice = target.parentElement?.querySelector('.preview-error');
+                          if (errNotice) (errNotice as HTMLElement).style.display = 'none';
+                        }}
+                      />
+                      <span className="preview-error" style={{ display: 'none', color: '#b91c1c', fontSize: '12px', marginTop: '4px' }}>
+                        Image failed to load. Check path or URL.
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+          <p>{view === 'posts' ? 'Article text renders safely as text blocks and fenced code. Use draft until ready. A future publish date delays public visibility.' : 'Image URLs must point to raster images. Leave the team image blank to use initials.'}</p>
+          <button disabled={busy}>{busy ? 'Saving…' : 'Save changes'}</button>
+          <button type="button" className="owner-secondary" onClick={() => { if (!dirty || window.confirm('Discard unsaved changes?')) { setEditor(null); setDirty(false); } }}>Cancel</button>
+        </form>
+      </section>}
       <button className="owner-secondary" onClick={() => void load()}>Refresh view</button>
     </>}
     </div></div>

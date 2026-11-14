@@ -12,14 +12,14 @@ function getConfiguredAdminCredentials() {
   const email = (
     process.env.ADMIN_EMAIL ||
     process.env.OWNER_EMAIL ||
-    'admin@hashdecode.com'
+    ''
   )
     .trim()
     .toLowerCase();
   const password = (
     process.env.ADMIN_PASSWORD ||
     process.env.OWNER_PASSWORD ||
-    'HashDecodeAdmin2026!'
+    ''
   ).trim();
   return { email, password };
 }
@@ -56,6 +56,13 @@ export async function POST(req: Request) {
     let owner = await db.collection<Owner>('adminUsers').findOne({ _id: 'owner' });
 
     if (!owner) {
+      if (!configuredEmail || !configuredPassword) {
+        throw new HttpError(
+          503,
+          'OWNER_NOT_CONFIGURED',
+          'The owner account is not configured. Set ADMIN_EMAIL and ADMIN_PASSWORD in your environment or run npm run admin:create.'
+        );
+      }
       const initialOwner: Owner = {
         _id: 'owner',
         email: configuredEmail,
@@ -109,8 +116,19 @@ export async function POST(req: Request) {
     const locked =
       ipLocked || (owner?.lockedUntil && new Date(owner.lockedUntil).getTime() > Date.now());
     const code = typeof body.code === 'string' ? body.code.trim() : '';
-    const needsTotp = Boolean(owner?.totpSecret && code);
-    const totpOk = needsTotp ? await consumeSecondFactor(owner!, code) : true;
+    const hasTotp = Boolean(owner?.totpSecret);
+    let totpOk = true;
+    if (hasTotp) {
+      if (!code) {
+        totpOk = false;
+      } else {
+        totpOk = await consumeSecondFactor(owner!, code);
+      }
+    }
+
+    if (owner && matches && passwordOk && !locked && hasTotp && !code) {
+      throw new HttpError(401, 'TOTP_REQUIRED', 'Enter your 6-digit authenticator or recovery code.');
+    }
 
     if (!owner || !matches || !passwordOk || locked || !totpOk) {
       await audit(req, 'login_failed', sha256(email));

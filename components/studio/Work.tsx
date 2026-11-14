@@ -1,7 +1,11 @@
 'use client';
 
 import type { Project } from '@/lib/studio-data';
+import { normalizeImagePath } from '@/lib/content-models';
 import { ArrowUpRight } from 'lucide-react';
+
+const isImage = (url?: string) =>
+  Boolean(url && /\.(png|jpg|jpeg|webp|avif|svg)(\?[^\s]*)?$/i.test(url.trim()));
 
 const wave = (phase: number) =>
   Array.from(
@@ -16,11 +20,13 @@ const wave = (phase: number) =>
   ).join(' ');
 
 export function Artwork({ project: p }: { project: Project }) {
-  if (p.image) {
+  const imgSrc = normalizeImagePath(p.image || (isImage(p.url) ? p.url : ''));
+
+  if (imgSrc) {
     return (
       <div className="art art-image">
         <img
-          src={p.image}
+          src={imgSrc}
           alt={`${p.title} project preview`}
           loading="lazy"
           width="960"
@@ -72,26 +78,70 @@ export function Artwork({ project: p }: { project: Project }) {
 }
 
 export function WorkCard({ project: p }: { project: Project; index?: number }) {
+  const techList = p.tech
+    ? p.tech
+        .split(',')
+        .map((t) => t.trim())
+        .filter(Boolean)
+    : [];
+
   return (
     <a
-      className="work-card hd-card"
+      className="work-card hd-card work-flip-card"
       href={'/portfolio/' + p.slug}
       data-reveal="up"
     >
       <div className="card-glare" aria-hidden="true" />
-      <div className="work-preview-container">
-        <Artwork project={p} />
-      </div>
-      <div className="work-caption">
-        <div className="work-meta-row">
-          <span className="concept-status-badge">Concept</span>
-          <span className="work-cat-tag">{p.category}</span>
+      <div className="work-flip-inner">
+        {/* Front Face: Artwork & Title */}
+        <div className="work-flip-front">
+          <div className="work-preview-container">
+            <Artwork project={p} />
+          </div>
+          <div className="work-caption">
+            <div className="work-meta-row">
+              <span className="concept-status-badge">{p.kind || 'Concept'}</span>
+              <span className="work-cat-tag">{p.category}</span>
+            </div>
+            <h3 className="work-title">{p.title}</h3>
+            <p className="work-summary">{p.summary}</p>
+            <div className="work-view-action" aria-hidden="true">
+              <span>View concept</span>
+              <ArrowUpRight size={16} className="work-view-arrow" />
+            </div>
+          </div>
         </div>
-        <h3 className="work-title">{p.title}</h3>
-        <p className="work-summary">{p.summary}</p>
-        <div className="work-view-action" aria-hidden="true">
-          <span>View concept</span>
-          <ArrowUpRight size={16} className="work-view-arrow" />
+
+        {/* Back Face: 3D Flip Reveal with Architecture & Deep Highlights */}
+        <div className="work-flip-back" aria-hidden="true">
+          <div className="work-back-content">
+            <div className="work-back-header">
+              <span className="work-back-badge">{p.category || 'Release'}</span>
+              <span className="work-back-status">{p.kind || 'Studio Concept'}</span>
+            </div>
+            <h4 className="work-back-title">{p.title}</h4>
+            <p className="work-back-summary">{p.challenge || p.summary}</p>
+
+            {techList.length > 0 && (
+              <div className="work-back-tech">
+                <span className="work-back-tech-label">Architecture</span>
+                <div className="work-back-chips">
+                  {techList.slice(0, 5).map((tech, i) => (
+                    <span key={i} className="work-back-chip">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="work-back-footer">
+              <span className="work-back-btn">
+                <span>Explore Project</span>
+                <ArrowUpRight size={15} />
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </a>

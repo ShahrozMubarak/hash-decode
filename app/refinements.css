@@ -21,3 +21,273 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 .owner-field{display:flex;align-items:center;gap:10px}
 .owner-field-badge{display:flex;align-items:center}
 .owner-brand-mark{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.75rem}
+
+/* ==========================================================================
+   3D Project Flip Card on Hover
+   ========================================================================== */
+.work-flip-card {
+  perspective: 1200px;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.work-flip-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+  border-radius: var(--card-radius, 24px);
+}
+
+.work-flip-front,
+.work-flip-back {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  box-sizing: border-box;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: var(--card-radius, 24px);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.work-flip-front {
+  background: var(--card-fill, rgba(255, 255, 255, 0.76));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 24px;
+  transform: rotateY(0deg);
+  z-index: 2;
+  transition: box-shadow 0.3s ease;
+}
+
+.work-flip-back {
+  background: linear-gradient(145deg, #0B1F3A 0%, #122849 55%, #1E40AF 100%);
+  color: #fff;
+  padding: 32px 28px;
+  transform: rotateY(180deg);
+  z-index: 1;
+  border-color: rgba(30, 64, 175, 0.35);
+  box-shadow: 0 24px 60px rgba(11, 31, 58, 0.3), 0 0 35px rgba(30, 64, 175, 0.25);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work-flip-card:hover .work-flip-inner,
+  .work-flip-card:focus-within .work-flip-inner {
+    transform: rotateY(180deg) translateY(-6px);
+  }
+  .work-flip-card:hover .work-flip-back {
+    box-shadow: 0 30px 70px rgba(11, 31, 58, 0.35), 0 0 45px rgba(30, 64, 175, 0.3);
+  }
+}
+
+.work-back-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.work-back-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.work-back-badge {
+  font: 600 12px/1.4 var(--font-body), sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #93c5fd;
+  background: rgba(147, 197, 253, 0.15);
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(147, 197, 253, 0.25);
+}
+
+.work-back-status {
+  font: 500 12px/1.4 var(--font-body), sans-serif;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.work-back-title {
+  font: 700 1.55rem/1.2 var(--font-body), sans-serif !important;
+  color: #ffffff !important;
+  margin: 0 0 1rem !important;
+  letter-spacing: -0.02em;
+}
+
+.work-back-summary {
+  font: 400 0.96rem/1.6 var(--font-body), sans-serif !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+  margin: 0 0 1.5rem !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.work-back-tech {
+  margin-top: auto;
+  margin-bottom: 1.5rem;
+}
+
+.work-back-tech-label {
+  display: block;
+  font: 600 11px/1.4 var(--font-body), sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 8px;
+}
+
+.work-back-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.work-back-chip {
+  font: 500 11px/1.3 var(--font-mono), monospace;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.work-back-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.work-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  background: var(--coral, #D93A2F);
+  font: 600 13px/1 var(--font-body), sans-serif;
+  padding: 10px 18px;
+  border-radius: 999px;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(217, 58, 47, 0.35);
+}
+
+.work-flip-card:hover .work-back-btn {
+  transform: translateX(4px);
+  background: #e8453a;
+  box-shadow: 0 6px 20px rgba(217, 58, 47, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-flip-inner {
+    transition: none !important;
+  }
+  .work-flip-card:hover .work-flip-inner {
+    transform: none !important;
+  }
+  .work-flip-back {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Enhanced Landing Page Motion & Animations
+   ========================================================================== */
+@keyframes heroAuraPulse {
+  0%, 100% {
+    transform: scale(1) translate3d(0, 0, 0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.08) translate3d(0, -10px, 0);
+    opacity: 0.65;
+  }
+}
+
+@keyframes badgeFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes radarPing {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(30, 64, 175, 0.45);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(30, 64, 175, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(30, 64, 175, 0);
+  }
+}
+
+.hero-pill-badge {
+  animation: badgeFloat 4s ease-in-out infinite;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hero-pill-dot {
+  position: relative;
+}
+
+.hero-pill-dot::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  animation: radarPing 2.5s infinite;
+}
+
+.service-card,
+.service-tri-card {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.4s ease !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-card:hover,
+  .service-tri-card:hover {
+    transform: translateY(-8px) scale(1.01) !important;
+    box-shadow: 0 20px 40px rgba(11, 31, 58, 0.16), 0 0 25px rgba(30, 64, 175, 0.12) !important;
+    border-color: rgba(30, 64, 175, 0.35) !important;
+  }
+}
+
+.step-marker {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.process-step-item:hover .step-marker {
+  transform: scale(1.15);
+  background: var(--emphasis) !important;
+  color: #fff !important;
+}
+
+.hd-btn-primary {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease !important;
+}
+
+.hd-btn-primary:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 10px 24px rgba(30, 64, 175, 0.3) !important;
+}
