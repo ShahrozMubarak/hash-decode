@@ -2,29 +2,49 @@
 :root{--page-bg:#acb0b0;--ink:#0B1F3A;--text:#1d3350;--emphasis:#1E40AF;--accent:#D93A2F;--coral:#D93A2F;--highlight:#1E40AF;--card-fill:rgba(255,255,255,.72);--card-border:rgba(11,31,58,.14);--card-shadow:0 10px 30px rgba(11,31,58,.14);--container:1328px;--gutter:clamp(20px,5vw,86px);--ease:cubic-bezier(.2,.8,.2,1);--section-space:clamp(72px,11vw,144px);--card-radius:24px}
 html,body{overflow-x:clip;background:var(--page-bg);color:var(--text);hyphens:none}p{text-align:start;hyphens:none}h1,h2,h3{color:var(--ink);text-wrap:balance}a,button,input,textarea,select{-webkit-tap-highlight-color:transparent}button,input,textarea,select{font-family:var(--font-body),sans-serif}:focus-visible{outline:3px solid var(--emphasis);outline-offset:4px}.wrap{width:100%;max-width:var(--container);padding-inline:var(--gutter);margin-inline:auto;box-sizing:border-box}
 .eyebrow,.section-rule-label,.kicker,.footer-subscribe-eyebrow{font:600 13px/1.4 var(--font-body),sans-serif!important;letter-spacing:.08em!important;text-transform:uppercase;color:var(--ink)!important;display:flex;align-items:center;gap:12px;margin:0 0 12px!important;max-width:none!important}.eyebrow::before,.section-rule-label::before{content:'';height:2px!important;width:24px!important;flex:0 0 24px;background:var(--accent)!important;position:static!important}.page-intro h1,.interior>h1{font-size:clamp(2.5rem,9vw,5rem);line-height:1.08}.section-rule-heading,.section-title h2,.page-intro~section h2{font-size:clamp(2rem,8vw,4.25rem)!important;line-height:1.08!important;max-width:20ch;letter-spacing:-.04em;margin:12px 0 16px!important}.hd-card h3{font-size:1.375rem;line-height:1.25}.highlight-word,.typing-cursor{color:var(--emphasis)!important}.lede,.section-rule-lede,.section-rule-lead,.section-rule-desc,.hero-cta-subtext,.hero-description{font-size:18px!important;line-height:1.6!important;max-width:62ch;white-space:normal!important;overflow:visible!important;display:block!important;-webkit-line-clamp:unset!important;text-overflow:clip!important;margin-bottom:24px!important}.section-rule-block{padding-block:var(--section-space)!important;margin-block:0!important}.section-rule-block .section-rule-header{margin-bottom:40px}.hd-card{border-radius:var(--card-radius);border:1px solid var(--card-border);box-shadow:var(--card-shadow);padding:32px;overflow:hidden}.hd-card>.card-glare{border-radius:inherit}.hd-card p,.about-bio-text,.work-card-summary,.team-role-tag{white-space:normal!important;-webkit-line-clamp:unset!important;text-overflow:clip!important;overflow:visible!important}.about-bio-accordion.is-clamped{max-height:none!important;overflow:visible!important}.about-bio-toggle-btn{display:none!important}.team-monogram-avatar,.about-monogram-avatar{background:var(--ink)!important;color:white!important;border-radius:50%}.team-monogram-initials,.about-monogram-initials{color:white!important}.team-role-tag{font-family:var(--font-body),sans-serif}.original-composition .hero-sheet{background:linear-gradient(to bottom,transparent 65%,var(--page-bg) 100%),radial-gradient(ellipse at 55% 35%,#d3d7d7,#8d9191)!important}.hero-tech-strip{overflow:hidden!important;padding-block:20px!important;max-width:100%;box-sizing:border-box}.hero-tech-track{display:flex!important;flex-wrap:nowrap!important;width:max-content!important;animation:hd-tech 40s linear infinite!important}.hero-tech-list{display:flex!important;flex-wrap:nowrap!important;flex-shrink:0!important;align-items:center;gap:32px!important;padding-right:32px;white-space:nowrap!important;font:500 14px/1.5 var(--font-body),sans-serif!important;color:var(--ink)!important;opacity:.6}.hero-tech-list span{white-space:nowrap!important;flex-shrink:0}.hero-cta-block .hero-cta-subtext{margin-bottom:20px!important}.hero-start-cta{margin-top:0!important}.site-header{position:sticky!important;top:0;z-index:100}.availability-note{font:600 13px/1.5 var(--font-body),sans-serif;letter-spacing:.02em}.empty-content{padding:24px;border:1px solid var(--card-border);border-radius:var(--card-radius)}
-/* Content is visible even when hydration or IntersectionObserver fails. */
-[data-reveal] {
-  opacity: 1;
-}
-
+/* Universal bulletproof visibility for all cards, sections, and pages */
+[data-reveal],
+html.js [data-reveal],
+html.js [data-reveal="up"],
+html.js [data-reveal="fade"],
+html.js [data-reveal="scale"],
+html.js [data-reveal="mask"],
+html.js [data-reveal="left"],
+html.js [data-reveal="right"],
 html.js [data-reveal].is-in,
 [data-reveal].is-in,
-html:not(.js) [data-reveal] {
+html:not(.js) [data-reveal],
+.page-reveal,
+.page-reveal:not(.page-visible),
+.page-about-content,
+.about-founder-section,
+.about-principles-section,
+.about-tech-section,
+.about-guarantee-section,
+.about-team-grid,
+.about-founder-card,
+.principle-card,
+.tech-badge-cloud,
+.guarantee-grid,
+.guarantee-item,
+.work-cta-card,
+.services-tri-grid,
+.service-tri-card,
+.security-strip-grid,
+.security-strip-card,
+.work-duo-grid,
+.work-tilt-card,
+.page-intro,
+.inner-hero-h1,
+.section-rule-block,
+.section-rule-heading,
+.section-rule-lead,
+.section-rule-label {
   opacity: 1 !important;
   visibility: visible !important;
-  transform: translate(0, 0) scale(1) !important;
-}
-
-@keyframes autoRevealFallback {
-  to {
-    opacity: 1 !important;
-    transform: none !important;
-    visibility: visible !important;
-  }
-}
-
-html.js [data-reveal] {
-  animation: autoRevealFallback 0.3s ease 400ms forwards;
+  transform: none !important;
+  clip-path: none !important;
+  filter: none !important;
 }
 
 /* Ensure desktop hero content is instantly solid and never visually empty */

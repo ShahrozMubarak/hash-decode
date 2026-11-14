@@ -9,36 +9,16 @@ export default function PageExperience() {
   const [shifting, setShifting] = useState<boolean>(false);
 
   useEffect(() => {
-    if (path === '/' || path.startsWith('/admin') || path.startsWith('/shahroz') || path.startsWith('/portal')) return;
-    let reveal: IntersectionObserver | null = null;
-    let elements: HTMLElement[] = [];
-    const timer = setTimeout(() => {
-      elements = Array.from(
-        document.querySelectorAll<HTMLElement>(
-          '.page-intro,.owner-intro,.owner-login,.principles article,.service-index section,.article-list a,.tool-cards a,.admin-item,.dashboard-kpis>div,.editorial-admin,.form-panel'
-        )
-      );
-      reveal = new IntersectionObserver(
-        (entries) =>
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('page-visible');
-              reveal?.unobserve(entry.target);
-            }
-          }),
-        { threshold: 0.08 }
-      );
-      elements.forEach((el) => {
-        el.classList.add('page-reveal');
-        reveal?.observe(el);
-      });
-    }, 50);
-
-    return () => {
-      clearTimeout(timer);
-      reveal?.disconnect();
-      elements.forEach((el) => el.classList.remove('page-reveal', 'page-visible'));
-    };
+    if (
+      path === '/' ||
+      path.startsWith('/admin') ||
+      path.startsWith('/shahroz') ||
+      path.startsWith('/portal') ||
+      path === '/about' ||
+      path === '/contact'
+    ) {
+      return;
+    }
   }, [path]);
 
   useEffect(() => {

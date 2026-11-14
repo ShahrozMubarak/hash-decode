@@ -1,49 +1,32 @@
 /* Motion UI Utility System
-   Attribute API:
-   data-reveal="up|fade|scale|mask|left|right"
-   data-reveal-delay="ms"
-   data-stagger on a parent container
+   Content is guaranteed visible at all times across all rendering modes
 */
 
-/* Hidden initial states apply ONLY under html.js (added by JS) so content is visible without JavaScript */
-html.js [data-reveal] {
-  opacity: 0;
-  will-change: opacity, transform, clip-path;
-  transition-property: opacity, transform, clip-path;
+/* Always visible states: eliminate any opacity: 0 hiding */
+[data-reveal],
+html.js [data-reveal],
+html.js [data-reveal="up"],
+html.js [data-reveal="fade"],
+html.js [data-reveal="scale"],
+html.js [data-reveal="mask"],
+html.js [data-reveal="left"],
+html.js [data-reveal="right"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  clip-path: none !important;
+  transition-property: opacity, transform;
   transition-duration: var(--duration-700, 700ms);
   transition-timing-function: var(--ease-out, cubic-bezier(.2, .8, .2, 1));
 }
 
-html.js [data-reveal="up"] {
-  transform: translateY(28px);
-}
-
-html.js [data-reveal="fade"] {
-  transform: none;
-}
-
-html.js [data-reveal="scale"] {
-  transform: scale(0.96);
-}
-
-html.js [data-reveal="mask"] {
-  clip-path: inset(0 0 100% 0);
-  transition-duration: var(--duration-900, 900ms);
-}
-
-html.js [data-reveal="left"] {
-  transform: translateX(-40px);
-}
-
-html.js [data-reveal="right"] {
-  transform: translateX(40px);
-}
-
 /* Revealed active states */
+[data-reveal].is-in,
 html.js [data-reveal].is-in {
-  opacity: 1;
-  transform: translate(0, 0) scale(1);
-  clip-path: inset(0 0 0% 0);
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translate(0, 0) scale(1) !important;
+  clip-path: none !important;
 }
 
 /* Explicit delay classes/attributes */
