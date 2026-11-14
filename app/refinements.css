@@ -23,184 +23,330 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 .owner-brand-mark{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.75rem}
 
 /* ==========================================================================
-   3D Project Flip Card on Hover
+   3D Project Perspective Tilt Cards on Hover & Enhanced Pictures
    ========================================================================== */
-.work-flip-card {
+.work-tilt-card {
   perspective: 1200px;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
   box-shadow: none !important;
-  display: block;
-  text-decoration: none;
-  cursor: pointer;
+  color: inherit;
+  outline: none;
 }
 
-.work-flip-inner {
-  display: grid;
-  grid-template-columns: 1fr;
-  transform-style: preserve-3d;
-  transition: transform 0.65s cubic-bezier(0.23, 1, 0.32, 1);
-  will-change: transform;
-  border-radius: var(--card-radius, 24px);
-}
-
-.work-flip-front,
-.work-flip-back {
-  grid-area: 1 / 1;
-  width: 100%;
-  height: 100%;
-  min-height: 480px;
-  box-sizing: border-box;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  border-radius: var(--card-radius, 24px);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow);
+.work-tilt-inner {
+  position: relative;
   display: flex;
   flex-direction: column;
-}
-
-.work-flip-front {
-  background: var(--card-fill, rgba(255, 255, 255, 0.76));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 24px;
-  transform: rotateY(0deg);
-  z-index: 2;
-  transition: box-shadow 0.3s ease;
-}
-
-.work-flip-back {
-  background: linear-gradient(145deg, #0B1F3A 0%, #122849 55%, #1E40AF 100%);
-  color: #fff;
-  padding: 32px 28px;
-  transform: rotateY(180deg);
-  z-index: 1;
-  border-color: rgba(30, 64, 175, 0.35);
-  box-shadow: 0 24px 60px rgba(11, 31, 58, 0.3), 0 0 35px rgba(30, 64, 175, 0.25);
+  background: var(--card-fill, rgba(255, 255, 255, 0.78));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border, rgba(11, 31, 58, 0.12));
+  border-radius: var(--card-radius, 24px);
+  box-shadow: var(--card-shadow, 0 10px 30px rgba(11, 31, 58, 0.08));
+  overflow: hidden;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0);
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+  min-height: 480px;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .work-flip-card:hover .work-flip-inner,
-  .work-flip-card:focus-within .work-flip-inner {
-    transform: rotateY(180deg) translateY(-6px);
+  .work-tilt-card:hover .work-tilt-inner,
+  .work-tilt-card:focus-visible .work-tilt-inner {
+    /* Subtle 3D tilt to side (not full 180° flip) */
+    transform: perspective(1200px) rotateY(-5deg) rotateX(3deg) translateY(-8px);
+    border-color: rgba(30, 64, 175, 0.35);
+    box-shadow: 0 24px 48px -12px rgba(11, 31, 58, 0.22),
+                0 0 30px rgba(30, 64, 175, 0.12);
   }
-  .work-flip-card:hover .work-flip-back {
-    box-shadow: 0 30px 70px rgba(11, 31, 58, 0.35), 0 0 45px rgba(30, 64, 175, 0.3);
+
+  .work-tilt-card:hover .work-preview-img {
+    transform: scale(1.05);
+    filter: contrast(1.05) saturate(1.06) brightness(1.02);
+  }
+
+  .work-tilt-card:hover .work-tilt-link {
+    color: var(--accent, #D93A2F);
+    transform: translateX(4px);
+  }
+
+  .work-tilt-card:hover .work-category-pill {
+    background: var(--ink, #0B1F3A);
+    border-color: rgba(30, 64, 175, 0.5);
   }
 }
 
-.work-back-content {
-  display: flex;
-  flex-direction: column;
+/* Enhanced Picture Container & Media Layer */
+.work-tilt-media {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  background: #0e1e36;
+}
+
+.work-preview-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0B1F3A 0%, #172d50 100%);
+}
+
+.work-preview-img {
+  width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+              filter 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  filter: contrast(1.02) saturate(1.02);
 }
 
-.work-back-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.25rem;
+.work-img-gradient-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(11, 31, 58, 0.1) 0%,
+    transparent 40%,
+    rgba(11, 31, 58, 0.65) 100%
+  );
+  transition: opacity 0.4s ease;
 }
 
-.work-back-badge {
-  font: 600 12px/1.4 var(--font-body), sans-serif;
+.work-category-pill {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  font: 600 11px/1.3 var(--font-body), sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #93c5fd;
-  background: rgba(147, 197, 253, 0.15);
-  padding: 4px 12px;
+  color: #f8fafc;
+  background: rgba(11, 31, 58, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 5px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(147, 197, 253, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-.work-back-status {
-  font: 500 12px/1.4 var(--font-body), sans-serif;
-  color: rgba(255, 255, 255, 0.65);
+/* Card Body & Typography */
+.work-tilt-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 24px;
 }
 
-.work-back-title {
-  font: 700 1.55rem/1.2 var(--font-body), sans-serif !important;
-  color: #ffffff !important;
-  margin: 0 0 1rem !important;
+.work-tilt-body h3 {
+  font: 700 1.45rem/1.25 var(--font-body), sans-serif;
+  color: var(--ink, #0B1F3A);
+  margin: 0 0 10px;
   letter-spacing: -0.02em;
 }
 
-.work-back-summary {
-  font: 400 0.96rem/1.6 var(--font-body), sans-serif !important;
-  color: rgba(255, 255, 255, 0.88) !important;
-  margin: 0 0 1.5rem !important;
+.work-card-summary {
+  font: 400 0.95rem/1.6 var(--font-body), sans-serif;
+  color: var(--text, #1d3350);
+  margin: 0 0 18px;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.work-back-tech {
-  margin-top: auto;
-  margin-bottom: 1.5rem;
-}
-
-.work-back-tech-label {
-  display: block;
-  font: 600 11px/1.4 var(--font-body), sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  margin-bottom: 8px;
-}
-
-.work-back-chips {
+.work-tech-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-}
-
-.work-back-chip {
-  font: 500 11px/1.3 var(--font-mono), monospace;
-  background: rgba(255, 255, 255, 0.12);
-  color: #f1f5f9;
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.work-back-footer {
   margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  margin-bottom: 20px;
 }
 
-.work-back-btn {
+.work-tech-chip {
+  font: 500 11px/1.2 var(--font-mono), monospace;
+  background: rgba(11, 31, 58, 0.06);
+  color: var(--ink, #0B1F3A);
+  padding: 4px 9px;
+  border-radius: 6px;
+  border: 1px solid rgba(11, 31, 58, 0.1);
+}
+
+.work-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 14px;
+  border-top: 1px solid rgba(11, 31, 58, 0.08);
+}
+
+.work-tilt-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  color: #fff;
-  background: var(--coral, #D93A2F);
+  gap: 6px;
   font: 600 13px/1 var(--font-body), sans-serif;
-  padding: 10px 18px;
-  border-radius: 999px;
-  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 14px rgba(217, 58, 47, 0.35);
-}
-
-.work-flip-card:hover .work-back-btn {
-  transform: translateX(4px);
-  background: #e8453a;
-  box-shadow: 0 6px 20px rgba(217, 58, 47, 0.45);
+  color: var(--emphasis, #1E40AF);
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .work-flip-inner {
+  .work-tilt-inner {
     transition: none !important;
-  }
-  .work-flip-card:hover .work-flip-inner {
     transform: none !important;
   }
-  .work-flip-back {
-    display: none !important;
+  .work-tilt-card:hover .work-tilt-inner {
+    transform: none !important;
   }
+  .work-preview-img {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile SVG Circuit Rail with Pulsing Ambient Dots
+   ========================================================================== */
+.mobile-circuit-rail {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-circuit-rail {
+    display: block;
+    position: fixed;
+    left: 8px;
+    top: 60px;
+    bottom: 20px;
+    width: 20px;
+    z-index: 35;
+    pointer-events: none;
+    opacity: 0.85;
+  }
+
+  .mobile-circuit-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .circuit-track {
+    stroke: rgba(11, 31, 58, 0.16);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 4;
+  }
+
+  .circuit-glow-track {
+    stroke: rgba(30, 64, 175, 0.35);
+    stroke-width: 2;
+    stroke-dasharray: 40 180;
+    stroke-dashoffset: 0;
+    animation: circuitPulseFlow 6s linear infinite;
+  }
+
+  .circuit-dot {
+    fill: var(--emphasis, #1E40AF);
+    filter: drop-shadow(0 0 4px rgba(30, 64, 175, 0.8));
+    animation: circuitDotGlow 3s ease-in-out infinite alternate;
+  }
+
+  .circuit-dot-coral {
+    fill: var(--coral, #D93A2F);
+    filter: drop-shadow(0 0 5px rgba(217, 58, 47, 0.8));
+    animation: circuitDotGlow 2.5s ease-in-out infinite alternate;
+    animation-delay: 1.2s;
+  }
+}
+
+@keyframes circuitPulseFlow {
+  0% {
+    stroke-dashoffset: 220;
+  }
+  100% {
+    stroke-dashoffset: -220;
+  }
+}
+
+@keyframes circuitDotGlow {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Studio Direct Contacts Pill & Quick Connect Bar
+   ========================================================================== */
+.studio-contact-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.studio-contact-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--card-border);
+  color: var(--ink);
+  font: 600 13px/1.3 var(--font-body), sans-serif;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(11, 31, 58, 0.05);
+}
+
+.studio-contact-pill:hover {
+  background: #ffffff;
+  border-color: var(--emphasis);
+  color: var(--emphasis);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(30, 64, 175, 0.15);
+}
+
+.studio-contact-pill.is-whatsapp {
+  border-color: rgba(37, 211, 102, 0.35);
+}
+
+.studio-contact-pill.is-whatsapp:hover {
+  border-color: #25D366;
+  color: #128C7E;
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.2);
+}
+
+.studio-whatsapp-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
 }
 
 /* ==========================================================================

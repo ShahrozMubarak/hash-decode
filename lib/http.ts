@@ -33,9 +33,7 @@ export function failure(error: unknown) {
         message: known
           ? error.message
           : config
-          ? process.env.NODE_ENV !== 'production'
-            ? `Service configuration: ${detail}. Check DEPLOY.md.`
-            : 'Service configuration is incomplete. Check DEPLOY.md.'
+          ? 'Service configuration is incomplete. Check DEPLOY.md.'
           : 'The service is unavailable. Please try again.',
         requestId,
       },

@@ -24,7 +24,7 @@ export function Artwork({ project: p }: { project: Project }) {
 
   if (imgSrc) {
     return (
-      <div className="art art-image">
+      <div className="art art-image work-preview-img-wrap">
         <img
           src={imgSrc}
           alt={`${p.title} project preview`}
@@ -33,6 +33,8 @@ export function Artwork({ project: p }: { project: Project }) {
           height="570"
           className="work-preview-img"
         />
+        <div className="work-img-gradient-scrim" aria-hidden="true" />
+        <span className="work-img-pill">{p.category || 'Featured'}</span>
       </div>
     );
   }
@@ -87,60 +89,36 @@ export function WorkCard({ project: p }: { project: Project; index?: number }) {
 
   return (
     <a
-      className="work-card hd-card work-flip-card"
+      className="work-card hd-card work-tilt-card"
       href={'/portfolio/' + p.slug}
       data-reveal="up"
     >
       <div className="card-glare" aria-hidden="true" />
-      <div className="work-flip-inner">
-        {/* Front Face: Artwork & Title */}
-        <div className="work-flip-front">
-          <div className="work-preview-container">
-            <Artwork project={p} />
-          </div>
-          <div className="work-caption">
-            <div className="work-meta-row">
-              <span className="concept-status-badge">{p.kind || 'Concept'}</span>
-              <span className="work-cat-tag">{p.category}</span>
-            </div>
-            <h3 className="work-title">{p.title}</h3>
-            <p className="work-summary">{p.summary}</p>
-            <div className="work-view-action" aria-hidden="true">
-              <span>View concept</span>
-              <ArrowUpRight size={16} className="work-view-arrow" />
-            </div>
-          </div>
+      <div className="work-card-content">
+        <div className="work-preview-container">
+          <Artwork project={p} />
         </div>
-
-        {/* Back Face: 3D Flip Reveal with Architecture & Deep Highlights */}
-        <div className="work-flip-back" aria-hidden="true">
-          <div className="work-back-content">
-            <div className="work-back-header">
-              <span className="work-back-badge">{p.category || 'Release'}</span>
-              <span className="work-back-status">{p.kind || 'Studio Concept'}</span>
+        <div className="work-caption">
+          <div className="work-meta-row">
+            <span className="concept-status-badge">{p.kind || 'Client project'}</span>
+            <span className="work-cat-tag">{p.category}</span>
+          </div>
+          <h3 className="work-title">{p.title}</h3>
+          <p className="work-summary">{p.summary}</p>
+          
+          {techList.length > 0 && (
+            <div className="work-tech-pills">
+              {techList.slice(0, 4).map((tech, i) => (
+                <span key={i} className="work-tech-chip">
+                  {tech}
+                </span>
+              ))}
             </div>
-            <h4 className="work-back-title">{p.title}</h4>
-            <p className="work-back-summary">{p.challenge || p.summary}</p>
+          )}
 
-            {techList.length > 0 && (
-              <div className="work-back-tech">
-                <span className="work-back-tech-label">Architecture</span>
-                <div className="work-back-chips">
-                  {techList.slice(0, 5).map((tech, i) => (
-                    <span key={i} className="work-back-chip">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="work-back-footer">
-              <span className="work-back-btn">
-                <span>Explore Project</span>
-                <ArrowUpRight size={15} />
-              </span>
-            </div>
+          <div className="work-view-action" aria-hidden="true">
+            <span>Explore project</span>
+            <ArrowUpRight size={16} className="work-view-arrow" />
           </div>
         </div>
       </div>

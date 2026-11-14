@@ -16,7 +16,7 @@ const salt = randomBytes(16).toString('hex');
 const password = randomBytes(24).toString('hex');
 env.OWNER_PASSWORD_HASH =
   salt + ':' + pbkdf2Sync(password, Buffer.from(salt, 'hex'), 100000, 32, 'sha256').toString('hex');
-env.MONGODB_URI = 'mongodb+srv://studio_admin:SecretPass123@cluster0.hashdecode.mongodb.net/hash_decode';
+env.MONGODB_URI = 'mongodb://127.0.0.1:27017/test_hashdecode';
 env.MONGODB_DB_NAME = 'hash_decode';
 
 let cookie = '';

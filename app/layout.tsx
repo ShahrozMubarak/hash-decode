@@ -6,6 +6,7 @@ import CardTiltManager from '@/components/studio/CardTiltManager';
 import ToastManager from '@/components/studio/ToastManager';
 import NavigationProgressBar from '@/components/studio/NavigationProgressBar';
 import PageTransition from '@/components/studio/PageTransition';
+import MobileCircuitRail from '@/components/studio/MobileCircuitRail';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import './motion-ui.css';
@@ -48,11 +49,29 @@ const organizationJsonLd = {
   url: origin || 'https://hashdecode.com',
   logo: (origin || 'https://hashdecode.com') + '/logo.png',
   description: 'Custom software, web platforms and security reviews for teams building their next release.',
-  contactPoint: {
-    '@type': 'ContactPoint',
-    contactType: 'customer support',
-
+  email: 'hashdecodeofficial@gmail.com',
+  telephone: '+923001237124',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Johar Town',
+    addressLocality: 'Lahore',
+    addressRegion: 'Punjab',
+    addressCountry: 'PK',
   },
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      telephone: '+92-300-1237124',
+      contactType: 'customer support',
+      availableLanguage: ['English', 'Urdu'],
+    },
+    {
+      '@type': 'ContactPoint',
+      telephone: '+92-321-4866916',
+      contactType: 'technical inquiries',
+      availableLanguage: ['English', 'Urdu'],
+    },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -68,6 +87,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RevealObserver />
         <CardTiltManager />
         <ToastManager />
+        <MobileCircuitRail />
         <Header />
         <main id="main" tabIndex={-1}>
           <PageExperience />

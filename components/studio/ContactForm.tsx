@@ -159,10 +159,14 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         }
 
         const signature = JSON.stringify([data.name, data.email, data.topic, data.budget, data.brief]);
-        if (signature !== last.current.signature) {
+        if (signature !== last.current.signature || !last.current.id) {
+          const generatedId =
+            typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+              ? crypto.randomUUID()
+              : 'inq_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
           last.current = {
             signature,
-            id: typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : '',
+            id: generatedId,
           };
         }
 
@@ -175,25 +179,27 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         }
 
         try {
+          const clientTimestamp = startedAt.current || String(Date.now());
+          const submissionId = last.current.id || ('inq_' + Date.now().toString(36));
           const r = await fetch('/api/inquiries', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               ...data,
-              startedAt: startedAt.current,
-              ...(last.current.id ? { submissionId: last.current.id } : {}),
+              startedAt: clientTimestamp,
+              submissionId,
             }),
             signal: AbortSignal.timeout(18000),
           });
 
           if (!r.ok) {
             const payload = await r.json().catch(() => null);
-            const msg = payload?.error?.message || 'Your brief could not be confirmed. Please try again.';
+            const msg = payload?.error?.message || 'Please check your information and try submitting again.';
 
             setError(msg);
             showToast({
               type: 'error',
-              title: 'Submission issue',
+              title: 'Submission notice',
               message: msg,
             });
             triggerShake();
@@ -221,11 +227,11 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
             );
           }
         } catch {
-          const msg = 'Your brief could not be confirmed. Your details are preserved. Please retry.';
+          const msg = 'We could not reach the server right now. Your details are preserved. You can retry or email hashdecodeofficial@gmail.com directly.';
           setError(msg);
           showToast({
             type: 'error',
-            title: 'Network error',
+            title: 'Connection notice',
             message: msg,
           });
           triggerShake();

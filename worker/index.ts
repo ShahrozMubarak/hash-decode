@@ -62,7 +62,7 @@ const worker = {
     // Wrangler variables/secrets are exposed on `env`; mirror them onto
     // process.env so server code reads the deployed configuration.
     for (const [key, value] of Object.entries(bindings)) {
-      if (typeof value === 'string' && process.env[key] === undefined) process.env[key] = value;
+      if (typeof value === 'string' && (process.env[key] === undefined || process.env[key] === '')) process.env[key] = value;
     }
     const turnstile = bindings.TURNSTILE_SECRET && bindings.TURNSTILE_SITE_KEY ? ' https://challenges.cloudflare.com' : '';
     const extraConnect=(process.env.CSP_CONNECT_ORIGINS||'').split(',').map(s=>s.trim()).filter(Boolean).map(o=>' '+o).join('');
