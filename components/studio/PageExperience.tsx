@@ -52,7 +52,18 @@ export default function PageExperience() {
     }
   }, [path]);
 
-  if (path === '/' || path.startsWith('/admin') || path.startsWith('/shahroz') || path === '/contact' || path === '/about') return null;
+  if (
+    path === '/' ||
+    path.startsWith('/admin') ||
+    path.startsWith('/shahroz') ||
+    path === '/contact' ||
+    path === '/about' ||
+    path.startsWith('/portfolio') ||
+    path.startsWith('/work') ||
+    path.startsWith('/lab')
+  ) {
+    return null;
+  }
 
   const pageClass = 'page-' + (path.replace('/', '').split('/')[0] || 'root');
 

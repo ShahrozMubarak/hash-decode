@@ -79,7 +79,20 @@ export default async function Case({ params }: Props) {
       {/* Large Preview */}
       <div className="case-large-preview hd-card" data-reveal="up">
         <div className="card-glare" aria-hidden="true" />
-        <Artwork project={p} />
+        {p.url ? (
+          <a
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={`Visit ${p.title} live website`}
+            className="case-preview-anchor"
+            style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}
+          >
+            <Artwork project={p} />
+          </a>
+        ) : (
+          <Artwork project={p} />
+        )}
       </div>
 
       {/* Case Details Cards */}
