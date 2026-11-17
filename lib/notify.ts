@@ -20,11 +20,11 @@ const escapeHtml = (s: string) =>
 
 export function emailConfigured() {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM || process.env.RESEND_FROM || process.env.MAIL_FROM;
+  const from = process.env.RESEND_FROM || process.env.EMAIL_FROM || process.env.MAIL_FROM;
   const to =
-    process.env.EMAIL_TO ||
     process.env.ADMIN_NOTIFICATION_EMAIL ||
     process.env.ADMIN_EMAIL ||
+    process.env.EMAIL_TO ||
     process.env.STUDIO_OWNER_EMAIL;
   return Boolean(apiKey && from && to);
 }
@@ -45,27 +45,23 @@ export async function sendMail(
 
   const apiKey = process.env.RESEND_API_KEY;
   const from =
-    process.env.EMAIL_FROM ||
     process.env.RESEND_FROM ||
+    process.env.EMAIL_FROM ||
     process.env.MAIL_FROM ||
     'Hash Decode <onboarding@resend.dev>';
   const to =
-    process.env.EMAIL_TO ||
     process.env.ADMIN_NOTIFICATION_EMAIL ||
     process.env.ADMIN_EMAIL ||
+    process.env.EMAIL_TO ||
     process.env.STUDIO_OWNER_EMAIL ||
     'shaahrozdogar@gmail.com';
 
   if (!apiKey || !from || !to) {
-    return { ...result, emailError: 'Set RESEND_API_KEY, EMAIL_FROM and EMAIL_TO.' };
+    return { ...result, emailError: 'Set RESEND_API_KEY, RESEND_FROM and ADMIN_NOTIFICATION_EMAIL.' };
   }
 
   const cleanSubject = subject.replace(/[\r\n]/g, ' ').slice(0, 180);
   const htmlContent = customHtml || `<div style="white-space:pre-wrap">${escapeHtml(text)}</div>`;
-  const safeReplyTo =
-    replyTo && replyTo.trim().toLowerCase() !== to.trim().toLowerCase()
-      ? replyTo.trim()
-      : undefined;
 
   try {
     const response = await fetch('https://api.resend.com/emails', {
@@ -75,12 +71,13 @@ export async function sendMail(
       headers: {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
+        'User-Agent': 'resend-node:6.34.1',
         ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
       },
       body: JSON.stringify({
         from,
         to: [to],
-        ...(safeReplyTo ? { reply_to: safeReplyTo } : {}),
+        ...(replyTo ? { reply_to: replyTo } : {}),
         subject: cleanSubject,
         text,
         html: htmlContent,
@@ -96,8 +93,12 @@ export async function sendMail(
       };
     }
     return { ...result, emailStatus: 'sent', emailSentAt: new Date(), providerId: body.id };
-  } catch {
-    return { ...result, emailStatus: 'failed', emailError: 'Email provider could not be reached.' };
+  } catch (err) {
+    return {
+      ...result,
+      emailStatus: 'failed',
+      emailError: (err instanceof Error ? err.message : 'Email provider could not be reached.').slice(0, 300),
+    };
   }
 }
 
@@ -149,10 +150,14 @@ export async function mailBrief(
     </div>
   `;
 
+  // Avoid self-spoofing if client email equals notification recipient
+  const to = process.env.ADMIN_NOTIFICATION_EMAIL || process.env.EMAIL_TO || 'shaahrozdogar@gmail.com';
+  const replyTo = m.email && m.email.toLowerCase().trim() !== to.toLowerCase().trim() ? m.email.trim() : undefined;
+
   return sendMail(
-    `New Client Inquiry: ${m.name} - ${m.topic}`,
+    `🚨 [New Project Brief] ${m.name} (${m.topic})`,
     plainText,
-    m.email,
+    replyTo,
     `brief-${m.id}-${attempt}`,
     html
   );
