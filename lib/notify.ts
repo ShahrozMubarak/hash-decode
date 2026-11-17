@@ -62,6 +62,10 @@ export async function sendMail(
 
   const cleanSubject = subject.replace(/[\r\n]/g, ' ').slice(0, 180);
   const htmlContent = customHtml || `<div style="white-space:pre-wrap">${escapeHtml(text)}</div>`;
+  const safeReplyTo =
+    replyTo && replyTo.trim().toLowerCase() !== to.trim().toLowerCase()
+      ? replyTo.trim()
+      : undefined;
 
   try {
     const response = await fetch('https://api.resend.com/emails', {
@@ -76,7 +80,7 @@ export async function sendMail(
       body: JSON.stringify({
         from,
         to: [to],
-        ...(replyTo ? { reply_to: replyTo } : {}),
+        ...(safeReplyTo ? { reply_to: safeReplyTo } : {}),
         subject: cleanSubject,
         text,
         html: htmlContent,
@@ -146,7 +150,7 @@ export async function mailBrief(
   `;
 
   return sendMail(
-    `Hash Decode: project brief from ${m.name} (${m.topic})`,
+    `New Client Inquiry: ${m.name} - ${m.topic}`,
     plainText,
     m.email,
     `brief-${m.id}-${attempt}`,
