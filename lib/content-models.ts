@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export function normalizeImagePath(raw?: string | null): string {
   if (!raw || typeof raw !== 'string') return '';
-  let s = raw.trim();
+  const s = raw.trim();
   if (!s) return '';
   if (/^(https?:\/\/|data:image\/)/i.test(s)) return s;
   if (s.startsWith('/teams/')) return '/team/' + s.slice(7);
