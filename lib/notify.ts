@@ -1,3 +1,5 @@
+import { sendViaHttps } from './resend-dns-fallback';
+
 export type MailResult = {
   emailStatus: 'sent' | 'failed' | 'skipped';
   emailError: string;
@@ -63,33 +65,59 @@ export async function sendMail(
   const cleanSubject = subject.replace(/[\r\n]/g, ' ').slice(0, 180);
   const htmlContent = customHtml || `<div style="white-space:pre-wrap">${escapeHtml(text)}</div>`;
 
-  try {
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      redirect: 'error',
-      signal: AbortSignal.timeout(8000),
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'User-Agent': 'resend-node:6.34.1',
-        ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        ...(replyTo ? { reply_to: replyTo } : {}),
-        subject: cleanSubject,
-        text,
-        html: htmlContent,
-      }),
-    });
+  const payload: Record<string, unknown> = {
+    from,
+    to: [to],
+    ...(replyTo ? { reply_to: replyTo } : {}),
+    subject: cleanSubject,
+    text,
+    html: htmlContent,
+  };
 
-    const body = (await response.json()) as { id?: string; message?: string };
-    if (!response.ok || !body.id) {
+  try {
+    let body: { id?: string; message?: string } = {};
+    let ok = false;
+    let status = 0;
+
+    try {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        redirect: 'error',
+        signal: AbortSignal.timeout(8000),
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'resend-node:6.34.1',
+          ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      body = (await response.json()) as { id?: string; message?: string };
+      ok = response.ok && Boolean(body.id);
+      status = response.status;
+    } catch (fetchErr) {
+      // If fetch fails due to local router DNS failure (ENOTFOUND api.resend.com), fall back to HTTPS with public DNS
+      if (
+        typeof window === 'undefined' &&
+        fetchErr instanceof Error &&
+        (fetchErr.message.includes('ENOTFOUND') ||
+          (fetchErr.cause as { code?: string })?.code === 'ENOTFOUND')
+      ) {
+        const fallback = await sendViaHttps(apiKey, payload, idempotencyKey);
+        body = fallback.body;
+        ok = fallback.ok && Boolean(body.id);
+        status = fallback.status;
+      } else {
+        throw fetchErr;
+      }
+    }
+
+    if (!ok || !body.id) {
       return {
         ...result,
         emailStatus: 'failed',
-        emailError: (body.message || `Provider returned HTTP ${response.status}`).slice(0, 300),
+        emailError: (body.message || `Provider returned HTTP ${status}`).slice(0, 300),
       };
     }
     return { ...result, emailStatus: 'sent', emailSentAt: new Date(), providerId: body.id };
@@ -106,58 +134,56 @@ export async function mailBrief(
   m: { id: string; name: string; email: string; topic: string; budget: string; brief: string },
   attempt = 'initial'
 ) {
-  const plainText = `Hash Decode New Project Inquiry\n\nClient Name: ${m.name}\nEmail: ${m.email}\nService Topic: ${m.topic}\nBudget Range: ${m.budget}\nReference ID: ${m.id}\n\nProject Brief:\n${m.brief}\n`;
+  const safeName = escapeHtml(m.name);
+  const safeEmail = escapeHtml(m.email);
+  const safeTopic = escapeHtml(m.topic);
+  const safeBudget = escapeHtml(m.budget);
+  const safeBrief = escapeHtml(m.brief);
+  const safeRef = escapeHtml(m.id.slice(0, 8).toUpperCase());
 
+  const plainText = `Hash Decode New Project Inquiry\n\nClient Name: ${m.name}\nEmail: ${m.email}\nService Topic: ${m.topic}\nBudget Range: ${m.budget}\nReference ID: #${safeRef}\n\nProject Brief:\n${m.brief}\n`;
+
+  // Foolish Arc concise card pattern: delivers directly without trigger words
   const html = `
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; color: #0B1F3A;">
-      <div style="border-bottom: 2px solid #1E40AF; padding-bottom: 16px; margin-bottom: 20px;">
-        <h2 style="color: #0B1F3A; margin: 0 0 6px 0; font-size: 20px; font-weight: 700;">🚀 New Project Inquiry Received</h2>
-        <p style="color: #64748b; margin: 0; font-size: 13px;">Hash Decode Studio Inbox &bull; Ref #${escapeHtml(m.id.slice(0, 8).toUpperCase())}</p>
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 540px; margin: 0 auto; padding: 24px; background: #ffffff; border: 2px solid #0B1F3A; border-radius: 10px; color: #0B1F3A;">
+      <div style="border-bottom: 2px solid #0B1F3A; padding-bottom: 14px; margin-bottom: 18px;">
+        <span style="font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #1E40AF; font-weight: 700;">HASH DECODE STUDIO</span>
+        <h2 style="margin: 6px 0 0 0; color: #0B1F3A; font-size: 20px; font-weight: 700;">💌 New Project Inquiry</h2>
       </div>
 
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
-        <tr>
-          <td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #64748b; font-size: 14px; width: 130px;"><strong>Client Name:</strong></td>
-          <td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #0B1F3A; font-size: 15px; font-weight: 600;">${escapeHtml(m.name)}</td>
-        </tr>
-        <tr>
-          <td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #64748b; font-size: 14px;"><strong>Client Email:</strong></td>
-          <td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #1E40AF; font-size: 15px;">
-            <a href="mailto:${escapeHtml(m.email)}" style="color: #1E40AF; text-decoration: none; font-weight: 600;">${escapeHtml(m.email)}</a>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #64748b; font-size: 14px;"><strong>Service Topic:</strong></td>
-          <td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #0B1F3A; font-size: 14px;">${escapeHtml(m.topic)}</td>
-        </tr>
-        <tr>
-          <td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #64748b; font-size: 14px;"><strong>Target Budget:</strong></td>
-          <td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9; color: #D93A2F; font-size: 14px; font-weight: 600;">${escapeHtml(m.budget)}</td>
-        </tr>
-      </table>
+      <p style="font-size: 14px; margin: 0 0 10px; line-height: 1.5;">
+        <strong>From:</strong> ${safeName} (<a href="mailto:${safeEmail}" style="color: #1E40AF;">${safeEmail}</a>)
+      </p>
+      <p style="font-size: 14px; margin: 0 0 10px; line-height: 1.5;">
+        <strong>Service Topic:</strong> ${safeTopic}
+      </p>
+      <p style="font-size: 14px; margin: 0 0 16px; line-height: 1.5;">
+        <strong>Target Budget:</strong> <span style="color: #D93A2F; font-weight: 700;">${safeBudget}</span>
+      </p>
 
-      <div style="background: #f8fafc; border-radius: 8px; padding: 18px; border-left: 4px solid #1E40AF; margin-bottom: 24px;">
-        <h4 style="margin: 0 0 10px 0; color: #0B1F3A; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Project Brief:</h4>
-        <div style="color: #1e293b; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(m.brief)}</div>
+      <div style="background: #f8fafc; border-left: 3px solid #0B1F3A; padding: 14px 18px; margin-bottom: 20px; border-radius: 6px; font-size: 14px; color: #1e293b; line-height: 1.6; white-space: pre-wrap;">
+        "${safeBrief}"
       </div>
 
-      <div style="text-align: center; padding-top: 12px;">
-        <a href="mailto:${escapeHtml(m.email)}?subject=Re:%20Hash%20Decode%20Project%20Inquiry%20(${escapeHtml(m.topic)})"
-           style="display: inline-block; background: #0B1F3A; color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 999px;">
-          Reply to ${escapeHtml(m.name)} &rarr;
+      <div style="margin-top: 20px; text-align: center;">
+        <a href="mailto:${safeEmail}?subject=RE: Hash Decode Project Inquiry (${safeTopic})"
+           style="background: #0B1F3A; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-weight: 700; font-size: 13px; display: inline-block;">
+          Reply to ${safeName} &rarr;
         </a>
+      </div>
+
+      <div style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 12px; font-size: 11px; color: #64748b; text-align: center;">
+        Hash Decode Studio &bull; Ref #${safeRef}
       </div>
     </div>
   `;
 
-  // Avoid self-spoofing if client email equals notification recipient
-  const to = process.env.ADMIN_NOTIFICATION_EMAIL || process.env.EMAIL_TO || 'shaahrozdogar@gmail.com';
-  const replyTo = m.email && m.email.toLowerCase().trim() !== to.toLowerCase().trim() ? m.email.trim() : undefined;
-
+  // Mirror Foolish Arc: do NOT pass external reply_to on sandbox onboarding@resend.dev domain,
+  // which causes Gmail SPF/DMARC flags. Rely on the direct mailto button in the email body.
   return sendMail(
-    `🚨 [New Project Brief] ${m.name} (${m.topic})`,
+    `💌 [New Project Inquiry] ${m.name} (${m.topic})`,
     plainText,
-    replyTo,
+    undefined,
     `brief-${m.id}-${attempt}`,
     html
   );
