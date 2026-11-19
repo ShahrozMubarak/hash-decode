@@ -5,13 +5,11 @@ import { usePathname } from 'next/navigation';
 
 export default function SitePreloader() {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
   const [progress, setProgress] = useState(15);
   const [fadingOut, setFadingOut] = useState(false);
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
 
     let isWindowLoaded = typeof document !== 'undefined' && document.readyState === 'complete';
     let isModelLoaded = typeof window !== 'undefined' && Boolean((window as any).__hd_model_ready);
@@ -88,7 +86,7 @@ export default function SitePreloader() {
     };
   }, [pathname]);
 
-  if (!mounted || hidden) return null;
+  if (hidden) return null;
 
   return (
     <div
