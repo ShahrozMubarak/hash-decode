@@ -26,7 +26,18 @@ function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
   if(activeScenes >= 4) return;
   activeScenes++;
   const node=canvas.current,controller=new AbortController();let lastState='';
-  const update=(state:'loading'|'live'|'failed')=>{if(!controller.signal.aborted&&lastState!==state){lastState=state;setStatus(state);}};
+  const update = (state: 'loading' | 'live' | 'failed') => {
+    if (!controller.signal.aborted && lastState !== state) {
+      lastState = state;
+      setStatus(state);
+      if (state === 'live' || state === 'failed') {
+        if (typeof window !== 'undefined') {
+          (window as any).__hd_model_ready = true;
+          window.dispatchEvent(new CustomEvent('hd:model-ready'));
+        }
+      }
+    }
+  };
   update('loading');
   import('@/lib/studio-scene')
    .then(async({mountScene})=>{
@@ -46,10 +57,6 @@ function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
   <div className={'scene-surface'+(live?' live':'')} ref={mount}>
    {!live && (
      <div className="scene-model-loader" aria-hidden="true">
-       <div className="model-dual-dots">
-         <div className="tiktok-dot dot-blue" />
-         <div className="tiktok-dot dot-red" />
-       </div>
        <div className="model-lazy-line" />
      </div>
    )}
