@@ -1,13 +1,13 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
-import ModelPoster,{type PosterModel} from './ModelPoster';
+import type { PosterModel } from './ModelPoster';
 import SceneBoundary from './SceneBoundary';
 
 let activeScenes = 0;
 function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
  const mount=useRef<HTMLDivElement>(null),canvas=useRef<HTMLCanvasElement>(null);
  const [near,setNear]=useState(true);
- const [status,setStatus]=useState<'poster'|'loading'|'live'|'failed'|'unavailable'>('loading');
+ const [status,setStatus]=useState<'loading'|'live'|'failed'|'unavailable'>('loading');
 
  useEffect(()=>{
   const observer=new IntersectionObserver(entries=>{
@@ -42,10 +42,20 @@ function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
  },[active,targetModel]);
 
  const live=active&&status==='live';
- return <div className={'scene-surface'+(live?' live':'')} ref={mount}>
-  <div className="scene-poster"><ModelPoster model={targetModel}/></div>
-  {active&&<canvas key={targetModel} ref={canvas} aria-hidden="true"/>}
- </div>;
+ return (
+  <div className={'scene-surface'+(live?' live':'')} ref={mount}>
+   {!live && (
+     <div className="scene-model-loader" aria-hidden="true">
+       <div className="model-dual-dots">
+         <div className="tiktok-dot dot-blue" />
+         <div className="tiktok-dot dot-red" />
+       </div>
+       <div className="model-lazy-line" />
+     </div>
+   )}
+   {active&&<canvas key={targetModel} ref={canvas} aria-hidden="true"/>}
+  </div>
+ );
 }
 
 export default function SceneSurface({model,autoMobile=false}:{model:PosterModel,autoMobile?:boolean}){

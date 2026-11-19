@@ -51,8 +51,265 @@ html:not(.js) [data-reveal],
 .hero-heading-block, .hero-cta-block, .hero-h1-line, .hero-pill-badge, .hero-cta-subtext, .hero-start-cta {
   visibility: visible !important;
 }
-.original-composition .hero-object .scene-poster {
-  display: block !important;
+/* Hide static model poster completely - no fallback cartoon pictures */
+.scene-poster,
+.original-composition .hero-object .scene-poster,
+.scene-surface .scene-poster {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ==========================================================================
+   Site Opening Preloader & TikTok-Style Dual-Dot Loader + Lazy Line
+   ========================================================================== */
+.hd-site-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 45%, #d1d5d5 0%, #acb0b0 100%);
+  opacity: 1;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(1);
+  filter: blur(0px);
+  pointer-events: all;
+  user-select: none;
+}
+
+.hd-site-preloader.is-fading {
+  opacity: 0;
+  transform: scale(1.03);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.preloader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Brand Wordmark */
+.preloader-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body), Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.preloader-brand .brand-h {
+  color: #0B1F3A;
+}
+
+.preloader-brand .brand-d {
+  color: #1E40AF;
+}
+
+/* TikTok-Style 2-Dot Animation Container */
+.preloader-dots-wrap {
+  position: relative;
+  width: 72px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tiktok-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+
+.tiktok-dot.dot-blue {
+  background: #1E40AF;
+  box-shadow: 0 0 16px rgba(30, 64, 175, 0.8), 0 0 32px rgba(30, 64, 175, 0.4);
+  animation: tiktokDotBlue 1.25s infinite cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.tiktok-dot.dot-red {
+  background: #D93A2F;
+  box-shadow: 0 0 16px rgba(217, 58, 47, 0.8), 0 0 32px rgba(217, 58, 47, 0.4);
+  animation: tiktokDotRed 1.25s infinite cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes tiktokDotBlue {
+  0% {
+    transform: translateX(-18px) scale(1);
+    z-index: 3;
+    opacity: 1;
+  }
+  25% {
+    transform: translateX(0px) scale(1.22);
+    z-index: 3;
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(18px) scale(0.8);
+    z-index: 1;
+    opacity: 0.82;
+  }
+  75% {
+    transform: translateX(0px) scale(0.72);
+    z-index: 1;
+    opacity: 0.82;
+  }
+  100% {
+    transform: translateX(-18px) scale(1);
+    z-index: 3;
+    opacity: 1;
+  }
+}
+
+@keyframes tiktokDotRed {
+  0% {
+    transform: translateX(18px) scale(0.8);
+    z-index: 1;
+    opacity: 0.82;
+  }
+  25% {
+    transform: translateX(0px) scale(0.72);
+    z-index: 1;
+    opacity: 0.82;
+  }
+  50% {
+    transform: translateX(-18px) scale(1);
+    z-index: 3;
+    opacity: 1;
+  }
+  75% {
+    transform: translateX(0px) scale(1.22);
+    z-index: 3;
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(18px) scale(0.8);
+    z-index: 1;
+    opacity: 0.82;
+  }
+}
+
+/* Lazy Line Progress */
+.preloader-lazy-line-track {
+  width: 180px;
+  height: 2.5px;
+  background: rgba(11, 31, 58, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(11, 31, 58, 0.1);
+}
+
+.preloader-lazy-line-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #1E40AF 0%, #60a5fa 45%, #D93A2F 90%, #1E40AF 100%);
+  background-size: 200% 100%;
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(30, 64, 175, 0.7), 0 0 18px rgba(217, 58, 47, 0.5);
+  animation: lazyLineSweep 1.6s ease-in-out infinite, lazyLineGrow 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes lazyLineSweep {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes lazyLineGrow {
+  0% {
+    transform: scaleX(0.08);
+    transform-origin: left center;
+  }
+  60% {
+    transform: scaleX(0.75);
+    transform-origin: left center;
+  }
+  100% {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+/* Status Text */
+.preloader-status-text {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(11, 31, 58, 0.65);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  animation: preloaderTextPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes preloaderTextPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* In-place 3D Model Loader (Replaces the static poster picture) */
+.scene-model-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+  z-index: 2;
+}
+
+.scene-surface.live .scene-model-loader {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.scene-model-loader .model-dual-dots {
+  position: relative;
+  width: 52px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scene-model-loader .tiktok-dot {
+  width: 12px;
+  height: 12px;
+}
+
+.scene-model-loader .model-lazy-line {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #1E40AF 40%, #D93A2F 60%, transparent);
+  border-radius: 999px;
+  animation: lazyLineSweep 1.5s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(30, 64, 175, 0.5);
 }
 
 .owner-workspace section{padding-block:28px}.owner-workspace h2{font-size:1.375rem!important}.owner-workspace .eyebrow{font-size:13px!important}

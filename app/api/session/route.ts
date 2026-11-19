@@ -2,7 +2,7 @@ import { getDb } from '@/lib/db';
 import { assertOrigin, readJson, ok, failure, HttpError } from '@/lib/http';
 import { enforceLimit, loginIpLocked, recordLoginIpFailure } from '@/lib/abuse';
 import { verifyPassword, hashPassword, randomToken, sha256 } from '@/lib/security-crypto.mjs';
-import { requireOwner, issueSession, audit, sessionCookie, type Owner } from '@/lib/owner-session';
+import { requireOwner, issueSession, consumeSecondFactor, audit, sessionCookie, type Owner } from '@/lib/owner-session';
 import { sendMail } from '@/lib/notify';
 
 export const dynamic = 'force-dynamic';
@@ -50,6 +50,7 @@ export async function POST(req: Request) {
     const email = typeof body.email === 'string' ? body.email.trim().toLowerCase().slice(0, 254) : '';
     const passwordInput = typeof body.password === 'string' ? body.password : '';
     await enforceLimit(req, 'login', 20, 15 * 60000, email);
+
 
     const db = await getDb();
     const { email: configuredEmail, password: configuredPassword } = getConfiguredAdminCredentials();
@@ -118,8 +119,22 @@ export async function POST(req: Request) {
     const ipLocked = await loginIpLocked(req);
     const locked =
       ipLocked || (owner?.lockedUntil && new Date(owner.lockedUntil).getTime() > Date.now());
+    const code = typeof body.code === 'string' ? body.code.trim() : '';
+    const hasTotp = Boolean(owner?.totpSecret);
+    let totpOk = true;
+    if (hasTotp) {
+      if (!code) {
+        totpOk = false;
+      } else {
+        totpOk = await consumeSecondFactor(owner!, code);
+      }
+    }
 
-    if (!owner || !matches || !passwordOk || locked) {
+    if (owner && matches && passwordOk && !locked && hasTotp && !code) {
+      throw new HttpError(401, 'TOTP_REQUIRED', 'Enter your 6-digit authenticator or recovery code.');
+    }
+
+    if (!owner || !matches || !passwordOk || locked || !totpOk) {
       await audit(req, 'login_failed', sha256(email));
       if (!ipLocked && (await recordLoginIpFailure(req))) {
         const mail = await sendMail(
