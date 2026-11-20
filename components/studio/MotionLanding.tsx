@@ -89,21 +89,21 @@ export default function MotionLanding({
               Custom software and security testing for businesses.
             </p>
 
-            <figure className="hero-robot-wrapper">
-              <div className="specimen-visual" id="hero-model-anchor">
-                <SceneSurface model="eva" autoMobile={true} />
-              </div>
-              <div className="hero-ground-shadow" aria-hidden="true" />
-            </figure>
-
             <div className="hero-actions">
-              <a className="hd-btn-primary hero-start-cta cta-magnetic" href="#brief">
+              <a className="hd-btn-primary hero-start-cta" href="#brief">
                 <span className="btn-label">Start a project</span>
               </a>
               <a href="#services" className="hd-text-link hero-explore-link">
                 <span>Explore the studio ›</span>
               </a>
             </div>
+
+            <figure className="hero-robot-wrapper">
+              <div className="specimen-visual" id="hero-model-anchor">
+                <SceneSurface model="eva" autoMobile={true} />
+              </div>
+              <div className="hero-ground-shadow" aria-hidden="true" />
+            </figure>
           </div>
         </div>
       </section>
