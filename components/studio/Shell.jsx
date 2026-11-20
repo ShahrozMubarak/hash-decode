@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import {usePathname} from 'next/navigation';
-import {ArrowUpRight,ArrowUp,Menu,X,Pause,Play,Briefcase,Cpu,Users,Mail,ShieldCheck,Search,ShoppingBag,Terminal} from 'lucide-react';
+import {ArrowUp,Menu,X,Pause,Play,Briefcase,Cpu,Users,Mail,ShieldCheck,Search,ShoppingBag,Terminal} from 'lucide-react';
 import FooterSubscribe from './FooterSubscribe';
 
 const links=[
@@ -87,7 +87,6 @@ export function Header(){
           <a className="nav-contact ronin-cta-pill" href="/contact">
             <Terminal size={14} aria-hidden="true" />
             <span>Get in touch</span>
-            <ArrowUpRight size={14}/>
           </a>
           <button
             className={`icon-btn nav-toggle ronin-icon-btn ${open ? 'is-active' : ''}`}
@@ -133,7 +132,7 @@ export function Header(){
             >
               <span className="mobile-nav-link-num">0{i+1}</span>
               <span className="mobile-nav-link-title">{name}</span>
-              <ArrowUpRight size={22} className="mobile-nav-link-arrow" aria-hidden="true" />
+              <span className="mobile-nav-link-arrow" aria-hidden="true">›</span>
             </a>
           ))}
         </nav>
@@ -141,9 +140,6 @@ export function Header(){
           <p className="menu-subtext">Software engineering &amp; digital resilience.</p>
           <a className="hd-btn-primary" href="/contact" onClick={closeMenu}>
             <span className="btn-label">Start a project</span>
-            <span className="btn-arrow-circle" aria-hidden="true">
-              <ArrowUpRight size={15}/>
-            </span>
           </a>
         </div>
       </div>
@@ -197,12 +193,10 @@ export function Footer(){
               rel="noopener noreferrer"
               className="hd-text-link footer-contact-link"
             >
-              <span>WhatsApp the studio</span>
-              <span className="link-arrow"><ArrowUpRight size={15} /></span>
+              <span>WhatsApp the studio ›</span>
             </a>
             <a href="/contact" className="hd-text-link footer-contact-link">
-              <span>Start a project</span>
-              <span className="link-arrow"><ArrowUpRight size={15} /></span>
+              <span>Start a project ›</span>
             </a>
           </div>
           <div className="footer-newsletter-block">

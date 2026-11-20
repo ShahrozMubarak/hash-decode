@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ArrowUpRight, ShieldCheck, Lock, FileText, Trash2, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, Lock, FileText, Trash2, CheckCircle2 } from 'lucide-react';
 
 type SectionItem = {
   id: string;
@@ -179,9 +179,8 @@ export default function PrivacyDocument() {
               and purge your records.
             </p>
             <div style={{ marginTop: '1.5rem' }}>
-              <a className="hd-btn-secondary" href="/contact">
+              <a className="hd-btn-primary" href="/contact">
                 <span>Submit a data request</span>
-                <ArrowUpRight size={15} aria-hidden="true" />
               </a>
             </div>
           </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUpRight, ArrowLeft, RotateCcw, Briefcase, Cpu, Mail } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Briefcase, Cpu, Mail } from 'lucide-react';
 
 export default function Recovery({ reset }: { reset: () => void }) {
   return (
@@ -59,7 +59,7 @@ export default function Recovery({ reset }: { reset: () => void }) {
                 <strong>Explore our work</strong>
                 <span>Review shipped client software</span>
               </div>
-              <ArrowUpRight size={14} className="useful-link-arrow" aria-hidden="true" />
+              <span className="useful-link-arrow" aria-hidden="true">›</span>
             </a>
 
             <a href="/services" className="useful-link-item">
@@ -70,7 +70,7 @@ export default function Recovery({ reset }: { reset: () => void }) {
                 <strong>Our services</strong>
                 <span>Web platforms &amp; security audits</span>
               </div>
-              <ArrowUpRight size={14} className="useful-link-arrow" aria-hidden="true" />
+              <span className="useful-link-arrow" aria-hidden="true">›</span>
             </a>
 
             <a href="/contact" className="useful-link-item">
@@ -81,7 +81,7 @@ export default function Recovery({ reset }: { reset: () => void }) {
                 <strong>Start a consultation</strong>
                 <span>Speak directly with our engineers</span>
               </div>
-              <ArrowUpRight size={14} className="useful-link-arrow" aria-hidden="true" />
+              <span className="useful-link-arrow" aria-hidden="true">›</span>
             </a>
           </div>
         </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { ArrowUpRight, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { showToast } from './ToastManager';
 
 export const topics = [
@@ -398,16 +398,6 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         type="submit"
       >
         <span className="btn-label">{busy ? 'Sending brief…' : 'Send project brief'}</span>
-        <span className="btn-arrow-circle" aria-hidden="true">
-          <span className="btn-arrow-track">
-            <span className="btn-arrow-icon btn-arrow-primary">
-              <ArrowUpRight size={15} />
-            </span>
-            <span className="btn-arrow-icon btn-arrow-clone">
-              <ArrowUpRight size={15} />
-            </span>
-          </span>
-        </span>
         <span className="btn-spinner" aria-hidden="true" />
       </button>
     </form>

@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   XCircle,
   ExternalLink,
-  ArrowUpRight,
   Globe,
   RotateCcw,
   Loader2,
@@ -166,12 +165,7 @@ export default function SecurityChecker() {
                     <span className="btn-label">Analyzing headers...</span>
                   </>
                 ) : (
-                  <>
-                    <span className="btn-label">Run free check</span>
-                    <span className="btn-arrow-circle" aria-hidden="true">
-                      <ArrowUpRight size={15} />
-                    </span>
-                  </>
+                  <span className="btn-label">Run free check</span>
                 )}
               </button>
             </div>
@@ -348,9 +342,6 @@ export default function SecurityChecker() {
 
                 <a className="hd-btn-primary" href="/contact?type=Security%20audit">
                   <span className="btn-label">Request scoped audit</span>
-                  <span className="btn-arrow-circle" aria-hidden="true">
-                    <ArrowUpRight size={15} />
-                  </span>
                 </a>
               </div>
 

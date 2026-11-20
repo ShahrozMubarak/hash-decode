@@ -2,7 +2,6 @@
 
 import type { Project } from '@/lib/studio-data';
 import { normalizeImagePath } from '@/lib/content-models';
-import { ArrowUpRight } from 'lucide-react';
 
 const isImage = (url?: string) =>
   Boolean(url && /\.(png|jpg|jpeg|webp|avif|svg)(\?[^\s]*)?$/i.test(url.trim()));
@@ -117,8 +116,7 @@ export function WorkCard({ project: p }: { project: Project; index?: number }) {
           )}
 
           <div className="work-view-action" aria-hidden="true">
-            <span>Explore project</span>
-            <ArrowUpRight size={16} className="work-view-arrow" />
+            <span>Explore project ›</span>
           </div>
         </div>
       </div>
@@ -146,10 +144,7 @@ export function SectionTitle({
       </div>
       {href && (
         <a className="hd-text-link" href={href}>
-          <span>{link}</span>
-          <span className="link-arrow">
-            <ArrowUpRight size={16} />
-          </span>
+          <span>{link} ›</span>
         </a>
       )}
     </div>

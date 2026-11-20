@@ -1,6 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { ArrowUpRight, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { showToast } from './ToastManager';
 
 export default function FooterSubscribe() {
@@ -90,10 +90,7 @@ export default function FooterSubscribe() {
               {status === 'loading' ? (
                 <span className="spinner-dot" />
               ) : (
-                <>
-                  <span>Join</span>
-                  <ArrowUpRight size={15} />
-                </>
+                <span>Subscribe</span>
               )}
             </button>
           </div>

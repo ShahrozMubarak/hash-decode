@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import type { Founder } from '@/lib/studio-data';
-import { ArrowUpRight, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface Props {
   founders: Founder[];
@@ -242,10 +242,9 @@ function FounderCard({
                 href={founder.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hd-btn-secondary founder-link-pill"
+                className="hd-btn-primary founder-link-pill"
               >
                 <span>Connect with {founder.name.split(' ')[0]}</span>
-                <ArrowUpRight size={15} />
               </a>
             </div>
           )}

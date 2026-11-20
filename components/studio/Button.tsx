@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'text-link' | 'icon';
@@ -52,22 +52,9 @@ export default function Button({
     <>
       <span className="btn-label">{children}</span>
 
-      {variant === 'primary' && (
-        <span className="btn-arrow-circle" aria-hidden="true">
-          <span className="btn-arrow-track">
-            <span className="btn-arrow-icon btn-arrow-primary">
-              <ArrowUpRight size={15} />
-            </span>
-            <span className="btn-arrow-icon btn-arrow-clone">
-              <ArrowUpRight size={15} />
-            </span>
-          </span>
-        </span>
-      )}
-
       {variant === 'text-link' && (
         <span className="link-arrow" aria-hidden="true">
-          <ArrowUpRight size={15} />
+          ›
         </span>
       )}
 

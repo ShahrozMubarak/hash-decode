@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, RotateCcw, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, RotateCcw, Sparkles } from 'lucide-react';
 
 export const scopes = [
   {
@@ -401,9 +401,6 @@ export default function EstimateStepper() {
                   )}&brief=${encodeURIComponent(contactBrief)}`}
                 >
                   <span className="btn-label">Discuss this estimate</span>
-                  <span className="btn-arrow-circle" aria-hidden="true">
-                    <ArrowUpRight size={15} />
-                  </span>
                 </a>
 
                 <button

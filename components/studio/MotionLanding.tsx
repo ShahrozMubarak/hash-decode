@@ -12,8 +12,6 @@ import FAQAccordion from './FAQAccordion';
 import ProcessTimeline from './ProcessTimeline';
 import TeamStrip from './TeamStrip';
 import {
-  ArrowUpRight,
-  ArrowDown,
   AppWindow,
   Braces,
   ShieldCheck,
@@ -120,16 +118,6 @@ export default function MotionLanding({
               <div className="actions">
                 <a className="hd-btn-primary hero-start-cta cta-magnetic" href="#brief">
                   <span className="btn-label">Start a project</span>
-                  <span className="btn-arrow-circle" aria-hidden="true">
-                    <span className="btn-arrow-track">
-                      <span className="btn-arrow-icon btn-arrow-primary">
-                        <ArrowUpRight size={15} />
-                      </span>
-                      <span className="btn-arrow-icon btn-arrow-clone">
-                        <ArrowUpRight size={15} />
-                      </span>
-                    </span>
-                  </span>
                 </a>
               </div>
             </div>
@@ -137,10 +125,7 @@ export default function MotionLanding({
 
           <div className="wrap hero-baseline">
             <a href="#services" className="hd-text-link hero-explore-link">
-              <span>Explore the studio</span>
-              <span className="link-arrow">
-                <ArrowDown size={14} />
-              </span>
+              <span>Explore the studio ›</span>
             </a>
           </div>
         </div>
@@ -163,10 +148,7 @@ export default function MotionLanding({
             </div>
             <div className="section-head-link-wrap" data-reveal="fade" data-reveal-delay="200">
               <a className="hd-text-link" href="/services">
-                <span>Explore services</span>
-                <span className="link-arrow">
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </span>
+                <span>Explore services ›</span>
               </a>
             </div>
           </div>
@@ -190,8 +172,7 @@ export default function MotionLanding({
                   className="card-arrow-link"
                   aria-label={`Learn more about ${svc.title}`}
                 >
-                  <span>Learn more</span>
-                  <ArrowUpRight size={16} className="card-link-arrow" aria-hidden="true" />
+                  <span>Learn more ›</span>
                 </a>
               </article>
             ))}
@@ -237,16 +218,6 @@ export default function MotionLanding({
           <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
             <a className="hd-btn-primary" href="#brief">
               <span className="btn-label">Request an audit</span>
-              <span className="btn-arrow-circle" aria-hidden="true">
-                <span className="btn-arrow-track">
-                  <span className="btn-arrow-icon btn-arrow-primary">
-                    <ArrowUpRight size={15} />
-                  </span>
-                  <span className="btn-arrow-icon btn-arrow-clone">
-                    <ArrowUpRight size={15} />
-                  </span>
-                </span>
-              </span>
             </a>
           </div>
         </div>
@@ -276,10 +247,7 @@ export default function MotionLanding({
 
           <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
             <a className="hd-text-link" href="/portfolio">
-              <span>Project index</span>
-              <span className="link-arrow">
-                <ArrowUpRight size={16} aria-hidden="true" />
-              </span>
+              <span>Project index ›</span>
             </a>
           </div>
         </div>
@@ -305,9 +273,8 @@ export default function MotionLanding({
           </div>
 
           <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
-            <a className="hd-btn-secondary" href="/about">
-              <span>How we work</span>
-              <ArrowUpRight size={16} aria-hidden="true" />
+            <a className="hd-btn-primary" href="/about">
+              <span className="btn-label">How we work</span>
             </a>
           </div>
         </div>
@@ -333,9 +300,8 @@ export default function MotionLanding({
           </div>
 
           <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
-            <a className="hd-btn-secondary" href="/about">
-              <span>Meet the team</span>
-              <ArrowUpRight size={16} aria-hidden="true" />
+            <a className="hd-btn-primary" href="/about">
+              <span className="btn-label">Meet the team</span>
             </a>
           </div>
         </div>
@@ -361,9 +327,8 @@ export default function MotionLanding({
           </div>
 
           <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
-            <a className="hd-btn-secondary" href="/tools">
-              <span>Explore project tools</span>
-              <ArrowUpRight size={16} aria-hidden="true" />
+            <a className="hd-btn-primary" href="/tools">
+              <span className="btn-label">Explore project tools</span>
             </a>
           </div>
         </div>
@@ -416,9 +381,7 @@ export default function MotionLanding({
                 className="social-link social-whatsapp"
                 aria-label="WhatsApp 0300 1237124"
               >
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-                <span>WhatsApp (0300 1237124)</span>
-                <span className="link-arrow">↗</span>
+                <span>WhatsApp (0300 1237124) ›</span>
               </a>
               <a
                 href="https://wa.me/923214866916"
@@ -427,8 +390,7 @@ export default function MotionLanding({
                 className="social-link social-whatsapp"
                 aria-label="WhatsApp 0321 4866916"
               >
-                <span>WhatsApp (0321 4866916)</span>
-                <span className="link-arrow">↗</span>
+                <span>WhatsApp (0321 4866916) ›</span>
               </a>
               {links.instagram && (
                 <a
@@ -438,9 +400,8 @@ export default function MotionLanding({
                   className="social-link social-instagram"
                   aria-label="Instagram"
                 >
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="17.5" x2="17.51" y2="17.51"/></svg>
-                  <span>Instagram</span>
-                  <span className="link-arrow">↗</span>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="17.5" x2="17.51" y2="17.51"/></svg>
+                  <span>Instagram ›</span>
                 </a>
               )}
               {links.facebook && (
@@ -452,8 +413,7 @@ export default function MotionLanding({
                   aria-label="Facebook"
                 >
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true"><path d="M22 12c0-5.52-4.48-10-10-10H2v6h3v4h4v-4h2l1-4h-4V7a1 1 0 0 1 1-1h3v2.06h-2.22a1 1 0 0 0-1 1v2.06h-3V12h3v4z" /></svg>
-                  <span>Facebook</span>
-                  <span className="link-arrow">↗</span>
+                  <span>Facebook ›</span>
                 </a>
               )}
               {links.youtube && (
@@ -465,8 +425,7 @@ export default function MotionLanding({
                   aria-label="YouTube"
                 >
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true"><path d="M23.498 6.327A3 3 0 0 0 22.52 4.5H1.5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h21a3 3 0 0 0 3-3V9.327a3 3 0 0 0-.002-3m-9.494 1.834L8.366 16.1l-3.408-6.014L8.366 4.08z" /></svg>
-                  <span>YouTube</span>
-                  <span className="link-arrow">↗</span>
+                  <span>YouTube ›</span>
                 </a>
               )}
               {links.tiktok && (
@@ -478,8 +437,7 @@ export default function MotionLanding({
                   aria-label="TikTok"
                 >
                   <span className="social-badge social-tiktok-badge" aria-hidden="true">T</span>
-                  <span>TikTok</span>
-                  <span className="link-arrow">↗</span>
+                  <span>TikTok ›</span>
                 </a>
               )}
               {links.linkedin && (
@@ -491,8 +449,7 @@ export default function MotionLanding({
                   aria-label="LinkedIn"
                 >
                   <span className="social-badge social-linkedin-badge" aria-hidden="true">in</span>
-                  <span>LinkedIn</span>
-                  <span className="link-arrow">↗</span>
+                  <span>LinkedIn ›</span>
                 </a>
               )}
               {links.booking && (
@@ -504,13 +461,11 @@ export default function MotionLanding({
                   aria-label="Booking"
                 >
                   <span className="social-badge social-booking-badge" aria-hidden="true">B</span>
-                  <span>Book a conversation</span>
-                  <span className="link-arrow">↗</span>
+                  <span>Book a conversation ›</span>
                 </a>
               )}
               <a className="hd-text-link cta-link" href="/contact">
-                <span>Contact page</span>
-                <span className="link-arrow">↗</span>
+                <span>Contact page ›</span>
               </a>
             </div>
             <TeleportBot />

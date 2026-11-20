@@ -1262,3 +1262,186 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   display: none !important;
 }
 
+/* ==========================================================================
+   STAGE 4: Apple-Style Unified Buttons & Links System
+   ========================================================================== */
+
+/* 1. Primary Button: pill, --accent, white text, weight 500, padding ~12px 22px, NO arrow icon, NO inner circle */
+.hd-btn-primary,
+.btn-primary,
+.hero-start-cta,
+.send-brief-btn,
+.footer-subscribe-btn,
+.hd-btn-secondary,
+.btn-secondary,
+.founder-link-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 44px !important;
+  height: auto !important;
+  padding: 12px 22px !important;
+  border-radius: var(--radius-pill) !important;
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  font-family: var(--font-sans) !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+  text-decoration: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: background-color 0.2s ease, opacity 0.2s ease !important;
+}
+
+.hd-btn-primary:hover,
+.btn-primary:hover,
+.hero-start-cta:hover,
+.send-brief-btn:hover,
+.footer-subscribe-btn:hover,
+.hd-btn-secondary:hover,
+.btn-secondary:hover,
+.founder-link-pill:hover {
+  background: var(--accent-hover) !important;
+  color: #ffffff !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.hd-btn-primary:active,
+.btn-primary:active,
+.hero-start-cta:active,
+.send-brief-btn:active,
+.footer-subscribe-btn:active,
+.hd-btn-secondary:active,
+.btn-secondary:active,
+.founder-link-pill:active {
+  transform: scale(0.98) !important;
+  opacity: 0.9 !important;
+}
+
+/* Hide button arrow circles, tracks, icons, and shine animations */
+.btn-arrow-circle,
+.btn-arrow-track,
+.btn-arrow-icon,
+.btn-arrow-primary,
+.btn-arrow-clone,
+.cta-arrow-circle,
+.hd-btn-primary::after,
+.btn-primary::after,
+.hd-btn-secondary::after,
+.btn-secondary::after {
+  display: none !important;
+}
+
+/* 2. On dark backgrounds (#work section) */
+#work .hd-btn-primary,
+#work .btn-primary,
+#work .hd-btn-secondary,
+#work .btn-secondary {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+#work .hd-btn-primary:hover,
+#work .btn-primary:hover,
+#work .hd-btn-secondary:hover,
+#work .btn-secondary:hover {
+  background: #f5f5f7 !important;
+  color: #000000 !important;
+}
+
+#work .hd-text-link,
+#work .work-view-action,
+#work a:not(.hd-btn-primary):not(.btn-primary):not(.work-card) {
+  color: var(--accent-on-dark) !important;
+}
+
+/* 3. Text links: --accent color, text followed by ›, hover underline */
+.hd-text-link,
+.card-arrow-link,
+.work-view-action,
+.footer-contact-link,
+.hero-explore-link {
+  color: var(--accent) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em !important;
+  text-decoration: none !important;
+  background-image: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.hd-text-link:hover,
+.card-arrow-link:hover,
+.work-view-action:hover,
+.footer-contact-link:hover,
+.hero-explore-link:hover {
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+  opacity: 0.85 !important;
+}
+
+.card-arrow-link .card-link-arrow,
+.work-view-action .work-view-arrow,
+.link-arrow {
+  display: inline-block !important;
+  transition: transform 0.15s ease !important;
+}
+
+/* 4. WhatsApp & Social links in #brief: clean text links */
+.contact-links .social-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 4px 0 !important;
+  color: var(--accent) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.contact-links .social-link:hover {
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  color: var(--accent-hover) !important;
+}
+
+.contact-links .social-badge {
+  display: none !important;
+}
+
+/* 5. Focus states: visible 2px accent outline offset 2px */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+.hd-btn-primary:focus-visible,
+.btn-primary:focus-visible,
+.hd-btn-secondary:focus-visible,
+.btn-secondary:focus-visible,
+.hd-text-link:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+}
+
