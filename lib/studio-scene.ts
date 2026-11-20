@@ -8,6 +8,42 @@ import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js';
 import {cubeCells,sceneBudget} from './scene-settings';
 import type {PosterModel} from '@/components/studio/ModelPoster';
 
+// In-memory ArrayBuffer cache to make model loads instant (< 20ms) after initial fetch
+const modelBufferCache = new Map<string, Promise<ArrayBuffer>>();
+
+function fetchModelBuffer(url: string, fallbackUrl: string, signal?: AbortSignal): Promise<ArrayBuffer> {
+  const existing = modelBufferCache.get(url);
+  if (existing) return existing;
+
+  const promise = fetch(url, signal ? { signal } : undefined)
+    .then(r => r.ok ? r : fetch(fallbackUrl, signal ? { signal } : undefined))
+    .then(async r => {
+      if (!r.ok) throw Error(`Failed to fetch ${url}`);
+      return await r.arrayBuffer();
+    })
+    .catch(err => {
+      modelBufferCache.delete(url);
+      throw err;
+    });
+
+  modelBufferCache.set(url, promise);
+  return promise;
+}
+
+let gltfLoaderModulePromise: Promise<any> | null = null;
+function getGLTFLoaderModule() {
+  if (!gltfLoaderModulePromise) {
+    gltfLoaderModulePromise = import('three/examples/jsm/loaders/GLTFLoader.js');
+  }
+  return gltfLoaderModulePromise;
+}
+
+// Pre-warm GLTF loader and fetch eva_robot.glb immediately on client
+if (typeof window !== 'undefined') {
+  getGLTFLoaderModule();
+  fetchModelBuffer('/models/eva_robot.glb', '/models/eva.glb').catch(() => {});
+}
+
 export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,signal:AbortSignal,ready:()=>void,failed:()=>void){
  const getIsMobile = () => (typeof window !== 'undefined' && window.innerWidth <= 850) || (canvas && canvas.clientWidth > 0 && canvas.clientWidth <= 640);
  const isMobile = getIsMobile();
@@ -283,12 +319,14 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     keyRadius*Math.sin(keyBaseAngle+orbitAngle)
    );
 
-   // Camera Intro Dolly: FOV 40 -> 32 (38 on mobile) over 1800ms ease-out
-   if(!prefersReducedMotion&&elapsed<=1.8){
-    const dollyT=Math.min(1,elapsed/1.8);
-    const dollyEase=1-Math.pow(1-dollyT,3);
-    camera.fov=40-(40-targetFov)*dollyEase;
+   // Camera Intro: quick 350ms settle to targetFov so it's ready immediately
+   if(!prefersReducedMotion&&elapsed<=0.35){
+    const dollyT=elapsed/0.35;
+    const dollyEase=1-Math.pow(1-dollyT,2);
+    camera.fov=34-(34-targetFov)*dollyEase;
     camera.updateProjectionMatrix();
+   } else {
+    camera.fov=targetFov;
    }
 
    // Happy emotion interpolation (0 -> 1 on hover)
@@ -360,19 +398,16 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
      object.position.set(0,0,0);
      object.rotation.set(0,0,0);
     }else{
-     // Intro drop-in starting at 700ms with soft overshoot (ease-out-back over 1200ms)
+     // Fast smooth entrance starting immediately at t=0 (no dead wait)
      let dropY=0;
      let introScale=1.0;
-     if(elapsed<0.7){
-      dropY=0.8;
-      introScale=0.9;
-     }else if(elapsed<1.9){
-      const t=(elapsed-0.7)/1.2;
-      const c1=1.3;
+     if(elapsed<0.45){
+      const t=elapsed/0.45;
+      const c1=1.2;
       const c3=c1+1;
       const easeBack=1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2);
-      dropY=(1-easeBack)*0.8;
-      introScale=0.9+0.1*easeBack;
+      dropY=(1-easeBack)*0.25;
+      introScale=0.95+0.05*easeBack;
      }
 
      // Idle float: sin(t * 0.9) * 0.06 (~7s period)
@@ -569,15 +604,14 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    instances=new THREE.InstancedMesh(cell,surface,26);instances.frustumCulled=false;
    object.add(instances,new THREE.Mesh(cell,coreFallback));
   }else{
-   const deadline=typeof AbortSignal.any==="function"?AbortSignal.any([signal,AbortSignal.timeout(15000)]):signal;
+   const deadline=typeof AbortSignal.any==="function"?AbortSignal.any([signal,AbortSignal.timeout(8000)]):signal;
    const modelUrl=model==='fixer'?'/models/fixer_robot.glb':'/models/eva_robot.glb';
    const fallbackUrl=model==='fixer'?'/models/fixer_robot.glb':'/models/eva.glb';
-   const [reply,{GLTFLoader}]=await Promise.all([
-    fetch(modelUrl,{signal:deadline}).then(r=>r.ok?r:fetch(fallbackUrl,{signal:deadline})),
-    import('three/examples/jsm/loaders/GLTFLoader.js')
+   const [buffer,{GLTFLoader}]=await Promise.all([
+    fetchModelBuffer(modelUrl,fallbackUrl,deadline),
+    getGLTFLoaderModule()
    ]);
-   if(!reply.ok)throw Error(`${model} unavailable`);
-   const gltf=await new GLTFLoader().parseAsync(await reply.arrayBuffer(),'');
+   const gltf=await new GLTFLoader().parseAsync(buffer.slice(0),'');
    const robot=gltf.scene;
    if(gltf.animations&&gltf.animations.length>0){
     mixer=new THREE.AnimationMixer(robot);
@@ -618,7 +652,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    coreGroup.position.set(0,2.05,0.88);
    robot.add(coreGroup);
 
-   robot.traverse(child=>{
+   robot.traverse((child: THREE.Object3D)=>{
     if(child instanceof THREE.Mesh){
      if(child.name==='Eye_Left'||child.name==='Eye_Right'){
       child.material=grokEyeMat;

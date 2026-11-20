@@ -3,6 +3,11 @@ import {useEffect,useRef,useState} from 'react';
 import type { PosterModel } from './ModelPoster';
 import SceneBoundary from './SceneBoundary';
 
+// Pre-warm the WebGL studio scene bundle immediately so mount has zero network lag
+if (typeof window !== 'undefined') {
+  import('@/lib/studio-scene').catch(() => {});
+}
+
 let activeScenes = 0;
 function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
  const mount=useRef<HTMLDivElement>(null),canvas=useRef<HTMLCanvasElement>(null);

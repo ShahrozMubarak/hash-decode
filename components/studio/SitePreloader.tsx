@@ -11,19 +11,19 @@ export default function SitePreloader() {
 
   useEffect(() => {
 
-    let isWindowLoaded = typeof document !== 'undefined' && document.readyState === 'complete';
+    let isDomReady = typeof document !== 'undefined' && (document.readyState === 'interactive' || document.readyState === 'complete');
     let isModelLoaded = typeof window !== 'undefined' && Boolean((window as any).__hd_model_ready);
     let isDone = false;
 
-    // Simulate natural progress step while waiting for real assets & WebGL
+    // Fast, responsive progress ticks (completes well within ~400-600ms)
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
-        if (prev < 45) return prev + 12;
-        if (prev < 75) return prev + 5;
-        if (prev < 90) return prev + 2;
-        return prev; // hold at ~90% until everything actually finishes loading
+        if (prev < 50) return prev + 20;
+        if (prev < 85) return prev + 15;
+        if (prev < 98) return prev + 8;
+        return 98;
       });
-    }, 120);
+    }, 45);
 
     const finishWhenReady = () => {
       if (isDone) return;
@@ -31,57 +31,50 @@ export default function SitePreloader() {
       clearInterval(progressInterval);
       setProgress(100);
 
-      // Give a tiny moment for the user to see the complete line, then dissolve
+      // Fast, smooth dissolve without artificial lag
       setTimeout(() => {
         setFadingOut(true);
         setTimeout(() => {
           setHidden(true);
-        }, 450);
-      }, 240);
+        }, 220);
+      }, 50);
     };
 
     const checkComplete = () => {
-      const isHome = pathname === '/';
-      // If on home page, wait for BOTH window resources and 3D model ready
-      if (isHome) {
-        if (isWindowLoaded && isModelLoaded) {
-          finishWhenReady();
-        }
-      } else {
-        // On interior pages without hero 3D model, wait for window load
-        if (isWindowLoaded) {
-          finishWhenReady();
-        }
+      if (isModelLoaded || isDomReady) {
+        finishWhenReady();
       }
     };
 
-    const onWindowLoad = () => {
-      isWindowLoaded = true;
+    const onDomReady = () => {
+      isDomReady = true;
       checkComplete();
     };
 
     const onModelReady = () => {
       isModelLoaded = true;
-      checkComplete();
+      finishWhenReady();
     };
 
-    if (!isWindowLoaded) {
-      window.addEventListener('load', onWindowLoad, { once: true });
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', onDomReady, { once: true });
+      window.addEventListener('load', onDomReady, { once: true });
+    } else {
+      isDomReady = true;
+      checkComplete();
     }
     window.addEventListener('hd:model-ready', onModelReady, { once: true });
 
-    // Initial check in case everything loaded instantly
-    checkComplete();
-
-    // Safety fallback: if WebGL is disabled or network hangs, open after 4.5s max
+    // Strict safety cap: never let the preloader hold screen longer than 850ms
     const maxSafetyTimer = setTimeout(() => {
       finishWhenReady();
-    }, 4500);
+    }, 850);
 
     return () => {
       clearInterval(progressInterval);
       clearTimeout(maxSafetyTimer);
-      window.removeEventListener('load', onWindowLoad);
+      document.removeEventListener('DOMContentLoaded', onDomReady);
+      window.removeEventListener('load', onDomReady);
       window.removeEventListener('hd:model-ready', onModelReady);
     };
   }, [pathname]);
