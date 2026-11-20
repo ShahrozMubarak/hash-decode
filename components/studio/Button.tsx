@@ -1,99 +1,71 @@
 'use client';
 
-import React from 'react';
+import type { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from 'react';
 import Link from 'next/link';
-import { Check } from 'lucide-react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'text-link' | 'icon';
-  href?: string;
-  loading?: boolean;
-  success?: boolean;
-  magnetic?: boolean;
-  icon?: React.ReactNode;
-  children?: React.ReactNode;
+export type ButtonMode = 'light' | 'dark';
+
+interface BaseButtonProps {
+  mode?: ButtonMode;
+  children: ReactNode;
+  className?: string;
 }
 
-export default function Button({
-  variant = 'primary',
-  href,
-  loading = false,
-  success = false,
-  magnetic = false,
-  icon,
-  className = '',
-  children,
-  disabled,
-  onClick,
-  ...rest
-}: ButtonProps) {
-  const internalSuccess = success;
-
-  const baseClass =
-    variant === 'primary'
-      ? 'hd-btn-primary'
-      : variant === 'secondary'
-      ? 'hd-btn-secondary'
-      : variant === 'text-link'
-      ? 'hd-text-link'
-      : 'hd-icon-btn';
-
-  const classes = [
-    baseClass,
-    magnetic ? 'cta-magnetic' : '',
-    loading ? 'is-loading' : '',
-    internalSuccess ? 'is-success' : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  const content = (
-    <>
-      <span className="btn-label">{children}</span>
-
-      {variant === 'text-link' && (
-        <span className="link-arrow" aria-hidden="true">
-          ›
-        </span>
-      )}
-
-      {variant === 'icon' && icon}
-
-      {/* Loading Spinner */}
-      <span className="btn-spinner" aria-hidden="true" />
-
-      {/* Success Checkmark */}
-      <span className="btn-check" aria-hidden="true">
-        <Check size={18} strokeWidth={2.5} />
-      </span>
-    </>
+export type ButtonProps = BaseButtonProps &
+  (
+    | ({ href: string } & AnchorHTMLAttributes<HTMLAnchorElement>)
+    | ({ href?: undefined } & ButtonHTMLAttributes<HTMLButtonElement>)
   );
 
-  if (href) {
+export default function Button({
+  mode = 'light',
+  children,
+  className = '',
+  ...props
+}: ButtonProps) {
+  const classes = `hd-btn-primary hd-btn-primary--${mode} ${className}`.trim();
+
+  if ('href' in props && props.href) {
+    const { href, ...rest } = props;
     return (
-      <Link
-        href={href}
-        className={classes}
-        aria-busy={loading}
-        aria-disabled={disabled}
-        role="button"
-      >
-        {content}
+      <Link href={href} className={classes} {...(rest as any)}>
+        <span className="btn-label">{children}</span>
       </Link>
     );
   }
 
+  const { ...rest } = props as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
-    <button
-      className={classes}
-      disabled={disabled || loading}
-      aria-busy={loading}
-      onClick={onClick}
-      {...rest}
-    >
-      {content}
+    <button className={classes} {...rest}>
+      <span className="btn-label">{children}</span>
     </button>
   );
 }
 
+interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: string;
+  children: ReactNode;
+  className?: string;
+  mode?: ButtonMode;
+}
+
+export function TextLink({
+  href,
+  children,
+  className = '',
+  mode = 'light',
+  ...props
+}: TextLinkProps) {
+  return (
+    <Link
+      href={href}
+      className={`hd-text-link hd-text-link--${mode} ${className}`.trim()}
+      {...props}
+    >
+      <span>{children}</span>
+      <span className="link-arrow" aria-hidden="true">
+        ›
+      </span>
+    </Link>
+  );
+}

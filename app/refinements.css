@@ -2248,7 +2248,11 @@ body {
   scroll-margin-top: 56px !important;
 }
 
-/* 1. Full-width fixed bar, height 48px, translucent white blur, bottom hairline */
+/* ==========================================================================
+   STAGE 2: NAVBAR, BUTTONS, LINKS (V2 REDESIGN)
+   ========================================================================== */
+
+/* 1. Full-width fixed bar, height var(--nav-h) [56px], translucent white blur, bottom hairline, NO SHADOW */
 .site-header,
 .ronin-header {
   position: fixed !important;
@@ -2256,16 +2260,16 @@ body {
   left: 0 !important;
   right: 0 !important;
   width: 100% !important;
-  height: 48px !important;
-  min-height: 48px !important;
-  max-height: 48px !important;
+  height: var(--nav-h) !important;
+  min-height: var(--nav-h) !important;
+  max-height: var(--nav-h) !important;
   padding: 0 !important;
   margin: 0 !important;
   z-index: 1000 !important;
   background: rgba(255, 255, 255, 0.8) !important;
   -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
   backdrop-filter: saturate(180%) blur(20px) !important;
-  border-bottom: 1px solid var(--hairline) !important;
+  border-bottom: 1px solid var(--hairline-light) !important;
   box-shadow: none !important;
   box-sizing: border-box !important;
 }
@@ -2275,13 +2279,14 @@ body {
   max-width: var(--container) !important;
   height: 100% !important;
   margin: 0 auto !important;
-  padding-inline: var(--gutter, clamp(16px, 4vw, 32px)) !important;
+  padding-inline: var(--gutter) !important;
   display: flex !important;
   align-items: center !important;
+  justify-content: space-between !important;
   box-sizing: border-box !important;
 }
 
-/* 2. Flat navbar container (remove navy gradient pill, border, shadows) */
+/* 2. Flat navbar container */
 .nav,
 .ronin-nav,
 html.header-compressed .ronin-nav {
@@ -2301,7 +2306,7 @@ html.header-compressed .ronin-nav {
   position: relative !important;
 }
 
-/* 3. Logo (Left) */
+/* 3. Logo (Left): Wordmark fully black (both HASH and DECODE) */
 .ronin-brand-wrap {
   display: flex !important;
   align-items: center !important;
@@ -2315,28 +2320,26 @@ html.header-compressed .ronin-nav {
   align-items: center !important;
   gap: 8px !important;
   text-decoration: none !important;
+  color: #000000 !important;
 }
 
 .ronin-brand-wrap .brand .brand-logo {
-  width: 24px !important;
-  height: 24px !important;
+  width: 26px !important;
+  height: 26px !important;
   border-radius: 4px !important;
   object-fit: contain !important;
 }
 
-.ronin-brand-wrap .brand strong {
-  font-family: var(--font-sans) !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.02em !important;
-  color: var(--text) !important;
-}
-
+.ronin-brand-wrap .brand strong,
 .ronin-brand-wrap .brand strong span {
-  color: var(--text) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: #000000 !important;
 }
 
-/* 4. Nav Links (Centered, 13px, weight 400, --text, lighter on hover) */
+/* 4. Nav Links: Centered, black 15px/600 */
 .site-links,
 .ronin-links {
   position: absolute !important;
@@ -2344,7 +2347,7 @@ html.header-compressed .ronin-nav {
   transform: translateX(-50%) !important;
   display: flex !important;
   align-items: center !important;
-  gap: 32px !important;
+  gap: 36px !important;
   margin: 0 !important;
   padding: 0 !important;
 }
@@ -2356,13 +2359,13 @@ html.header-compressed .ronin-nav {
   border-radius: 0 !important;
   box-shadow: none !important;
   padding: 0 !important;
-  color: var(--text) !important;
-  opacity: 0.8 !important;
+  color: #000000 !important;
   font-family: var(--font-sans) !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  letter-spacing: -0.01em !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.005em !important;
   text-decoration: none !important;
+  opacity: 0.85 !important;
   transition: opacity 0.2s ease !important;
   min-height: auto !important;
 }
@@ -2371,7 +2374,8 @@ html.header-compressed .ronin-nav {
 .site-nav-link:hover {
   background: transparent !important;
   opacity: 1 !important;
-  color: var(--text) !important;
+  color: #000000 !important;
+  text-decoration: underline !important;
   transform: none !important;
   box-shadow: none !important;
 }
@@ -2379,8 +2383,8 @@ html.header-compressed .ronin-nav {
 .ronin-nav-item[aria-current="page"] {
   background: transparent !important;
   opacity: 1 !important;
-  font-weight: 500 !important;
-  color: var(--text) !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
   box-shadow: none !important;
 }
 
@@ -2390,12 +2394,12 @@ html.header-compressed .ronin-nav {
 
 .ronin-nav-text {
   font-family: var(--font-sans) !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
   color: inherit !important;
 }
 
-/* 5. Right actions */
+/* 5. Right actions: pause button + black pill "Get in touch" */
 .nav-actions,
 .ronin-actions {
   display: flex !important;
@@ -2405,7 +2409,7 @@ html.header-compressed .ronin-nav {
   flex-shrink: 0 !important;
 }
 
-/* Pause-animation button: small 28px circle, thin grey outline, grey icon */
+/* Pause-animation button: 28px circle, black outline */
 .motion-toggle,
 .ronin-icon-btn.motion-toggle {
   width: 28px !important;
@@ -2415,60 +2419,67 @@ html.header-compressed .ronin-nav {
   padding: 0 !important;
   border-radius: 50% !important;
   background: transparent !important;
-  border: 1px solid var(--hairline) !important;
-  color: var(--text-2) !important;
+  border: 1.5px solid #000000 !important;
+  color: #000000 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer !important;
-  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease !important;
   box-shadow: none !important;
+  transition: opacity 0.2s ease !important;
 }
 
 .motion-toggle:hover,
 .ronin-icon-btn.motion-toggle:hover {
-  background: rgba(0, 0, 0, 0.04) !important;
-  border-color: rgba(0, 0, 0, 0.2) !important;
-  color: var(--text) !important;
+  opacity: 0.85 !important;
+  background: transparent !important;
   transform: none !important;
 }
 
-/* Small primary pill "Get in touch" (right, 13px, no arrow icon) */
-.ronin-cta-pill {
+/* Black pill "Get in touch" (white text) */
+.ronin-cta-pill,
+.nav-contact {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  min-height: 28px !important;
-  height: 28px !important;
-  padding: 0 14px !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 0 18px !important;
   border-radius: var(--radius-pill) !important;
-  background: var(--accent) !important;
+  background: #000000 !important;
   color: #ffffff !important;
   border: none !important;
   font-family: var(--font-sans) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
   letter-spacing: -0.01em !important;
   text-decoration: none !important;
   box-shadow: none !important;
   cursor: pointer !important;
-  transition: background-color 0.2s ease !important;
+  transition: opacity 0.2s ease !important;
 }
 
-.ronin-cta-pill:hover {
-  background: var(--accent-hover) !important;
+.ronin-cta-pill:hover,
+.nav-contact:hover {
+  opacity: 0.85 !important;
   color: #ffffff !important;
+  text-decoration: none !important;
   transform: none !important;
   box-shadow: none !important;
+}
+
+.ronin-cta-pill span,
+.nav-contact span {
+  color: #ffffff !important;
 }
 
 /* Mobile Nav Toggle Button */
 .nav-toggle,
 .ronin-icon-btn.nav-toggle {
-  width: 28px !important;
-  height: 28px !important;
-  min-width: 28px !important;
-  min-height: 28px !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
@@ -2480,7 +2491,7 @@ html.header-compressed .ronin-nav {
 }
 
 .burger-bar {
-  background: var(--text) !important;
+  background: #000000 !important;
 }
 
 /* Mobile responsive layout */
@@ -2498,7 +2509,7 @@ html.header-compressed .ronin-nav {
   }
 }
 
-/* 6. Mobile Menu Sheet: clean full-width sheet, same colors */
+/* 6. Mobile Menu Sheet: clean full-width sheet */
 .studio-menu {
   position: fixed !important;
   top: 0 !important;
@@ -2507,18 +2518,18 @@ html.header-compressed .ronin-nav {
   max-width: 100vw !important;
   height: auto !important;
   max-height: 100svh !important;
-  background: rgba(255, 255, 255, 0.96) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
   -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
   backdrop-filter: saturate(180%) blur(20px) !important;
-  border-bottom: 1px solid var(--hairline) !important;
+  border-bottom: 1px solid var(--hairline-light) !important;
   border-left: none !important;
   border-right: none !important;
   border-top: none !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+  box-shadow: none !important;
   padding: 0 !important;
   margin: 0 !important;
   z-index: 9999 !important;
-  color: var(--text) !important;
+  color: #000000 !important;
 }
 
 .studio-menu::backdrop {
@@ -2528,95 +2539,233 @@ html.header-compressed .ronin-nav {
 }
 
 .studio-menu .menu-panel {
-  padding: 20px 24px 32px !important;
-  background: transparent !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 20px !important;
-  height: auto !important;
+  padding: 24px var(--gutter) 32px !important;
+  box-sizing: border-box !important;
 }
 
-.menu-top {
+.studio-menu .menu-top {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding-bottom: 16px !important;
-  border-bottom: 1px solid var(--hairline) !important;
+  margin-bottom: 24px !important;
 }
 
-.menu-brand-kicker {
+.studio-menu .menu-brand-kicker {
   font-family: var(--font-sans) !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  color: var(--text-2) !important;
-  letter-spacing: 0 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  color: #000000 !important;
 }
 
-.menu-close-btn {
-  width: 30px !important;
-  height: 30px !important;
-  border-radius: 50% !important;
-  background: rgba(0, 0, 0, 0.05) !important;
-  color: var(--text) !important;
-  border: 1px solid var(--hairline) !important;
+.studio-menu .menu-close-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  cursor: pointer !important;
+}
+
+.studio-menu .mobile-nav-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  margin-bottom: 32px !important;
+}
+
+.studio-menu .mobile-nav-link {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 12px 0 !important;
+  color: #000000 !important;
+  font-family: var(--font-sans) !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid var(--hairline-light) !important;
+}
+
+.studio-menu .mobile-nav-link:hover {
+  text-decoration: underline !important;
+}
+
+.studio-menu .mobile-nav-link-arrow {
+  font-size: 22px !important;
+  color: #000000 !important;
+}
+
+.studio-menu .menu-bottom .menu-subtext {
+  font-family: var(--font-sans) !important;
+  font-size: 15px !important;
+  color: #000000 !important;
+  margin-bottom: 16px !important;
+}
+
+/* 7. Scroll margin top for all anchor targets */
+[id],
+#overview,
+#services,
+#security,
+#work,
+#process,
+#team,
+#faq,
+#brief,
+#contact,
+#principles,
+#stack,
+#guarantees,
+#site-footer {
+  scroll-margin-top: calc(var(--nav-h) + 16px) !important;
+}
+
+/* ==========================================================================
+   SECTION 3.6 BUTTONS (ONLY TWO LOOKS EXIST SITE-WIDE)
+   ========================================================================== */
+
+/* 1. PRIMARY PILL */
+.hd-btn-primary,
+.hd-btn-secondary,
+.hero-start-cta,
+button.hd-btn-primary,
+a.hd-btn-primary {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  font-family: var(--font-sans) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  padding: 14px 26px !important;
+  border-radius: var(--radius-pill) !important;
+  border: none !important;
   cursor: pointer !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  transition: opacity 0.2s ease !important;
+  box-sizing: border-box !important;
+}
+
+/* Primary Pill On Light Surfaces: Black pill, white text */
+.hd-btn-primary,
+.hd-btn-secondary,
+.hero-start-cta,
+[data-mode="light"] .hd-btn-primary,
+.hd-section--white .hd-btn-primary,
+.hd-section--off-white .hd-btn-primary,
+#overview .hd-btn-primary,
+#services .hd-btn-primary,
+#security .hd-btn-primary,
+#team .hd-btn-primary,
+#contact .hd-btn-primary,
+.page-about-content .hd-btn-primary,
+.page-services-content .hd-btn-primary,
+.page-contact-content .hd-btn-primary,
+.page-tools-hub .hd-btn-primary,
+.page-tool-detail .hd-btn-primary,
+.page-error-container .hd-btn-primary {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+.hd-btn-primary:hover,
+.hd-btn-secondary:hover,
+.hero-start-cta:hover {
+  opacity: 0.85 !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  transform: none !important;
   box-shadow: none !important;
 }
-
-.mobile-nav-list {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0 !important;
-  margin: 0 !important;
+.hd-btn-primary .btn-label,
+.hd-btn-secondary .btn-label,
+.hero-start-cta .btn-label {
+  color: #ffffff !important;
 }
 
-.mobile-nav-link {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 14px 0 !important;
-  border-bottom: 1px solid var(--hairline) !important;
-  color: var(--text) !important;
+/* Primary Pill On Dark Surfaces: White pill, black text */
+[data-mode="dark"] .hd-btn-primary,
+.hd-section--black .hd-btn-primary,
+#work .hd-btn-primary,
+.wide-card[data-mode="dark"] .hd-btn-primary {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+[data-mode="dark"] .hd-btn-primary:hover,
+.hd-section--black .hd-btn-primary:hover,
+#work .hd-btn-primary:hover,
+.wide-card[data-mode="dark"] .hd-btn-primary:hover {
+  opacity: 0.85 !important;
+  color: #000000 !important;
   text-decoration: none !important;
-  animation: none !important;
+}
+[data-mode="dark"] .hd-btn-primary .btn-label,
+.hd-section--black .hd-btn-primary .btn-label,
+#work .hd-btn-primary .btn-label,
+.wide-card[data-mode="dark"] .hd-btn-primary .btn-label {
+  color: #000000 !important;
 }
 
-.mobile-nav-link-num {
+/* Hide old arrow circle and clone icons on pills */
+.btn-arrow-circle,
+.btn-arrow-track,
+.btn-arrow-icon,
+.btn-arrow-clone,
+.btn-arrow-primary {
   display: none !important;
 }
 
-.mobile-nav-link-title {
+/* 2. TEXT LINK (Same color as text, ends with ›, underline on hover) */
+.hd-text-link,
+.card-arrow-link,
+.hero-explore-link,
+.case-back-link,
+.article-back-link,
+.footer-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
   font-family: var(--font-sans) !important;
-  font-size: 18px !important;
+  font-size: 16px !important;
   font-weight: 500 !important;
+  line-height: 1.4 !important;
   letter-spacing: -0.01em !important;
-  color: var(--text) !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  transition: opacity 0.2s ease !important;
 }
 
-.mobile-nav-link-arrow {
-  color: var(--text-2) !important;
-  font-size: 18px !important;
+[data-mode="light"] .hd-text-link,
+.hd-section--white .hd-text-link,
+.hd-section--off-white .hd-text-link,
+#overview .hd-text-link,
+#services .hd-text-link,
+#security .hd-text-link,
+#team .hd-text-link,
+#contact .hd-text-link,
+.card-arrow-link,
+.footer-link {
+  color: #000000 !important;
 }
 
-.menu-bottom {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: 14px !important;
-  padding-top: 8px !important;
+[data-mode="dark"] .hd-text-link,
+.hd-section--black .hd-text-link,
+#work .hd-text-link,
+.wide-card[data-mode="dark"] .hd-text-link {
+  color: #ffffff !important;
 }
 
-.menu-subtext {
-  font-size: 14px !important;
-  color: var(--text-2) !important;
-  margin: 0 !important;
-}
-
-.menu-bottom .hd-btn-primary {
-  width: 100% !important;
+.hd-text-link:hover,
+.card-arrow-link:hover,
+.hero-explore-link:hover,
+.footer-link:hover {
+  text-decoration: underline !important;
+  opacity: 0.85 !important;
+  background: transparent !important;
 }
 
 /* ==========================================================================
