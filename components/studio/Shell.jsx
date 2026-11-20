@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import {usePathname} from 'next/navigation';
-import {ArrowUp,X,Pause,Play} from 'lucide-react';
+import {X,Pause,Play} from 'lucide-react';
 import FooterSubscribe from './FooterSubscribe';
 
 const links=[
@@ -219,7 +219,6 @@ export function Footer(){
             aria-label="Scroll back to top"
           >
             <span>Back to top</span>
-            <ArrowUp size={14} aria-hidden="true" />
           </button>
         </div>
         

@@ -55,10 +55,9 @@ export default function FooterSubscribe() {
   return (
     <div className="footer-subscribe-wrapper">
       <div className="footer-subscribe-header">
-        <span className="footer-subscribe-eyebrow">Stay ahead</span>
-        <h4 className="footer-subscribe-title">Engineering & Security dispatch</h4>
+        <h4 className="footer-subscribe-title">Stay in the loop.</h4>
         <p className="footer-subscribe-desc">
-          Architecture notes, security teardowns, and digital craft from Hash Decode.
+          Occasional notes on engineering and security.
         </p>
       </div>
 

@@ -674,88 +674,7 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   box-shadow: 0 10px 24px rgba(30, 64, 175, 0.3) !important;
 }
 
-/* ==========================================================================
-   Clean Minimal Footer Styling & Micro-interactions
-   ========================================================================== */
-.site-footer {
-  background: var(--bg-alt) !important;
-  color: var(--text) !important;
-  border-top: 1px solid var(--hairline) !important;
-  padding-block: clamp(48px, 6vw, 80px) 28px !important;
-}
-
-.footer-columns-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1.35fr;
-  gap: clamp(2rem, 4vw, 3.5rem);
-}
-
-@media (max-width: 768px) {
-  .footer-columns-grid {
-    grid-template-columns: 1fr;
-    gap: 2.25rem;
-  }
-}
-
-.footer-col-title {
-  color: var(--text) !important;
-  font: 600 12px/1.4 var(--font-sans), sans-serif !important;
-  letter-spacing: 0.08em !important;
-  text-transform: uppercase !important;
-  margin-bottom: 1rem !important;
-}
-
-.footer-link {
-  color: var(--text-2) !important;
-  font: 400 14px/1.5 var(--font-sans), sans-serif !important;
-  letter-spacing: -0.01em !important;
-  text-decoration: none !important;
-  transition: color 0.2s ease, transform 0.2s ease;
-  display: inline-block;
-}
-
-.footer-link:hover {
-  color: var(--text) !important;
-  transform: translateX(3px);
-}
-
-.footer-contact-note {
-  font: 400 14px/1.6 var(--font-sans), sans-serif !important;
-  color: var(--text-2) !important;
-  max-width: 44ch;
-  margin-bottom: 1.25rem !important;
-}
-
-.footer-contact-actions {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 1.5rem;
-}
-
-.footer-contact-link {
-  color: var(--text) !important;
-  font: 500 13px/1 var(--font-sans), sans-serif !important;
-  letter-spacing: -0.01em !important;
-  text-transform: none !important;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--card-on-grey) !important;
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: 1px solid var(--hairline) !important;
-  text-decoration: none !important;
-  transition: all 0.2s ease;
-}
-
-.footer-contact-link:hover {
-  background: var(--card-on-grey) !important;
-  border-color: var(--accent) !important;
-  transform: translateY(-1px);
-  color: var(--accent) !important;
-}
+/* Clean Minimal Footer Styling consolidated into Section Map below */
 
 /* Tasteful Hover Elevation on Studio Cards */
 .about-founder-card {
@@ -1504,73 +1423,275 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   text-align: center !important;
 }
 
-/* 9. FOOTER (.site-footer) - Grey section */
+/* 9. FOOTER (.site-footer) - Quiet Apple Footer */
 .site-footer,
 #site-footer {
   background: var(--bg-alt) !important;
   color: var(--text) !important;
   border-top: 1px solid var(--hairline) !important;
+  padding-top: clamp(48px, 6vw, 80px) !important;
+  padding-bottom: clamp(32px, 4vw, 48px) !important;
 }
+
+.footer-columns-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1.35fr !important;
+  gap: clamp(2rem, 4vw, 3.5rem) !important;
+  max-width: var(--container, 1080px) !important;
+  margin: 0 auto !important;
+}
+
+@media (max-width: 768px) {
+  .footer-columns-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+}
+
+/* Headings 12px/600 --text (sentence case, not uppercase tracked) */
 .footer-col-title {
   color: var(--text) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+  margin-bottom: 12px !important;
+  display: block !important;
 }
+
+/* Links 12px --text-2, hover underline, compact vertical spacing (~10px between links) */
+.footer-links-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .footer-link {
   color: var(--text-2) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease !important;
+  transform: none !important;
+  display: inline-block !important;
 }
+
 .footer-link:hover {
   color: var(--text) !important;
+  text-decoration: underline !important;
+  transform: none !important;
 }
+
 .footer-contact-note {
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1.45 !important;
   color: var(--text-2) !important;
+  max-width: 320px !important;
+  margin: 0 0 12px !important;
 }
+
+.footer-contact-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin-bottom: 20px !important;
+}
+
 .footer-contact-link {
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
   color: var(--accent) !important;
+  text-decoration: none !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  transform: none !important;
 }
-.footer-contact-link::after {
-  background: var(--accent) !important;
+
+.footer-contact-link:hover {
+  color: var(--accent-hover) !important;
+  text-decoration: underline !important;
+  background: transparent !important;
+  border: none !important;
+  transform: none !important;
 }
-.footer-bottom-row {
-  border-top: 1px solid var(--hairline) !important;
+
+/* Newsletter: Stay in the loop. + short sub line, pill input (white, no border, radius 980px) + primary Subscribe pill */
+.footer-newsletter-block {
+  margin-top: 16px !important;
 }
-.footer-copyright {
+
+.footer-subscribe-header {
+  margin-bottom: 12px !important;
+}
+
+.footer-subscribe-title {
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text) !important;
+  margin: 0 0 4px !important;
+}
+
+.footer-subscribe-desc {
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
   color: var(--text-2) !important;
+  margin: 0 !important;
 }
+
+.footer-subscribe-form {
+  margin-top: 10px !important;
+}
+
+.footer-input-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  max-width: 360px !important;
+}
+
+.footer-subscribe-input {
+  flex: 1 1 auto !important;
+  height: 38px !important;
+  background: #ffffff !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: var(--radius-pill, 980px) !important;
+  padding: 0 16px !important;
+  font-family: var(--font-sans) !important;
+  font-size: 13px !important;
+  color: var(--text) !important;
+  outline: none !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.footer-subscribe-input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px var(--accent) !important;
+}
+
+.footer-subscribe-btn {
+  flex: 0 0 auto !important;
+  height: 38px !important;
+  padding: 0 18px !important;
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  border-radius: var(--radius-pill, 980px) !important;
+  border: none !important;
+  font-family: var(--font-sans) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease !important;
+}
+
+.footer-subscribe-btn:hover {
+  background: var(--accent-hover) !important;
+}
+
+.footer-subscribe-success {
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  color: var(--text) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.footer-subscribe-error {
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  color: #d32f2f !important;
+  margin-top: 6px !important;
+}
+
+/* Bottom row separated by a hairline: © 2026 Hash Decode. Developed by ... in 12px grey; Privacy & Security as text link; Back to top as a small text link (no pill) */
+.footer-bottom-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  border-top: 1px solid var(--hairline) !important;
+  margin-top: clamp(28px, 4vw, 40px) !important;
+  padding-top: 18px !important;
+  max-width: var(--container, 1080px) !important;
+  margin-inline: auto !important;
+}
+
+.footer-bottom-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.footer-bottom-brand .brand-logo {
+  width: 22px !important;
+  height: 22px !important;
+  opacity: 0.9 !important;
+  filter: none !important;
+}
+
+.footer-copyright {
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  color: var(--text-2) !important;
+  line-height: 1.4 !important;
+}
+
 .footer-copyright strong {
+  font-weight: 500 !important;
   color: var(--text) !important;
 }
+
+.footer-bottom-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+
 .footer-legal-link,
 .footer-back-to-top {
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
   color: var(--text-2) !important;
+  text-decoration: none !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  transition: color 0.15s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
 }
+
 .footer-legal-link:hover,
 .footer-back-to-top:hover {
   color: var(--text) !important;
-}
-.footer-subscribe-eyebrow {
-  color: var(--text-2) !important;
-}
-.footer-subscribe-title {
-  color: var(--text) !important;
-}
-.footer-subscribe-desc {
-  color: var(--text-2) !important;
-}
-.footer-input-group {
-  background: var(--card-on-grey) !important;
-  border: 1px solid var(--hairline) !important;
-}
-.footer-subscribe-input {
-  color: var(--text) !important;
-}
-.footer-subscribe-input::placeholder {
-  color: var(--text-2) !important;
-}
-.footer-subscribe-btn {
-  background: var(--accent) !important;
-  color: #ffffff !important;
-}
-.footer-subscribe-btn:hover {
-  background: var(--accent-hover) !important;
+  text-decoration: underline !important;
 }
 
 /* ==========================================================================
