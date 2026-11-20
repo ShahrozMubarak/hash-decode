@@ -952,10 +952,15 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 }
 #overview .hero-eyebrow,
 .hero-pill-badge {
-  color: #8ef2ff !important;
-  border-color: rgba(142, 242, 255, 0.35) !important;
-  letter-spacing: 0.12em !important;
+  color: #000000 !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
+  padding: 6px 18px !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
 }
 
 /* 2. CAPABILITIES (#services) - Grey section */
@@ -1314,26 +1319,48 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   color: var(--text-on-dark) !important;
 }
 
-/* 2. Junaid Jawaid: --card-on-grey (white) */
-#team .team-strip-card.team-card-white {
-  background: var(--card-on-grey, #ffffff) !important;
+/* 2. Junaid Tariq: Warm Terracotta Peach (#fdf3eb) */
+#team .team-strip-card.team-card-white,
+#team .wide-card[data-palette="peach"],
+.wide-card[data-palette="peach"] {
+  background: #fdf3eb !important;
+  border: 1px solid rgba(225, 91, 62, 0.22) !important;
 }
-#team .team-strip-card.team-card-white .team-member-name {
-  color: var(--text, #1d1d1f) !important;
+#team .team-strip-card.team-card-white .team-member-name,
+#team .wide-card[data-palette="peach"] .wide-card__title,
+.wide-card[data-palette="peach"] .wide-card__title {
+  color: #1a1a1a !important;
 }
-#team .team-strip-card.team-card-white .team-role-tag {
-  color: var(--text-2, #6e6e73) !important;
+#team .team-strip-card.team-card-white .team-role-tag,
+#team .wide-card[data-palette="peach"] .wide-card__eyebrow,
+.wide-card[data-palette="peach"] .wide-card__eyebrow {
+  color: #7c2d12 !important;
+}
+#team .wide-card[data-palette="peach"] .wide-card__desc,
+.wide-card[data-palette="peach"] .wide-card__desc {
+  color: #292524 !important;
 }
 
-/* 3. Shahmeer Hasan: --card-tint (#eaf2ff) */
-#team .team-strip-card.team-card-tint {
-  background: var(--card-tint, #eaf2ff) !important;
+/* 3. Shahmeer Khan: Soft Lavender (#f2ecfc) */
+#team .team-strip-card.team-card-tint,
+#team .wide-card[data-palette="lilac"],
+.wide-card[data-palette="lilac"] {
+  background: #f2ecfc !important;
+  border: 1px solid rgba(139, 92, 246, 0.22) !important;
 }
-#team .team-strip-card.team-card-tint .team-member-name {
-  color: var(--text, #1d1d1f) !important;
+#team .team-strip-card.team-card-tint .team-member-name,
+#team .wide-card[data-palette="lilac"] .wide-card__title,
+.wide-card[data-palette="lilac"] .wide-card__title {
+  color: #1e1b4b !important;
 }
-#team .team-strip-card.team-card-tint .team-role-tag {
-  color: var(--text-2, #6e6e73) !important;
+#team .team-strip-card.team-card-tint .team-role-tag,
+#team .wide-card[data-palette="lilac"] .wide-card__eyebrow,
+.wide-card[data-palette="lilac"] .wide-card__eyebrow {
+  color: #4338ca !important;
+}
+#team .wide-card[data-palette="lilac"] .wide-card__desc,
+.wide-card[data-palette="lilac"] .wide-card__desc {
+  color: #312e81 !important;
 }
 
 /* 4. Shahroz Mubarak: --card-navy (#0b1f3f) */
@@ -1967,9 +1994,12 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 .site-footer__col-heading {
   font-family: var(--font-sans) !important;
   font-size: 13px !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   color: var(--black) !important;
   letter-spacing: -0.01em !important;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.14) !important;
+  padding-bottom: 6px !important;
+  display: inline-block !important;
 }
 
 .site-footer__list {
@@ -1986,13 +2016,16 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   font-size: 14px !important;
   font-weight: 500 !important;
   color: var(--black) !important;
-  text-decoration: none !important;
-  transition: opacity 0.2s ease !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+  text-decoration-color: rgba(0, 0, 0, 0.28) !important;
+  transition: opacity 0.2s ease, text-decoration-color 0.2s ease !important;
 }
 
 .site-footer__link:hover {
   text-decoration: underline !important;
-  opacity: 0.75 !important;
+  text-decoration-color: #000000 !important;
+  opacity: 1 !important;
 }
 
 .site-footer__bottom {
@@ -2024,31 +2057,42 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   margin-top: 16px !important;
 }
 
+.footer-subscribe-wrapper {
+  background: linear-gradient(135deg, rgba(234, 242, 255, 0.92) 0%, rgba(242, 236, 252, 0.92) 100%) !important;
+  border: 1px solid rgba(11, 31, 63, 0.14) !important;
+  border-radius: 28px !important;
+  padding: 24px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
 .footer-subscribe-header {
-  margin-bottom: 12px !important;
+  margin-bottom: 4px !important;
 }
 
 .footer-subscribe-title {
   font-family: var(--font-sans) !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
   line-height: 1.25 !important;
   letter-spacing: -0.01em !important;
-  color: var(--text) !important;
+  color: #0B1F3A !important;
   margin: 0 0 4px !important;
 }
 
 .footer-subscribe-desc {
   font-family: var(--font-sans) !important;
-  font-size: 12px !important;
+  font-size: 13px !important;
   font-weight: 400 !important;
   line-height: 1.4 !important;
-  color: var(--text-2) !important;
+  color: #334155 !important;
   margin: 0 !important;
 }
 
 .footer-subscribe-form {
-  margin-top: 10px !important;
+  margin-top: 4px !important;
 }
 
 .footer-input-group {
@@ -2058,45 +2102,46 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
-  max-width: 360px !important;
+  max-width: 100% !important;
 }
 
 .footer-subscribe-input {
   flex: 1 1 auto !important;
-  height: 38px !important;
+  height: 44px !important;
   background: #ffffff !important;
-  border: 1px solid var(--hairline) !important;
+  border: 1px solid rgba(11, 31, 63, 0.16) !important;
   border-radius: var(--radius-pill, 980px) !important;
-  padding: 0 16px !important;
+  padding: 0 18px !important;
   font-family: var(--font-sans) !important;
-  font-size: 13px !important;
-  color: var(--text) !important;
+  font-size: 14px !important;
+  color: #000000 !important;
   outline: none !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .footer-subscribe-input:focus {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 2px var(--accent) !important;
+  border-color: #0B1F3A !important;
+  box-shadow: 0 0 0 2px rgba(11, 31, 63, 0.2) !important;
 }
 
 .footer-subscribe-btn {
   flex: 0 0 auto !important;
-  height: 38px !important;
-  padding: 0 18px !important;
-  background: var(--accent) !important;
+  height: 44px !important;
+  padding: 0 22px !important;
+  background: #0B1F3A !important;
   color: #ffffff !important;
   border-radius: var(--radius-pill, 980px) !important;
   border: none !important;
   font-family: var(--font-sans) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
   cursor: pointer !important;
-  transition: background 0.2s ease !important;
+  transition: background 0.2s ease, transform 0.2s ease !important;
 }
 
 .footer-subscribe-btn:hover {
-  background: var(--accent-hover) !important;
+  background: #165e6b !important;
+  transform: translateY(-1px) !important;
 }
 
 .footer-subscribe-success {
@@ -2583,20 +2628,22 @@ html.header-compressed .nav {
   box-sizing: border-box !important;
 }
 
-/* 2. Flat navbar container */
+/* 2. Floating Sleek Dark Navbar Container */
 .nav,
 .ronin-nav,
 html.header-compressed .ronin-nav {
-  height: 100% !important;
-  min-height: 100% !important;
-  max-height: 100% !important;
+  height: 52px !important;
+  min-height: 52px !important;
+  max-height: 52px !important;
   width: 100% !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  background: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  padding: 0 16px !important;
+  margin: 10px auto 0 !important;
+  background: rgba(5, 24, 33, 0.90) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
@@ -3052,27 +3099,30 @@ html.header-compressed .site-header,
    SECTION 3.6 BUTTONS (ONLY TWO LOOKS EXIST SITE-WIDE)
    ========================================================================== */
 
-/* 1. PRIMARY PILL */
+/* 1. PRIMARY PILL & STANDARDIZED SIZING */
 .hd-btn-primary,
 .hd-btn-secondary,
+.hd-btn-azure,
 .hero-start-cta,
+.hero-explore-btn,
 button.hd-btn-primary,
-a.hd-btn-primary {
+a.hd-btn-primary,
+.section-rule-action a {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   font-family: var(--font-sans) !important;
   font-size: 16px !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   line-height: 1 !important;
   letter-spacing: 0 !important;
-  padding: 14px 26px !important;
+  min-height: 52px !important;
+  height: 52px !important;
+  padding: 0 32px !important;
   border-radius: var(--radius-pill) !important;
-  border: none !important;
   cursor: pointer !important;
   text-decoration: none !important;
-  box-shadow: none !important;
-  transition: opacity 0.2s ease !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background 0.2s ease !important;
   box-sizing: border-box !important;
 }
 
@@ -3436,17 +3486,19 @@ html[data-motion=on] .hero-sheet {
 /* 1. Eyebrow: 14px / weight 600, uppercase letter-spacing 0.14em */
 .hero-eyebrow {
   font-family: var(--font-sans) !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
   line-height: 1.4 !important;
-  letter-spacing: 0.14em !important;
+  letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
-  color: #8ef2ff !important;
+  color: #000000 !important;
   margin: 0 0 16px 0 !important;
-  padding: 0 !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+  padding: 6px 16px !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
 }
 
 .hero-eyebrow::before,
@@ -3540,58 +3592,50 @@ html[data-motion=on] .hero-sheet {
 
 #overview .hero-actions .hero-explore-btn,
 #overview .hero-actions .hd-btn-azure,
-#overview .hero-explore-btn {
+#overview .hero-explore-btn,
+.hero-explore-btn {
   min-height: 52px !important;
   height: 52px !important;
   padding: 0 28px !important;
   font-size: 16px !important;
   font-weight: 600 !important;
   border-radius: 9999px !important;
-  background: rgba(255, 255, 255, 0.08) !important;
+  background: transparent !important;
   color: #ffffff !important;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border: 1.5px solid rgba(200, 235, 240, 0.45) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
   box-shadow: none !important;
   cursor: pointer !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease !important;
 }
 
 #overview .hero-actions .hero-explore-btn:hover,
 #overview .hero-actions .hd-btn-azure:hover,
-#overview .hero-explore-btn:hover {
-  background: rgba(255, 255, 255, 0.16) !important;
-  border-color: rgba(200, 235, 240, 0.8) !important;
+#overview .hero-explore-btn:hover,
+.hero-explore-btn:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: #ffffff !important;
   transform: translateY(-2px) scale(1.02) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
   text-decoration: none !important;
 }
 
 #overview .hero-actions .hero-explore-btn *,
 #overview .hero-actions .hd-btn-azure *,
-#overview .hero-explore-btn * {
+#overview .hero-explore-btn *,
+.hero-explore-btn * {
   color: #ffffff !important;
 }
 
 .hero-actions .hero-explore-link {
   font-size: 17px !important;
   font-weight: 600 !important;
-  color: #0071e3 !important;
-  text-decoration: none !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 4px !important;
-  transition: color 0.2s ease, opacity 0.2s ease !important;
-}
-
-.hero-actions .hero-explore-link {
-  font-size: 17px !important;
-  font-weight: 600 !important;
-  color: #8ef2ff !important;
+  color: #ffffff !important;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -3606,7 +3650,7 @@ html[data-motion=on] .hero-sheet {
 }
 
 .hero-actions .hero-explore-link * {
-  color: #8ef2ff !important;
+  color: #ffffff !important;
 }
 
 /* ==========================================================================
@@ -7614,4 +7658,85 @@ html[data-motion=on] .hero-sheet {
     animation: none !important;
     transform: none !important;
   }
+}
+
+/* ==========================================================================
+   SCROLL TRANSITIONS & DYNAMIC REVEALS
+   ========================================================================== */
+
+/* Hero section scroll transition exit */
+.hero-runway {
+  position: relative !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease !important;
+}
+
+#overview::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, rgba(5, 24, 33, 0.98));
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Black Work Section transition on entry and exit */
+#work {
+  position: relative !important;
+  transition: background-color 0.4s ease !important;
+}
+
+#work::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+#work::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Scroll late-appear stagger effect */
+[data-reveal="up"] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+[data-reveal="up"].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Typewriter cursor blinking animation */
+.typewriter-cursor {
+  display: inline-block;
+  font-weight: 300;
+  color: currentColor;
+  margin-left: 2px;
+  animation: typewriterBlink 0.9s infinite;
+}
+
+@keyframes typewriterBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 }

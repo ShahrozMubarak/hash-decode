@@ -58,7 +58,7 @@ export default function MotionLanding({
               <a className="hd-btn-primary hero-start-cta" href="#brief">
                 <span className="btn-label">Start a project</span>
               </a>
-              <a href="#services" className="hd-btn-azure hero-explore-btn">
+              <a href="#services" className="hero-explore-btn">
                 <span className="btn-label">Explore the studio ›</span>
               </a>
             </div>
@@ -233,30 +233,43 @@ export default function MotionLanding({
                 </div>
               }
             />
+          </div>
 
-            <WideCard
-              palette="violet"
-              reverse={true}
-              eyebrow="Internal tooling"
-              title="Cloud Cost Estimator"
-              desc="Real-time multi-cloud price modeling tool that helps engineering teams forecast and reduce AWS/GCP spend."
-              ctaText="Try the estimator"
-              ctaHref="/tools/estimate"
-              ctaVariant="azure"
-              visual={<CostEstimatorMock />}
-            />
+          {/* Separate section for Calculators & Tools */}
+          <div style={{ marginTop: 'var(--s-7)' }}>
+            <div style={{ marginBottom: 'var(--s-4)', textAlign: 'center' }}>
+              <span style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: '13px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                Engineering Utilities
+              </span>
+              <h3 style={{ color: '#ffffff', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 700, margin: '8px 0 0 0' }}>
+                Interactive Calculators &amp; Scanners.
+              </h3>
+            </div>
+            <div className="wide-cards-stack">
+              <WideCard
+                palette="violet"
+                reverse={true}
+                eyebrow="Internal tooling"
+                title="Cloud Cost Estimator"
+                desc="Real-time multi-cloud price modeling tool that helps engineering teams forecast and reduce AWS/GCP spend."
+                ctaText="Try the estimator"
+                ctaHref="/tools/estimate"
+                ctaVariant="azure"
+                visual={<CostEstimatorMock />}
+              />
 
-            <WideCard
-              palette="teal"
-              reverse={false}
-              eyebrow="Security tool"
-              title="Header Security Scanner"
-              desc="Instant HTTP response header analyzer grading websites against OWASP, HSTS, and CSP security baselines."
-              ctaText="Run a scan"
-              ctaHref="/tools/security-check"
-              ctaVariant="coral"
-              visual={<HeaderScannerMock />}
-            />
+              <WideCard
+                palette="teal"
+                reverse={false}
+                eyebrow="Security tool"
+                title="Header Security Scanner"
+                desc="Instant HTTP response header analyzer grading websites against OWASP, HSTS, and CSP security baselines."
+                ctaText="Run a scan"
+                ctaHref="/tools/security-check"
+                ctaVariant="coral"
+                visual={<HeaderScannerMock />}
+              />
+            </div>
           </div>
 
           <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
@@ -307,7 +320,7 @@ export default function MotionLanding({
 
             {/* 2. Junaid Tariq */}
             <WideCard
-              palette="cloud"
+              palette="peach"
               reverse={true}
               eyebrow="Co-Founder & Head of Engineering"
               title="Junaid Tariq"
@@ -335,7 +348,7 @@ export default function MotionLanding({
 
             {/* 3. Shahmeer Khan */}
             <WideCard
-              palette="peach"
+              palette="lilac"
               reverse={false}
               eyebrow="Lead Product Designer"
               title="Shahmeer Khan"

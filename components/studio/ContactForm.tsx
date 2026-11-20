@@ -16,9 +16,9 @@ export const scopeOptions = [
 ];
 
 export const budgetOptions = [
-  '< $5,000',
-  '$5,000 – $15,000',
-  '$15,000+',
+  '< 1.5M PKR ($5k)',
+  '1.5M – 4M PKR ($5k–$15k)',
+  '4M+ PKR ($15k+)',
   'Flexible',
 ];
 

@@ -35,7 +35,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
           <header className="page-intro compact">
             <p className="section-rule-label">Direct inquiry</p>
             <h1 className="inner-hero-h1">
-              Start A Project.
+              <span style={{ color: '#0B1F3A' }}>Start</span> A Project.
             </h1>
             <p className="section-rule-lead">
               Tell us about the people using your software and the problem you want to solve.

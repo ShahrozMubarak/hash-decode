@@ -7,6 +7,7 @@ import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js';
 import {cubeCells,sceneBudget} from './scene-settings';
 import type {PosterModel} from '@/components/studio/ModelPoster';
+import {createWinterAccessories} from './winter-accessories';
 
 // In-memory ArrayBuffer cache to make model loads instant (< 20ms) after initial fetch
 const modelBufferCache = new Map<string, Promise<ArrayBuffer>>();
@@ -173,6 +174,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
  let corePointLight:THREE.PointLight|undefined;
  let coralGlowSprite:THREE.Sprite|undefined;
+ let winterAccessories:ReturnType<typeof createWinterAccessories>|undefined;
  let contactShadowMesh:THREE.Mesh|undefined;
  let eyeLeft:THREE.Object3D|undefined;
  let eyeRight:THREE.Object3D|undefined;
@@ -339,8 +341,14 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    if(corePointLight)corePointLight.intensity=1.5+corePulse*1.8+coreBrightnessBoost*1.2+happyHeartbeat*1.4;
    if(coralGlowSprite)coralGlowSprite.material.opacity=0.55+corePulse*0.35+happyAmount*0.2;
 
-   // Glowing cyan eyes brighten excitedly when happy
-   grokEyeMat.emissiveIntensity=3.6+happyAmount*2.0;
+   // When hovered: eyes turn from Grok cyan to danger red!
+   const eyeCyan=new THREE.Color('#00f0ff');
+   const eyeRed=new THREE.Color('#ff1a1a');
+   grokEyeMat.color.lerpColors(eyeCyan,eyeRed,happyAmount);
+   grokEyeMat.emissive.lerpColors(eyeCyan,eyeRed,happyAmount);
+   grokEyeMat.emissiveIntensity=3.6+happyAmount*3.5;
+
+   winterAccessories?.update(elapsed,isHovered);
 
    // Eye Blink and Happy Arcs (^ ^)
    if(eyeLeft&&eyeRight){
@@ -562,6 +570,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   canvas.removeEventListener('webglcontextlost',lost);
   canvas.removeEventListener('webglcontextrestored',restore);
   if(happyTouchTimer)clearTimeout(happyTouchTimer);
+  winterAccessories?.dispose();winterAccessories=undefined;
   cleanGeometry();
   instances?.dispose();
   mixer?.stopAllAction();mixer=undefined;
@@ -648,6 +657,11 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
 
    coreGroup.position.set(0,2.05,0.88);
    robot.add(coreGroup);
+
+   if(model==='eva'){
+    winterAccessories=createWinterAccessories();
+    robot.add(winterAccessories.group);
+   }
 
    robot.traverse((child: THREE.Object3D)=>{
     if(child instanceof THREE.Mesh){

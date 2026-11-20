@@ -5,7 +5,7 @@ import WideCard from '@/components/studio/WideCard';
 import PhoneMockup from '@/components/studio/visuals/PhoneMockup';
 import LaptopMockup from '@/components/studio/visuals/LaptopMockup';
 import BottomCta from '@/components/studio/BottomCta';
-import { CheckCircle, Terminal } from 'lucide-react';
+import { Terminal, Shield, KeyRound, Award, Code2, Cpu, FileCheck } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const metadata = meta(
@@ -20,6 +20,39 @@ const techStack = [
   'Docker', 'Tailwind CSS', 'Zero Trust TLS'
 ];
 
+const studioProtections = [
+  {
+    icon: Shield,
+    title: 'Mutual NDA Protected',
+    desc: 'Your proprietary concepts, business logic, and customer data are legally safeguarded before we review architecture or draft a single line of code.',
+  },
+  {
+    icon: KeyRound,
+    title: '100% Client IP Ownership',
+    desc: 'You receive full ownership of the git repositories, production artifacts, container registries, and cloud infrastructure upon project handover.',
+  },
+  {
+    icon: Award,
+    title: 'Fixed Milestones & Transparent Billing',
+    desc: 'Every phase is tied to explicit delivery criteria and scheduled milestone releases with zero hidden fees or unplanned hourly overages.',
+  },
+  {
+    icon: Code2,
+    title: 'Zero Vendor Lock-in',
+    desc: 'Every system is built on standardized, open-source runtimes and vendor-neutral cloud primitives that your in-house team can run anywhere.',
+  },
+  {
+    icon: Cpu,
+    title: '30-Day Post-Launch Warranty',
+    desc: 'Every production release includes a 30-day dedicated warranty window with priority hotfixes and bug remediation at zero additional cost.',
+  },
+  {
+    icon: FileCheck,
+    title: 'Complimentary Security Retesting',
+    desc: 'Audit engagements include verified proof-of-concept exploits, actionable remediation steps, and an authorized retest report upon fix implementation.',
+  },
+];
+
 export default async function About() {
   const [copy, founders] = await Promise.all([studioCopy(), listFounders()]);
 
@@ -29,7 +62,7 @@ export default async function About() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">About Hash Decode</p>
         <h1 className="inner-hero-h1">
-          About Hash Decode.
+          <span style={{ color: '#0B1F3A' }}>About</span> Hash Decode.
         </h1>
         <p className="section-rule-lead">
           {copy.about ||
@@ -42,7 +75,7 @@ export default async function About() {
         <div className="section-head-rule">
           <span className="section-rule-label">Leadership</span>
           <h2 className="section-rule-heading">
-            The team behind the studio.
+            <span style={{ color: '#0B1F3A' }}>The</span> team behind the studio.
           </h2>
           <p className="section-rule-lead">
             Independent architects, product designers, and penetration testers who take pride in crafting resilient software.
@@ -57,7 +90,7 @@ export default async function About() {
         <div className="section-head-rule">
           <span className="section-rule-label">Core values</span>
           <h2 className="section-rule-heading">
-            How we operate.
+            <span style={{ color: '#0B1F3A' }}>How</span> we operate.
           </h2>
           <p className="section-rule-lead">Clear expectations, direct engineering, and zero technical debt.</p>
         </div>
@@ -101,7 +134,7 @@ export default async function About() {
         <div className="section-head-rule">
           <span className="section-rule-label">Tools of the craft</span>
           <h2 className="section-rule-heading">
-            Our technology stack.
+            <span style={{ color: '#0B1F3A' }}>Our</span> technology stack.
           </h2>
           <p className="section-rule-lead">Modern, battle-tested technologies chosen for speed, reliability, and security.</p>
         </div>
@@ -115,33 +148,61 @@ export default async function About() {
         </div>
       </section>
 
-      {/* The Client Guarantees */}
+      {/* The Studio Protections Info - Heading removed, less thick font, richer info */}
       <section className="about-guarantee-section" id="guarantees" data-reveal="up" style={{ scrollMarginTop: '96px', marginBottom: 'var(--s-8)' }}>
-        <div className="section-head-rule">
-          <span className="section-rule-label">Peace of mind</span>
-          <h2 className="section-rule-heading">
-            The Hash Decode guarantee.
-          </h2>
-        </div>
-        <div className="guarantee-grid" data-stagger>
-          <div className="guarantee-item" data-reveal="up">
-            <CheckCircle size={24} aria-hidden="true" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <div>
-              <strong style={{ fontSize: '17px', display: 'block', marginBottom: '4px' }}>Mutual NDA protected</strong>
-              <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
-                Your ideas, code, and customer data are fully protected before we write a single line of code.
-              </p>
-            </div>
-          </div>
-          <div className="guarantee-item" data-reveal="up">
-            <CheckCircle size={24} aria-hidden="true" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <div>
-              <strong style={{ fontSize: '17px', display: 'block', marginBottom: '4px' }}>Transparent fixed pricing</strong>
-              <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
-                Clear, agreed milestones with zero surprise billing or hidden hourly charges.
-              </p>
-            </div>
-          </div>
+        <div
+          className="guarantee-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '24px',
+            marginTop: 'var(--s-4)',
+          }}
+        >
+          {studioProtections.map((p) => {
+            const Icon = p.icon;
+            return (
+              <div
+                key={p.title}
+                className="guarantee-card"
+                style={{
+                  background: 'rgba(0, 0, 0, 0.02)',
+                  border: '1px solid rgba(0, 0, 0, 0.08)',
+                  borderRadius: '24px',
+                  padding: '24px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
+                  transition: 'border-color 0.2s ease, transform 0.2s ease',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Icon size={20} color="#0B1F3A" aria-hidden="true" style={{ flexShrink: 0 }} />
+                  <span
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: 600,
+                      color: '#0B1F3A',
+                      letterSpacing: '-0.01em',
+                    }}
+                  >
+                    {p.title}
+                  </span>
+                </div>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: 1.55,
+                    color: '#333333',
+                  }}
+                >
+                  {p.desc}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </section>
 

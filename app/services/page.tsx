@@ -18,7 +18,7 @@ export default function Services() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Services</p>
         <h1 className="inner-hero-h1">
-          Services &amp; Solutions.
+          <span style={{ color: '#0B1F3A' }}>Services</span> &amp; Solutions.
         </h1>
         <p className="section-rule-lead">
           Software designed for the people who use it, and practical security reviews for the teams who maintain it.
@@ -31,7 +31,7 @@ export default function Services() {
         <div className="section-head-rule" data-reveal="fade">
           <span className="section-rule-label">Core capabilities</span>
           <h2 className="section-rule-heading">
-            What we specialise in.
+            <span style={{ color: '#0B1F3A' }}>What</span> we specialise in.
           </h2>
         </div>
 
