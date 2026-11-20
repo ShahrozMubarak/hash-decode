@@ -57,8 +57,8 @@ export default function MotionLanding({
               <a className="hd-btn-primary hero-start-cta" href="#brief">
                 <span className="btn-label">Start a project</span>
               </a>
-              <a href="#services" className="hd-text-link hero-explore-link">
-                <span>Explore the studio ›</span>
+              <a href="#services" className="hd-btn-azure hero-explore-btn">
+                <span className="btn-label">Explore the studio ›</span>
               </a>
             </div>
 
