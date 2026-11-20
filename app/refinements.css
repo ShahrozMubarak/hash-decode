@@ -121,7 +121,8 @@ body {
 .wide-card[data-mode="dark"] li,
 .wide-card[data-mode="dark"] strong,
 #services .wide-card[data-mode="dark"] *,
-#security .wide-card[data-mode="dark"] * {
+#security .wide-card[data-mode="dark"] *,
+#team .wide-card[data-mode="dark"] * {
   color: #ffffff !important;
 }
 
@@ -1173,7 +1174,7 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 /* 6. TEAM (#team) - Grey section */
 #team,
 .original-composition #team {
-  background: var(--bg-alt) !important;
+  background: var(--white) !important;
   color: var(--text) !important;
   padding-block: var(--section-pad, clamp(80px, 12vw, 160px)) !important;
 }
@@ -2767,7 +2768,8 @@ a.hd-btn-primary {
 #work .hd-text-link,
 .wide-card[data-mode="dark"] .hd-text-link,
 #services .wide-card[data-mode="dark"] .hd-text-link,
-#security .wide-card[data-mode="dark"] .hd-text-link {
+#security .wide-card[data-mode="dark"] .hd-text-link,
+#team .wide-card[data-mode="dark"] .hd-text-link {
   color: #ffffff !important;
 }
 

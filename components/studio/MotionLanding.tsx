@@ -8,7 +8,6 @@ import TeleportBot from './TeleportBot';
 import HeroParallaxManager from './HeroParallaxManager';
 import FAQAccordion from './FAQAccordion';
 import ProcessTimeline from './ProcessTimeline';
-import TeamStrip from './TeamStrip';
 import Section from './Section';
 import Container from './Container';
 import SectionHeader from './SectionHeader';
@@ -23,7 +22,7 @@ import HeaderScannerMock from './visuals/HeaderScannerMock';
 
 export default function MotionLanding({
   projects: _projects,
-  founders,
+  founders: _founders,
   links,
   intro: _intro,
   availability: _availability,
@@ -270,32 +269,136 @@ export default function MotionLanding({
         </div>
       </section>
 
-      {/* 5. TEAM STRIP */}
-      <section className="section-rule-block" id="team" data-station="Team">
-        <div className="wrap">
-          <div className="section-head-rule">
-            <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
-              Team
-            </span>
-            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Meet the team.
-            </h2>
-            <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-              Developers, marketers, and builders working as one studio.
-            </p>
+      {/* 5. TEAM (white section, 4 alternating widecards with 4:5 rounded rectangle photos) */}
+      <Section id="team" bg="white" pad="regular" data-station="Team">
+        <Container>
+          <SectionHeader
+            eyebrow="Leadership"
+            title="The team behind the studio."
+            sub="Engineers and designers building resilient software."
+          />
+
+          <div className="wide-cards-stack">
+            {/* 1. Fawad Ahmed */}
+            <WideCard
+              palette="ink"
+              reverse={false}
+              eyebrow="Co-Founder & Head of Security"
+              title="Fawad Ahmed"
+              desc="Engineers containerization pipelines, automated CI/CD releases, and zero-trust edge infrastructure. Guarantees high availability and defensive security."
+              linkText="Connect on LinkedIn ›"
+              linkHref="https://linkedin.com/company/hash-decode"
+              visual={
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
+                  <img
+                    src="/team/fawad.jpeg"
+                    alt="Fawad Ahmed"
+                    style={{
+                      width: '100%',
+                      maxWidth: '300px',
+                      aspectRatio: '4 / 5',
+                      objectFit: 'cover',
+                      borderRadius: '28px',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              }
+            />
+
+            {/* 2. Junaid Tariq */}
+            <WideCard
+              palette="lilac"
+              reverse={true}
+              eyebrow="Co-Founder & Head of Engineering"
+              title="Junaid Tariq"
+              desc="Brings precision to full-stack web applications, real-time architectures, and reactive user interfaces. Focused on sub-second loads and clean, maintainable systems."
+              linkText="Connect on LinkedIn ›"
+              linkHref="https://linkedin.com/company/hash-decode"
+              visual={
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
+                  <img
+                    src="/team/junaid.jpeg"
+                    alt="Junaid Tariq"
+                    style={{
+                      width: '100%',
+                      maxWidth: '300px',
+                      aspectRatio: '4 / 5',
+                      objectFit: 'cover',
+                      borderRadius: '28px',
+                      border: '1px solid rgba(0, 0, 0, 0.08)',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              }
+            />
+
+            {/* 3. Shahmeer Khan */}
+            <WideCard
+              palette="mint"
+              reverse={false}
+              eyebrow="Lead Product Designer"
+              title="Shahmeer Khan"
+              desc="Shapes intuitive interaction models, real-time 3D visualizations, and precision design systems. Bridges aesthetic elegance with tactile, latency-free digital response."
+              linkText="Connect on LinkedIn ›"
+              linkHref="https://linkedin.com/company/hash-decode"
+              visual={
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
+                  <img
+                    src="/team/shahmeer.jpeg"
+                    alt="Shahmeer Khan"
+                    style={{
+                      width: '100%',
+                      maxWidth: '300px',
+                      aspectRatio: '4 / 5',
+                      objectFit: 'cover',
+                      borderRadius: '28px',
+                      border: '1px solid rgba(0, 0, 0, 0.08)',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              }
+            />
+
+            {/* 4. Shahroz Dogar */}
+            <WideCard
+              palette="midnight"
+              reverse={true}
+              eyebrow="Founder & CEO"
+              title="Shahroz Dogar"
+              desc="Oversees distributed systems architecture, high-concurrency cloud deployments, and zero-trust security frameworks. Leads technical direction and end-to-end delivery for all enterprise platforms."
+              linkText="Connect on LinkedIn ›"
+              linkHref="https://linkedin.com/company/hash-decode"
+              visual={
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
+                  <img
+                    src="/team/shahroz.jpeg"
+                    alt="Shahroz Dogar"
+                    style={{
+                      width: '100%',
+                      maxWidth: '300px',
+                      aspectRatio: '4 / 5',
+                      objectFit: 'cover',
+                      borderRadius: '28px',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              }
+            />
           </div>
 
-          <div data-reveal="up" data-reveal-delay="320">
-            <TeamStrip founders={founders} />
-          </div>
-
-          <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
+          <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
             <a className="hd-btn-primary" href="/about">
-              <span className="btn-label">Meet the team</span>
+              <span className="btn-label">About the founders</span>
             </a>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* 6. FAQ (5 QUESTIONS ACCORDION) */}
       <section className="section-rule-block" id="faq" data-station="Questions">
