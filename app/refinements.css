@@ -2535,12 +2535,27 @@ body {
   padding: 0 !important;
   margin: 0 !important;
   z-index: 1000 !important;
-  background: rgba(255, 255, 255, 0.85) !important;
-  -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
-  backdrop-filter: saturate(180%) blur(20px) !important;
-  border-bottom: 1px solid rgba(2, 27, 56, 0.12) !important;
-  box-shadow: 0 4px 20px rgba(2, 27, 56, 0.08) !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid rgba(2, 27, 56, 0.1) !important;
+  box-shadow: 0 2px 12px rgba(2, 27, 56, 0.06) !important;
   box-sizing: border-box !important;
+}
+
+/* Never shrink or hide the bar on scroll */
+html.header-compressed .site-header,
+html.header-compressed .ronin-header {
+  height: var(--nav-h) !important;
+  min-height: var(--nav-h) !important;
+  max-height: var(--nav-h) !important;
+  padding: 0 !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+html.header-compressed .ronin-nav,
+html.header-compressed .nav {
+  height: 100% !important;
+  padding: 0 !important;
 }
 
 .ronin-header-wrap {
@@ -2784,6 +2799,86 @@ html.header-compressed .ronin-nav {
     display: none !important;
   }
   .ronin-cta-pill {
+    display: none !important;
+  }
+  .nav-toggle,
+  .ronin-icon-btn.nav-toggle {
+    display: inline-flex !important;
+  }
+}
+
+/* Navbar contrast hardening: always dark-on-light, no white-on-white */
+.site-header .ronin-nav-item,
+.site-header .ronin-nav-item:hover,
+.site-header .ronin-nav-item[aria-current="page"],
+.site-header .ronin-nav-text,
+.site-header .ronin-brand-wrap .brand,
+.site-header .ronin-brand-wrap .brand strong,
+.site-header .ronin-brand-wrap .brand strong span {
+  color: #000000 !important;
+}
+
+.site-header .ronin-icon-btn,
+.site-header .motion-toggle,
+.site-header .nav-toggle {
+  background: transparent !important;
+  border: 2px solid #000000 !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+}
+
+.site-header .ronin-icon-btn:hover,
+.site-header .motion-toggle:hover,
+.site-header .nav-toggle:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+  transform: none !important;
+}
+
+.site-header .ronin-icon-btn svg,
+.site-header .motion-toggle svg,
+.site-header .nav-toggle svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+.site-header .burger-bar {
+  background: #000000 !important;
+}
+
+.site-header .ronin-cta-pill,
+.site-header .ronin-cta-pill span,
+.site-header .nav-contact,
+.site-header .nav-contact span {
+  color: #000000 !important;
+}
+
+.site-header .ronin-cta-pill,
+.site-header .nav-contact {
+  background: transparent !important;
+  border: 1.5px solid #000000 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+.site-header .ronin-cta-pill:hover,
+.site-header .nav-contact:hover {
+  background: #000000 !important;
+  border-color: #000000 !important;
+}
+
+.site-header .ronin-cta-pill:hover,
+.site-header .ronin-cta-pill:hover span,
+.site-header .nav-contact:hover,
+.site-header .nav-contact:hover span {
+  color: #ffffff !important;
+}
+
+/* Prevent centered links colliding with brand/actions on mid screens */
+@media (max-width: 1024px) and (min-width: 851px) {
+  .site-links,
+  .ronin-links {
     display: none !important;
   }
   .nav-toggle,
@@ -3255,12 +3350,16 @@ a.hd-btn-azure:hover,
    STAGE 4 (V2): Apple-Style Centered Hero (keep the robot)
    ========================================================================== */
 
-/* Hero runway & sheet: liquid crystal wash of #45d9c8, soft not bold, slightly deeper */
+/* Hero runway & sheet: liquid crystal (glassy light aqua, soft not bold) */
 .hero-runway,
 .original-composition .hero-runway,
 .hero-sheet,
 .original-composition .hero-sheet {
-  background: radial-gradient(ellipse at 60% 35%, rgba(69, 217, 200, 0.55) 0%, rgba(69, 217, 200, 0.25) 50%, transparent 80%), rgba(69, 217, 200, 0.30) !important;
+  background:
+    radial-gradient(ellipse 65% 60% at 24% 18%, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0) 60%),
+    radial-gradient(ellipse 70% 65% at 78% 28%, rgba(126, 232, 255, 0.40) 0%, rgba(126, 232, 255, 0) 65%),
+    radial-gradient(ellipse 85% 70% at 52% 90%, rgba(69, 217, 200, 0.38) 0%, rgba(69, 217, 200, 0) 72%),
+    linear-gradient(160deg, #eafcf9 0%, #c9f4ee 50%, #a8ece4 100%) !important;
   color: var(--black) !important;
   border-bottom: none !important;
   min-height: auto !important;
@@ -3398,16 +3497,18 @@ html[data-motion=on] .hero-sheet {
   fill: #ffffff !important;
 }
 
-.hero-actions .hero-explore-btn,
-.hero-actions .hd-btn-azure {
+#overview .hero-actions .hero-explore-btn,
+#overview .hero-actions .hd-btn-azure,
+#overview .hero-explore-btn {
   min-height: 52px !important;
   height: 52px !important;
-  padding: 0 28px !important;
+  padding: 0 8px !important;
   font-size: 17px !important;
   font-weight: 600 !important;
-  border-radius: 6px !important;
+  border-radius: 0 !important;
   background: transparent !important;
-  color: #0B1F3A !important;
+  background-image: none !important;
+  color: #000000 !important;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -3415,24 +3516,28 @@ html[data-motion=on] .hero-sheet {
   border: none !important;
   box-shadow: none !important;
   cursor: pointer !important;
-  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease !important;
+  transition: opacity 0.2s ease, color 0.2s ease !important;
 }
 
-.hero-actions .hero-explore-btn:hover,
-.hero-actions .hd-btn-azure:hover {
-  background: rgba(69, 217, 200, 0.15) !important;
-  color: #0B1F3A !important;
-  opacity: 1 !important;
-  transform: translateY(-2px) !important;
+#overview .hero-actions .hero-explore-btn:hover,
+#overview .hero-actions .hd-btn-azure:hover,
+#overview .hero-explore-btn:hover {
+  background: transparent !important;
+  background-image: none !important;
+  color: #000000 !important;
+  opacity: 0.7 !important;
+  transform: none !important;
   box-shadow: none !important;
-  text-decoration: none !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
   border: none !important;
 }
 
-.hero-actions .hero-explore-btn *,
-.hero-actions .hd-btn-azure * {
-  color: #0B1F3A !important;
-  fill: #0B1F3A !important;
+#overview .hero-actions .hero-explore-btn *,
+#overview .hero-actions .hd-btn-azure *,
+#overview .hero-explore-btn * {
+  color: #000000 !important;
+  fill: #000000 !important;
 }
 
 .hero-actions .hero-explore-link {
@@ -3466,16 +3571,17 @@ html[data-motion=on] .hero-sheet {
   width: 100% !important;
   max-width: 1120px !important;
   margin: 32px auto 0 auto !important;
-  border-radius: 40px !important;
+  border-radius: 0 !important;
   min-height: clamp(480px, 62vh, 640px) !important;
+  background: transparent !important;
   background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  contain: paint !important;
+  contain: none !important;
 }
 
 /* 2. Inner overflow-hidden layer for liquid effect blobs */
@@ -3484,8 +3590,10 @@ html[data-motion=on] .hero-sheet {
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  overflow: hidden !important;
-  border-radius: inherit !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -4857,6 +4965,2498 @@ html[data-motion=on] .hero-sheet {
   color: #ffffff !important;
 }
 
+/* ==========================================================================
+   TEAM CARDS 2 & 3: ~20% shorter
+   ========================================================================== */
+#team .wide-cards-stack > .wide-card:nth-child(2),
+#team .wide-cards-stack > .wide-card:nth-child(3) {
+  padding-top: clamp(20px, 2.6vw, 34px) !important;
+  padding-bottom: clamp(20px, 2.6vw, 34px) !important;
+}
+
+#team .wide-cards-stack > .wide-card:nth-child(2) .wide-card__visual > div,
+#team .wide-cards-stack > .wide-card:nth-child(3) .wide-card__visual > div {
+  padding: 10px !important;
+}
+
+#team .wide-cards-stack > .wide-card:nth-child(2) .wide-card__visual img,
+#team .wide-cards-stack > .wide-card:nth-child(3) .wide-card__visual img {
+  max-width: 240px !important;
+}
+
+/* ==========================================================================
+   SIMPLE FORM + MOTION
+   ========================================================================== */
+/* Plain white form card with a clear border */
+.contact-form-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+.contact-form-card .liquid__blob {
+  display: none !important;
+}
+
+.premium-studio-form .form-input,
+.premium-studio-form .form-textarea {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.18) !important;
+  border-radius: 10px !important;
+  padding: 12px 14px !important;
+  font-size: 14px !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease !important;
+}
+
+.premium-studio-form .form-input:focus,
+.premium-studio-form .form-textarea:focus {
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.07) !important;
+  transform: translateY(-1px);
+}
+
+.premium-studio-form .form-input.is-invalid,
+.premium-studio-form .form-textarea.is-invalid {
+  border-color: #e15b3e !important;
+  box-shadow: 0 0 0 3px rgba(225, 91, 62, 0.12) !important;
+}
+
+.premium-studio-form .simple-pill-btn {
+  background: transparent !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
+  border-radius: 8px !important;
+  padding: 8px 14px !important;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.premium-studio-form .simple-pill-btn:hover {
+  border-color: #000000 !important;
+  transform: translateY(-1px);
+}
+
+.premium-studio-form .simple-pill-btn.is-selected {
+  background: linear-gradient(135deg, #021B38 0%, #0A3568 100%) !important;
+  border-color: #0A3568 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 14px rgba(2, 27, 56, 0.28) !important;
+  animation: hdPillPop 0.32s cubic-bezier(0.22, 1.4, 0.36, 1);
+}
+
+.premium-studio-form .simple-pill-btn.is-selected * {
+  color: #ffffff !important;
+}
+
+@keyframes hdPillPop {
+  0% { transform: scale(0.95); }
+  60% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.premium-studio-form .simple-form-head,
+.premium-studio-form .form-row,
+.premium-studio-form .simple-field-group,
+.premium-studio-form .simple-checkbox-label,
+.premium-studio-form .form-submit-row {
+  animation: hdFormRise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.premium-studio-form .simple-form-head { animation-delay: 0s; }
+.premium-studio-form .form-row { animation-delay: 0.05s; }
+.premium-studio-form .simple-field-group:nth-of-type(3) { animation-delay: 0.12s; }
+.premium-studio-form .simple-field-group:nth-of-type(4) { animation-delay: 0.18s; }
+.premium-studio-form .simple-field-group:nth-of-type(5) { animation-delay: 0.24s; }
+.premium-studio-form .simple-checkbox-label { animation-delay: 0.28s; }
+.premium-studio-form .form-submit-row { animation-delay: 0.34s; }
+
+@keyframes hdFormRise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-studio-form .simple-form-head,
+  .premium-studio-form .form-row,
+  .premium-studio-form .simple-field-group,
+  .premium-studio-form .simple-checkbox-label,
+  .premium-studio-form .form-submit-row,
+  .premium-studio-form .simple-pill-btn.is-selected {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   HERO FIRST WORD ACCENT: azure navy only, all other text stays black
+   ========================================================================== */
+.hero-h1 .hero-word-build {
+  color: #0071e3 !important;
+  -webkit-text-fill-color: #0071e3 !important;
+  background: none !important;
+  filter: none !important;
+}
+
+/* ==========================================================================
+   NAVBAR: centered text, completely stable (no movement)
+   ========================================================================== */
+.site-header .ronin-links,
+.site-header .site-links {
+  position: absolute !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  justify-content: center !important;
+}
+
+.site-header,
+.site-header .ronin-header-wrap,
+.site-header .ronin-nav,
+.site-header .ronin-brand-wrap,
+.site-header .ronin-actions {
+  transition: none !important;
+  animation: none !important;
+}
 
 
 
+
+
+/* ==========================================================================
+   APPLE-GRADE REALISTIC DEVICE MOCKUPS & SHOWCASE CARDS
+   (iPhone 16 Pro Dynamic Island + macOS Laptop + Live Service Screens)
+   ========================================================================== */
+
+/* 1. Phone Mockup Frame */
+.phone-mockup-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+.phone-interactive-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(2, 27, 56, 0.06);
+  padding: 4px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(2, 27, 56, 0.1);
+}
+
+.phone-tab-btn {
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #021B38;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.phone-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.phone-tab-btn.is-active {
+  background: #021B38;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(2, 27, 56, 0.2);
+}
+
+/* Smartphone Titanium Outer Shell */
+.phone-device-frame {
+  position: relative;
+  width: clamp(270px, 28vw, 310px);
+  height: clamp(560px, 58vh, 620px);
+  background: linear-gradient(150deg, #2c2d33 0%, #151619 45%, #24252a 100%);
+  border-radius: 46px;
+  padding: 5px;
+  box-sizing: border-box;
+  box-shadow:
+    0 0 0 1.5px rgba(255, 255, 255, 0.18),
+    0 0 0 3px #18191d,
+    0 28px 64px -12px rgba(2, 27, 56, 0.35),
+    0 14px 28px -8px rgba(0, 0, 0, 0.22);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wide-card:hover .phone-device-frame,
+.apple-device-card:hover .phone-device-frame {
+  transform: translateY(-4px);
+}
+
+/* Hardware side button notches */
+.phone-button {
+  position: absolute;
+  background: #34353a;
+  z-index: 1;
+}
+
+.phone-button--action {
+  top: 90px;
+  left: -3px;
+  width: 3px;
+  height: 24px;
+  border-radius: 2px 0 0 2px;
+}
+
+.phone-button--vol-up {
+  top: 128px;
+  left: -3px;
+  width: 3px;
+  height: 44px;
+  border-radius: 2px 0 0 2px;
+}
+
+.phone-button--vol-down {
+  top: 182px;
+  left: -3px;
+  width: 3px;
+  height: 44px;
+  border-radius: 2px 0 0 2px;
+}
+
+.phone-button--power {
+  top: 138px;
+  right: -3px;
+  width: 3px;
+  height: 68px;
+  border-radius: 0 2px 2px 0;
+}
+
+/* OLED Screen Surface */
+.phone-screen-display {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 41px;
+  background: #090d16;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Diagonal glass sheen reflection */
+.phone-screen-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 21;
+  background: linear-gradient(
+    130deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 55%
+  );
+  border-radius: 41px;
+}
+
+/* Dynamic Island */
+.phone-dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 82px;
+  height: 23px;
+  border-radius: 14px;
+  background: #000000;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.05);
+  box-sizing: border-box;
+}
+
+.phone-camera-lens {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #070b12;
+  border: 1.5px solid #141f30;
+  box-shadow: inset 0 0 2px #38bdf8;
+}
+
+.phone-camera-sensor {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #08090e;
+}
+
+/* Status Bar */
+.phone-status-bar {
+  position: absolute;
+  top: 12px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 22;
+  pointer-events: none;
+  color: #ffffff;
+}
+
+.phone-status-time {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.phone-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.phone-status-svg {
+  display: block;
+}
+
+.phone-battery-capsule {
+  width: 19px;
+  height: 9.5px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 2.5px;
+  padding: 1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.phone-battery-fill {
+  height: 100%;
+  width: 85%;
+  background: #34c759;
+  border-radius: 1.5px;
+}
+
+.phone-battery-nub {
+  position: absolute;
+  right: -2.5px;
+  top: 2px;
+  width: 1.5px;
+  height: 3.5px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 0 1px 1px 0;
+}
+
+/* Home Indicator */
+.phone-home-indicator {
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 108px;
+  height: 3.5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.65);
+  z-index: 25;
+  pointer-events: none;
+}
+
+/* Screen Scrollable View */
+.phone-screen-scrollable {
+  flex: 1;
+  padding: 42px 14px 18px 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-sans);
+  color: #f1f5f9;
+  scrollbar-width: none;
+}
+
+.phone-screen-scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   2. Service App Screens Inside Phone
+   ========================================================================== */
+.phone-service-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.psp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.psp-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.psp-logo-mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.psp-logo-mark--cloud {
+  background: linear-gradient(135deg, #021B38 0%, #0A3568 100%);
+}
+
+.psp-logo-mark--security {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.psp-logo-mark--tools {
+  background: linear-gradient(135deg, #d93a2f 0%, #b91c1c 100%);
+}
+
+.psp-brand-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.psp-brand-sub {
+  font-size: 9.5px;
+  color: #94a3b8;
+}
+
+.psp-status-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.psp-status-badge--cloud {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.psp-status-badge--security {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+.psp-status-badge--tools {
+  background: rgba(225, 91, 62, 0.15);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+.psp-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+}
+
+.psp-status-dot--cloud {
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+/* Metric KPI Card */
+.psp-hero-metric {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.psp-hero-metric--cloud {
+  background: linear-gradient(180deg, rgba(2, 27, 56, 0.85) 0%, rgba(10, 53, 104, 0.95) 100%);
+  border-color: rgba(56, 189, 248, 0.2);
+}
+
+.psp-hero-metric--security {
+  background: linear-gradient(180deg, rgba(6, 78, 59, 0.5) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border-color: rgba(74, 222, 128, 0.2);
+}
+
+.psp-metric-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.psp-metric-label {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.psp-metric-pill {
+  font-size: 10px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 1px 6px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.psp-metric-pill--cloud {
+  color: #67e8f9;
+  background: rgba(103, 232, 249, 0.15);
+}
+
+.psp-metric-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.psp-metric-val-cents {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.psp-metric-caption {
+  font-size: 9.5px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.psp-sparkline-wrap {
+  width: 100%;
+  height: 42px;
+  margin-top: 6px;
+}
+
+.psp-sparkline-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Traffic Load Distribution Histogram */
+.psp-histogram-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 3px;
+  height: 38px;
+  margin-top: 10px;
+  padding-top: 4px;
+}
+
+.psp-hist-bar {
+  flex: 1;
+  background: linear-gradient(180deg, #38bdf8 0%, rgba(56, 189, 248, 0.2) 100%);
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+
+/* Security Gauge */
+.psp-security-gauge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.psp-gauge-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: conic-gradient(#4ade80 0% 100%, #1e293b 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(74, 222, 128, 0.4);
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.3);
+}
+
+.psp-gauge-num {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.psp-gauge-denom {
+  font-size: 8px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.psp-gauge-info {
+  flex: 1;
+}
+
+.psp-gauge-status {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.psp-gauge-desc {
+  font-size: 10px;
+  color: #4ade80;
+  font-weight: 500;
+}
+
+/* Stats Row */
+.psp-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.psp-stat-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.psp-stat-label {
+  font-size: 9.5px;
+  color: #94a3b8;
+  display: block;
+}
+
+.psp-stat-num {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 2px;
+  display: block;
+}
+
+.psp-stat-unit {
+  font-size: 10px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-left: 2px;
+}
+
+.psp-stat-sub {
+  font-size: 8.5px;
+  color: #64748b;
+  display: block;
+  margin-top: 1px;
+}
+
+/* Section Blocks & Lists */
+.psp-section-block {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.psp-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.psp-pipeline-list,
+.psp-region-list,
+.psp-audit-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.psp-pipeline-item,
+.psp-region-item,
+.psp-audit-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.psp-pipe-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.psp-pipe-icon--azure { background: #0284c7; }
+.psp-pipe-icon--coral { background: #d93a2f; }
+.psp-pipe-icon--tools { background: #021B38; }
+
+.psp-pipe-info,
+.psp-region-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.psp-pipe-name,
+.psp-region-name,
+.psp-audit-name {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.psp-pipe-desc,
+.psp-region-specs {
+  font-size: 8.5px;
+  color: #64748b;
+}
+
+.psp-pipe-status {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #4ade80;
+}
+
+.psp-region-flag {
+  font-size: 13px;
+}
+
+.psp-badge-tag {
+  font-size: 9px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.psp-check-icon {
+  color: #4ade80;
+  flex-shrink: 0;
+}
+
+.psp-audit-status {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #4ade80;
+  margin-left: auto;
+}
+
+.psp-ownership-callout {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9.5px;
+  color: #cbd5e1;
+  background: rgba(2, 27, 56, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 7px 10px;
+}
+
+.psp-cert-seal {
+  background: rgba(6, 78, 59, 0.3);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  border-radius: 8px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.psp-cert-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.psp-cert-id {
+  font-size: 8px;
+  color: #94a3b8;
+  font-family: monospace;
+  margin-top: 1px;
+}
+
+.psp-bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: auto;
+}
+
+.psp-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 8px;
+  color: #64748b;
+}
+
+.psp-nav-item.is-active {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   3. Laptop Mockup (MacBook Pro Chassis & Console)
+   ========================================================================== */
+.laptop-device-wrapper {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+}
+
+.laptop-lid {
+  width: 100%;
+  background: #0f172a;
+  border-radius: 14px 14px 2px 2px;
+  border: 2px solid #262c3d;
+  box-shadow: 0 24px 48px -12px rgba(2, 27, 56, 0.35);
+  overflow: hidden;
+  position: relative;
+}
+
+.laptop-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 9px;
+  background: #1e293b;
+  border-radius: 0 0 5px 5px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.laptop-camera-eye {
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 50%;
+  background: #0284c7;
+}
+
+.laptop-screen {
+  background: #090d16;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-sans);
+}
+
+.laptop-titlebar {
+  height: 28px;
+  background: #151d2f;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.laptop-traffic-lights {
+  display: flex;
+  gap: 5px;
+}
+
+.laptop-light {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.laptop-light--red { background: #ff5f56; }
+.laptop-light--yellow { background: #ffbd2e; }
+.laptop-light--green { background: #27c93f; }
+
+.laptop-address-pill {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 2px 10px;
+  font-size: 10px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.laptop-badge-live {
+  font-size: 9px;
+  font-weight: 600;
+  color: #4ade80;
+}
+
+.laptop-content-grid {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  min-height: 220px;
+}
+
+.laptop-sidebar {
+  background: #0b1120;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.laptop-sb-brand {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.laptop-sb-logo {
+  font-size: 9px;
+  font-weight: 800;
+  background: #021B38;
+  color: #ffffff;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.laptop-sb-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.laptop-sb-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.laptop-sb-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  color: #64748b;
+  padding: 4px 6px;
+  border-radius: 5px;
+}
+
+.laptop-sb-item.is-active {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.laptop-main-panel {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.laptop-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.laptop-kpi-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.laptop-kpi-label {
+  font-size: 8.5px;
+  color: #94a3b8;
+}
+
+.laptop-kpi-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 1px;
+}
+
+.laptop-kpi-unit {
+  font-size: 8.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.laptop-kpi-sub {
+  font-size: 7.5px;
+  color: #4ade80;
+  margin-top: 1px;
+}
+
+.laptop-topology-box {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.laptop-box-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.laptop-box-title {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.laptop-box-badge {
+  font-size: 8px;
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.laptop-nodes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.laptop-node-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.laptop-node-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 5px #4ade80;
+}
+
+.laptop-node-name {
+  font-size: 8.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.laptop-node-meta {
+  font-size: 7.5px;
+  color: #64748b;
+}
+
+.laptop-log-strip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 5px 8px;
+  border-radius: 6px;
+  margin-top: auto;
+}
+
+.laptop-log-icon {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.laptop-log-code {
+  font-family: monospace;
+  font-size: 8px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.laptop-base {
+  width: 106%;
+  height: 9px;
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  border-radius: 0 0 14px 14px;
+  position: relative;
+  margin-top: -1px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.laptop-base-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 3.5px;
+  background: #0f172a;
+  border-radius: 0 0 3px 3px;
+}
+
+/* ==========================================================================
+   4. Apple-Style Centered Showcase Card (Solve Puzzles tribute layout)
+   ========================================================================== */
+.apple-device-card {
+  position: relative;
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  border-radius: var(--radius-card);
+  padding: clamp(36px, 6vw, 68px) clamp(20px, 4vw, 48px);
+  overflow: hidden;
+  box-sizing: border-box;
+  contain: paint;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.apple-device-card:hover {
+  transform: scale(1.008);
+}
+
+.apple-device-card__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.apple-device-card__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-3);
+  margin-bottom: clamp(24px, 4vw, 42px);
+  max-width: 720px;
+}
+
+.apple-device-card__eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #2ba6c4;
+}
+
+.apple-device-card__title {
+  font-family: var(--font-sans);
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #000000;
+  margin: 0;
+}
+
+/* Apple Word Tiles Row (e.g. P U Z Z L E S / C O D E ) */
+.apple-word-tiles-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.apple-word-tile-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.apple-char-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(36px, 4.5vw, 48px);
+  height: clamp(36px, 4.5vw, 48px);
+  background: #fbcfe8;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: clamp(18px, 2.2vw, 24px);
+  font-weight: 700;
+  color: #000000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.apple-device-card__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.apple-device-card__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-4);
+  max-width: 620px;
+  margin-top: clamp(24px, 4vw, 40px);
+}
+
+.apple-device-card__sub {
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.8vw, 19px);
+  font-weight: 500;
+  line-height: 1.5;
+  color: #1e293b;
+  margin: 0;
+}
+
+.apple-device-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .phone-device-frame {
+    width: 260px;
+    height: 520px;
+    border-radius: 38px;
+  }
+  .phone-screen-display {
+    border-radius: 34px;
+  }
+  .laptop-device-wrapper {
+    max-width: 320px;
+  }
+  .laptop-content-grid {
+    grid-template-columns: 1fr;
+  }
+  .laptop-sidebar {
+    display: none;
+  }
+  .apple-char-tile {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+}
+
+/* ==========================================================================
+   APPLE-GRADE REALISTIC DEVICE MOCKUPS & SHOWCASE CARDS
+   (iPhone 16 Pro Dynamic Island + macOS Laptop + Live Service Screens)
+   ========================================================================== */
+
+/* 1. Phone Mockup Frame */
+.phone-mockup-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+.phone-interactive-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(2, 27, 56, 0.06);
+  padding: 4px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(2, 27, 56, 0.1);
+}
+
+.phone-tab-btn {
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #021B38;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.phone-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.phone-tab-btn.is-active {
+  background: #021B38;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(2, 27, 56, 0.2);
+}
+
+/* Smartphone Titanium Outer Shell */
+.phone-device-frame {
+  position: relative;
+  width: clamp(270px, 28vw, 310px);
+  height: clamp(560px, 58vh, 620px);
+  background: linear-gradient(150deg, #2c2d33 0%, #151619 45%, #24252a 100%);
+  border-radius: 46px;
+  padding: 5px;
+  box-sizing: border-box;
+  box-shadow:
+    0 0 0 1.5px rgba(255, 255, 255, 0.18),
+    0 0 0 3px #18191d,
+    0 28px 64px -12px rgba(2, 27, 56, 0.35),
+    0 14px 28px -8px rgba(0, 0, 0, 0.22);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wide-card:hover .phone-device-frame,
+.apple-device-card:hover .phone-device-frame {
+  transform: translateY(-4px);
+}
+
+/* Hardware side button notches */
+.phone-button {
+  position: absolute;
+  background: #34353a;
+  z-index: 1;
+}
+
+.phone-button--action {
+  top: 90px;
+  left: -3px;
+  width: 3px;
+  height: 24px;
+  border-radius: 2px 0 0 2px;
+}
+
+.phone-button--vol-up {
+  top: 128px;
+  left: -3px;
+  width: 3px;
+  height: 44px;
+  border-radius: 2px 0 0 2px;
+}
+
+.phone-button--vol-down {
+  top: 182px;
+  left: -3px;
+  width: 3px;
+  height: 44px;
+  border-radius: 2px 0 0 2px;
+}
+
+.phone-button--power {
+  top: 138px;
+  right: -3px;
+  width: 3px;
+  height: 68px;
+  border-radius: 0 2px 2px 0;
+}
+
+/* OLED Screen Surface */
+.phone-screen-display {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 41px;
+  background: #090d16;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Diagonal glass sheen reflection */
+.phone-screen-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 21;
+  background: linear-gradient(
+    130deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 55%
+  );
+  border-radius: 41px;
+}
+
+/* Dynamic Island */
+.phone-dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 82px;
+  height: 23px;
+  border-radius: 14px;
+  background: #000000;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.05);
+  box-sizing: border-box;
+}
+
+.phone-camera-lens {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #070b12;
+  border: 1.5px solid #141f30;
+  box-shadow: inset 0 0 2px #38bdf8;
+}
+
+.phone-camera-sensor {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #08090e;
+}
+
+/* Status Bar */
+.phone-status-bar {
+  position: absolute;
+  top: 12px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 22;
+  pointer-events: none;
+  color: #ffffff;
+}
+
+.phone-status-time {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.phone-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.phone-status-svg {
+  display: block;
+}
+
+.phone-battery-capsule {
+  width: 19px;
+  height: 9.5px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 2.5px;
+  padding: 1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.phone-battery-fill {
+  height: 100%;
+  width: 85%;
+  background: #34c759;
+  border-radius: 1.5px;
+}
+
+.phone-battery-nub {
+  position: absolute;
+  right: -2.5px;
+  top: 2px;
+  width: 1.5px;
+  height: 3.5px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 0 1px 1px 0;
+}
+
+/* Home Indicator */
+.phone-home-indicator {
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 108px;
+  height: 3.5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.65);
+  z-index: 25;
+  pointer-events: none;
+}
+
+/* Screen Scrollable View */
+.phone-screen-scrollable {
+  flex: 1;
+  padding: 42px 14px 18px 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-sans);
+  color: #f1f5f9;
+  scrollbar-width: none;
+}
+
+.phone-screen-scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   2. Service App Screens Inside Phone
+   ========================================================================== */
+.phone-service-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.psp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.psp-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.psp-logo-mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.psp-logo-mark--cloud {
+  background: linear-gradient(135deg, #021B38 0%, #0A3568 100%);
+}
+
+.psp-logo-mark--security {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.psp-logo-mark--tools {
+  background: linear-gradient(135deg, #d93a2f 0%, #b91c1c 100%);
+}
+
+.psp-brand-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.psp-brand-sub {
+  font-size: 9.5px;
+  color: #94a3b8;
+}
+
+.psp-status-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.psp-status-badge--cloud {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.psp-status-badge--security {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+.psp-status-badge--tools {
+  background: rgba(225, 91, 62, 0.15);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+.psp-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+}
+
+.psp-status-dot--cloud {
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+/* Metric KPI Card */
+.psp-hero-metric {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.psp-hero-metric--cloud {
+  background: linear-gradient(180deg, rgba(2, 27, 56, 0.85) 0%, rgba(10, 53, 104, 0.95) 100%);
+  border-color: rgba(56, 189, 248, 0.2);
+}
+
+.psp-hero-metric--security {
+  background: linear-gradient(180deg, rgba(6, 78, 59, 0.5) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border-color: rgba(74, 222, 128, 0.2);
+}
+
+.psp-metric-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.psp-metric-label {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.psp-metric-pill {
+  font-size: 10px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 1px 6px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.psp-metric-pill--cloud {
+  color: #67e8f9;
+  background: rgba(103, 232, 249, 0.15);
+}
+
+.psp-metric-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.psp-metric-val-cents {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.psp-metric-caption {
+  font-size: 9.5px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.psp-sparkline-wrap {
+  width: 100%;
+  height: 42px;
+  margin-top: 6px;
+}
+
+.psp-sparkline-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Traffic Load Distribution Histogram */
+.psp-histogram-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 3px;
+  height: 38px;
+  margin-top: 10px;
+  padding-top: 4px;
+}
+
+.psp-hist-bar {
+  flex: 1;
+  background: linear-gradient(180deg, #38bdf8 0%, rgba(56, 189, 248, 0.2) 100%);
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+
+/* Security Gauge */
+.psp-security-gauge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.psp-gauge-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: conic-gradient(#4ade80 0% 100%, #1e293b 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(74, 222, 128, 0.4);
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.3);
+}
+
+.psp-gauge-num {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.psp-gauge-denom {
+  font-size: 8px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.psp-gauge-info {
+  flex: 1;
+}
+
+.psp-gauge-status {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.psp-gauge-desc {
+  font-size: 10px;
+  color: #4ade80;
+  font-weight: 500;
+}
+
+/* Stats Row */
+.psp-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.psp-stat-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.psp-stat-label {
+  font-size: 9.5px;
+  color: #94a3b8;
+  display: block;
+}
+
+.psp-stat-num {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 2px;
+  display: block;
+}
+
+.psp-stat-unit {
+  font-size: 10px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-left: 2px;
+}
+
+.psp-stat-sub {
+  font-size: 8.5px;
+  color: #64748b;
+  display: block;
+  margin-top: 1px;
+}
+
+/* Section Blocks & Lists */
+.psp-section-block {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.psp-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.psp-pipeline-list,
+.psp-region-list,
+.psp-audit-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.psp-pipeline-item,
+.psp-region-item,
+.psp-audit-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.psp-pipe-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.psp-pipe-icon--azure { background: #0284c7; }
+.psp-pipe-icon--coral { background: #d93a2f; }
+.psp-pipe-icon--tools { background: #021B38; }
+
+.psp-pipe-info,
+.psp-region-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.psp-pipe-name,
+.psp-region-name,
+.psp-audit-name {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.psp-pipe-desc,
+.psp-region-specs {
+  font-size: 8.5px;
+  color: #64748b;
+}
+
+.psp-pipe-status {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #4ade80;
+}
+
+.psp-region-flag {
+  font-size: 13px;
+}
+
+.psp-badge-tag {
+  font-size: 9px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.psp-check-icon {
+  color: #4ade80;
+  flex-shrink: 0;
+}
+
+.psp-audit-status {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #4ade80;
+  margin-left: auto;
+}
+
+.psp-ownership-callout {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9.5px;
+  color: #cbd5e1;
+  background: rgba(2, 27, 56, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 7px 10px;
+}
+
+.psp-cert-seal {
+  background: rgba(6, 78, 59, 0.3);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  border-radius: 8px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.psp-cert-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.psp-cert-id {
+  font-size: 8px;
+  color: #94a3b8;
+  font-family: monospace;
+  margin-top: 1px;
+}
+
+.psp-bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: auto;
+}
+
+.psp-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 8px;
+  color: #64748b;
+}
+
+.psp-nav-item.is-active {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   3. Laptop Mockup (MacBook Pro Chassis & Console)
+   ========================================================================== */
+.laptop-device-wrapper {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+}
+
+.laptop-lid {
+  width: 100%;
+  background: #0f172a;
+  border-radius: 14px 14px 2px 2px;
+  border: 2px solid #262c3d;
+  box-shadow: 0 24px 48px -12px rgba(2, 27, 56, 0.35);
+  overflow: hidden;
+  position: relative;
+}
+
+.laptop-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 9px;
+  background: #1e293b;
+  border-radius: 0 0 5px 5px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.laptop-camera-eye {
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 50%;
+  background: #0284c7;
+}
+
+.laptop-screen {
+  background: #090d16;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-sans);
+}
+
+.laptop-titlebar {
+  height: 28px;
+  background: #151d2f;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.laptop-traffic-lights {
+  display: flex;
+  gap: 5px;
+}
+
+.laptop-light {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.laptop-light--red { background: #ff5f56; }
+.laptop-light--yellow { background: #ffbd2e; }
+.laptop-light--green { background: #27c93f; }
+
+.laptop-address-pill {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 2px 10px;
+  font-size: 10px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.laptop-badge-live {
+  font-size: 9px;
+  font-weight: 600;
+  color: #4ade80;
+}
+
+.laptop-content-grid {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  min-height: 220px;
+}
+
+.laptop-sidebar {
+  background: #0b1120;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.laptop-sb-brand {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.laptop-sb-logo {
+  font-size: 9px;
+  font-weight: 800;
+  background: #021B38;
+  color: #ffffff;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.laptop-sb-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.laptop-sb-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.laptop-sb-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  color: #64748b;
+  padding: 4px 6px;
+  border-radius: 5px;
+}
+
+.laptop-sb-item.is-active {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.laptop-main-panel {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.laptop-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.laptop-kpi-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.laptop-kpi-label {
+  font-size: 8.5px;
+  color: #94a3b8;
+}
+
+.laptop-kpi-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 1px;
+}
+
+.laptop-kpi-unit {
+  font-size: 8.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.laptop-kpi-sub {
+  font-size: 7.5px;
+  color: #4ade80;
+  margin-top: 1px;
+}
+
+.laptop-topology-box {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.laptop-box-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.laptop-box-title {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.laptop-box-badge {
+  font-size: 8px;
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.laptop-nodes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.laptop-node-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.laptop-node-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 5px #4ade80;
+}
+
+.laptop-node-name {
+  font-size: 8.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.laptop-node-meta {
+  font-size: 7.5px;
+  color: #64748b;
+}
+
+.laptop-log-strip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 5px 8px;
+  border-radius: 6px;
+  margin-top: auto;
+}
+
+.laptop-log-icon {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.laptop-log-code {
+  font-family: monospace;
+  font-size: 8px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.laptop-base {
+  width: 106%;
+  height: 9px;
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  border-radius: 0 0 14px 14px;
+  position: relative;
+  margin-top: -1px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.laptop-base-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 3.5px;
+  background: #0f172a;
+  border-radius: 0 0 3px 3px;
+}
+
+/* ==========================================================================
+   4. Apple-Style Centered Showcase Card (Solve Puzzles tribute layout)
+   ========================================================================== */
+.apple-device-card {
+  position: relative;
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  border-radius: var(--radius-card);
+  padding: clamp(36px, 6vw, 68px) clamp(20px, 4vw, 48px);
+  overflow: hidden;
+  box-sizing: border-box;
+  contain: paint;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.apple-device-card:hover {
+  transform: scale(1.008);
+}
+
+.apple-device-card__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.apple-device-card__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-3);
+  margin-bottom: clamp(24px, 4vw, 42px);
+  max-width: 720px;
+}
+
+.apple-device-card__eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #2ba6c4;
+}
+
+.apple-device-card__title {
+  font-family: var(--font-sans);
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #000000;
+  margin: 0;
+}
+
+/* Apple Word Tiles Row (e.g. P U Z Z L E S / C O D E ) */
+.apple-word-tiles-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.apple-word-tile-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.apple-char-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(36px, 4.5vw, 48px);
+  height: clamp(36px, 4.5vw, 48px);
+  background: #fbcfe8;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: clamp(18px, 2.2vw, 24px);
+  font-weight: 700;
+  color: #000000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.apple-device-card__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.apple-device-card__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-4);
+  max-width: 620px;
+  margin-top: clamp(24px, 4vw, 40px);
+}
+
+.apple-device-card__sub {
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.8vw, 19px);
+  font-weight: 500;
+  line-height: 1.5;
+  color: #1e293b;
+  margin: 0;
+}
+
+.apple-device-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .phone-device-frame {
+    width: 260px;
+    height: 520px;
+    border-radius: 38px;
+  }
+  .phone-screen-display {
+    border-radius: 34px;
+  }
+  .laptop-device-wrapper {
+    max-width: 320px;
+  }
+  .laptop-content-grid {
+    grid-template-columns: 1fr;
+  }
+  .laptop-sidebar {
+    display: none;
+  }
+  .apple-char-tile {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+}

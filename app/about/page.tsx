@@ -2,10 +2,8 @@ import AboutTeamGrid from '@/components/studio/AboutTeamGrid';
 import { studioCopy, listFounders } from '@/lib/studio-data';
 import { meta } from '@/lib/meta';
 import WideCard from '@/components/studio/WideCard';
-import BrowserMock from '@/components/studio/visuals/BrowserMock';
-import ScanReportMock from '@/components/studio/visuals/ScanReportMock';
-import TerminalMock from '@/components/studio/visuals/TerminalMock';
-import ScopeMapMock from '@/components/studio/visuals/ScopeMapMock';
+import PhoneMockup from '@/components/studio/visuals/PhoneMockup';
+import LaptopMockup from '@/components/studio/visuals/LaptopMockup';
 import BottomCta from '@/components/studio/BottomCta';
 import { CheckCircle, Terminal } from 'lucide-react';
 
@@ -70,7 +68,7 @@ export default async function About() {
             eyebrow="01 · Clarity"
             title="Clarity over complexity."
             desc="We speak plain English, not confusing technical jargon. We start with the actual user workflow so the software is intuitive and easy to use."
-            visual={<BrowserMock />}
+            visual={<PhoneMockup variant="web" />}
           />
           <WideCard
             palette="mint"
@@ -78,14 +76,14 @@ export default async function About() {
             eyebrow="02 · Security"
             title="Security by design."
             desc="Security is not an afterthought. Every form, API, and database query is audited against vulnerabilities before it ever goes live."
-            visual={<ScanReportMock />}
+            visual={<PhoneMockup variant="security" />}
           />
           <WideCard
             palette="peach"
             eyebrow="03 · Ownership"
             title="Client ownership."
             desc="You own every line of code, every repository, and every cloud credential. We never lock you in, and we provide clean documentation so any engineer can continue our work."
-            visual={<TerminalMock />}
+            visual={<LaptopMockup variant="cloud" />}
           />
           <WideCard
             palette="cloud"
@@ -93,7 +91,7 @@ export default async function About() {
             eyebrow="04 · Direct"
             title="Direct engineering."
             desc="You work directly with the senior engineers designing and building your product. No account managers, no lost translations, no wasted time."
-            visual={<ScopeMapMock />}
+            visual={<PhoneMockup variant="tools" />}
           />
         </div>
       </section>

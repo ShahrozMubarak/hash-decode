@@ -11,9 +11,10 @@ import Section from './Section';
 import Container from './Container';
 import SectionHeader from './SectionHeader';
 import WideCard from './WideCard';
-import BrowserMock from './visuals/BrowserMock';
+import AppleDeviceCard from './AppleDeviceCard';
+import PhoneMockup from './visuals/PhoneMockup';
+import LaptopMockup from './visuals/LaptopMockup';
 import TerminalMock from './visuals/TerminalMock';
-import ScanReportMock from './visuals/ScanReportMock';
 import ScopeMapMock from './visuals/ScopeMapMock';
 import ChecklistMock from './visuals/ChecklistMock';
 import CostEstimatorMock from './visuals/CostEstimatorMock';
@@ -47,7 +48,7 @@ export default function MotionLanding({
           <div className="wrap hero-centered-column">
             <p className="hero-eyebrow">Secure software studio</p>
             <h1 className="hero-h1" aria-label="Build it. Break it. Secure.">
-              Build it. Break it. Secure.
+              <span className="hero-word-build">Build</span> it. Break it. Secure.
             </h1>
             <p className="hero-subtext">
               Custom software and security testing for businesses.
@@ -62,11 +63,9 @@ export default function MotionLanding({
               </a>
             </div>
 
-            {/* HERO STAGE CARD (TASK B) */}
-            <div className="hero-stage-card liquid liquid--cloud is-visible" aria-label="Autonomous Studio Agent Stage">
+            {/* HERO STAGE (model only, no backing panel) */}
+            <div className="hero-stage-card" aria-label="Autonomous Studio Agent Stage">
               <div className="hero-stage-card__inner">
-                <span className="liquid__blob liquid__blob--a" aria-hidden="true" />
-                <span className="liquid__blob liquid__blob--b" aria-hidden="true" />
                 <div className="hero-stage-card__content">
                   <figure className="hero-robot-wrapper">
                     <div className="specimen-visual" id="hero-model-anchor">
@@ -94,7 +93,7 @@ export default function MotionLanding({
             <WideCard
               palette="cloud"
               reverse={false}
-              visual={<BrowserMock />}
+              visual={<PhoneMockup variant="web" />}
               eyebrow="Web platforms"
               title="Fast, resilient, accessible."
               desc="Full-stack web applications built with modern frameworks, clean APIs, and rigorous performance standards."
@@ -104,7 +103,7 @@ export default function MotionLanding({
             <WideCard
               palette="lilac"
               reverse={true}
-              visual={<TerminalMock />}
+              visual={<LaptopMockup variant="cloud" />}
               eyebrow="API & cloud systems"
               title="Architecture that scales without friction."
               desc="Backend services designed for reliability, high throughput, and straightforward maintenance."
@@ -114,12 +113,27 @@ export default function MotionLanding({
             <WideCard
               palette="ink"
               reverse={false}
-              visual={<ScanReportMock />}
+              visual={<PhoneMockup variant="security" />}
               eyebrow="Security testing"
               title="Break it before attackers do."
               desc="Comprehensive vulnerability assessments, penetration testing, and code reviews that leave no stone unturned."
               linkText="Explore security services ›"
               linkHref="/services#security"
+            />
+
+            {/* Apple News+ Style Centered Device Showcase Card */}
+            <AppleDeviceCard
+              palette="peach"
+              eyebrow="Interactive Device Preview"
+              title="Engineered for real-world devices."
+              highlightWords={['S O L U T I O N S']}
+              deviceType="phone"
+              serviceVariant="web"
+              interactive={true}
+              sub="Direct senior engineering across web platforms, multi-region cloud clusters, and zero-trust security audits. Tap the tabs on the device to preview each service."
+              ctaText="Schedule an architectural review ›"
+              ctaHref="/contact"
+              ctaVariant="coral"
             />
           </div>
 
@@ -293,7 +307,7 @@ export default function MotionLanding({
 
             {/* 2. Junaid Tariq */}
             <WideCard
-              palette="lilac"
+              palette="cloud"
               reverse={true}
               eyebrow="Co-Founder & Head of Engineering"
               title="Junaid Tariq"
@@ -321,7 +335,7 @@ export default function MotionLanding({
 
             {/* 3. Shahmeer Khan */}
             <WideCard
-              palette="mint"
+              palette="peach"
               reverse={false}
               eyebrow="Lead Product Designer"
               title="Shahmeer Khan"

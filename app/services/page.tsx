@@ -1,9 +1,7 @@
 import { meta } from '@/lib/meta';
 import WideCard from '@/components/studio/WideCard';
-import BrowserMock from '@/components/studio/visuals/BrowserMock';
-import TerminalMock from '@/components/studio/visuals/TerminalMock';
-import ScopeMapMock from '@/components/studio/visuals/ScopeMapMock';
-import ScanReportMock from '@/components/studio/visuals/ScanReportMock';
+import PhoneMockup from '@/components/studio/visuals/PhoneMockup';
+import LaptopMockup from '@/components/studio/visuals/LaptopMockup';
 import BottomCta from '@/components/studio/BottomCta';
 import { Check } from 'lucide-react';
 
@@ -43,7 +41,7 @@ export default function Services() {
             eyebrow="01 · Products"
             title="Custom web applications."
             desc="Map core user journeys, test interactive prototypes, and ship responsive, typed web apps designed to scale smoothly."
-            visual={<BrowserMock />}
+            visual={<PhoneMockup variant="web" />}
             ctaText="Discuss products"
             ctaHref="/contact?type=Products"
             ctaVariant="coral"
@@ -54,7 +52,7 @@ export default function Services() {
             eyebrow="02 · Platforms"
             title="Web platforms &amp; systems."
             desc="Server-rendered pages with sub-second initial loads, structured content models your team can edit without code, and accessible SEO markup."
-            visual={<TerminalMock />}
+            visual={<LaptopMockup variant="cloud" />}
             ctaText="Discuss platforms"
             ctaHref="/contact?type=Platforms"
             ctaVariant="azure"
@@ -64,7 +62,7 @@ export default function Services() {
             eyebrow="03 · Tools"
             title="Internal tools &amp; consoles."
             desc="Automate repeated manual operational workflows with custom management consoles, role-based access, and comprehensive audit trails."
-            visual={<ScopeMapMock />}
+            visual={<PhoneMockup variant="tools" />}
             ctaText="Discuss tools"
             ctaHref="/contact?type=Tools"
             ctaVariant="coral"
@@ -75,7 +73,7 @@ export default function Services() {
             eyebrow="04 · Security"
             title="Security audits &amp; hardening."
             desc="Inspect authentication and permission boundaries, reproducible vulnerability findings with prioritized fixes, and concrete patch roadmaps."
-            visual={<ScanReportMock />}
+            visual={<PhoneMockup variant="security" />}
             ctaText="Discuss security"
             ctaHref="/contact?type=Security"
             ctaVariant="white"
