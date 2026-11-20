@@ -114,7 +114,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         <div className="confirmation-action">
           <a className="hd-text-link" href="/portfolio">
             <span>Explore the work</span>
-            <span className="link-arrow">↗</span>
+            <span className="link-arrow">›</span>
           </a>
         </div>
       </section>

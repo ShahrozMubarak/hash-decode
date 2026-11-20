@@ -306,7 +306,7 @@ export default function MotionLanding({
         </div>
       </section>
 
-      {/* 7. FINAL CALL TO ACTION (Animated Navy to Deep Blue Gradient + Magnetic Primary Button) */}
+      {/* 7. FINAL CALL TO ACTION (Clean two-column contact section on white) */}
       <section className="section-rule-block final-cta-section" id="brief" data-station="Contact">
         <div className="wrap contact-grid">
           <div>
@@ -327,52 +327,51 @@ export default function MotionLanding({
               data-reveal-delay="200"
               style={{ maxWidth: '42ch', marginBottom: '1.5rem' }}
             >
-              Tell us who it’s for, what needs to change, and your target timeline.
+              Tell us what you need, who it is for, and when you want it done.
             </p>
             <div className="cta-direct-contacts" data-reveal="up" data-reveal-delay="250">
-              <a href="mailto:hashdecodeofficial@gmail.com" className="cta-direct-item">
+              <div className="cta-contact-row">
                 <span className="cta-direct-label">Email:</span>
-                <strong>hashdecodeofficial@gmail.com</strong>
-              </a>
-              <div className="cta-direct-phones">
-                <span className="cta-direct-label">Call / WhatsApp:</span>
-                <a href="tel:+923001237124" className="cta-phone-link">0300 1237124</a>
-                <span className="cta-sep">•</span>
-                <a href="tel:+923214866916" className="cta-phone-link">0321 4866916</a>
+                <a href="mailto:hashdecodeofficial@gmail.com" className="hd-text-link">hashdecodeofficial@gmail.com</a>
               </div>
-              <div className="cta-direct-item cta-location">
+              <div className="cta-contact-row">
+                <span className="cta-direct-label">WhatsApp:</span>
+                <a href="https://wa.me/923001237124" target="_blank" rel="noopener noreferrer" className="hd-text-link">0300 1237124</a>
+                <span className="cta-sep"> · </span>
+                <a href="https://wa.me/923214866916" target="_blank" rel="noopener noreferrer" className="hd-text-link">0321 4866916</a>
+              </div>
+              <div className="cta-contact-row">
                 <span className="cta-direct-label">HQ:</span>
-                <span>Johar Town, Lahore, Pakistan</span>
+                <span className="cta-direct-val">Johar Town, Lahore, Pakistan</span>
               </div>
             </div>
-            <div className="contact-links social-links" data-reveal="up" data-reveal-delay="320">
+            <div className="contact-links" data-reveal="up" data-reveal-delay="320">
               <a
                 href="https://wa.me/923001237124"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="social-link social-whatsapp"
+                className="hd-text-link"
                 aria-label="WhatsApp 0300 1237124"
               >
-                <span>WhatsApp (0300 1237124) ›</span>
+                <span>WhatsApp 0300 1237124 ›</span>
               </a>
               <a
                 href="https://wa.me/923214866916"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="social-link social-whatsapp"
+                className="hd-text-link"
                 aria-label="WhatsApp 0321 4866916"
               >
-                <span>WhatsApp (0321 4866916) ›</span>
+                <span>WhatsApp 0321 4866916 ›</span>
               </a>
               {links.instagram && (
                 <a
                   href={links.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-link social-instagram"
+                  className="hd-text-link"
                   aria-label="Instagram"
                 >
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="17.5" x2="17.51" y2="17.51"/></svg>
                   <span>Instagram ›</span>
                 </a>
               )}
@@ -381,10 +380,9 @@ export default function MotionLanding({
                   href={links.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-link social-facebook"
+                  className="hd-text-link"
                   aria-label="Facebook"
                 >
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true"><path d="M22 12c0-5.52-4.48-10-10-10H2v6h3v4h4v-4h2l1-4h-4V7a1 1 0 0 1 1-1h3v2.06h-2.22a1 1 0 0 0-1 1v2.06h-3V12h3v4z" /></svg>
                   <span>Facebook ›</span>
                 </a>
               )}
@@ -393,10 +391,9 @@ export default function MotionLanding({
                   href={links.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-link social-youtube"
+                  className="hd-text-link"
                   aria-label="YouTube"
                 >
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style={{ verticalAlign: 'middle', marginRight: '6px' }} aria-hidden="true"><path d="M23.498 6.327A3 3 0 0 0 22.52 4.5H1.5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h21a3 3 0 0 0 3-3V9.327a3 3 0 0 0-.002-3m-9.494 1.834L8.366 16.1l-3.408-6.014L8.366 4.08z" /></svg>
                   <span>YouTube ›</span>
                 </a>
               )}
@@ -405,10 +402,9 @@ export default function MotionLanding({
                   href={links.tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-link social-tiktok"
+                  className="hd-text-link"
                   aria-label="TikTok"
                 >
-                  <span className="social-badge social-tiktok-badge" aria-hidden="true">T</span>
                   <span>TikTok ›</span>
                 </a>
               )}
@@ -417,10 +413,9 @@ export default function MotionLanding({
                   href={links.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-link social-linkedin"
+                  className="hd-text-link"
                   aria-label="LinkedIn"
                 >
-                  <span className="social-badge social-linkedin-badge" aria-hidden="true">in</span>
                   <span>LinkedIn ›</span>
                 </a>
               )}
@@ -429,10 +424,9 @@ export default function MotionLanding({
                   href={links.booking}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-link social-booking"
+                  className="hd-text-link"
                   aria-label="Booking"
                 >
-                  <span className="social-badge social-booking-badge" aria-hidden="true">B</span>
                   <span>Book a conversation ›</span>
                 </a>
               )}

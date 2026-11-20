@@ -1240,68 +1240,268 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   background: var(--bg) !important;
   color: var(--text) !important;
   animation: none !important;
-  padding-block: var(--section-pad, clamp(80px, 12vw, 160px)) !important;
+  padding-top: var(--section-pad, clamp(80px, 12vw, 160px)) !important;
+  padding-bottom: clamp(100px, 14vw, 180px) !important;
 }
+
+#brief .contact-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) !important;
+  gap: clamp(32px, 5vw, 64px) !important;
+  align-items: start !important;
+  max-width: var(--container, 1080px) !important;
+  margin: 0 auto !important;
+}
+
+@media (max-width: 900px) {
+  #brief .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+  }
+}
+
 #brief .section-rule-heading,
 .cta-heading {
   color: var(--text) !important;
+  text-align: left !important;
+  margin: 0 0 16px !important;
 }
+
 #brief .section-rule-lead,
 .cta-lead {
   color: var(--text-2) !important;
+  text-align: left !important;
+  font-size: 17px !important;
+  line-height: 1.47 !important;
+  margin: 0 0 28px !important;
+  max-width: 480px !important;
 }
+
 #brief .section-rule-label,
 .cta-eyebrow {
   color: var(--text-2) !important;
+  text-align: left !important;
+  margin: 0 0 12px !important;
 }
+
 .cta-highlight {
   color: var(--accent) !important;
 }
+
+/* Contact info as a tidy list: small grey label, then 17px value */
 .cta-direct-contacts {
-  color: var(--text) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin-bottom: 24px !important;
 }
+
+.cta-contact-row {
+  display: flex !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  font-family: var(--font-sans) !important;
+  font-size: 17px !important;
+  line-height: 1.47 !important;
+}
+
 .cta-direct-label {
+  font-size: 14px !important;
+  font-weight: 400 !important;
   color: var(--text-2) !important;
+  min-width: 80px !important;
 }
-.cta-direct-item strong,
-.cta-phone-link,
-.cta-location span {
+
+.cta-direct-val {
   color: var(--text) !important;
+  font-size: 17px !important;
 }
-.cta-direct-item:hover strong,
-.cta-phone-link:hover {
-  color: var(--accent) !important;
-}
+
 .cta-sep {
   color: var(--text-2) !important;
+  margin: 0 2px !important;
 }
-.social-link {
+
+.contact-links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  margin-bottom: 32px !important;
+}
+
+.contact-links .hd-text-link {
+  font-family: var(--font-sans) !important;
+  font-size: 15px !important;
+  color: var(--accent) !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.contact-links .hd-text-link:hover {
+  text-decoration: underline !important;
+}
+
+/* Hash Bot bubble: white, radius 18px, soft shadow 0 4px 24px rgba(0,0,0,0.08) */
+.teleport-bot-stage {
+  margin-top: 24px !important;
+  margin-bottom: 40px !important;
+}
+
+.bot-speech-card {
+  background: #ffffff !important;
+  border-radius: 18px !important;
+  border: none !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08) !important;
+  padding: 12px 18px !important;
+  max-width: 280px !important;
+}
+
+.bot-speech-card::before,
+.bot-speech-card::after {
+  border-top-color: #ffffff !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom: none !important;
+}
+
+.bot-speech-text {
+  font-family: var(--font-sans) !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
   color: var(--text) !important;
-  border: 1px solid var(--hairline) !important;
-  background: var(--card-on-white) !important;
 }
-.social-link:hover {
-  color: var(--accent) !important;
-  border-color: var(--accent) !important;
+
+.bot-status-tag {
+  font-family: var(--font-sans) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--text-2) !important;
 }
-.cta-link {
-  color: var(--accent) !important;
+
+/* Ensure mini robot below bubble ends at least 40px above footer */
+.teleport-model-anchor {
+  margin-bottom: 40px !important;
 }
+
+/* Form card: --card-on-white, radius 28px, padding 32px, no border, no shadow */
 #brief .form-panel {
   background: var(--card-on-white) !important;
-  border: 1px solid var(--hairline) !important;
+  border-radius: var(--radius-card, 28px) !important;
+  padding: clamp(24px, 4vw, 32px) !important;
+  border: none !important;
   box-shadow: none !important;
   color: var(--text) !important;
 }
-#brief .form-panel label {
-  color: var(--text) !important;
+
+#brief .form-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
 }
-#brief .form-panel input,
-#brief .form-panel textarea,
-#brief .form-panel select {
-  background: var(--card-on-grey) !important;
-  border: 1px solid var(--hairline) !important;
+
+@media (max-width: 600px) {
+  #brief .form-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+#brief .form-field-label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin-bottom: 16px !important;
+}
+
+#brief .field-label-text {
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
   color: var(--text) !important;
+  letter-spacing: 0 !important;
+}
+
+/* Inputs/selects/textarea: background --bg (white) on the grey card, 1px --hairline, radius 12px, height 48px, 17px text */
+#brief .form-input,
+#brief .form-select,
+#brief .form-textarea {
+  background: var(--bg, #ffffff) !important;
+  border: 1px solid var(--hairline, rgba(0, 0, 0, 0.08)) !important;
+  border-radius: var(--radius-input, 12px) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 17px !important;
+  color: var(--text) !important;
+  padding: 0 16px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  outline: none !important;
+}
+
+#brief .form-input,
+#brief .form-select {
+  height: 48px !important;
+}
+
+#brief .form-textarea {
+  padding: 14px 16px !important;
+  min-height: 120px !important;
+  resize: vertical !important;
+  line-height: 1.47 !important;
+}
+
+/* Focus: 2px accent outline */
+#brief .form-input:focus,
+#brief .form-select:focus,
+#brief .form-textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px var(--accent) !important;
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 0 !important;
+}
+
+/* Privacy note: 12px grey */
+#brief .form-helper-text {
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  color: var(--text-2) !important;
+  line-height: 1.4 !important;
+  margin: 12px 0 20px !important;
+}
+
+/* Submit: full-width primary pill */
+#brief .send-brief-btn {
+  width: 100% !important;
+  height: 48px !important;
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  border-radius: var(--radius-pill, 980px) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease !important;
+}
+
+#brief .send-brief-btn:hover {
+  background: var(--accent-hover) !important;
+}
+
+/* Confirmation card */
+#brief .confirmation-card {
+  background: var(--card-on-white) !important;
+  border-radius: var(--radius-card, 28px) !important;
+  padding: clamp(32px, 5vw, 48px) !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-align: center !important;
 }
 
 /* 9. FOOTER (.site-footer) - Grey section */
