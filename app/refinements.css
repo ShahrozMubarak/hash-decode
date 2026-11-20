@@ -98,14 +98,22 @@ body {
 
 /* Section 3.1: No grey text, no accent text, no two-tone text */
 [data-mode="light"] h1, [data-mode="light"] h2, [data-mode="light"] h3,
-[data-mode="light"] p, [data-mode="light"] span, [data-mode="light"] a,
-[data-mode="light"] li, [data-mode="light"] strong,
-#overview h1, #overview h2, #overview h3, #overview p, #overview span,
-#services h1, #services h2, #services h3, #services p, #services span,
-#security h1, #security h2, #security h3, #security p, #security span,
-#team h1, #team h2, #team h3, #team p, #team span,
-#contact h1, #contact h2, #contact h3, #contact p, #contact span {
-  color: #000000 !important;
+[data-mode="light"] p, [data-mode="light"] li, [data-mode="light"] strong,
+#overview h1, #overview h2, #overview h3, #overview p,
+#services h1, #services h2, #services h3, #services p,
+#security h1, #security h2, #security h3, #security p,
+#team h1, #team h2, #team h3, #team p,
+#contact h1, #contact h2, #contact h3, #contact p {
+  color: #000000;
+}
+
+[data-mode="light"] span:not(.btn-label):not([class*="btn"]),
+#overview span:not(.btn-label):not([class*="btn"]),
+#services span:not(.btn-label):not([class*="btn"]),
+#security span:not(.btn-label):not([class*="btn"]),
+#team span:not(.btn-label):not([class*="btn"]),
+#contact span:not(.btn-label):not([class*="btn"]) {
+  color: #000000;
 }
 
 [data-mode="dark"] h1, [data-mode="dark"] h2, [data-mode="dark"] h3,
@@ -2382,16 +2390,28 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   display: none !important;
 }
 
-/* 2. On dark backgrounds (#work section): honor coral and azure */
+/* 2. On dark backgrounds (#work section): white background, black text */
 #work .hd-btn-primary,
-#work .hd-btn-coral {
-  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
-  color: #ffffff !important;
+#work .btn-primary {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
+
+#work .hd-btn-primary *,
+#work .btn-primary * {
+  color: #000000 !important;
 }
 
 #work .hd-btn-secondary,
-#work .hd-btn-azure {
-  background: linear-gradient(135deg, #0071e3 0%, #004bb0 100%) !important;
+#work .btn-secondary {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  color: #ffffff !important;
+}
+
+#work .hd-btn-secondary *,
+#work .btn-secondary * {
   color: #ffffff !important;
 }
 
@@ -2501,7 +2521,7 @@ body {
    STAGE 2: NAVBAR, BUTTONS, LINKS (V2 REDESIGN)
    ========================================================================== */
 
-/* 1. Full-width fixed bar, height var(--nav-h) [56px], translucent white blur, bottom hairline, NO SHADOW */
+/* 1. Full-width fixed bar, height var(--nav-h) [56px], crisp white glass, bottom hairline, NO SHADOW */
 .site-header,
 .ronin-header {
   position: fixed !important;
@@ -2515,10 +2535,10 @@ body {
   padding: 0 !important;
   margin: 0 !important;
   z-index: 1000 !important;
-  background: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
   -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
   backdrop-filter: saturate(180%) blur(20px) !important;
-  border-bottom: 1px solid var(--hairline-light) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
   box-shadow: none !important;
   box-sizing: border-box !important;
 }
@@ -2696,27 +2716,27 @@ html.header-compressed .ronin-nav {
   height: 38px !important;
   padding: 0 18px !important;
   border-radius: 9999px !important;
-  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
+  background: #000000 !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border: 1px solid #000000 !important;
   font-family: var(--font-sans) !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   letter-spacing: -0.01em !important;
   text-decoration: none !important;
-  box-shadow: 0 4px 16px rgba(225, 91, 62, 0.42), 0 1px 0 rgba(255, 255, 255, 0.25) inset !important;
+  box-shadow: none !important;
   cursor: pointer !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
 }
 
 .ronin-cta-pill:hover,
 .nav-contact:hover {
-  background: linear-gradient(135deg, #ff5f40 0%, #e84d2d 100%) !important;
-  box-shadow: 0 8px 24px rgba(225, 91, 62, 0.55), 0 1px 0 rgba(255, 255, 255, 0.35) inset !important;
+  background: #000000 !important;
+  opacity: 0.88 !important;
+  box-shadow: none !important;
   color: #ffffff !important;
   text-decoration: none !important;
   transform: translateY(-1px) !important;
-  opacity: 1 !important;
 }
 
 .ronin-cta-pill *,
@@ -2899,140 +2919,163 @@ a.hd-btn-primary {
 }
 
 /* ==========================================================================
-   VIBRANT BUTTON SYSTEM: CORAL RED & AZURE NAVY BLUE
+   BUTTON SYSTEM: PURE BLACK ON LIGHT, PURE WHITE ON DARK
    ========================================================================== */
 
-/* 1. Signature Coral Red Pill */
+/* 1. Primary Button On Light Surfaces: Black background, white text */
 .hd-btn-primary,
 .btn-primary,
-.hd-btn-coral,
-.hd-btn--coral,
 .hero-start-cta,
 .send-brief-btn,
-.coral-glow,
+button.hd-btn-primary,
+a.hd-btn-primary,
+[data-mode="light"] .hd-btn-primary,
+[data-mode="light"] .btn-primary,
+.hd-section--white .hd-btn-primary,
+.hd-section--off-white .hd-btn-primary,
+#overview .hd-btn-primary,
 #overview .hero-start-cta,
+#services .hd-btn-primary,
 #security .hd-btn-primary,
+#team .hd-btn-primary,
 #contact .hd-btn-primary,
-.bottom-cta-card .hd-btn-primary {
-  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
+.bottom-cta-card .hd-btn-primary,
+.page-about-content .hd-btn-primary,
+.page-services-content .hd-btn-primary,
+.page-contact-content .hd-btn-primary,
+.page-tools-hub .hd-btn-primary,
+.page-tool-detail .hd-btn-primary,
+.page-error-container .hd-btn-primary {
+  background: #000000 !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  box-shadow: 0 4px 18px rgba(225, 91, 62, 0.38), 0 1px 0 rgba(255, 255, 255, 0.25) inset !important;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border: 1px solid #000000 !important;
   border-radius: 9999px !important;
-  padding: 12px 24px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
+  box-shadow: none !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
 }
 
 .hd-btn-primary:hover,
 .btn-primary:hover,
-.hd-btn-coral:hover,
-.hd-btn--coral:hover,
 .hero-start-cta:hover,
 .send-brief-btn:hover,
-.coral-glow:hover,
-#overview .hero-start-cta:hover,
-#security .hd-btn-primary:hover,
-#contact .hd-btn-primary:hover,
-.bottom-cta-card .hd-btn-primary:hover {
-  background: linear-gradient(135deg, #ff5f40 0%, #e84d2d 100%) !important;
-  box-shadow: 0 8px 28px rgba(225, 91, 62, 0.52), 0 1px 0 rgba(255, 255, 255, 0.35) inset !important;
-  transform: translateY(-2px) !important;
+button.hd-btn-primary:hover,
+a.hd-btn-primary:hover {
+  background: #000000 !important;
+  opacity: 0.88 !important;
   color: #ffffff !important;
-  opacity: 1 !important;
+  text-decoration: none !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* 2. Signature Azure Navy Blue Pill */
-.hd-btn-secondary,
-.btn-secondary,
-.hd-btn-azure,
-.hd-btn--azure,
-.hd-btn-navy,
-.hero-explore-btn,
-#overview .hero-explore-btn,
-#services .hd-btn-azure,
-#work .hd-btn-secondary,
-#team .hd-btn-azure {
-  background: linear-gradient(135deg, #0071e3 0%, #004bb0 100%) !important;
+.hd-btn-primary *,
+.btn-primary *,
+.hero-start-cta *,
+.send-brief-btn *,
+.hd-btn-primary .btn-label,
+.btn-primary .btn-label,
+.hero-start-cta .btn-label,
+.send-brief-btn .btn-label,
+.hd-btn-primary span,
+.btn-primary span {
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  box-shadow: 0 4px 18px rgba(0, 113, 227, 0.38), 0 1px 0 rgba(255, 255, 255, 0.25) inset !important;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* 2. Primary Button On Dark Surfaces: White background, black text */
+[data-mode="dark"] .hd-btn-primary,
+[data-mode="dark"] .btn-primary,
+[data-mode="dark"] .hero-start-cta,
+[data-mode="dark"] .send-brief-btn,
+.hd-section--black .hd-btn-primary,
+.hd-section--black .btn-primary,
+#work .hd-btn-primary,
+#work .btn-primary,
+.wide-card[data-mode="dark"] .hd-btn-primary,
+.wide-card[data-mode="dark"] .btn-primary {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
   border-radius: 9999px !important;
-  padding: 12px 24px !important;
-  font-weight: 600 !important;
+  box-shadow: none !important;
+}
+
+[data-mode="dark"] .hd-btn-primary:hover,
+[data-mode="dark"] .btn-primary:hover,
+[data-mode="dark"] .hero-start-cta:hover,
+[data-mode="dark"] .send-brief-btn:hover,
+.hd-section--black .hd-btn-primary:hover,
+.hd-section--black .btn-primary:hover,
+#work .hd-btn-primary:hover,
+#work .btn-primary:hover,
+.wide-card[data-mode="dark"] .hd-btn-primary:hover,
+.wide-card[data-mode="dark"] .btn-primary:hover {
+  background: #ffffff !important;
+  opacity: 0.88 !important;
+  color: #000000 !important;
   text-decoration: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+[data-mode="dark"] .hd-btn-primary *,
+[data-mode="dark"] .btn-primary *,
+[data-mode="dark"] .hero-start-cta *,
+[data-mode="dark"] .send-brief-btn *,
+.hd-section--black .hd-btn-primary *,
+.hd-section--black .btn-primary *,
+#work .hd-btn-primary *,
+#work .btn-primary *,
+.wide-card[data-mode="dark"] .hd-btn-primary *,
+.wide-card[data-mode="dark"] .btn-primary *,
+[data-mode="dark"] .hd-btn-primary .btn-label,
+#work .hd-btn-primary .btn-label,
+[data-mode="dark"] .hd-btn-primary span,
+#work .hd-btn-primary span {
+  color: #000000 !important;
+}
+
+/* 3. Secondary Button / Action */
+.hd-btn-secondary,
+.btn-secondary {
+  background: transparent !important;
+  color: #000000 !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.15) !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
 }
 
 .hd-btn-secondary:hover,
-.btn-secondary:hover,
-.hd-btn-azure:hover,
-.hd-btn--azure:hover,
-.hd-btn-navy:hover,
-.hero-explore-btn:hover,
-#overview .hero-explore-btn:hover,
-#services .hd-btn-azure:hover,
-#work .hd-btn-secondary:hover,
-#team .hd-btn-azure:hover {
-  background: linear-gradient(135deg, #1d82f5 0%, #005bb5 100%) !important;
-  box-shadow: 0 8px 28px rgba(0, 113, 227, 0.52), 0 1px 0 rgba(255, 255, 255, 0.35) inset !important;
-  transform: translateY(-2px) !important;
-  color: #ffffff !important;
-  opacity: 1 !important;
+.btn-secondary:hover {
+  border-color: #000000 !important;
+  color: #000000 !important;
 }
 
-/* 3. Universal High-Contrast Button Text (Crisp Pure White) */
-.hd-btn-primary,
-.hd-btn-secondary,
-.hd-btn-coral,
-.hd-btn-azure,
-.hd-btn-navy,
-.hero-start-cta,
-.hero-explore-btn,
-.send-brief-btn,
-.ronin-cta-pill,
-.hd-btn-primary *,
 .hd-btn-secondary *,
-.hd-btn-coral *,
-.hd-btn-azure *,
-.hd-btn-navy *,
-.hero-start-cta *,
-.hero-explore-btn *,
-.send-brief-btn *,
-.ronin-cta-pill *,
-.hd-btn-primary .btn-label,
-.hd-btn-secondary .btn-label,
-.hd-btn-coral .btn-label,
-.hd-btn-azure .btn-label,
-.hd-btn-navy .btn-label {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.01em !important;
-  -webkit-font-smoothing: antialiased !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+.btn-secondary * {
+  color: #000000 !important;
 }
 
-/* 4. Buttons on Dark / Midnight WideCards */
-.wide-card[data-mode="dark"] .hd-btn-coral,
-.wide-card[data-mode="dark"] .hd-btn-primary {
-  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 20px rgba(255, 77, 45, 0.45) !important;
-}
-.wide-card[data-mode="dark"] .hd-btn-azure,
+[data-mode="dark"] .hd-btn-secondary,
+[data-mode="dark"] .btn-secondary,
+#work .hd-btn-secondary,
 .wide-card[data-mode="dark"] .hd-btn-secondary {
-  background: linear-gradient(135deg, #0071e3 0%, #004bb0 100%) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 20px rgba(0, 113, 227, 0.45) !important;
 }
-.wide-card[data-mode="dark"] .hd-btn-white {
-  background: #ffffff !important;
-  color: #000000 !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+
+[data-mode="dark"] .hd-btn-secondary:hover,
+[data-mode="dark"] .btn-secondary:hover,
+#work .hd-btn-secondary:hover,
+.wide-card[data-mode="dark"] .hd-btn-secondary:hover {
+  border-color: #ffffff !important;
+  color: #ffffff !important;
 }
-.wide-card[data-mode="dark"] .hd-btn-white * {
-  color: #000000 !important;
+
+[data-mode="dark"] .hd-btn-secondary *,
+[data-mode="dark"] .btn-secondary *,
+#work .hd-btn-secondary *,
+.wide-card[data-mode="dark"] .hd-btn-secondary * {
+  color: #ffffff !important;
 }
 
 /* Hide old arrow circle and clone icons on pills */
@@ -3131,30 +3174,30 @@ html[data-motion=on] .hero-sheet {
 }
 
 /* Centered Column Layout:
-   Top padding: calc(var(--nav-h) + var(--s-7)) (56px + 64px = 120px) so eyebrow doesn't sit under fixed nav */
+   Nav -> 40px -> Eyebrow */
 .hero-centered-column {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   text-align: center !important;
-  padding-top: calc(var(--nav-h) + var(--s-7)) !important;
-  padding-bottom: clamp(48px, 8vw, 80px) !important;
+  padding-top: calc(var(--nav-h, 56px) + 40px) !important;
+  padding-bottom: clamp(48px, 6vw, 80px) !important;
   max-width: var(--container) !important;
   margin: 0 auto !important;
   position: relative !important;
   z-index: 10 !important;
 }
 
-/* 1. Eyebrow: Secure software studio (14px, 600, solid black #000000, 24px gap) */
+/* 1. Eyebrow: 16px / weight 600, 16px gap to h1 */
 .hero-eyebrow {
   font-family: var(--font-sans) !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
   font-weight: 600 !important;
   line-height: 1.4 !important;
   letter-spacing: -0.01em !important;
   text-transform: none !important;
-  color: var(--black) !important;
-  margin: 0 0 var(--s-4) 0 !important;
+  color: #000000 !important;
+  margin: 0 0 16px 0 !important;
   padding: 0 !important;
   background: transparent !important;
   border: none !important;
@@ -3167,15 +3210,16 @@ html[data-motion=on] .hero-sheet {
   display: none !important;
 }
 
-/* 2. H1: Build it. Break it. Secure. (one line desktop, 64px, 700, solid black #000000, zero gradient, 24px gap) */
+/* 2. Headline: letter-spacing -0.02em, word-spacing 0.04em, weight 700, 24px gap to sub */
 .hero-h1 {
   font-family: var(--font-sans) !important;
-  font-size: clamp(32px, 5.2vw, 64px) !important;
+  font-size: clamp(34px, 5.5vw, 64px) !important;
   font-weight: 700 !important;
   line-height: 1.05 !important;
-  letter-spacing: -0.03em !important;
-  color: var(--black) !important;
-  margin: 0 0 var(--s-4) 0 !important;
+  letter-spacing: -0.02em !important;
+  word-spacing: 0.04em !important;
+  color: #000000 !important;
+  margin: 0 0 24px 0 !important;
   max-width: 100% !important;
   text-align: center !important;
 }
@@ -3187,55 +3231,65 @@ html[data-motion=on] .hero-sheet {
 }
 
 .hero-h1 .highlight-word {
-  color: var(--black) !important;
+  color: #000000 !important;
 }
 
-/* 3. Sub line: Custom software and security testing for businesses. (20px, 400, #000000, 32px gap) */
+/* 3. Subtext: 22-24px / weight 500 / line-height 1.4 / max-width 640px, 32px gap to buttons */
 .hero-subtext {
   font-family: var(--font-sans) !important;
-  font-size: clamp(17px, 2vw, 20px) !important;
-  font-weight: 400 !important;
-  line-height: 1.45 !important;
+  font-size: clamp(22px, 2.4vw, 24px) !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
   letter-spacing: -0.01em !important;
-  color: var(--black) !important;
+  color: #000000 !important;
   max-width: 640px !important;
-  margin: 0 auto var(--s-5) auto !important;
+  margin: 0 auto 32px auto !important;
   text-align: center !important;
 }
 
-/* 4. Buttons: centered primary black pill + text link, one baseline, gap 16px, 48px gap to robot */
+/* 4. Buttons: 17-18px / weight 600, height 52px, padding 0 28px, 16px gap between buttons */
 .hero-actions {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 16px !important;
-  margin: 0 auto var(--s-6) auto !important;
+  margin: 0 auto !important;
   z-index: 10 !important;
 }
 
 .hero-actions .hero-start-cta {
-  min-height: 48px !important;
-  padding: 14px 26px !important;
-  font-size: 15px !important;
-  font-weight: 500 !important;
-  border-radius: var(--radius-pill) !important;
-  background: var(--black) !important;
-  color: var(--white) !important;
+  min-height: 52px !important;
+  height: 52px !important;
+  padding: 0 28px !important;
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  border-radius: 9999px !important;
+  background: #000000 !important;
+  color: #ffffff !important;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  transition: opacity 0.2s ease !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: opacity 0.2s ease, background-color 0.2s ease !important;
 }
 
 .hero-actions .hero-start-cta:hover {
-  opacity: 0.88 !important;
+  background: #262626 !important;
+  color: #ffffff !important;
+  opacity: 0.95 !important;
+  text-decoration: none !important;
+}
+
+.hero-actions .hero-start-cta * {
+  color: #ffffff !important;
 }
 
 .hero-actions .hero-explore-link {
-  font-size: 15px !important;
-  font-weight: 500 !important;
-  color: var(--black) !important;
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -3246,14 +3300,100 @@ html[data-motion=on] .hero-sheet {
 .hero-actions .hero-explore-link:hover {
   text-decoration: underline !important;
   text-underline-offset: 4px !important;
+  color: #000000 !important;
 }
 
-/* 5. Robot: clamp(340px, 48vh, 520px), transparent canvas, CSS mask fade, soft ground shadow */
-.hero-robot-wrapper {
+.hero-actions .hero-explore-link * {
+  color: #000000 !important;
+}
+
+/* ==========================================================================
+   TASK B: HERO STAGE CARD
+   ========================================================================== */
+
+/* 1. Card container: max-width 1120px, centered, radius 40px, min-height clamp(480px, 62vh, 640px), 32px gap from buttons, no border, no shadow */
+.hero-stage-card {
   position: relative !important;
   width: 100% !important;
-  max-width: 600px !important;
-  height: clamp(340px, 48vh, 520px) !important;
+  max-width: 1120px !important;
+  margin: 32px auto 0 auto !important;
+  border-radius: 40px !important;
+  min-height: clamp(480px, 62vh, 640px) !important;
+  background-color: #e6f0ff !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  contain: paint !important;
+}
+
+/* 2. Inner overflow-hidden layer for liquid effect blobs */
+.hero-stage-card__inner {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Blobs: base #e6f0ff, blob A #b9d4ff, blob B #dcd0ff, blur 60px, slow transform drift 20-26s */
+.hero-stage-card .liquid__blob {
+  position: absolute !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  filter: blur(60px) !important;
+  opacity: 0.65 !important;
+  will-change: transform !important;
+}
+
+.hero-stage-card .liquid__blob--a {
+  background-color: #b9d4ff !important;
+  width: 65% !important;
+  height: 65% !important;
+  top: -10% !important;
+  left: -5% !important;
+  animation: drift-a 22s ease-in-out infinite alternate !important;
+}
+
+.hero-stage-card .liquid__blob--b {
+  background-color: #dcd0ff !important;
+  width: 60% !important;
+  height: 60% !important;
+  bottom: -10% !important;
+  right: -5% !important;
+  animation: drift-b 26s ease-in-out infinite alternate !important;
+  animation-delay: -7s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-stage-card .liquid__blob {
+    animation: none !important;
+  }
+}
+
+.hero-stage-card__content {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* 3. Robot canvas inside card: centered, about 60% of card height, transparent canvas */
+.hero-stage-card .hero-robot-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  height: 60% !important;
+  min-height: 280px !important;
   margin: 0 auto !important;
   display: flex !important;
   align-items: center !important;
@@ -3263,18 +3403,19 @@ html[data-motion=on] .hero-sheet {
   box-shadow: none !important;
 }
 
-.hero-robot-wrapper .specimen-visual,
-.hero-robot-wrapper .scene-surface {
+.hero-stage-card .specimen-visual,
+.hero-stage-card .scene-surface {
   width: 100% !important;
   height: 100% !important;
   background: transparent !important;
   pointer-events: auto !important;
   transform: none !important;
-  -webkit-mask-image: linear-gradient(to bottom, #000000 82%, transparent 100%) !important;
-  mask-image: linear-gradient(to bottom, #000000 82%, transparent 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.hero-robot-wrapper canvas {
+.hero-stage-card canvas {
   width: 100% !important;
   height: 100% !important;
   background: transparent !important;
@@ -3282,19 +3423,38 @@ html[data-motion=on] .hero-sheet {
   transform: none !important;
 }
 
-/* Soft ground shadow under the robot */
-.hero-ground-shadow {
+/* Soft ground shadow ellipse under robot (CSS, not clipped by canvas) */
+.hero-stage-card .hero-ground-shadow {
   position: absolute !important;
-  bottom: 0px !important;
+  bottom: 5% !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  width: clamp(240px, 32vw, 320px) !important;
-  height: 24px !important;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.04) 45%, transparent 70%) !important;
+  width: clamp(260px, 34vw, 360px) !important;
+  height: 36px !important;
+  background: radial-gradient(ellipse at center, rgba(30, 41, 59, 0.22) 0%, rgba(30, 41, 59, 0.08) 45%, transparent 70%) !important;
   border-radius: 50% !important;
-  filter: blur(6px) !important;
+  filter: blur(10px) !important;
   pointer-events: none !important;
   z-index: 1 !important;
+}
+
+/* Mobile responsive (under 800px): card radius 28px, min-height 420px, robot ~55% height */
+@media (max-width: 800px) {
+  .hero-centered-column {
+    padding-top: calc(var(--nav-h, 56px) + 28px) !important;
+  }
+  .hero-stage-card {
+    border-radius: 28px !important;
+    min-height: 420px !important;
+    margin-top: 24px !important;
+  }
+  .hero-stage-card .hero-robot-wrapper {
+    height: 55% !important;
+    min-height: 230px !important;
+  }
+  .hero-stage-card .liquid__blob {
+    filter: blur(40px) !important;
+  }
 }
 
 /* Reset old absolute position hero blocks */
@@ -4139,181 +4299,8 @@ html[data-motion=on] .hero-sheet {
 }
 
 /* ==========================================================================
-   V2 ENHANCEMENTS: LIQUID CRYSTAL NAVBAR, STUDIO MANIFESTO, PREMIUM FORM & VIBRANT BUTTONS
+   V2 ENHANCEMENTS: STUDIO MANIFESTO, PREMIUM FORM & VIBRANT ACCENTS
    ========================================================================== */
-
-/* 1. Liquid Crystal Floating Navbar */
-.ronin-header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 1000 !important;
-  padding: 12px 16px 0 !important;
-  display: flex !important;
-  justify-content: center !important;
-  pointer-events: none !important;
-  background: transparent !important;
-}
-
-.ronin-header-wrap {
-  width: min(1140px, 100%) !important;
-  padding: 0 !important;
-  pointer-events: auto !important;
-}
-
-.ronin-nav {
-  width: 100% !important;
-  height: 60px !important;
-  border-radius: 9999px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 0 10px 0 18px !important;
-
-  /* Liquid Crystal Prismatic Glass Sheen */
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.8) 0%,
-    rgba(238, 245, 255, 0.62) 35%,
-    rgba(255, 243, 250, 0.6) 70%,
-    rgba(255, 255, 255, 0.85) 100%
-  ) !important;
-  backdrop-filter: blur(28px) saturate(210%) brightness(104%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(210%) brightness(104%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.88) !important;
-  box-shadow:
-    0 16px 40px -10px rgba(3, 27, 56, 0.12),
-    0 0 0 1px rgba(255, 255, 255, 0.75) inset,
-    0 1px 2px 0 rgba(147, 197, 253, 0.35) inset,
-    0 -1px 2px 0 rgba(225, 91, 62, 0.15) inset !important;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.ronin-brand-wrap {
-  display: flex !important;
-  align-items: center !important;
-}
-
-.ronin-brand-wrap .brand {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  text-decoration: none !important;
-}
-
-.ronin-brand-wrap .brand strong {
-  font-family: var(--font-sans) !important;
-  font-size: 16px !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.02em !important;
-  color: #000000 !important;
-}
-
-.ronin-brand-wrap .brand strong span {
-  font-weight: 500 !important;
-  color: #0071e3 !important;
-}
-
-.ronin-links {
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-}
-
-.ronin-nav-item {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 7px !important;
-  padding: 8px 14px !important;
-  border-radius: 9999px !important;
-  color: #000000 !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.ronin-nav-icon {
-  color: #0071e3 !important;
-  transition: transform 0.2s ease !important;
-}
-
-.ronin-nav-item:hover {
-  background: rgba(255, 255, 255, 0.8) !important;
-  color: #000000 !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
-}
-
-.ronin-nav-item:hover .ronin-nav-icon {
-  transform: scale(1.15) !important;
-}
-
-.ronin-nav-item[aria-current="page"] {
-  background: #ffffff !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-}
-
-.ronin-actions {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
-.ronin-icon-btn {
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 50% !important;
-  display: grid !important;
-  place-items: center !important;
-  background: rgba(255, 255, 255, 0.75) !important;
-  border: 1px solid rgba(255, 255, 255, 0.9) !important;
-  color: #000000 !important;
-  cursor: pointer !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-  transition: all 0.2s ease !important;
-}
-
-.ronin-icon-btn:hover {
-  background: #ffffff !important;
-  transform: scale(1.05) !important;
-}
-
-.ronin-cta-pill {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 7px !important;
-  padding: 9px 18px !important;
-  border-radius: 9999px !important;
-  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
-  color: #ffffff !important;
-  font-size: 13.5px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-  box-shadow: 0 4px 16px rgba(225, 91, 62, 0.38) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  transition: all 0.2s ease !important;
-}
-
-.ronin-cta-pill * {
-  color: #ffffff !important;
-}
-
-.ronin-cta-pill:hover {
-  background: linear-gradient(135deg, #ff5f40 0%, #e84d2d 100%) !important;
-  box-shadow: 0 8px 24px rgba(225, 91, 62, 0.52) !important;
-  transform: translateY(-1px) !important;
-}
-
-@media (max-width: 850px) {
-  .ronin-links {
-    display: none !important;
-  }
-  .ronin-cta-pill {
-    display: none !important;
-  }
-}
 
 /* 2. Studio Manifesto Pre-Footer Section */
 .studio-manifesto-section {
@@ -4371,7 +4358,7 @@ html[data-motion=on] .hero-sheet {
 }
 
 .manifesto-badge-icon {
-  color: #e15b3e !important;
+  color: #ffffff !important;
 }
 
 .manifesto-badge * {
@@ -4441,30 +4428,23 @@ html[data-motion=on] .hero-sheet {
   gap: 8px !important;
   font-size: 13px !important;
   font-weight: 600 !important;
-  color: #0071e3 !important;
+  color: #000000 !important;
 }
 
 .accreditation-dot {
   width: 8px !important;
   height: 8px !important;
   border-radius: 50% !important;
-  background: #e15b3e !important;
+  background: #000000 !important;
 }
 
-/* 3. Detailed & Premium Form */
+/* 2. Premium Luxury Studio Contact Form */
 .premium-studio-form {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(244, 248, 255, 0.82) 50%,
-    rgba(255, 255, 255, 0.94) 100%
-  ) !important;
-  backdrop-filter: blur(28px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.9) !important;
-  border-radius: 28px !important;
-  padding: clamp(24px, 4vw, 44px) !important;
-  box-shadow: 0 20px 50px -10px rgba(3, 27, 56, 0.08) !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 32px !important;
+  padding: clamp(28px, 4.5vw, 48px) !important;
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04) !important;
 }
 
 .form-section-header {
@@ -4488,18 +4468,20 @@ html[data-motion=on] .hero-sheet {
 }
 
 .form-step-title {
-  font-size: 16px !important;
+  font-size: 17px !important;
   font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
   color: #000000 !important;
   margin: 0 !important;
   line-height: 1.2 !important;
 }
 
 .form-step-desc {
-  font-size: 12px !important;
+  font-size: 12.5px !important;
   color: #000000 !important;
-  opacity: 0.65 !important;
+  opacity: 0.6 !important;
   display: block !important;
+  margin-top: 2px !important;
 }
 
 .form-chips-grid {
@@ -4512,20 +4494,21 @@ html[data-motion=on] .hero-sheet {
   display: inline-flex !important;
   align-items: center !important;
   gap: 7px !important;
-  padding: 8px 16px !important;
+  padding: 9px 18px !important;
   border-radius: 9999px !important;
-  background: #ffffff !important;
-  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
+  background: #f8fafc !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.08) !important;
   color: #000000 !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
   cursor: pointer !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .form-scope-chip:hover {
-  border-color: #0071e3 !important;
-  color: #0071e3 !important;
+  border-color: #000000 !important;
+  background: #ffffff !important;
+  color: #000000 !important;
   transform: translateY(-1px) !important;
 }
 
@@ -4533,6 +4516,7 @@ html[data-motion=on] .hero-sheet {
   background: #000000 !important;
   border-color: #000000 !important;
   color: #ffffff !important;
+  font-weight: 600 !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
 }
 
@@ -4563,26 +4547,54 @@ html[data-motion=on] .hero-sheet {
 }
 
 .form-segment-item {
-  padding: 7px 14px !important;
+  padding: 8px 16px !important;
   border-radius: 12px !important;
-  background: #ffffff !important;
+  background: #f8fafc !important;
   border: 1px solid rgba(0, 0, 0, 0.09) !important;
   color: #000000 !important;
-  font-size: 12.5px !important;
-  font-weight: 600 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
   cursor: pointer !important;
   transition: all 0.18s ease !important;
 }
 
 .form-segment-item:hover {
-  border-color: #0071e3 !important;
+  border-color: #000000 !important;
+  background: #ffffff !important;
+  color: #000000 !important;
 }
 
 .form-segment-item.is-selected {
-  background: #0071e3 !important;
-  border-color: #0071e3 !important;
+  background: #000000 !important;
+  border-color: #000000 !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14) !important;
+}
+
+.form-segment-item.is-selected * {
+  color: #ffffff !important;
+}
+
+.premium-studio-form .form-input,
+.premium-studio-form .form-textarea {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-radius: 14px !important;
+  padding: 13px 16px !important;
+  font-size: 15px !important;
+  font-family: var(--font-sans) !important;
+  color: #000000 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.premium-studio-form .form-input:focus,
+.premium-studio-form .form-textarea:focus {
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 2px #000000 !important;
+  outline: none !important;
 }
 
 .nda-toggle-box {
@@ -4590,23 +4602,24 @@ html[data-motion=on] .hero-sheet {
   display: flex !important;
   align-items: flex-start !important;
   gap: 12px !important;
-  padding: 14px 16px !important;
+  padding: 16px 20px !important;
   border-radius: 16px !important;
-  background: rgba(255, 255, 255, 0.85) !important;
+  background: #f8fafc !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
   cursor: pointer !important;
   transition: all 0.2s ease !important;
 }
 
 .nda-toggle-box:hover {
-  border-color: #0071e3 !important;
+  border-color: #000000 !important;
+  background: #ffffff !important;
 }
 
 .nda-checkbox-indicator {
   width: 20px !important;
   height: 20px !important;
   border-radius: 6px !important;
-  border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.25) !important;
   background: #ffffff !important;
   display: grid !important;
   place-items: center !important;
@@ -4617,28 +4630,29 @@ html[data-motion=on] .hero-sheet {
 }
 
 .nda-checkbox-indicator.is-checked {
-  background: #e15b3e !important;
-  border-color: #e15b3e !important;
+  background: #000000 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
 }
 
 .nda-title-row {
   display: flex !important;
   align-items: center !important;
   gap: 6px !important;
-  font-size: 13.5px !important;
+  font-size: 14px !important;
   color: #000000 !important;
 }
 
 .nda-shield-icon {
-  color: #e15b3e !important;
+  color: #000000 !important;
 }
 
 .nda-desc {
   margin: 4px 0 0 0 !important;
-  font-size: 12px !important;
-  line-height: 1.4 !important;
+  font-size: 12.5px !important;
+  line-height: 1.45 !important;
   color: #000000 !important;
-  opacity: 0.7 !important;
+  opacity: 0.65 !important;
 }
 
 .form-submit-row {
@@ -4646,149 +4660,83 @@ html[data-motion=on] .hero-sheet {
   align-items: center !important;
   justify-content: space-between !important;
   flex-wrap: wrap !important;
-  gap: 14px !important;
+  gap: 16px !important;
+}
+
+.send-brief-btn {
+  background: #000000 !important;
+  color: #ffffff !important;
+  min-height: 52px !important;
+  height: 52px !important;
+  padding: 0 32px !important;
+  border-radius: 9999px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  border: 1px solid #000000 !important;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.22) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.send-brief-btn:hover {
+  background: #262626 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.send-brief-btn * {
+  color: #ffffff !important;
 }
 
 .form-sla-guarantee {
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
-  font-size: 12.5px !important;
-  font-weight: 600 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
   color: #000000 !important;
-  opacity: 0.7 !important;
+  opacity: 0.75 !important;
 }
 
-/* 4. Button Color System: Coral Red & Azure Blue */
-.hd-btn-primary,
-.btn-primary,
-.send-brief-btn,
-.coral-glow,
-.hd-btn--coral {
-  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  box-shadow: 0 4px 18px rgba(225, 91, 62, 0.38), 0 1px 0 rgba(255, 255, 255, 0.25) inset !important;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  border-radius: 9999px !important;
-  padding: 12px 24px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-}
-
-.hd-btn-primary:hover,
-.btn-primary:hover,
-.send-brief-btn:hover,
-.coral-glow:hover,
-.hd-btn--coral:hover {
-  background: linear-gradient(135deg, #ff5f40 0%, #e84d2d 100%) !important;
-  box-shadow: 0 8px 28px rgba(225, 91, 62, 0.52), 0 1px 0 rgba(255, 255, 255, 0.35) inset !important;
-  transform: translateY(-2px) !important;
-  color: #ffffff !important;
-}
-
-.hd-btn-primary *,
-.send-brief-btn * {
-  color: #ffffff !important;
-}
-
-.hd-btn-secondary,
-.btn-secondary,
-.hd-btn-azure,
-.hd-btn--azure,
-.hd-btn--azure-solid,
-.hd-btn-navy,
-.hero-explore-btn {
-  background: linear-gradient(135deg, #0071e3 0%, #004bb0 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  box-shadow: 0 4px 18px rgba(0, 113, 227, 0.38), 0 1px 0 rgba(255, 255, 255, 0.25) inset !important;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  border-radius: 9999px !important;
-  padding: 12px 24px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-}
-
-.hd-btn-secondary:hover,
-.btn-secondary:hover,
-.hd-btn-azure:hover,
-.hd-btn--azure:hover,
-.hd-btn--azure-solid:hover,
-.hd-btn-navy:hover,
-.hero-explore-btn:hover {
-  background: linear-gradient(135deg, #1d82f5 0%, #005bb5 100%) !important;
-  box-shadow: 0 8px 28px rgba(0, 113, 227, 0.52), 0 1px 0 rgba(255, 255, 255, 0.35) inset !important;
-  transform: translateY(-2px) !important;
-  color: #ffffff !important;
-}
-
-.hd-btn-secondary *,
-.btn-secondary *,
-.hd-btn-azure *,
-.hd-btn--azure *,
-.hd-btn--azure-solid *,
-.hd-btn-navy *,
-.hero-explore-btn * {
-  color: #ffffff !important;
-}
-
-.hd-btn-white {
-  background: #ffffff !important;
-  color: #000000 !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  border-radius: 9999px !important;
-  padding: 12px 24px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-}
-
-.hd-btn-white:hover {
-  background: #f5f5f7 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
-  color: #000000 !important;
-}
-
-.hd-btn-white * {
-  color: #000000 !important;
-}
-
+/* 3. Text links: black on light, white on dark, underline on hover */
 .hd-text-link,
 .hero-explore-link {
-  color: #0071e3 !important;
+  color: #000000 !important;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
   font-weight: 600 !important;
-  transition: all 0.2s ease !important;
+  transition: opacity 0.2s ease !important;
 }
 
 .hd-text-link:hover,
 .hero-explore-link:hover {
-  color: #0056b3 !important;
-  transform: translateX(2px) !important;
+  color: #000000 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
 }
 
 .hd-text-link *,
 .hero-explore-link * {
   color: inherit !important;
 }
+
+[data-mode="dark"] .hd-text-link,
+[data-mode="dark"] .hero-explore-link {
+  color: #ffffff !important;
+}
+
+[data-mode="dark"] .hd-text-link:hover,
+[data-mode="dark"] .hero-explore-link:hover {
+  color: #ffffff !important;
+}
+
 
 
 

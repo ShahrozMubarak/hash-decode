@@ -57,17 +57,26 @@ export default function MotionLanding({
               <a className="hd-btn-primary hero-start-cta" href="#brief">
                 <span className="btn-label">Start a project</span>
               </a>
-              <a href="#services" className="hd-btn-azure hero-explore-btn">
-                <span className="btn-label">Explore the studio ›</span>
+              <a href="#services" className="hd-text-link hero-explore-link">
+                <span>Explore the studio ›</span>
               </a>
             </div>
 
-            <figure className="hero-robot-wrapper">
-              <div className="specimen-visual" id="hero-model-anchor">
-                <SceneSurface model="eva" autoMobile={true} />
+            {/* HERO STAGE CARD (TASK B) */}
+            <div className="hero-stage-card liquid liquid--cloud is-visible" aria-label="Autonomous Studio Agent Stage">
+              <div className="hero-stage-card__inner">
+                <span className="liquid__blob liquid__blob--a" aria-hidden="true" />
+                <span className="liquid__blob liquid__blob--b" aria-hidden="true" />
+                <div className="hero-stage-card__content">
+                  <figure className="hero-robot-wrapper">
+                    <div className="specimen-visual" id="hero-model-anchor">
+                      <SceneSurface model="eva" autoMobile={true} />
+                    </div>
+                    <div className="hero-ground-shadow" aria-hidden="true" />
+                  </figure>
+                </div>
               </div>
-              <div className="hero-ground-shadow" aria-hidden="true" />
-            </figure>
+            </div>
           </div>
         </div>
       </section>

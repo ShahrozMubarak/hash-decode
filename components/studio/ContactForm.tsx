@@ -32,11 +32,11 @@ export const timelineOptions = [
 ];
 
 export const budgetOptions = [
-  'Under US$5,000',
-  'US$5,000–$15,000',
-  'US$15,000–$35,000',
-  'US$35,000+',
-  'Still exploring',
+  'Under PKR 1.5M (< $5k)',
+  'PKR 1.5M – 4M ($5k–$15k)',
+  'PKR 4M – 10M ($15k–$35k)',
+  'PKR 10M+ ($35k+)',
+  'Flexible / Still exploring',
 ];
 
 interface ContactFormProps {
@@ -119,13 +119,13 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
               cy="26"
               r="24"
               fill="none"
-              stroke="#e15b3e"
+              stroke="#000000"
               strokeWidth="2.5"
             />
             <path
               className="success-check-path"
               fill="none"
-              stroke="#e15b3e"
+              stroke="#000000"
               strokeWidth="3"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -544,7 +544,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
       <div className="form-submit-row" style={{ marginTop: '1.75rem' }}>
         <button
           id="send-brief-btn"
-          className={`hd-btn-primary send-brief-btn coral-glow ${busy ? 'is-loading' : ''}`}
+          className={`hd-btn-primary send-brief-btn ${busy ? 'is-loading' : ''}`}
           disabled={busy}
           aria-busy={busy}
           type="submit"
