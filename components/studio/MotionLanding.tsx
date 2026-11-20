@@ -187,6 +187,7 @@ export default function MotionLanding({
               desc="Full e-commerce platform with custom checkout, inventory synchronization, and bespoke brand aesthetics."
               ctaText="View project"
               ctaHref="/portfolio/foolish-arc"
+              ctaVariant="coral"
               visual={
                 <div className="visual-panel browser-mock" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '12px', borderBottom: '1px solid currentColor', opacity: 0.85 }}>
@@ -218,6 +219,7 @@ export default function MotionLanding({
               desc="Real-time multi-cloud price modeling tool that helps engineering teams forecast and reduce AWS/GCP spend."
               ctaText="Try the estimator"
               ctaHref="/tools/estimate"
+              ctaVariant="azure"
               visual={<CostEstimatorMock />}
             />
 
@@ -229,12 +231,13 @@ export default function MotionLanding({
               desc="Instant HTTP response header analyzer grading websites against OWASP, HSTS, and CSP security baselines."
               ctaText="Run a scan"
               ctaHref="/tools/security-check"
+              ctaVariant="coral"
               visual={<HeaderScannerMock />}
             />
           </div>
 
           <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
-            <a className="hd-btn-primary" href="/portfolio">
+            <a className="hd-btn-secondary" href="/portfolio">
               <span className="btn-label">View all projects</span>
             </a>
           </div>

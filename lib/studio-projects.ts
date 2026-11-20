@@ -6,6 +6,7 @@ export interface StudioProject {
   palette: 'midnight' | 'violet' | 'teal';
   ctaText: string;
   ctaHref: string;
+  ctaVariant?: 'coral' | 'azure' | 'dark' | 'white';
   image?: string;
   reverse?: boolean;
 }
@@ -19,6 +20,7 @@ export const studioProjects: StudioProject[] = [
     palette: 'midnight',
     ctaText: 'View project',
     ctaHref: '/portfolio/foolish-arc',
+    ctaVariant: 'coral',
     image: '/team/foolisharc.jpeg',
     reverse: false,
   },
@@ -30,6 +32,7 @@ export const studioProjects: StudioProject[] = [
     palette: 'violet',
     ctaText: 'Try the estimator',
     ctaHref: '/tools/estimate',
+    ctaVariant: 'azure',
     reverse: true,
   },
   {
@@ -40,6 +43,8 @@ export const studioProjects: StudioProject[] = [
     palette: 'teal',
     ctaText: 'Run a scan',
     ctaHref: '/tools/security-check',
+    ctaVariant: 'coral',
     reverse: false,
   },
 ];
+

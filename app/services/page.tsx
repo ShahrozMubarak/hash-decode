@@ -46,6 +46,7 @@ export default function Services() {
             visual={<BrowserMock />}
             ctaText="Discuss products"
             ctaHref="/contact?type=Products"
+            ctaVariant="coral"
           />
           <WideCard
             palette="lilac"
@@ -56,6 +57,7 @@ export default function Services() {
             visual={<TerminalMock />}
             ctaText="Discuss platforms"
             ctaHref="/contact?type=Platforms"
+            ctaVariant="azure"
           />
           <WideCard
             palette="peach"
@@ -65,6 +67,7 @@ export default function Services() {
             visual={<ScopeMapMock />}
             ctaText="Discuss tools"
             ctaHref="/contact?type=Tools"
+            ctaVariant="coral"
           />
           <WideCard
             palette="ink"
@@ -75,6 +78,7 @@ export default function Services() {
             visual={<ScanReportMock />}
             ctaText="Discuss security"
             ctaHref="/contact?type=Security"
+            ctaVariant="white"
           />
         </div>
       </section>

@@ -15,6 +15,7 @@ export interface WideCardProps extends HTMLAttributes<HTMLElement> {
   linkHref?: string;
   ctaText?: string;
   ctaHref?: string;
+  ctaVariant?: 'coral' | 'azure' | 'dark' | 'white';
   visual?: ReactNode;
   children?: ReactNode;
   minHeight?: number | string;
@@ -32,6 +33,7 @@ export default function WideCard({
   linkHref,
   ctaText,
   ctaHref,
+  ctaVariant,
   visual,
   children,
   minHeight,
@@ -95,7 +97,18 @@ export default function WideCard({
               </a>
             )}
             {ctaText && ctaHref && (
-              <a href={ctaHref} className="hd-btn-primary">
+              <a
+                href={ctaHref}
+                className={
+                  ctaVariant === 'azure'
+                    ? 'hd-btn-azure'
+                    : ctaVariant === 'white'
+                    ? 'hd-btn-white'
+                    : ctaVariant === 'dark'
+                    ? 'hd-btn-dark'
+                    : 'hd-btn-primary'
+                }
+              >
                 <span className="btn-label">{ctaText}</span>
               </a>
             )}

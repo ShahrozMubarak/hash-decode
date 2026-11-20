@@ -92,6 +92,7 @@ export default function Portfolio() {
               desc={p.desc}
               ctaText={p.ctaText}
               ctaHref={p.ctaHref}
+              ctaVariant={p.ctaVariant}
               visual={getVisual(p.slug, p.image)}
             />
           ))}

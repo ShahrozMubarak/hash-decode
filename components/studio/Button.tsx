@@ -4,9 +4,11 @@ import type { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from 'reac
 import Link from 'next/link';
 
 export type ButtonMode = 'light' | 'dark';
+export type ButtonVariant = 'coral' | 'azure' | 'dark' | 'white' | 'glass';
 
 interface BaseButtonProps {
   mode?: ButtonMode;
+  variant?: ButtonVariant;
   children: ReactNode;
   className?: string;
 }
@@ -19,11 +21,12 @@ export type ButtonProps = BaseButtonProps &
 
 export default function Button({
   mode = 'light',
+  variant = 'coral',
   children,
   className = '',
   ...props
 }: ButtonProps) {
-  const classes = `hd-btn-primary hd-btn-primary--${mode} ${className}`.trim();
+  const classes = `hd-btn-primary hd-btn-primary--${mode} hd-btn--${variant} ${className}`.trim();
 
   if ('href' in props && props.href) {
     const { href, ...rest } = props;
@@ -47,6 +50,7 @@ interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   children: ReactNode;
   className?: string;
   mode?: ButtonMode;
+  variant?: 'azure' | 'coral' | 'dark';
 }
 
 export function TextLink({
@@ -54,12 +58,13 @@ export function TextLink({
   children,
   className = '',
   mode = 'light',
+  variant = 'azure',
   ...props
 }: TextLinkProps) {
   return (
     <Link
       href={href}
-      className={`hd-text-link hd-text-link--${mode} ${className}`.trim()}
+      className={`hd-text-link hd-text-link--${mode} hd-text-link--${variant} ${className}`.trim()}
       {...props}
     >
       <span>{children}</span>
