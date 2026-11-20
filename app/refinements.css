@@ -82,7 +82,7 @@ body {
 [data-mode="light"],
 .hd-section--white,
 .hd-section--off-white,
-#overview, #services, #security, #team, #contact,
+#services, #security, #team, #contact,
 .page-about-content, .page-services-content, .page-contact-content,
 .page-tools-hub, .page-tool-detail, .page-blog-content, .page-privacy-content,
 .page-error-container {
@@ -92,6 +92,7 @@ body {
 /* Dark surfaces: text is pure #ffffff */
 [data-mode="dark"],
 .hd-section--black,
+#overview,
 #work {
   color: #ffffff !important;
 }
@@ -99,7 +100,6 @@ body {
 /* Section 3.1: No grey text, no accent text, no two-tone text */
 [data-mode="light"] h1, [data-mode="light"] h2, [data-mode="light"] h3,
 [data-mode="light"] p, [data-mode="light"] li, [data-mode="light"] strong,
-#overview h1, #overview h2, #overview h3, #overview p,
 #services h1, #services h2, #services h3, #services p,
 #security h1, #security h2, #security h3, #security p,
 #team h1, #team h2, #team h3, #team p,
@@ -108,7 +108,6 @@ body {
 }
 
 [data-mode="light"] span:not(.btn-label):not([class*="btn"]),
-#overview span:not(.btn-label):not([class*="btn"]),
 #services span:not(.btn-label):not([class*="btn"]),
 #security span:not(.btn-label):not([class*="btn"]),
 #team span:not(.btn-label):not([class*="btn"]),
@@ -931,21 +930,32 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 #overview,
 .hero-runway,
 .original-composition .hero-runway,
+.hero-sheet,
 .original-composition .hero-sheet {
-  background: #ffffff !important;
-  color: var(--black) !important;
+  background: radial-gradient(circle at 52% 45%, #165e6b 0%, #0b3944 45%, #051821 100%) !important;
+  background-color: #051821 !important;
+  color: #ffffff !important;
   position: relative !important;
 }
+#overview h1,
+#overview .hero-h1,
+#overview .hero-h1 span,
 .hero-heading-block h1,
 .hero-h1-line {
-  color: var(--text) !important;
+  color: #ffffff !important;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45) !important;
 }
+#overview p,
+#overview .hero-subtext,
 .hero-cta-subtext {
-  color: var(--text-2) !important;
+  color: rgba(200, 235, 240, 0.85) !important;
 }
+#overview .hero-eyebrow,
 .hero-pill-badge {
-  color: var(--text-2) !important;
-  border-color: var(--hairline) !important;
+  color: #8ef2ff !important;
+  border-color: rgba(142, 242, 255, 0.35) !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
 }
 
 /* 2. CAPABILITIES (#services) - Grey section */
@@ -2621,13 +2631,13 @@ html.header-compressed .ronin-nav {
 .ronin-brand-wrap .brand strong span {
   font-family: var(--font-sans) !important;
   font-size: 15px !important;
-  font-weight: 800 !important;
+  font-weight: 700 !important;
   letter-spacing: -0.02em !important;
-  color: #000000 !important;
+  color: #ffffff !important;
   -webkit-font-smoothing: antialiased !important;
 }
 
-/* 4. Nav Links: Centered, BLACK, BOLD and THICK (weight 800) */
+/* 4. Nav Links: Centered, White, Weight 600 */
 .site-links,
 .ronin-links {
   position: absolute !important;
@@ -2647,10 +2657,10 @@ html.header-compressed .ronin-nav {
   border-radius: 0 !important;
   box-shadow: none !important;
   padding: 0 !important;
-  color: #000000 !important;
+  color: #ffffff !important;
   font-family: var(--font-sans) !important;
   font-size: 15px !important;
-  font-weight: 800 !important;
+  font-weight: 600 !important;
   letter-spacing: -0.01em !important;
   text-decoration: none !important;
   opacity: 1 !important;
@@ -2810,7 +2820,7 @@ html.header-compressed .ronin-nav {
   }
 }
 
-/* Navbar contrast hardening: always dark-on-light, no white-on-white */
+/* Navbar contrast on dark sci-fi hero: crisp white elements matching Behance sci-fi UI */
 .site-header .ronin-nav-item,
 .site-header .ronin-nav-item:hover,
 .site-header .ronin-nav-item[aria-current="page"],
@@ -2818,46 +2828,46 @@ html.header-compressed .ronin-nav {
 .site-header .ronin-brand-wrap .brand,
 .site-header .ronin-brand-wrap .brand strong,
 .site-header .ronin-brand-wrap .brand strong span {
-  color: #000000 !important;
+  color: #ffffff !important;
 }
 
 .site-header .ronin-icon-btn,
 .site-header .motion-toggle,
 .site-header .nav-toggle {
-  background: transparent !important;
-  border: 2px solid #000000 !important;
-  color: #000000 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
   box-shadow: none !important;
 }
 
 .site-header .ronin-icon-btn:hover,
 .site-header .motion-toggle:hover,
 .site-header .nav-toggle:hover {
-  background: rgba(0, 0, 0, 0.06) !important;
-  border-color: #000000 !important;
-  color: #000000 !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  color: #ffffff !important;
   transform: none !important;
 }
 
 .site-header .ronin-icon-btn svg,
 .site-header .motion-toggle svg,
 .site-header .nav-toggle svg {
-  color: #000000 !important;
-  stroke: #000000 !important;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
 .site-header .burger-bar {
-  background: #000000 !important;
+  background: #ffffff !important;
 }
 
 .site-header .ronin-cta-pill,
 .site-header .nav-contact {
-  background: #000000 !important;
-  color: #ffffff !important;
+  background: #ffffff !important;
+  color: #051821 !important;
   border: none !important;
   border-radius: 999px !important;
   padding: 8px 18px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
   transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, box-shadow 0.2s ease !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -2867,7 +2877,7 @@ html.header-compressed .ronin-nav {
 
 .site-header .ronin-cta-pill *,
 .site-header .nav-contact * {
-  color: #ffffff !important;
+  color: #051821 !important;
   font-family: var(--font-sans) !important;
   font-size: 14px !important;
   font-weight: 700 !important;
@@ -2875,15 +2885,23 @@ html.header-compressed .ronin-nav {
 
 .site-header .ronin-cta-pill:hover,
 .site-header .nav-contact:hover {
-  background: #000000 !important;
-  opacity: 0.9 !important;
+  background: #ffffff !important;
+  opacity: 0.92 !important;
   transform: translateY(-1px) scale(1.02) !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
 .site-header .ronin-cta-pill:hover *,
 .site-header .nav-contact:hover * {
-  color: #ffffff !important;
+  color: #051821 !important;
+}
+
+html.header-compressed .site-header,
+.site-header.is-scrolled {
+  background: rgba(5, 24, 33, 0.88) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 /* Nav links breakpoint: keep desktop links visible on laptop/desktop */
@@ -3369,17 +3387,18 @@ a.hd-btn-azure:hover,
 }
 
 /* ==========================================================================
-   STAGE 4 (V2): Apple-Style Centered Hero (keep the robot)
+   STAGE 4 (V2): Futuristic Sci-Fi Hero Section
    ========================================================================== */
 
-/* Hero runway & sheet: Clean, crisp Apple white */
+/* Hero runway & sheet: Deep glowing teal sci-fi radial aura from ai_studio_code.html */
 #overview,
 .hero-runway,
 .original-composition .hero-runway,
 .hero-sheet,
 .original-composition .hero-sheet {
-  background: #ffffff !important;
-  color: var(--black) !important;
+  background: radial-gradient(circle at 52% 45%, #165e6b 0%, #0b3944 45%, #051821 100%) !important;
+  background-color: #051821 !important;
+  color: #ffffff !important;
   border-bottom: none !important;
   min-height: auto !important;
   height: auto !important;
@@ -3414,15 +3433,15 @@ html[data-motion=on] .hero-sheet {
   z-index: 10 !important;
 }
 
-/* 1. Eyebrow: 16px / weight 600, 16px gap to h1 */
+/* 1. Eyebrow: 14px / weight 600, uppercase letter-spacing 0.14em */
 .hero-eyebrow {
   font-family: var(--font-sans) !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
   line-height: 1.4 !important;
-  letter-spacing: -0.01em !important;
-  text-transform: none !important;
-  color: #000000 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #8ef2ff !important;
   margin: 0 0 16px 0 !important;
   padding: 0 !important;
   background: transparent !important;
@@ -3444,7 +3463,8 @@ html[data-motion=on] .hero-sheet {
   line-height: 1.05 !important;
   letter-spacing: -0.02em !important;
   word-spacing: 0.04em !important;
-  color: #000000 !important;
+  color: #ffffff !important;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.45) !important;
   margin: 0 0 24px 0 !important;
   max-width: 100% !important;
   text-align: center !important;
@@ -3456,18 +3476,19 @@ html[data-motion=on] .hero-sheet {
   }
 }
 
-.hero-h1 .highlight-word {
-  color: #000000 !important;
+.hero-h1 .highlight-word,
+.hero-h1 span {
+  color: #ffffff !important;
 }
 
-/* 3. Subtext: 22-24px / weight 500 / line-height 1.4 / max-width 640px, 32px gap to buttons */
+/* 3. Subtext: 20-22px / weight 400 / line-height 1.45 / max-width 640px, 32px gap to buttons */
 .hero-subtext {
   font-family: var(--font-sans) !important;
-  font-size: clamp(22px, 2.4vw, 24px) !important;
-  font-weight: 500 !important;
-  line-height: 1.4 !important;
+  font-size: clamp(20px, 2.2vw, 22px) !important;
+  font-weight: 400 !important;
+  line-height: 1.45 !important;
   letter-spacing: -0.01em !important;
-  color: #000000 !important;
+  color: rgba(200, 235, 240, 0.85) !important;
   max-width: 640px !important;
   margin: 0 auto 32px auto !important;
   text-align: center !important;
@@ -3487,33 +3508,34 @@ html[data-motion=on] .hero-sheet {
   min-height: 52px !important;
   height: 52px !important;
   padding: 0 28px !important;
-  font-size: 17px !important;
-  font-weight: 600 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
   border-radius: 9999px !important;
-  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
-  color: #ffffff !important;
+  background: #ffffff !important;
+  color: #051821 !important;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  box-shadow: 0 4px 18px rgba(255, 77, 45, 0.38) !important;
+  border: none !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 16px rgba(142, 242, 255, 0.25) !important;
   cursor: pointer !important;
   transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .hero-actions .hero-start-cta:hover {
-  background: linear-gradient(135deg, #ff5f40 0%, #eb4520 100%) !important;
-  color: #ffffff !important;
+  background: #ffffff !important;
+  color: #051821 !important;
   opacity: 1 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 28px rgba(255, 77, 45, 0.52) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 24px rgba(142, 242, 255, 0.45) !important;
   text-decoration: none !important;
 }
 
-.hero-actions .hero-start-cta * {
-  color: #ffffff !important;
-  fill: #ffffff !important;
+.hero-actions .hero-start-cta *,
+.hero-actions .hero-start-cta .btn-label {
+  color: #051821 !important;
+  font-weight: 700 !important;
 }
 
 #overview .hero-actions .hero-explore-btn,
@@ -3521,42 +3543,38 @@ html[data-motion=on] .hero-sheet {
 #overview .hero-explore-btn {
   min-height: 52px !important;
   height: 52px !important;
-  padding: 0 8px !important;
-  font-size: 17px !important;
+  padding: 0 28px !important;
+  font-size: 16px !important;
   font-weight: 600 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  background-image: none !important;
-  color: #000000 !important;
+  border-radius: 9999px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border: none !important;
+  border: 1.5px solid rgba(200, 235, 240, 0.45) !important;
   box-shadow: none !important;
   cursor: pointer !important;
-  transition: opacity 0.2s ease, color 0.2s ease !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease !important;
 }
 
 #overview .hero-actions .hero-explore-btn:hover,
 #overview .hero-actions .hd-btn-azure:hover,
 #overview .hero-explore-btn:hover {
-  background: transparent !important;
-  background-image: none !important;
-  color: #000000 !important;
-  opacity: 0.7 !important;
-  transform: none !important;
-  box-shadow: none !important;
-  text-decoration: underline !important;
-  text-underline-offset: 4px !important;
-  border: none !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(200, 235, 240, 0.8) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  text-decoration: none !important;
 }
 
 #overview .hero-actions .hero-explore-btn *,
 #overview .hero-actions .hd-btn-azure *,
 #overview .hero-explore-btn * {
-  color: #000000 !important;
-  fill: #000000 !important;
+  color: #ffffff !important;
 }
 
 .hero-actions .hero-explore-link {
@@ -3570,89 +3588,64 @@ html[data-motion=on] .hero-sheet {
   transition: color 0.2s ease, opacity 0.2s ease !important;
 }
 
+.hero-actions .hero-explore-link {
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  color: #8ef2ff !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  transition: color 0.2s ease, opacity 0.2s ease !important;
+}
+
 .hero-actions .hero-explore-link:hover {
   text-decoration: underline !important;
   text-underline-offset: 4px !important;
-  color: #004bb0 !important;
+  color: #ffffff !important;
 }
 
 .hero-actions .hero-explore-link * {
-  color: #0071e3 !important;
+  color: #8ef2ff !important;
 }
 
 /* ==========================================================================
-   TASK B: HERO STAGE CARD
+   TASK B: HERO STAGE CARD (Transparent immersion for the hooded cyber mech)
    ========================================================================== */
 
-/* 1. Card container: max-width 1120px, centered, radius 40px, min-height clamp(480px, 62vh, 640px), 32px gap from buttons, no border, no shadow */
 .hero-stage-card {
   position: relative !important;
   width: 100% !important;
   max-width: 1120px !important;
-  margin: 32px auto 0 auto !important;
+  margin: 24px auto 0 auto !important;
   border-radius: 40px !important;
-  min-height: clamp(480px, 62vh, 640px) !important;
-  background: #e6f0ff !important;
-  background-color: #e6f0ff !important;
+  min-height: clamp(520px, 68vh, 720px) !important;
+  background: transparent !important;
+  background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  contain: paint !important;
 }
 
-/* 2. Inner overflow-hidden layer for liquid effect blobs */
 .hero-stage-card__inner {
   position: absolute !important;
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   border-radius: 40px !important;
-  background: #e6f0ff !important;
-  background-color: #e6f0ff !important;
+  background: transparent !important;
+  background-color: transparent !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
 }
 
-/* Blobs: base #e6f0ff, blob A #b9d4ff, blob B #dcd0ff, blur 60px, slow transform drift 20-26s */
 .hero-stage-card .liquid__blob {
-  position: absolute !important;
-  border-radius: 50% !important;
-  pointer-events: none !important;
-  z-index: 0 !important;
-  filter: blur(60px) !important;
-  opacity: 0.65 !important;
-  will-change: transform !important;
-  display: block !important;
-}
-
-.hero-stage-card .liquid__blob--a {
-  background-color: #b9d4ff !important;
-  width: 65% !important;
-  height: 65% !important;
-  top: -10% !important;
-  left: -5% !important;
-  animation: drift-a 22s ease-in-out infinite alternate !important;
-}
-
-.hero-stage-card .liquid__blob--b {
-  background-color: #dcd0ff !important;
-  width: 60% !important;
-  height: 60% !important;
-  bottom: -10% !important;
-  right: -5% !important;
-  animation: drift-b 26s ease-in-out infinite alternate !important;
-  animation-delay: -7s !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-stage-card .liquid__blob {
-    animation: none !important;
-  }
+  display: none !important;
 }
 
 .hero-stage-card__content {
@@ -3665,12 +3658,11 @@ html[data-motion=on] .hero-sheet {
   justify-content: center !important;
 }
 
-/* 3. Robot canvas inside card: centered, about 60% of card height, transparent canvas */
 .hero-stage-card .hero-robot-wrapper {
   position: relative !important;
   width: 100% !important;
-  height: 60% !important;
-  min-height: 280px !important;
+  height: 100% !important;
+  min-height: 480px !important;
   margin: 0 auto !important;
   display: flex !important;
   align-items: center !important;
@@ -3684,6 +3676,7 @@ html[data-motion=on] .hero-sheet {
 .hero-stage-card .scene-surface {
   width: 100% !important;
   height: 100% !important;
+  min-height: 480px !important;
   background: transparent !important;
   pointer-events: auto !important;
   transform: none !important;
@@ -3700,37 +3693,32 @@ html[data-motion=on] .hero-sheet {
   transform: none !important;
 }
 
-/* Soft ground shadow ellipse under robot (CSS, not clipped by canvas) */
 .hero-stage-card .hero-ground-shadow {
   position: absolute !important;
-  bottom: 5% !important;
+  bottom: 6% !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  width: clamp(260px, 34vw, 360px) !important;
-  height: 36px !important;
-  background: radial-gradient(ellipse at center, rgba(30, 41, 59, 0.22) 0%, rgba(30, 41, 59, 0.08) 45%, transparent 70%) !important;
+  width: clamp(280px, 36vw, 420px) !important;
+  height: 38px !important;
+  background: radial-gradient(ellipse at center, rgba(5, 24, 33, 0.75) 0%, rgba(5, 24, 33, 0.3) 45%, transparent 75%) !important;
   border-radius: 50% !important;
-  filter: blur(10px) !important;
+  filter: blur(12px) !important;
   pointer-events: none !important;
   z-index: 1 !important;
 }
 
-/* Mobile responsive (under 800px): card radius 28px, min-height 420px, robot ~55% height */
 @media (max-width: 800px) {
   .hero-centered-column {
-    padding-top: calc(var(--nav-h, 56px) + 28px) !important;
+    padding-top: calc(var(--nav-h, 56px) + 24px) !important;
   }
   .hero-stage-card {
     border-radius: 28px !important;
-    min-height: 420px !important;
-    margin-top: 24px !important;
+    min-height: 400px !important;
+    margin-top: 16px !important;
   }
   .hero-stage-card .hero-robot-wrapper {
-    height: 55% !important;
-    min-height: 230px !important;
-  }
-  .hero-stage-card .liquid__blob {
-    filter: blur(40px) !important;
+    height: 100% !important;
+    min-height: 380px !important;
   }
 }
 
