@@ -8,6 +8,7 @@ export interface WideCardProps extends HTMLAttributes<HTMLElement> {
   palette?: LiquidPalette;
   reverse?: boolean;
   stepNumber?: string | number;
+  eyebrow?: string;
   title?: string;
   desc?: string;
   linkText?: string;
@@ -22,6 +23,7 @@ export default function WideCard({
   palette = 'cloud',
   reverse = false,
   stepNumber,
+  eyebrow,
   title,
   desc,
   linkText,
@@ -80,6 +82,7 @@ export default function WideCard({
                 {stepNumber}
               </span>
             )}
+            {eyebrow && <p className="wide-card__eyebrow">{eyebrow}</p>}
             {title && <h3 className="wide-card__title">{title}</h3>}
             {desc && <p className="wide-card__desc">{desc}</p>}
             {linkText && linkHref && (

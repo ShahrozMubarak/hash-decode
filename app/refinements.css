@@ -111,7 +111,17 @@ body {
 [data-mode="dark"] h1, [data-mode="dark"] h2, [data-mode="dark"] h3,
 [data-mode="dark"] p, [data-mode="dark"] span, [data-mode="dark"] a,
 [data-mode="dark"] li, [data-mode="dark"] strong,
-#work h1, #work h2, #work h3, #work p, #work span, #work a {
+#work h1, #work h2, #work h3, #work p, #work span, #work a,
+.wide-card[data-mode="dark"] h1,
+.wide-card[data-mode="dark"] h2,
+.wide-card[data-mode="dark"] h3,
+.wide-card[data-mode="dark"] p,
+.wide-card[data-mode="dark"] span,
+.wide-card[data-mode="dark"] a,
+.wide-card[data-mode="dark"] li,
+.wide-card[data-mode="dark"] strong,
+#services .wide-card[data-mode="dark"] *,
+#security .wide-card[data-mode="dark"] * {
   color: #ffffff !important;
 }
 
@@ -2755,7 +2765,9 @@ a.hd-btn-primary {
 [data-mode="dark"] .hd-text-link,
 .hd-section--black .hd-text-link,
 #work .hd-text-link,
-.wide-card[data-mode="dark"] .hd-text-link {
+.wide-card[data-mode="dark"] .hd-text-link,
+#services .wide-card[data-mode="dark"] .hd-text-link,
+#security .wide-card[data-mode="dark"] .hd-text-link {
   color: #ffffff !important;
 }
 

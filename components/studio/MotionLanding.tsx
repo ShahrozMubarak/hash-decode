@@ -10,50 +10,15 @@ import HeroParallaxManager from './HeroParallaxManager';
 import FAQAccordion from './FAQAccordion';
 import ProcessTimeline from './ProcessTimeline';
 import TeamStrip from './TeamStrip';
-import {
-  AppWindow,
-  Braces,
-  ShieldCheck,
-} from 'lucide-react';
-
-const homeServices = [
-  {
-    icon: AppWindow,
-    title: 'Custom Web Platforms',
-    desc: 'Fast, modern web apps built end to end.',
-    link: '/services',
-  },
-  {
-    icon: Braces,
-    title: 'Internal Tools & APIs',
-    desc: 'Backends, automations, and admin tools that scale.',
-    link: '/services',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Security Audits & Hardening',
-    desc: 'Penetration tests and fixes, before you launch.',
-    link: '/services',
-  },
-];
-
-const securitySteps = [
-  {
-    num: '1',
-    title: 'Scope',
-    desc: 'We map every entry point, API route, and data flow.',
-  },
-  {
-    num: '2',
-    title: 'Test',
-    desc: 'Manual and automated testing against real exploits.',
-  },
-  {
-    num: '3',
-    title: 'Verify',
-    desc: 'We retest every fix and give you a sign-off report.',
-  },
-];
+import Section from './Section';
+import Container from './Container';
+import SectionHeader from './SectionHeader';
+import WideCard from './WideCard';
+import BrowserMock from './visuals/BrowserMock';
+import TerminalMock from './visuals/TerminalMock';
+import ScanReportMock from './visuals/ScanReportMock';
+import ScopeMapMock from './visuals/ScopeMapMock';
+import ChecklistMock from './visuals/ChecklistMock';
 
 export default function MotionLanding({
   projects,
@@ -108,92 +73,102 @@ export default function MotionLanding({
         </div>
       </section>
 
-      {/* 1. CAPABILITIES (grey section, white cards) */}
-      <section className="section-rule-block" id="services" data-station="Services">
-        <div className="wrap">
-          <div className="section-head-rule">
-            <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
-              Capabilities
-            </span>
-            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Built to perform.
-            </h2>
-            <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-              Custom software, web platforms, and secure APIs, built around how your business works.
-            </p>
+      {/* 1. CAPABILITIES (grey section, alternating widecards) */}
+      <Section id="services" bg="grey" pad="regular" data-station="Services">
+        <Container>
+          <SectionHeader
+            eyebrow="Capabilities"
+            title="Built to perform."
+            sub="Custom software, web platforms, and secure APIs, built around how your business works."
+          />
+
+          <div className="wide-cards-stack">
+            <WideCard
+              palette="cloud"
+              reverse={false}
+              visual={<BrowserMock />}
+              eyebrow="Web platforms"
+              title="Fast, resilient, accessible."
+              desc="Full-stack web applications built with modern frameworks, clean APIs, and rigorous performance standards."
+              linkText="Explore web services ›"
+              linkHref="/services#web"
+            />
+            <WideCard
+              palette="lilac"
+              reverse={true}
+              visual={<TerminalMock />}
+              eyebrow="API & cloud systems"
+              title="Architecture that scales without friction."
+              desc="Backend services designed for reliability, high throughput, and straightforward maintenance."
+              linkText="Explore cloud services ›"
+              linkHref="/services#cloud"
+            />
+            <WideCard
+              palette="ink"
+              reverse={false}
+              visual={<ScanReportMock />}
+              eyebrow="Security testing"
+              title="Break it before attackers do."
+              desc="Comprehensive vulnerability assessments, penetration testing, and code reviews that leave no stone unturned."
+              linkText="Explore security services ›"
+              linkHref="/services#security"
+            />
           </div>
 
-          <div className="services-tri-grid" data-stagger>
-            {homeServices.map((svc, i) => (
-              <article
-                key={svc.title}
-                className="service-tri-card hd-card"
-                data-reveal="up"
-                data-reveal-delay={320 + i * 90}
-              >
-                <div className="service-card-icon-wrap" aria-hidden="true">
-                  <svc.icon size={32} />
-                </div>
-                <h3 className="service-card-title">{svc.title}</h3>
-                <p className="service-card-desc">{svc.desc}</p>
-                <a
-                  href={svc.link}
-                  className="card-arrow-link"
-                  aria-label={`Learn more about ${svc.title}`}
-                >
-                  <span>Learn more ›</span>
-                </a>
-              </article>
-            ))}
-          </div>
-
-          <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
+          <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
             <a className="hd-text-link" href="/services">
-              <span>Explore services ›</span>
+              <span>Explore all services ›</span>
             </a>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* 2. SECURITY (white section, grey cards) */}
-      <section className="section-rule-block" id="security" data-station="Security">
-        <div className="wrap">
-          <div className="section-head-rule">
-            <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
-              Security assurance
-            </span>
-            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Tested before launch.
-            </h2>
-            <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-              Penetration testing, code review, and a clear security sign-off.
-            </p>
+      {/* 2. SECURITY PROCESS (white section, alternating widecards with step numerals) */}
+      <Section id="security" bg="white" pad="regular" data-station="Security">
+        <Container>
+          <SectionHeader
+            eyebrow="Security process"
+            title="How we break and fix systems."
+            sub="A disciplined approach to finding what others miss."
+          />
+
+          <div className="wide-cards-stack">
+            <WideCard
+              palette="mint"
+              reverse={false}
+              visual={<ScopeMapMock />}
+              stepNumber="01"
+              eyebrow="Scoping & reconnaissance"
+              title="Map every entry point."
+              desc="We discover assets, map the attack surface, and build a precise testing plan tailored to your architecture."
+            />
+            <WideCard
+              palette="peach"
+              reverse={true}
+              visual={<TerminalMock />}
+              stepNumber="02"
+              eyebrow="Vulnerability analysis"
+              title="Uncover the critical flaws."
+              desc="Deep manual penetration testing and automated scanning to identify logic errors, injection flaws, and misconfigurations."
+            />
+            <WideCard
+              palette="cloud"
+              reverse={false}
+              visual={<ChecklistMock />}
+              stepNumber="03"
+              eyebrow="Remediation & verification"
+              title="Fix fast. Retest thoroughly."
+              desc="Actionable reports with proof-of-concept steps, remediation guidance, and a complimentary retest to verify every fix."
+            />
           </div>
 
-          <div className="security-steps-wrapper" data-reveal="up" data-reveal-delay="320">
-            <div className="security-strip-grid" data-stagger>
-              {securitySteps.map((st, i) => (
-                <article
-                  key={st.title}
-                  className="security-strip-card hd-card"
-                  data-reveal="up"
-                  data-reveal-delay={320 + i * 80}
-                >
-                  <span className="security-step-num" aria-hidden="true">{st.num}</span>
-                  <h3 className="security-card-title">{st.title}</h3>
-                  <p className="security-card-desc">{st.desc}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
+          <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
             <a className="hd-btn-primary" href="#brief">
               <span className="btn-label">Request an audit</span>
             </a>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* 3. WORK (STUDIO CONCEPTS - 1 DRAMATIC CARD ON BLACK) */}
       <section className="section-rule-block" id="work" data-station="Work">
