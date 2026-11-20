@@ -39,10 +39,17 @@ export default function MotionLanding({
       <JourneyControl />
       <ResponsiveStage />
 
-      {/* HERO RUNWAY */}
+      {/* HERO RUNWAY (Liquid Crystal) */}
       <section className="hero-runway" id="overview" data-station="Overview">
         <div className="hero-sheet">
           <HeroParallaxManager />
+
+          {/* Luminous Liquid Crystal Shimmer Blobs */}
+          <div className="hero-crystal-blobs-layer" aria-hidden="true">
+            <span className="hero-crystal-blob hero-crystal-blob--azure" />
+            <span className="hero-crystal-blob hero-crystal-blob--lilac" />
+            <span className="hero-crystal-blob hero-crystal-blob--teal" />
+          </div>
 
           {/* Hero Centered Content (Apple-Style) */}
           <div className="wrap hero-centered-column">

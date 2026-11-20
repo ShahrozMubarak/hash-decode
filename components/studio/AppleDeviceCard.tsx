@@ -61,7 +61,12 @@ export default function AppleDeviceCard({
               {highlightWords.map((word, wIdx) => (
                 <div key={wIdx} className="apple-word-tile-group">
                   {word.split('').map((char, cIdx) => (
-                    <span key={cIdx} className="apple-char-tile">
+                    <span
+                      key={cIdx}
+                      className="apple-char-tile"
+                      style={{ animationDelay: `${((cIdx * 83) % 450)}ms` }}
+                      data-index={cIdx}
+                    >
                       {char}
                     </span>
                   ))}

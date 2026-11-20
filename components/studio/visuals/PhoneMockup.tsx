@@ -274,20 +274,20 @@ function CloudMeshScreen() {
         <div className="psp-metric-val">1.42<span className="psp-metric-val-cents">M req/m</span></div>
         <div className="psp-metric-caption">99.999% Service Level Agreement</div>
 
-        {/* Traffic Load Distribution Histogram */}
+        {/* Traffic Load Distribution Histogram with Shuffled Live Wave */}
         <div className="psp-histogram-wrap" aria-hidden="true">
-          <div className="psp-hist-bar" style={{ height: '45%' }} />
-          <div className="psp-hist-bar" style={{ height: '65%' }} />
-          <div className="psp-hist-bar" style={{ height: '80%' }} />
-          <div className="psp-hist-bar" style={{ height: '55%' }} />
-          <div className="psp-hist-bar" style={{ height: '95%' }} />
-          <div className="psp-hist-bar" style={{ height: '70%' }} />
-          <div className="psp-hist-bar" style={{ height: '85%' }} />
-          <div className="psp-hist-bar" style={{ height: '100%' }} />
-          <div className="psp-hist-bar" style={{ height: '90%' }} />
-          <div className="psp-hist-bar" style={{ height: '75%' }} />
-          <div className="psp-hist-bar" style={{ height: '60%' }} />
-          <div className="psp-hist-bar" style={{ height: '88%' }} />
+          <div className="psp-hist-bar psp-hist-bar--1" style={{ height: '45%' }} />
+          <div className="psp-hist-bar psp-hist-bar--2" style={{ height: '65%' }} />
+          <div className="psp-hist-bar psp-hist-bar--3" style={{ height: '80%' }} />
+          <div className="psp-hist-bar psp-hist-bar--4" style={{ height: '55%' }} />
+          <div className="psp-hist-bar psp-hist-bar--5" style={{ height: '95%' }} />
+          <div className="psp-hist-bar psp-hist-bar--6" style={{ height: '70%' }} />
+          <div className="psp-hist-bar psp-hist-bar--7" style={{ height: '85%' }} />
+          <div className="psp-hist-bar psp-hist-bar--8" style={{ height: '100%' }} />
+          <div className="psp-hist-bar psp-hist-bar--9" style={{ height: '90%' }} />
+          <div className="psp-hist-bar psp-hist-bar--10" style={{ height: '75%' }} />
+          <div className="psp-hist-bar psp-hist-bar--11" style={{ height: '60%' }} />
+          <div className="psp-hist-bar psp-hist-bar--12" style={{ height: '88%' }} />
         </div>
       </section>
 

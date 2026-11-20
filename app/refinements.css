@@ -927,13 +927,19 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
    STAGE 2: APPLE REDESIGN SECTION MAP & TEXT CONTRAST SYSTEM
    ========================================================================== */
 
-/* 1. HERO (#overview) - White section */
+/* 1. HERO (#overview) - Liquid Crystal runway */
 #overview,
 .hero-runway,
 .original-composition .hero-runway,
 .original-composition .hero-sheet {
-  background: var(--white) !important;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(56, 189, 248, 0.35) 0%, transparent 48%),
+    radial-gradient(circle at 82% 28%, rgba(192, 132, 252, 0.30) 0%, transparent 46%),
+    radial-gradient(circle at 48% 85%, rgba(45, 212, 191, 0.28) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 12%, rgba(255, 255, 255, 0.9) 0%, transparent 60%),
+    linear-gradient(150deg, #f0f8ff 0%, #e6f3ff 35%, #edfdfb 68%, #f5f0ff 100%) !important;
   color: var(--black) !important;
+  position: relative !important;
 }
 .hero-heading-block h1,
 .hero-h1-line {
@@ -2521,7 +2527,7 @@ body {
    STAGE 2: NAVBAR, BUTTONS, LINKS (V2 REDESIGN)
    ========================================================================== */
 
-/* 1. Full-width fixed bar: Luminous Liquid Crystal Azure glass with subtle Azure Navy hairline */
+/* 1. Full-width fixed bar: Transparent background per user request */
 .site-header,
 .ronin-header {
   position: fixed !important;
@@ -2535,9 +2541,11 @@ body {
   padding: 0 !important;
   margin: 0 !important;
   z-index: 1000 !important;
-  background: #ffffff !important;
-  border-bottom: 1px solid rgba(2, 27, 56, 0.1) !important;
-  box-shadow: 0 2px 12px rgba(2, 27, 56, 0.06) !important;
+  background: transparent !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   box-sizing: border-box !important;
 }
 
@@ -2848,35 +2856,43 @@ html.header-compressed .ronin-nav {
 }
 
 .site-header .ronin-cta-pill,
-.site-header .ronin-cta-pill span,
-.site-header .nav-contact,
-.site-header .nav-contact span {
-  color: #000000 !important;
+.site-header .nav-contact {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 8px 18px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, box-shadow 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
 }
 
-.site-header .ronin-cta-pill,
-.site-header .nav-contact {
-  background: transparent !important;
-  border: 1.5px solid #000000 !important;
-  border-radius: 6px !important;
-  box-shadow: none !important;
+.site-header .ronin-cta-pill *,
+.site-header .nav-contact * {
+  color: #ffffff !important;
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
 }
 
 .site-header .ronin-cta-pill:hover,
 .site-header .nav-contact:hover {
   background: #000000 !important;
-  border-color: #000000 !important;
+  opacity: 0.9 !important;
+  transform: translateY(-1px) scale(1.02) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
 }
 
-.site-header .ronin-cta-pill:hover,
-.site-header .ronin-cta-pill:hover span,
-.site-header .nav-contact:hover,
-.site-header .nav-contact:hover span {
+.site-header .ronin-cta-pill:hover *,
+.site-header .nav-contact:hover * {
   color: #ffffff !important;
 }
 
-/* Prevent centered links colliding with brand/actions on mid screens */
-@media (max-width: 1024px) and (min-width: 851px) {
+/* Nav links breakpoint: keep desktop links visible on laptop/desktop */
+@media (max-width: 768px) {
   .site-links,
   .ronin-links {
     display: none !important;
@@ -2884,6 +2900,17 @@ html.header-compressed .ronin-nav {
   .nav-toggle,
   .ronin-icon-btn.nav-toggle {
     display: inline-flex !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .site-links,
+  .ronin-links {
+    display: flex !important;
+  }
+  .nav-toggle,
+  .ronin-icon-btn.nav-toggle {
+    display: none !important;
   }
 }
 
@@ -3350,16 +3377,18 @@ a.hd-btn-azure:hover,
    STAGE 4 (V2): Apple-Style Centered Hero (keep the robot)
    ========================================================================== */
 
-/* Hero runway & sheet: liquid crystal (glassy light aqua, soft not bold) */
+/* Hero runway & sheet: luminous liquid crystal mesh */
+#overview,
 .hero-runway,
 .original-composition .hero-runway,
 .hero-sheet,
 .original-composition .hero-sheet {
   background:
-    radial-gradient(ellipse 65% 60% at 24% 18%, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0) 60%),
-    radial-gradient(ellipse 70% 65% at 78% 28%, rgba(126, 232, 255, 0.40) 0%, rgba(126, 232, 255, 0) 65%),
-    radial-gradient(ellipse 85% 70% at 52% 90%, rgba(69, 217, 200, 0.38) 0%, rgba(69, 217, 200, 0) 72%),
-    linear-gradient(160deg, #eafcf9 0%, #c9f4ee 50%, #a8ece4 100%) !important;
+    radial-gradient(circle at 18% 22%, rgba(56, 189, 248, 0.35) 0%, transparent 48%),
+    radial-gradient(circle at 82% 28%, rgba(192, 132, 252, 0.30) 0%, transparent 46%),
+    radial-gradient(circle at 48% 85%, rgba(45, 212, 191, 0.28) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 12%, rgba(255, 255, 255, 0.95) 0%, transparent 60%),
+    linear-gradient(150deg, #f0f8ff 0%, #e6f3ff 35%, #edfdfb 68%, #f5f0ff 100%) !important;
   color: var(--black) !important;
   border-bottom: none !important;
   min-height: auto !important;
@@ -3367,7 +3396,7 @@ a.hd-btn-azure:hover,
   padding: 0 !important;
   margin-top: 0 !important;
   position: relative !important;
-  overflow: visible !important;
+  overflow: hidden !important;
 }
 
 html[data-motion=on] .hero-runway {
@@ -7458,5 +7487,218 @@ html[data-motion=on] .hero-sheet {
     width: 32px;
     height: 32px;
     font-size: 16px;
+  }
+}
+
+/* ==========================================================================
+   LUMINOUS LIQUID CRYSTAL BLOBS & SHUFFLED ANIMATIONS SUITE
+   ========================================================================== */
+
+/* 1. Luminous Liquid Crystal Shimmer Blobs in Hero */
+.hero-crystal-blobs-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero-crystal-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.hero-crystal-blob--azure {
+  width: clamp(260px, 35vw, 440px);
+  height: clamp(260px, 35vw, 440px);
+  background: radial-gradient(circle, #38bdf8 0%, rgba(56, 189, 248, 0) 70%);
+  top: 8%;
+  left: 10%;
+  animation: hdLiquidCrystalA 22s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+.hero-crystal-blob--lilac {
+  width: clamp(280px, 38vw, 460px);
+  height: clamp(280px, 38vw, 460px);
+  background: radial-gradient(circle, #c084fc 0%, rgba(192, 132, 252, 0) 70%);
+  top: 22%;
+  right: 8%;
+  animation: hdLiquidCrystalB 26s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+.hero-crystal-blob--teal {
+  width: clamp(300px, 40vw, 480px);
+  height: clamp(300px, 40vw, 480px);
+  background: radial-gradient(circle, #2dd4bf 0%, rgba(45, 212, 191, 0) 70%);
+  bottom: 8%;
+  left: 32%;
+  animation: hdLiquidCrystalC 19s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+@keyframes hdLiquidCrystalA {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, 40px) scale(1.12); }
+  100% { transform: translate(-40px, 70px) scale(0.95); }
+}
+
+@keyframes hdLiquidCrystalB {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-50px, -35px) scale(1.08); }
+  100% { transform: translate(45px, 60px) scale(0.92); }
+}
+
+@keyframes hdLiquidCrystalC {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-30px, -50px) scale(1.15); }
+  100% { transform: translate(50px, -20px) scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-crystal-blob {
+    animation: none !important;
+  }
+}
+
+/* 2. Shuffled Live Traffic Wave in Phone Mockup Histogram */
+.psp-hist-bar {
+  animation: hdBarWave 1.8s ease-in-out infinite alternate;
+  transform-origin: bottom;
+}
+
+.psp-hist-bar--1  { animation-duration: 1.4s; animation-delay: 0.05s; }
+.psp-hist-bar--2  { animation-duration: 2.1s; animation-delay: 0.35s; }
+.psp-hist-bar--3  { animation-duration: 1.7s; animation-delay: 0.12s; }
+.psp-hist-bar--4  { animation-duration: 2.4s; animation-delay: 0.48s; }
+.psp-hist-bar--5  { animation-duration: 1.5s; animation-delay: 0.22s; }
+.psp-hist-bar--6  { animation-duration: 2.0s; animation-delay: 0.40s; }
+.psp-hist-bar--7  { animation-duration: 1.6s; animation-delay: 0.18s; }
+.psp-hist-bar--8  { animation-duration: 2.2s; animation-delay: 0.30s; }
+.psp-hist-bar--9  { animation-duration: 1.8s; animation-delay: 0.45s; }
+.psp-hist-bar--10 { animation-duration: 2.5s; animation-delay: 0.26s; }
+.psp-hist-bar--11 { animation-duration: 1.5s; animation-delay: 0.55s; }
+.psp-hist-bar--12 { animation-duration: 1.9s; animation-delay: 0.08s; }
+
+@keyframes hdBarWave {
+  0%   { transform: scaleY(0.7); opacity: 0.75; }
+  50%  { transform: scaleY(1.18); opacity: 1; }
+  100% { transform: scaleY(0.82); opacity: 0.85; }
+}
+
+/* 3. Shuffled Live Pulsing Status Dots */
+.psp-status-dot,
+.laptop-node-dot {
+  animation: hdDotPulse 2.2s ease-in-out infinite;
+}
+
+.laptop-node-item:nth-child(1) .laptop-node-dot { animation-delay: 0.1s; }
+.laptop-node-item:nth-child(2) .laptop-node-dot { animation-delay: 0.5s; }
+.laptop-node-item:nth-child(3) .laptop-node-dot { animation-delay: 0.9s; }
+
+@keyframes hdDotPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50%      { transform: scale(1.35); opacity: 1; box-shadow: 0 0 8px currentColor; }
+}
+
+/* 4. Shuffled Word Tiles Bounce Entrance & Hover */
+.apple-char-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease !important;
+  animation: hdTileBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes hdTileBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.85) rotate(-4deg);
+  }
+  60% {
+    transform: translateY(-4px) scale(1.08) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+
+.apple-word-tile-group:hover .apple-char-tile:nth-child(3n+1) {
+  transform: translateY(-6px) rotate(-3deg) scale(1.06);
+}
+
+.apple-word-tile-group:hover .apple-char-tile:nth-child(3n+2) {
+  transform: translateY(-4px) rotate(2.5deg) scale(1.06);
+}
+
+.apple-word-tile-group:hover .apple-char-tile:nth-child(3n) {
+  transform: translateY(-7px) rotate(-1.5deg) scale(1.08);
+}
+
+/* 5. Shuffled Card Hover Micro-Interactions */
+.wide-cards-stack > :nth-child(1) .phone-device-frame {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wide-cards-stack > :nth-child(1):hover .phone-device-frame {
+  transform: translateY(-7px) rotate(-1.2deg) scale(1.015);
+}
+
+.wide-cards-stack > :nth-child(2) .laptop-device-wrapper {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wide-cards-stack > :nth-child(2):hover .laptop-device-wrapper {
+  transform: translateY(-6px) scale(1.025);
+}
+
+.wide-cards-stack > :nth-child(3) .phone-device-frame {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wide-cards-stack > :nth-child(3):hover .phone-device-frame {
+  transform: translateY(-7px) rotate(1.2deg) scale(1.015);
+}
+
+.apple-device-card .phone-device-frame {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.apple-device-card:hover .phone-device-frame {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* 6. Shuffled Button Hover Personalities */
+.hd-btn-coral {
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, opacity 0.2s ease !important;
+}
+.hd-btn-coral:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 8px 24px rgba(217, 58, 47, 0.35) !important;
+}
+
+.hd-btn-azure {
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, opacity 0.2s ease !important;
+}
+.hd-btn-azure:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 8px 24px rgba(2, 27, 56, 0.32) !important;
+}
+
+.hd-btn-primary,
+.hd-btn-dark {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease !important;
+}
+.hd-btn-primary:hover,
+.hd-btn-dark:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .psp-hist-bar,
+  .psp-status-dot,
+  .laptop-node-dot,
+  .apple-char-tile {
+    animation: none !important;
+    transform: none !important;
   }
 }
