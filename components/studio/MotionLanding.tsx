@@ -257,13 +257,13 @@ export default function MotionLanding({
         <div className="wrap">
           <div className="section-head-rule">
             <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
-              Leadership
+              Team
             </span>
             <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Senior engineering <span className="highlight-word">talent.</span>
+              Meet the <span className="highlight-word">team.</span>
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-              Led by architects and security specialists dedicated to building resilient platforms.
+              Developers, marketers, and builders working as one studio.
             </p>
           </div>
 
