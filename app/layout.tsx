@@ -17,7 +17,12 @@ export const dynamic = 'force-dynamic';
 import { Header, Footer } from '@/components/studio/Shell';
 import { origin } from '@/lib/meta';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-body', display: 'swap' });
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-body',
+  display: 'swap',
+});
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
 
 export const viewport: Viewport = {
