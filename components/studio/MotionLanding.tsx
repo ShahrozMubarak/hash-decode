@@ -7,8 +7,6 @@ import ResponsiveStage from './ResponsiveStage';
 import SceneSurface from './SceneSurface';
 import TypingSecure from './TypingSecure';
 import TeleportBot from './TeleportBot';
-import HeroDustMotes from './HeroDustMotes';
-import HeroWordmark from './HeroWordmark';
 import HeroParallaxManager from './HeroParallaxManager';
 import FAQAccordion from './FAQAccordion';
 import ProcessTimeline from './ProcessTimeline';
@@ -87,33 +85,14 @@ export default function MotionLanding({
         <div className="hero-sheet">
           <HeroParallaxManager />
 
-          {/* L1 Spotlight Cone from above the robot */}
-          <div className="hero-spotlight-cone" aria-hidden="true" />
-
-          {/* L3 Perspective Grid Floor */}
-          <div className="hero-grid-floor" aria-hidden="true" />
-
-          {/* L2 Light Pool on Floor */}
-          <div className="hero-light-pool" aria-hidden="true" />
-
-          {/* L4 Dust Motes Canvas */}
-          <HeroDustMotes />
-
-          {/* L5 Giant Wordmark "HASH DECODE" with Light Sweep */}
-          <HeroWordmark />
-
-          {/* L6 Vignette & 4% Film Grain */}
-          <div className="hero-vignette-grain" aria-hidden="true" />
-
           {/* Hero Foreground Content */}
           <div className="wrap hero-grid">
             <div className="hero-heading-block">
               <div className="hero-pill-badge">
-                <span className="hero-pill-dot" style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', marginRight: '8px' }} />
                 Secure software studio
               </div>
               {availability && <p className="availability-note">{availability}</p>}
-              <h1 aria-label="Build it. Break it. Secure it.">
+              <h1 aria-label="Build it. Break it. Secure.">
                 <span className="hero-h1-mask">
                   <span className="hero-h1-line hero-h1-line-1">Build it.</span>
                 </span>
@@ -129,8 +108,6 @@ export default function MotionLanding({
             </div>
 
             <figure className="hero-object">
-              <div className="hero-robot-glow" aria-hidden="true" />
-              <div className="hero-robot-shadow" aria-hidden="true" />
               <div className="specimen-visual" id="hero-model-anchor">
                 <SceneSurface model="eva" autoMobile={true} />
               </div>
@@ -165,40 +142,6 @@ export default function MotionLanding({
                 <ArrowDown size={14} />
               </span>
             </a>
-          </div>
-
-          {/* Extra Proof Row: Technologies slow marquee */}
-          <div className="hero-tech-strip" aria-label="Technologies used by Hash Decode">
-            <div className="hero-tech-track">
-              <div className="hero-tech-list">
-                <span>React</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>Next.js</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>Node</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>Python</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>TypeScript</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>Cloudflare</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-              </div>
-              <div className="hero-tech-list" aria-hidden="true">
-                <span>React</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>Next.js</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>Node</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>Python</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>TypeScript</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-                <span>Cloudflare</span>
-                <span className="hero-tech-dot" aria-hidden="true">·</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -272,24 +215,6 @@ export default function MotionLanding({
           </div>
 
           <div className="security-steps-wrapper" data-reveal="up" data-reveal-delay="320">
-            {/* Self-drawing SVG connector line */}
-            <svg
-              className="security-connector-svg"
-              viewBox="0 0 1000 2"
-              fill="none"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <path
-                className="security-connector-line"
-                d="M 166 1 L 834 1"
-                stroke="rgba(30, 64, 175, 0.35)"
-                strokeWidth="2"
-                strokeDasharray="668"
-                strokeDashoffset="668"
-              />
-            </svg>
-
             <div className="security-strip-grid" data-stagger>
               {securitySteps.map((st, i) => (
                 <article

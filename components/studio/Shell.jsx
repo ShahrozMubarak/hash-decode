@@ -11,7 +11,7 @@ const links=[
   {name:'Contact',url:'/contact',icon:Mail}
 ];
 
-export function Brand(){
+export function Brand({ showText = true } = {}){
  const [word,setWord]=useState('DECODE'),timer=useRef(null);
  useEffect(()=>()=>clearInterval(timer.current),[]);
  function decode(){
@@ -20,7 +20,7 @@ export function Brand(){
   const frames=['D3C0D3','DEC0DE','DECODE'];let i=0;
   timer.current=setInterval(()=>{setWord(frames[i++]);if(i===frames.length){clearInterval(timer.current);timer.current=null;}},55);
  }
- return <a className="brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}><img src="/logo.png" alt="Hash Decode" className="brand-logo" width="34" height="34" /><strong>HASH<span>{word}</span></strong></a>;
+ return <a className="brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}><img src="/logo.png" alt="Hash Decode" className="brand-logo" width="34" height="34" />{showText && <strong>HASH<span>{word}</span></strong>}</a>;
 }
 export function Header(){
  const [open,setOpen]=useState(false),[paused,setPaused]=useState(false),toggle=useRef(null),menu=useRef(null);
@@ -214,7 +214,7 @@ export function Footer(){
       {/* Small Bottom Row */}
       <div className="wrap footer-bottom-row">
         <div className="footer-bottom-brand">
-          <Brand/>
+          <Brand showText={false} />
           <span className="footer-copyright">
             &copy; {new Date().getFullYear()} Hash Decode. Developed by <strong>Shahroz Dogar</strong>
           </span>

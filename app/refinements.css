@@ -44,7 +44,7 @@
   --card-radius: var(--radius-card);
 }
 html,body{overflow-x:clip;background-color:var(--bg)!important;color:var(--text)!important;hyphens:none}body{font-family:var(--font-sans)!important;font-size:17px!important;font-weight:400!important;line-height:1.47!important;letter-spacing:-0.01em!important;-webkit-font-smoothing:antialiased!important;-moz-osx-font-smoothing:grayscale!important;text-rendering:optimizeLegibility!important}p{text-align:start;hyphens:none;font-family:var(--font-sans);font-size:17px;font-weight:400;line-height:1.47;letter-spacing:-0.01em}h1,h2,h3,h4{color:var(--ink);text-wrap:balance;font-family:var(--font-sans)}a,button,input,textarea,select{-webkit-tap-highlight-color:transparent}button,input,textarea,select{font-family:var(--font-sans)!important}:focus-visible{outline:3px solid var(--emphasis);outline-offset:4px}.wrap{width:100%;max-width:var(--container);padding-inline:var(--gutter);margin-inline:auto;box-sizing:border-box}
-.eyebrow,.section-rule-label,.kicker,.footer-subscribe-eyebrow{font:600 13px/1.4 var(--font-sans),sans-serif!important;letter-spacing:.08em!important;text-transform:uppercase;color:var(--ink)!important;display:flex;align-items:center;gap:12px;margin:0 0 12px!important;max-width:none!important}.eyebrow::before,.section-rule-label::before{content:'';height:2px!important;width:24px!important;flex:0 0 24px;background:var(--accent)!important;position:static!important}.page-intro h1,.interior>h1{font-family:var(--font-sans)!important;font-size:clamp(2.5rem,6vw,5rem)!important;font-weight:600!important;line-height:1.05!important;letter-spacing:-.03em!important}.section-rule-heading,.section-title h2,.page-intro~section h2{font-family:var(--font-sans)!important;font-size:clamp(2rem,4.5vw,3.5rem)!important;font-weight:600!important;line-height:1.1!important;max-width:20ch;letter-spacing:-.025em!important;margin:12px 0 16px!important}.hd-card h3{font-family:var(--font-sans)!important;font-size:1.375rem!important;font-weight:600!important;letter-spacing:-.01em!important;line-height:1.2!important}.highlight-word,.typing-cursor{color:var(--emphasis)!important}.lede,.section-rule-lede,.section-rule-lead,.section-rule-desc,.hero-cta-subtext,.hero-description{font-size:17px!important;line-height:1.47!important;letter-spacing:-0.01em!important;max-width:62ch;white-space:normal!important;overflow:visible!important;display:block!important;-webkit-line-clamp:unset!important;text-overflow:clip!important;margin-bottom:24px!important}.section-rule-block{padding-block:var(--section-space)!important;margin-block:0!important}.section-rule-block .section-rule-header{margin-bottom:40px}.hd-card{border-radius:var(--card-radius);border:1px solid var(--card-border);box-shadow:var(--card-shadow);padding:32px;overflow:hidden}.hd-card>.card-glare{border-radius:inherit}.hd-card p,.about-bio-text,.work-card-summary,.team-role-tag{white-space:normal!important;-webkit-line-clamp:unset!important;text-overflow:clip!important;overflow:visible!important}.about-bio-accordion.is-clamped{max-height:none!important;overflow:visible!important}.about-bio-toggle-btn{display:none!important}.team-monogram-avatar,.about-monogram-avatar{background:var(--ink)!important;color:white!important;border-radius:50%}.team-monogram-initials,.about-monogram-initials{color:white!important}.team-role-tag{font-family:var(--font-sans),sans-serif}.original-composition .hero-sheet{background:var(--bg)!important}.hero-tech-strip{overflow:hidden!important;padding-block:20px!important;max-width:100%;box-sizing:border-box}.hero-tech-track{display:flex!important;flex-wrap:nowrap!important;width:max-content!important;animation:hd-tech 40s linear infinite!important}.hero-tech-list{display:flex!important;flex-wrap:nowrap!important;flex-shrink:0!important;align-items:center;gap:32px!important;padding-right:32px;white-space:nowrap!important;font:500 13px/1.5 var(--font-sans),sans-serif!important;color:var(--ink)!important;opacity:.6}.hero-tech-list span{white-space:nowrap!important;flex-shrink:0}.hero-cta-block .hero-cta-subtext{margin-bottom:20px!important}.hero-start-cta{margin-top:0!important;font-weight:500!important;font-family:var(--font-sans)!important;letter-spacing:normal!important;text-transform:none!important}.site-header{position:sticky!important;top:0;z-index:100}.availability-note{font:600 13px/1.5 var(--font-sans),sans-serif;letter-spacing:.02em}.empty-content{padding:24px;border:1px solid var(--card-border);border-radius:var(--card-radius)}
+.eyebrow,.section-rule-label,.kicker,.footer-subscribe-eyebrow{font-family:var(--font-sans)!important;font-size:14px!important;font-weight:600!important;line-height:1.4!important;letter-spacing:0!important;text-transform:none!important;color:var(--text-2)!important;display:block!important;margin:0 0 12px!important;max-width:none!important}.eyebrow::before,.section-rule-label::before{content:none!important;display:none!important}.page-intro h1,.interior>h1{font-family:var(--font-sans)!important;font-size:clamp(2.5rem,6vw,5rem)!important;font-weight:600!important;line-height:1.05!important;letter-spacing:-.03em!important}.section-rule-heading,.section-title h2,.page-intro~section h2{font-family:var(--font-sans)!important;font-size:clamp(2rem,4.5vw,3.5rem)!important;font-weight:600!important;line-height:1.1!important;max-width:20ch;letter-spacing:-.025em!important;margin:12px 0 16px!important}.hd-card h3{font-family:var(--font-sans)!important;font-size:1.375rem!important;font-weight:600!important;letter-spacing:-.01em!important;line-height:1.2!important}.highlight-word,.typing-cursor{color:var(--emphasis)!important}.lede,.section-rule-lede,.section-rule-lead,.section-rule-desc,.hero-cta-subtext,.hero-description{font-size:17px!important;line-height:1.47!important;letter-spacing:-0.01em!important;max-width:62ch;white-space:normal!important;overflow:visible!important;display:block!important;-webkit-line-clamp:unset!important;text-overflow:clip!important;margin-bottom:24px!important}.section-rule-block{padding-block:var(--section-space)!important;margin-block:0!important}.section-rule-block .section-rule-header{margin-bottom:40px}.hd-card{border-radius:var(--card-radius);border:1px solid var(--card-border);box-shadow:var(--card-shadow);padding:32px;overflow:hidden}.hd-card>.card-glare{border-radius:inherit}.hd-card p,.about-bio-text,.work-card-summary,.team-role-tag{white-space:normal!important;-webkit-line-clamp:unset!important;text-overflow:clip!important;overflow:visible!important}.about-bio-accordion.is-clamped{max-height:none!important;overflow:visible!important}.about-bio-toggle-btn{display:none!important}.team-monogram-avatar,.about-monogram-avatar{background:var(--ink)!important;color:white!important;border-radius:50%}.team-monogram-initials,.about-monogram-initials{color:white!important}.team-role-tag{font-family:var(--font-sans),sans-serif}.original-composition .hero-sheet{background:var(--bg)!important}.hero-tech-strip{overflow:hidden!important;padding-block:20px!important;max-width:100%;box-sizing:border-box}.hero-tech-track{display:flex!important;flex-wrap:nowrap!important;width:max-content!important;animation:hd-tech 40s linear infinite!important}.hero-tech-list{display:flex!important;flex-wrap:nowrap!important;flex-shrink:0!important;align-items:center;gap:32px!important;padding-right:32px;white-space:nowrap!important;font:500 13px/1.5 var(--font-sans),sans-serif!important;color:var(--ink)!important;opacity:.6}.hero-tech-list span{white-space:nowrap!important;flex-shrink:0}.hero-cta-block .hero-cta-subtext{margin-bottom:20px!important}.hero-start-cta{margin-top:0!important;font-weight:500!important;font-family:var(--font-sans)!important;letter-spacing:normal!important;text-transform:none!important}.site-header{position:sticky!important;top:0;z-index:100}.availability-note{font:600 13px/1.5 var(--font-sans),sans-serif;letter-spacing:.02em}.empty-content{padding:24px;border:1px solid var(--card-border);border-radius:var(--card-radius)}
 /* Universal bulletproof visibility for all cards, sections, and pages */
 [data-reveal],
 html.js [data-reveal],
@@ -474,56 +474,57 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   z-index: 95;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
   padding: 8px 6px;
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(11, 31, 58, 0.12);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--hairline);
   border-radius: 999px;
-  box-shadow: 0 4px 16px rgba(11, 31, 58, 0.08);
+  box-shadow: none !important;
   pointer-events: auto;
 }
 
 .scroll-dot-btn {
   display: block;
-  width: 9px;
-  height: 9px;
+  width: 7px;
+  height: 7px;
   padding: 0;
   margin: 0;
   border-radius: 50%;
-  background: #ffffff;
-  border: 1.5px solid rgba(11, 31, 58, 0.28);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  background: #d1d1d6;
+  border: none !important;
+  box-shadow: none !important;
   cursor: pointer;
   outline: none;
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .scroll-dot-btn:hover {
   transform: scale(1.2);
-  border-color: #D93A2F;
+  background: var(--text-2) !important;
+  border: none !important;
 }
 
 .scroll-dot-btn.is-active {
-  background: #D93A2F !important;
-  border-color: #D93A2F !important;
-  transform: scale(1.25);
-  box-shadow: 0 1px 5px rgba(217, 58, 47, 0.4);
+  background: var(--text) !important;
+  border: none !important;
+  transform: scale(1.3);
+  box-shadow: none !important;
 }
 
 @media (max-width: 768px) {
   .scroll-dots-nav {
     right: 10px;
-    gap: 10px;
+    gap: 8px;
     padding: 6px 4px;
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.7);
   }
 
   .scroll-dot-btn {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 }
 
@@ -1119,5 +1120,145 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 }
 .footer-subscribe-btn:hover {
   background: var(--accent-hover) !important;
+}
+
+/* ==========================================================================
+   STAGE 3: DECLUTTER AND FLATTEN
+   ========================================================================== */
+
+/* 1. Simplify eyebrow labels & top badge */
+.eyebrow,
+.section-rule-label,
+.kicker,
+.footer-subscribe-eyebrow,
+.cta-eyebrow {
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: var(--text-2) !important;
+  display: block !important;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+}
+
+.eyebrow::before,
+.section-rule-label::before,
+.kicker::before,
+.footer-subscribe-eyebrow::before,
+.cta-eyebrow::before {
+  content: none !important;
+  display: none !important;
+}
+
+.hero-pill-badge {
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: var(--text-2) !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 0 12px !important;
+  box-shadow: none !important;
+  display: block !important;
+}
+
+.hero-pill-badge::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* 2. Remove floating particles, watermarks, tickers, connector lines, and neon glows */
+.card-glare,
+.card-shine,
+.hero-spotlight-cone,
+.hero-light-pool,
+.hero-grid-floor,
+.hero-vignette-grain,
+.hero-dust-canvas,
+.hero-wordmark-backdrop,
+.hero-tech-strip,
+.security-connector-svg,
+.hero-robot-glow,
+.hero-robot-shadow,
+.typing-cursor,
+.journey-decoration,
+.dotted-journey,
+.trail-orb-glow,
+.trail-orb-core,
+.trail-ambient-glow {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.hero-object {
+  background-image: none !important;
+}
+
+.hero-object .corner {
+  display: none !important;
+}
+
+/* 3. Remove all shadows on cards, buttons, and panels (flat color blocks) */
+.hd-card,
+.service-tri-card,
+.service-card,
+.service-detail-card,
+.process-card,
+.principle-card,
+.outcome-card,
+.work-cta-card,
+.security-strip-card,
+.work-card,
+.team-card,
+.team-strip-card,
+.process-timeline-card,
+.faq-card,
+.form-card,
+.form-panel,
+.hd-btn-primary,
+.hd-btn-secondary,
+.btn-primary,
+.btn-secondary,
+.footer-subscribe-btn,
+.social-link {
+  box-shadow: none !important;
+}
+
+.hd-card:hover,
+.service-tri-card:hover,
+.service-card:hover,
+.service-detail-card:hover,
+.process-card:hover,
+.principle-card:hover,
+.outcome-card:hover,
+.work-cta-card:hover,
+.security-strip-card:hover,
+.work-card:hover,
+.team-card:hover,
+.team-strip-card:hover,
+.process-timeline-card:hover,
+.faq-card:hover,
+.form-card:hover,
+.form-panel:hover,
+.hd-btn-primary:hover,
+.hd-btn-secondary:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.footer-subscribe-btn:hover,
+.social-link:hover {
+  box-shadow: none !important;
+}
+
+/* 4. Hide ghost HASH DECODE text next to logo in footer */
+.site-footer .brand strong {
+  display: none !important;
 }
 
