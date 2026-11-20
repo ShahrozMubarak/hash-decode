@@ -57,8 +57,8 @@ export default function MotionLanding({
               <a className="hd-btn-primary hero-start-cta" href="#brief">
                 <span className="btn-label">Start a project</span>
               </a>
-              <a href="#services" className="hd-text-link hero-explore-link">
-                <span>Explore the studio ›</span>
+              <a href="#services" className="hd-btn-azure hero-explore-btn">
+                <span className="btn-label">Explore the studio ›</span>
               </a>
             </div>
 
@@ -115,8 +115,8 @@ export default function MotionLanding({
           </div>
 
           <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
-            <a className="hd-text-link" href="/services">
-              <span>Explore all services ›</span>
+            <a className="hd-btn-azure" href="/services">
+              <span className="btn-label">Explore all services ›</span>
             </a>
           </div>
         </Container>
@@ -368,7 +368,7 @@ export default function MotionLanding({
           </div>
 
           <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
-            <a className="hd-btn-primary" href="/about">
+            <a className="hd-btn-azure" href="/about">
               <span className="btn-label">About the founders</span>
             </a>
           </div>

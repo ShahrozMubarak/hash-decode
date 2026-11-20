@@ -242,7 +242,7 @@ function FounderCard({
                 href={founder.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hd-btn-primary founder-link-pill"
+                className="hd-btn-azure founder-link-pill"
               >
                 <span>Connect with {founder.name.split(' ')[0]}</span>
               </a>

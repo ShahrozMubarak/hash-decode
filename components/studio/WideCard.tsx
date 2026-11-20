@@ -106,7 +106,7 @@ export default function WideCard({
                     ? 'hd-btn-white'
                     : ctaVariant === 'dark'
                     ? 'hd-btn-dark'
-                    : 'hd-btn-primary'
+                    : 'hd-btn-primary hd-btn-coral'
                 }
               >
                 <span className="btn-label">{ctaText}</span>

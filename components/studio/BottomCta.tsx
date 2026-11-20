@@ -26,6 +26,7 @@ export default function BottomCta({
         desc={sub}
         ctaText={btnText}
         ctaHref={btnHref}
+        ctaVariant="coral"
         className="bottom-cta-card"
       />
     </div>

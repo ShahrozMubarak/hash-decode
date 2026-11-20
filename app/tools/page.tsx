@@ -37,6 +37,7 @@ export default function Tools() {
           visual={<CostEstimatorMock />}
           ctaText="Open estimator"
           ctaHref="/tools/estimate"
+          ctaVariant="azure"
         />
         <WideCard
           palette="ink"
@@ -47,6 +48,7 @@ export default function Tools() {
           visual={<HeaderScannerMock />}
           ctaText="Run security check"
           ctaHref="/tools/security-check"
+          ctaVariant="coral"
         />
       </section>
 

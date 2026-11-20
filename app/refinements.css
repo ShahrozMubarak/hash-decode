@@ -2382,21 +2382,17 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   display: none !important;
 }
 
-/* 2. On dark backgrounds (#work section) */
+/* 2. On dark backgrounds (#work section): honor coral and azure */
 #work .hd-btn-primary,
-#work .btn-primary,
-#work .hd-btn-secondary,
-#work .btn-secondary {
-  background: #ffffff !important;
-  color: #000000 !important;
+#work .hd-btn-coral {
+  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
+  color: #ffffff !important;
 }
 
-#work .hd-btn-primary:hover,
-#work .btn-primary:hover,
-#work .hd-btn-secondary:hover,
-#work .btn-secondary:hover {
-  background: #f5f5f7 !important;
-  color: #000000 !important;
+#work .hd-btn-secondary,
+#work .hd-btn-azure {
+  background: linear-gradient(135deg, #0071e3 0%, #004bb0 100%) !important;
+  color: #ffffff !important;
 }
 
 #work .hd-text-link,
@@ -2695,34 +2691,36 @@ html.header-compressed .ronin-nav {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  min-height: 36px !important;
-  height: 36px !important;
+  gap: 7px !important;
+  min-height: 38px !important;
+  height: 38px !important;
   padding: 0 18px !important;
-  border-radius: var(--radius-pill) !important;
-  background: #000000 !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
   color: #ffffff !important;
-  border: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
   font-family: var(--font-sans) !important;
-  font-size: 15px !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
   letter-spacing: -0.01em !important;
   text-decoration: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 4px 16px rgba(225, 91, 62, 0.42), 0 1px 0 rgba(255, 255, 255, 0.25) inset !important;
   cursor: pointer !important;
-  transition: opacity 0.2s ease !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .ronin-cta-pill:hover,
 .nav-contact:hover {
-  opacity: 0.85 !important;
+  background: linear-gradient(135deg, #ff5f40 0%, #e84d2d 100%) !important;
+  box-shadow: 0 8px 24px rgba(225, 91, 62, 0.55), 0 1px 0 rgba(255, 255, 255, 0.35) inset !important;
   color: #ffffff !important;
   text-decoration: none !important;
-  transform: none !important;
-  box-shadow: none !important;
+  transform: translateY(-1px) !important;
+  opacity: 1 !important;
 }
 
-.ronin-cta-pill span,
-.nav-contact span {
+.ronin-cta-pill *,
+.nav-contact * {
   color: #ffffff !important;
 }
 
@@ -2900,62 +2898,140 @@ a.hd-btn-primary {
   box-sizing: border-box !important;
 }
 
-/* Primary Pill On Light Surfaces: Black pill, white text */
+/* ==========================================================================
+   VIBRANT BUTTON SYSTEM: CORAL RED & AZURE NAVY BLUE
+   ========================================================================== */
+
+/* 1. Signature Coral Red Pill */
 .hd-btn-primary,
-.hd-btn-secondary,
+.btn-primary,
+.hd-btn-coral,
+.hd-btn--coral,
 .hero-start-cta,
-[data-mode="light"] .hd-btn-primary,
-.hd-section--white .hd-btn-primary,
-.hd-section--off-white .hd-btn-primary,
-#overview .hd-btn-primary,
-#services .hd-btn-primary,
+.send-brief-btn,
+.coral-glow,
+#overview .hero-start-cta,
 #security .hd-btn-primary,
-#team .hd-btn-primary,
 #contact .hd-btn-primary,
-.page-about-content .hd-btn-primary,
-.page-services-content .hd-btn-primary,
-.page-contact-content .hd-btn-primary,
-.page-tools-hub .hd-btn-primary,
-.page-tool-detail .hd-btn-primary,
-.page-error-container .hd-btn-primary {
-  background: #000000 !important;
+.bottom-cta-card .hd-btn-primary {
+  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
   color: #ffffff !important;
-}
-.hd-btn-primary:hover,
-.hd-btn-secondary:hover,
-.hero-start-cta:hover {
-  opacity: 0.85 !important;
-  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 4px 18px rgba(225, 91, 62, 0.38), 0 1px 0 rgba(255, 255, 255, 0.25) inset !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border-radius: 9999px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
   text-decoration: none !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-.hd-btn-primary .btn-label,
-.hd-btn-secondary .btn-label,
-.hero-start-cta .btn-label {
-  color: #ffffff !important;
 }
 
-/* Primary Pill On Dark Surfaces: White pill, black text */
-[data-mode="dark"] .hd-btn-primary,
-.hd-section--black .hd-btn-primary,
-#work .hd-btn-primary,
-.wide-card[data-mode="dark"] .hd-btn-primary {
-  background: #ffffff !important;
-  color: #000000 !important;
+.hd-btn-primary:hover,
+.btn-primary:hover,
+.hd-btn-coral:hover,
+.hd-btn--coral:hover,
+.hero-start-cta:hover,
+.send-brief-btn:hover,
+.coral-glow:hover,
+#overview .hero-start-cta:hover,
+#security .hd-btn-primary:hover,
+#contact .hd-btn-primary:hover,
+.bottom-cta-card .hd-btn-primary:hover {
+  background: linear-gradient(135deg, #ff5f40 0%, #e84d2d 100%) !important;
+  box-shadow: 0 8px 28px rgba(225, 91, 62, 0.52), 0 1px 0 rgba(255, 255, 255, 0.35) inset !important;
+  transform: translateY(-2px) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
-[data-mode="dark"] .hd-btn-primary:hover,
-.hd-section--black .hd-btn-primary:hover,
-#work .hd-btn-primary:hover,
-.wide-card[data-mode="dark"] .hd-btn-primary:hover {
-  opacity: 0.85 !important;
-  color: #000000 !important;
+
+/* 2. Signature Azure Navy Blue Pill */
+.hd-btn-secondary,
+.btn-secondary,
+.hd-btn-azure,
+.hd-btn--azure,
+.hd-btn-navy,
+.hero-explore-btn,
+#overview .hero-explore-btn,
+#services .hd-btn-azure,
+#work .hd-btn-secondary,
+#team .hd-btn-azure {
+  background: linear-gradient(135deg, #0071e3 0%, #004bb0 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 4px 18px rgba(0, 113, 227, 0.38), 0 1px 0 rgba(255, 255, 255, 0.25) inset !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border-radius: 9999px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
   text-decoration: none !important;
 }
-[data-mode="dark"] .hd-btn-primary .btn-label,
-.hd-section--black .hd-btn-primary .btn-label,
-#work .hd-btn-primary .btn-label,
-.wide-card[data-mode="dark"] .hd-btn-primary .btn-label {
+
+.hd-btn-secondary:hover,
+.btn-secondary:hover,
+.hd-btn-azure:hover,
+.hd-btn--azure:hover,
+.hd-btn-navy:hover,
+.hero-explore-btn:hover,
+#overview .hero-explore-btn:hover,
+#services .hd-btn-azure:hover,
+#work .hd-btn-secondary:hover,
+#team .hd-btn-azure:hover {
+  background: linear-gradient(135deg, #1d82f5 0%, #005bb5 100%) !important;
+  box-shadow: 0 8px 28px rgba(0, 113, 227, 0.52), 0 1px 0 rgba(255, 255, 255, 0.35) inset !important;
+  transform: translateY(-2px) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* 3. Universal High-Contrast Button Text (Crisp Pure White) */
+.hd-btn-primary,
+.hd-btn-secondary,
+.hd-btn-coral,
+.hd-btn-azure,
+.hd-btn-navy,
+.hero-start-cta,
+.hero-explore-btn,
+.send-brief-btn,
+.ronin-cta-pill,
+.hd-btn-primary *,
+.hd-btn-secondary *,
+.hd-btn-coral *,
+.hd-btn-azure *,
+.hd-btn-navy *,
+.hero-start-cta *,
+.hero-explore-btn *,
+.send-brief-btn *,
+.ronin-cta-pill *,
+.hd-btn-primary .btn-label,
+.hd-btn-secondary .btn-label,
+.hd-btn-coral .btn-label,
+.hd-btn-azure .btn-label,
+.hd-btn-navy .btn-label {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  -webkit-font-smoothing: antialiased !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 4. Buttons on Dark / Midnight WideCards */
+.wide-card[data-mode="dark"] .hd-btn-coral,
+.wide-card[data-mode="dark"] .hd-btn-primary {
+  background: linear-gradient(135deg, #ff4d2d 0%, #e15b3e 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(255, 77, 45, 0.45) !important;
+}
+.wide-card[data-mode="dark"] .hd-btn-azure,
+.wide-card[data-mode="dark"] .hd-btn-secondary {
+  background: linear-gradient(135deg, #0071e3 0%, #004bb0 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(0, 113, 227, 0.45) !important;
+}
+.wide-card[data-mode="dark"] .hd-btn-white {
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+.wide-card[data-mode="dark"] .hd-btn-white * {
   color: #000000 !important;
 }
 
@@ -4622,39 +4698,12 @@ html[data-motion=on] .hero-sheet {
 
 .hd-btn-secondary,
 .btn-secondary,
-.hd-btn--azure {
-  background: rgba(0, 113, 227, 0.05) !important;
-  color: #0071e3 !important;
-  border: 1.5px solid rgba(0, 113, 227, 0.32) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  border-radius: 9999px !important;
-  padding: 12px 24px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.hd-btn-secondary:hover,
-.btn-secondary:hover,
-.hd-btn--azure:hover {
-  background: rgba(0, 113, 227, 0.12) !important;
-  border-color: #0071e3 !important;
-  color: #0071e3 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(0, 113, 227, 0.2) !important;
-}
-
-.hd-btn-secondary *,
-.btn-secondary * {
-  color: #0071e3 !important;
-}
-
 .hd-btn-azure,
-.hd-btn--azure-solid {
-  background: linear-gradient(135deg, #0071e3 0%, #005bb5 100%) !important;
+.hd-btn--azure,
+.hd-btn--azure-solid,
+.hd-btn-navy,
+.hero-explore-btn {
+  background: linear-gradient(135deg, #0071e3 0%, #004bb0 100%) !important;
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.28) !important;
   box-shadow: 0 4px 18px rgba(0, 113, 227, 0.38), 0 1px 0 rgba(255, 255, 255, 0.25) inset !important;
@@ -4669,16 +4718,26 @@ html[data-motion=on] .hero-sheet {
   text-decoration: none !important;
 }
 
+.hd-btn-secondary:hover,
+.btn-secondary:hover,
 .hd-btn-azure:hover,
-.hd-btn--azure-solid:hover {
-  background: linear-gradient(135deg, #1d82f5 0%, #0066cc 100%) !important;
+.hd-btn--azure:hover,
+.hd-btn--azure-solid:hover,
+.hd-btn-navy:hover,
+.hero-explore-btn:hover {
+  background: linear-gradient(135deg, #1d82f5 0%, #005bb5 100%) !important;
   box-shadow: 0 8px 28px rgba(0, 113, 227, 0.52), 0 1px 0 rgba(255, 255, 255, 0.35) inset !important;
   transform: translateY(-2px) !important;
   color: #ffffff !important;
 }
 
+.hd-btn-secondary *,
+.btn-secondary *,
 .hd-btn-azure *,
-.hd-btn--azure-solid * {
+.hd-btn--azure *,
+.hd-btn--azure-solid *,
+.hd-btn-navy *,
+.hero-explore-btn * {
   color: #ffffff !important;
 }
 
