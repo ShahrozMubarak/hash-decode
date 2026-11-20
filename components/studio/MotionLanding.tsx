@@ -14,47 +14,44 @@ import {
   AppWindow,
   Braces,
   ShieldCheck,
-  Compass,
-  Terminal,
-  CheckCircle2,
 } from 'lucide-react';
 
 const homeServices = [
   {
     icon: AppWindow,
     title: 'Custom Web Platforms',
-    desc: 'High-performance web apps built with modern full-stack architectures, typed APIs, and fluid user experiences.',
+    desc: 'Fast, modern web apps built end to end.',
     link: '/services',
   },
   {
     icon: Braces,
     title: 'Internal Tools & APIs',
-    desc: 'Reliable backend services, automation pipelines, and custom administrative consoles designed for scale.',
+    desc: 'Backends, automations, and admin tools that scale.',
     link: '/services',
   },
   {
     icon: ShieldCheck,
     title: 'Security Audits & Hardening',
-    desc: 'Comprehensive penetration tests, vulnerability audits, and concrete remediation roadmaps before launch.',
+    desc: 'Penetration tests and fixes, before you launch.',
     link: '/services',
   },
 ];
 
 const securitySteps = [
   {
-    icon: Compass,
+    num: '1',
     title: 'Scope',
-    desc: 'Map every entry point, API route, auth boundary, and data model to agree on precise testing surfaces.',
+    desc: 'We map every entry point, API route, and data flow.',
   },
   {
-    icon: Terminal,
+    num: '2',
     title: 'Test',
-    desc: 'Conduct thorough manual penetration testing and automated vulnerability analysis against real exploits.',
+    desc: 'Manual and automated testing against real exploits.',
   },
   {
-    icon: CheckCircle2,
-    title: 'Verify fixes',
-    desc: 'Retest patched endpoints, confirm vulnerability closures, and deliver an actionable security sign-off report.',
+    num: '3',
+    title: 'Verify',
+    desc: 'We retest every fix and give you a sign-off report.',
   },
 ];
 
@@ -111,26 +108,19 @@ export default function MotionLanding({
         </div>
       </section>
 
-      {/* 1. SERVICES (3 CARDS) */}
+      {/* 1. CAPABILITIES (grey section, white cards) */}
       <section className="section-rule-block" id="services" data-station="Services">
         <div className="wrap">
-          <div className="section-head-rule section-head-with-action">
-            <div className="section-head-text">
-              <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
-                Capabilities
-              </span>
-              <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-                Engineered for <span className="highlight-word">performance.</span>
-              </h2>
-              <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-                Custom software, web platforms, and secure APIs built around the way your business works.
-              </p>
-            </div>
-            <div className="section-head-link-wrap" data-reveal="fade" data-reveal-delay="200">
-              <a className="hd-text-link" href="/services">
-                <span>Explore services ›</span>
-              </a>
-            </div>
+          <div className="section-head-rule">
+            <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
+              Capabilities
+            </span>
+            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
+              Built to <span className="highlight-word">perform.</span>
+            </h2>
+            <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
+              Custom software, web platforms, and secure APIs, built around how your business works.
+            </p>
           </div>
 
           <div className="services-tri-grid" data-stagger>
@@ -141,9 +131,8 @@ export default function MotionLanding({
                 data-reveal="up"
                 data-reveal-delay={320 + i * 90}
               >
-                <div className="card-glare" aria-hidden="true" />
                 <div className="service-card-icon-wrap" aria-hidden="true">
-                  <svc.icon size={24} />
+                  <svc.icon size={32} />
                 </div>
                 <h3 className="service-card-title">{svc.title}</h3>
                 <p className="service-card-desc">{svc.desc}</p>
@@ -157,10 +146,16 @@ export default function MotionLanding({
               </article>
             ))}
           </div>
+
+          <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
+            <a className="hd-text-link" href="/services">
+              <span>Explore services ›</span>
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* 2. SECURITY (3-STEP STRIP: Scope, Test, Verify fixes + one "Request an audit" button) */}
+      {/* 2. SECURITY (white section, grey cards) */}
       <section className="section-rule-block" id="security" data-station="Security">
         <div className="wrap">
           <div className="section-head-rule">
@@ -171,7 +166,7 @@ export default function MotionLanding({
               Tested before <span className="highlight-word">launch.</span>
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-              Rigorous penetration testing, authorized code reviews, and concrete security sign-offs.
+              Penetration testing, code review, and a clear security sign-off.
             </p>
           </div>
 
@@ -184,10 +179,7 @@ export default function MotionLanding({
                   data-reveal="up"
                   data-reveal-delay={320 + i * 80}
                 >
-                  <div className="card-glare" aria-hidden="true" />
-                  <div className="security-card-icon-wrap" aria-hidden="true">
-                    <st.icon size={24} />
-                  </div>
+                  <span className="security-step-num" aria-hidden="true">{st.num}</span>
                   <h3 className="security-card-title">{st.title}</h3>
                   <p className="security-card-desc">{st.desc}</p>
                 </article>

@@ -2027,3 +2027,259 @@ html[data-motion=on] .hero-sheet {
   }
 }
 
+/* ==========================================================================
+   STAGE 7: Section Headers + Capabilities + Security Cards
+   ========================================================================== */
+
+/* Universal Section Header Pattern */
+.section-rule-block {
+  padding-block: var(--section-pad) !important;
+}
+
+.section-head-rule,
+.section-head {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  margin: 0 auto clamp(40px, 6vw, 64px) auto !important;
+  max-width: var(--container) !important;
+}
+
+.section-head-with-action {
+  justify-content: center !important;
+}
+
+.section-head-with-action .section-head-link-wrap {
+  display: none !important;
+}
+
+.section-rule-label,
+.section-head .section-rule-label {
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: var(--text-2) !important;
+  margin: 0 0 12px 0 !important;
+  text-align: center !important;
+  display: block !important;
+}
+
+.section-rule-heading,
+.section-head .section-rule-heading {
+  font-family: var(--font-sans) !important;
+  font-size: clamp(2rem, 4.5vw, 3.5rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.025em !important;
+  color: var(--text) !important;
+  text-align: center !important;
+  margin: 0 0 16px 0 !important;
+  max-width: 24ch !important;
+}
+
+.section-rule-heading .highlight-word {
+  color: var(--accent) !important;
+}
+
+.section-rule-lead,
+.section-rule-desc {
+  font-family: var(--font-sans) !important;
+  font-size: clamp(17px, 2vw, 20px) !important;
+  font-weight: 400 !important;
+  line-height: 1.47 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text-2) !important;
+  text-align: center !important;
+  max-width: 640px !important;
+  margin: 0 auto !important;
+}
+
+/* Capabilities (grey section, white cards) */
+#services {
+  background: var(--bg-alt) !important;
+  color: var(--text) !important;
+}
+
+.services-tri-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: var(--card-gap, 20px) !important;
+  max-width: var(--container) !important;
+  margin: 0 auto !important;
+  align-items: stretch !important;
+}
+
+.service-tri-card {
+  background: var(--card-on-grey) !important;
+  border-radius: var(--radius-card, 28px) !important;
+  padding: var(--card-pad, 40px 32px) !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  transition: transform 0.2s ease !important;
+}
+
+.service-tri-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Bare line icon, 32px, --accent, no tinted square behind it */
+.service-card-icon-wrap {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 0 24px 0 !important;
+  color: var(--accent) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.service-tri-card:hover .service-card-icon-wrap {
+  transform: none !important;
+}
+
+.service-card-icon-wrap svg {
+  width: 32px !important;
+  height: 32px !important;
+  stroke-width: 1.75px !important;
+  color: var(--accent) !important;
+  stroke: var(--accent) !important;
+}
+
+.service-card-title {
+  font-family: var(--font-sans) !important;
+  font-size: clamp(21px, 2.5vw, 24px) !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text) !important;
+  margin: 0 0 12px 0 !important;
+}
+
+.service-card-desc {
+  font-family: var(--font-sans) !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  line-height: 1.47 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text-2) !important;
+  margin: 0 0 28px 0 !important;
+  flex-grow: 1 !important;
+}
+
+.service-tri-card .card-arrow-link {
+  margin-top: auto !important;
+  color: var(--accent) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+}
+
+.service-tri-card .card-arrow-link:hover {
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+}
+
+/* Security (white section, grey cards) */
+#security {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+.security-strip-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: var(--card-gap, 20px) !important;
+  max-width: var(--container) !important;
+  margin: 0 auto !important;
+  align-items: stretch !important;
+}
+
+.security-strip-card {
+  background: var(--card-on-white) !important;
+  border-radius: var(--radius-card, 28px) !important;
+  padding: var(--card-pad, 40px 32px) !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  transition: transform 0.2s ease !important;
+}
+
+.security-strip-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Large numerals 1, 2, 3 (48px, weight 600, --accent) */
+.security-step-num {
+  font-family: var(--font-sans) !important;
+  font-size: 48px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--accent) !important;
+  margin: 0 0 24px 0 !important;
+  display: block !important;
+}
+
+.security-card-title {
+  font-family: var(--font-sans) !important;
+  font-size: clamp(21px, 2.5vw, 24px) !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text) !important;
+  margin: 0 0 12px 0 !important;
+}
+
+.security-card-desc {
+  font-family: var(--font-sans) !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  line-height: 1.47 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text-2) !important;
+  margin: 0 !important;
+  flex-grow: 1 !important;
+}
+
+/* Centered action container under cards */
+.section-rule-action {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-top: 48px !important;
+}
+
+/* Responsive grid for tablets and mobile */
+@media (max-width: 900px) {
+  .services-tri-grid,
+  .security-strip-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
