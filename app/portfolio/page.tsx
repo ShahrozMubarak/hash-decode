@@ -1,7 +1,10 @@
-import { listProjects } from '@/lib/studio-data';
-import WorkShowcase from '@/components/studio/WorkShowcase';
 import { meta } from '@/lib/meta';
-import { ArrowUpRight, CheckCircle2, ShieldCheck, Zap, Layers } from 'lucide-react';
+import WideCard from '@/components/studio/WideCard';
+import CostEstimatorMock from '@/components/studio/visuals/CostEstimatorMock';
+import HeaderScannerMock from '@/components/studio/visuals/HeaderScannerMock';
+import BottomCta from '@/components/studio/BottomCta';
+import { studioProjects } from '@/lib/studio-projects';
+import { Zap, ShieldCheck, CheckCircle2, Layers } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const metadata = meta(
@@ -10,111 +13,133 @@ export const metadata = meta(
   '/portfolio'
 );
 
-export default async function Portfolio() {
-  const projects = await listProjects();
+function getVisual(slug: string, image?: string) {
+  if (slug === 'foolish-arc' && image) {
+    return (
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          minHeight: '260px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden',
+          borderRadius: '16px',
+        }}
+      >
+        <img
+          src={image}
+          alt="Foolish Arc storefront preview"
+          style={{
+            maxWidth: '92%',
+            maxHeight: '92%',
+            objectFit: 'cover',
+            borderRadius: '14px',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+          }}
+        />
+      </div>
+    );
+  }
+  if (slug === 'cost-estimator') {
+    return <CostEstimatorMock />;
+  }
+  return <HeaderScannerMock />;
+}
 
+export default function Portfolio() {
   return (
     <div className="wrap interior page-work-content">
-      {/* Inner-page Hero */}
+      {/* Centered Hero */}
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Our work</p>
         <h1 className="inner-hero-h1">
           Our Selected Work.
         </h1>
-        <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
+        <p className="section-rule-lead">
           Explore real systems, web platforms, and security audits built by Hash Decode.
           Every project is built for speed, clean architecture, and reliable long-term security.
         </p>
       </header>
 
-      {/* Primary Project Showcase Grid with Filter Chips */}
-      <section className="work-showcase-section" data-reveal="up">
-        <div className="section-head-rule">
-          <span className="section-rule-label">Selected releases</span>
-          <h2 className="section-rule-heading">
-            Featured <span className="highlight-word">projects.</span>
+      {/* Featured Projects in Dark WideCards */}
+      <section
+        style={{
+          background: '#000000',
+          borderRadius: 'var(--r-card, 36px)',
+          padding: 'clamp(24px, 5vw, 48px)',
+          marginBottom: 'var(--s-8)',
+        }}
+      >
+        <div style={{ textAlign: 'center', marginBottom: 'var(--s-6)' }}>
+          <span style={{ color: '#ffffff', fontSize: '13px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            Featured releases
+          </span>
+          <h2 style={{ color: '#ffffff', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, margin: '8px 0 0 0' }}>
+            Systems in production.
           </h2>
         </div>
 
-        <WorkShowcase projects={projects} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          {studioProjects.map((p) => (
+            <WideCard
+              key={p.slug}
+              palette={p.palette}
+              reverse={p.reverse}
+              eyebrow={p.eyebrow}
+              title={p.title}
+              desc={p.desc}
+              ctaText={p.ctaText}
+              ctaHref={p.ctaHref}
+              visual={getVisual(p.slug, p.image)}
+            />
+          ))}
+        </div>
       </section>
 
       {/* Production Outcomes & Standards */}
-      <section className="work-outcomes-band" data-reveal="up">
+      <section className="work-outcomes-band" data-reveal="up" style={{ marginBottom: 'var(--s-8)' }}>
         <div className="section-head-rule">
           <span className="section-rule-label">Engineering standards</span>
           <h2 className="section-rule-heading">
-            What every build <span className="highlight-word">includes.</span>
+            What every build includes.
           </h2>
         </div>
         <div className="outcomes-grid" data-stagger>
-          <div className="outcome-card hd-card" data-reveal="up">
-            <div className="card-glare" aria-hidden="true" />
-            <div className="outcome-icon-tile" aria-hidden="true">
-              <Zap size={24} />
-            </div>
-            <h3>Sub-second speed</h3>
-            <p>Every page and API route is optimized to load under 150ms. Fast software means higher customer conversion.</p>
+          <div className="outcome-card" data-reveal="up">
+            <Zap size={24} aria-hidden="true" style={{ marginBottom: '12px' }} />
+            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}>Sub-second speed</h3>
+            <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
+              Every page and API route is optimized to load under 150ms. Fast software means higher customer conversion.
+            </p>
           </div>
-          <div className="outcome-card hd-card" data-reveal="up">
-            <div className="card-glare" aria-hidden="true" />
-            <div className="outcome-icon-tile" aria-hidden="true">
-              <ShieldCheck size={24} />
-            </div>
-            <h3>Penetration tested</h3>
-            <p>We test our own code against real-world attack vectors before launch. No open doors or data leaks.</p>
+          <div className="outcome-card" data-reveal="up">
+            <ShieldCheck size={24} aria-hidden="true" style={{ marginBottom: '12px' }} />
+            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}>Penetration tested</h3>
+            <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
+              We test our own code against real-world attack vectors before launch. No open doors or data leaks.
+            </p>
           </div>
-          <div className="outcome-card hd-card" data-reveal="up">
-            <div className="card-glare" aria-hidden="true" />
-            <div className="outcome-icon-tile" aria-hidden="true">
-              <CheckCircle2 size={24} />
-            </div>
-            <h3>Complete ownership</h3>
-            <p>You own 100% of the repository, accounts, database credentials, and documentation. No vendor lock-in.</p>
+          <div className="outcome-card" data-reveal="up">
+            <CheckCircle2 size={24} aria-hidden="true" style={{ marginBottom: '12px' }} />
+            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}>Complete ownership</h3>
+            <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
+              You own 100% of the repository, accounts, database credentials, and documentation. No vendor lock-in.
+            </p>
           </div>
-          <div className="outcome-card hd-card" data-reveal="up">
-            <div className="card-glare" aria-hidden="true" />
-            <div className="outcome-icon-tile" aria-hidden="true">
-              <Layers size={24} />
-            </div>
-            <h3>Clean architecture</h3>
-            <p>Built with modern TypeScript, clean database models, and clear documentation your team can maintain easily.</p>
+          <div className="outcome-card" data-reveal="up">
+            <Layers size={24} aria-hidden="true" style={{ marginBottom: '12px' }} />
+            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}>Clean architecture</h3>
+            <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
+              Built with modern TypeScript, clean database models, and clear documentation your team can maintain easily.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Project Inquiry CTA Banner */}
-      <section className="work-cta-card hd-card" data-reveal="up">
-        <div className="card-glare" aria-hidden="true" />
-        <div className="cta-content">
-          <span className="section-rule-label">Ready to build?</span>
-          <h2 className="section-rule-heading" style={{ margin: '0.4rem 0 0.8rem' }}>
-            Have a project <span className="highlight-word">in mind?</span>
-          </h2>
-          <p className="section-rule-lead">
-            Tell us what you want to build. We reply within 24 hours with honest advice and a clear estimate.
-          </p>
-        </div>
-        <div className="cta-actions" style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <a className="hd-btn-primary" href="/contact">
-            <span className="btn-label">Start a project</span>
-            <span className="btn-arrow-circle" aria-hidden="true">
-              <span className="btn-arrow-track">
-                <span className="btn-arrow-icon btn-arrow-primary">
-                  <ArrowUpRight size={15} />
-                </span>
-                <span className="btn-arrow-icon btn-arrow-clone">
-                  <ArrowUpRight size={15} />
-                </span>
-              </span>
-            </span>
-          </a>
-          <a className="hd-btn-secondary" href="/services">
-            <span>See all services</span>
-            <ArrowUpRight size={16} aria-hidden="true" />
-          </a>
-        </div>
-      </section>
+      {/* Single Wide Ink CTA Card */}
+      <BottomCta />
     </div>
   );
 }

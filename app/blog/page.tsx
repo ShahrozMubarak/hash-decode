@@ -1,5 +1,6 @@
 import { entries } from '@/lib/cms';
 import { meta } from '@/lib/meta';
+import BottomCta from '@/components/studio/BottomCta';
 import { ArrowUpRight, BookOpen, Clock, Calendar } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -34,19 +35,19 @@ export default async function Blog() {
 
   return (
     <div className="wrap interior page-blog-content">
-      {/* Inner-page Hero */}
+      {/* Centered Hero */}
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Studio journal</p>
         <h1 className="inner-hero-h1">
           Engineering notes.
         </h1>
-        <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
+        <p className="section-rule-lead">
           Practical notes on web development, software handovers, system performance, and application security.
         </p>
       </header>
 
-      {/* 3-Column Card Grid (2 on tablet, 1 on phones) */}
-      <section className="blog-posts-section" data-reveal="up">
+      {/* Blog Cards Grid */}
+      <section className="blog-posts-section" data-reveal="up" style={{ marginBottom: 'var(--s-8)' }}>
         {posts.length > 0 ? (
           <div className="blog-cards-grid" data-stagger>
             {posts.map((p, i) => {
@@ -56,12 +57,11 @@ export default async function Blog() {
               return (
                 <article
                   key={p.id}
-                  className="blog-card hd-card"
+                  className="blog-card"
                   data-reveal="up"
                   data-reveal-delay={i * 80}
                 >
-                  <div className="card-glare" aria-hidden="true" />
-                  <a href={`/blog/${p.id}`} className="blog-card-link-wrapper">
+                  <a href={`/blog/${p.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', height: '100%' }}>
                     {/* Thumbnail */}
                     <div className="blog-card-thumbnail">
                       {p.image ? (
@@ -74,33 +74,35 @@ export default async function Blog() {
                           className="blog-thumbnail-img"
                         />
                       ) : (
-                        <div className="blog-thumbnail-gradient" aria-hidden="true">
-                          <BookOpen size={36} className="thumbnail-icon" />
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: 'rgba(0,0,0,0.04)' }} aria-hidden="true">
+                          <BookOpen size={36} />
                         </div>
                       )}
                     </div>
 
                     <div className="blog-card-content">
-                      <div className="blog-card-meta">
-                        <span className="blog-tag-badge">{p.label || 'Engineering'}</span>
-                        <span className="blog-meta-item">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                        <span style={{ fontSize: '12px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px', background: 'rgba(0,0,0,0.06)' }}>
+                          {p.label || 'Engineering'}
+                        </span>
+                        <span style={{ fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                           <Clock size={13} aria-hidden="true" />
                           <span>{readTime}</span>
                         </span>
                       </div>
 
-                      <h3 className="blog-card-title">{p.title}</h3>
+                      <h3 style={{ fontSize: '19px', fontWeight: 700, margin: '0 0 8px 0', lineHeight: 1.3 }}>{p.title}</h3>
 
-                      <p className="blog-card-excerpt">
+                      <p style={{ fontSize: '14px', lineHeight: 1.5, margin: '0 0 16px 0', flexGrow: 1 }}>
                         {p.body.replace(/\s+/g, ' ').slice(0, 130)}...
                       </p>
 
-                      <div className="blog-card-footer">
-                        <span className="blog-card-date">
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '12px', fontSize: '13px', fontWeight: 600 }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                           <Calendar size={13} aria-hidden="true" />
                           <span>{dateStr}</span>
                         </span>
-                        <span className="blog-read-link">
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                           <span>Read note</span>
                           <ArrowUpRight size={15} aria-hidden="true" />
                         </span>
@@ -112,25 +114,24 @@ export default async function Blog() {
             })}
           </div>
         ) : (
-          <div className="blog-empty-state hd-card" data-reveal="up">
-            <div className="card-glare" aria-hidden="true" />
-            <BookOpen size={40} className="empty-state-icon" aria-hidden="true" />
-            <h3>No engineering notes published yet</h3>
-            <p>
+          <div style={{ background: 'var(--off-white)', borderRadius: '28px', padding: 'var(--s-7) var(--s-5)', textAlign: 'center' }} data-reveal="up">
+            <BookOpen size={40} style={{ margin: '0 auto 16px' }} aria-hidden="true" />
+            <h3 style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 8px' }}>No engineering notes published yet</h3>
+            <p style={{ fontSize: '16px', maxWidth: '480px', margin: '0 auto 24px' }}>
               We are documenting production systems, architecture teardowns, and security insights.
               Check back soon or submit a project brief to start a conversation.
             </p>
-            <div style={{ marginTop: '1.5rem' }}>
+            <div>
               <a className="hd-btn-primary" href="/contact">
                 <span className="btn-label">Start a project</span>
-                <span className="btn-arrow-circle" aria-hidden="true">
-                  <ArrowUpRight size={15} />
-                </span>
               </a>
             </div>
           </div>
         )}
       </section>
+
+      {/* Single Wide Ink CTA Card */}
+      <BottomCta />
     </div>
   );
 }

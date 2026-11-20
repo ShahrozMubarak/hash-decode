@@ -1,4 +1,4 @@
-import { ArrowUpRight, ArrowLeft, Briefcase, Cpu, Mail } from 'lucide-react';
+import { ArrowLeft, Briefcase, Cpu, Mail } from 'lucide-react';
 import { meta } from '@/lib/meta';
 
 export const metadata = meta(
@@ -10,30 +10,7 @@ export const metadata = meta(
 export default function NotFound() {
   return (
     <div className="wrap interior page-error-container">
-      <div className="error-hero-card hd-card" data-reveal="fade">
-        <div className="card-glare" aria-hidden="true" />
-
-        {/* Small Calming Robot / Compass Graphic */}
-        <div className="error-graphic-wrap" aria-hidden="true">
-          <svg
-            width="72"
-            height="72"
-            viewBox="0 0 72 72"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="error-robot-svg"
-          >
-            <rect x="14" y="20" width="44" height="36" rx="10" stroke="#000000" strokeWidth="2.5" fill="#f8fafc" />
-            <circle cx="28" cy="36" r="3.5" fill="#000000" />
-            <circle cx="44" cy="36" r="3.5" fill="#000000" />
-            <path d="M30 46H42" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
-            <path d="M36 12V20" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
-            <circle cx="36" cy="10" r="3" fill="#000000" />
-            <line x1="8" y1="36" x2="14" y2="36" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="58" y1="36" x2="64" y2="36" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
-          </svg>
-        </div>
-
+      <div className="error-hero-card" data-reveal="fade">
         <span className="section-rule-label">404 Error</span>
         <h1 className="error-main-title">
           Page not found.
@@ -43,7 +20,7 @@ export default function NotFound() {
         </p>
 
         {/* Primary Action */}
-        <div className="error-primary-action">
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--s-6)' }}>
           <a className="hd-btn-primary" href="/">
             <ArrowLeft size={16} aria-hidden="true" />
             <span className="btn-label">Back to home</span>
@@ -51,40 +28,39 @@ export default function NotFound() {
         </div>
 
         {/* 3 Useful Links */}
-        <div className="error-useful-links-box">
-          <span className="useful-links-label">Suggested destinations:</span>
+        <div style={{ textAlign: 'left', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: 'var(--s-5)' }}>
+          <span style={{ fontSize: '13px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: '12px' }}>
+            Suggested destinations:
+          </span>
           <div className="useful-links-grid">
             <a href="/portfolio" className="useful-link-item">
-              <div className="useful-link-icon" aria-hidden="true">
+              <div aria-hidden="true">
                 <Briefcase size={16} />
               </div>
-              <div className="useful-link-text">
+              <div>
                 <strong>Explore our work</strong>
                 <span>Review shipped client software</span>
               </div>
-              <ArrowUpRight size={14} className="useful-link-arrow" aria-hidden="true" />
             </a>
 
             <a href="/services" className="useful-link-item">
-              <div className="useful-link-icon" aria-hidden="true">
+              <div aria-hidden="true">
                 <Cpu size={16} />
               </div>
-              <div className="useful-link-text">
+              <div>
                 <strong>Our services</strong>
                 <span>Web platforms &amp; security audits</span>
               </div>
-              <ArrowUpRight size={14} className="useful-link-arrow" aria-hidden="true" />
             </a>
 
             <a href="/contact" className="useful-link-item">
-              <div className="useful-link-icon" aria-hidden="true">
+              <div aria-hidden="true">
                 <Mail size={16} />
               </div>
-              <div className="useful-link-text">
+              <div>
                 <strong>Start a consultation</strong>
                 <span>Speak directly with our engineers</span>
               </div>
-              <ArrowUpRight size={14} className="useful-link-arrow" aria-hidden="true" />
             </a>
           </div>
         </div>

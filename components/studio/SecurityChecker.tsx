@@ -26,18 +26,8 @@ type Scan = {
 
 type ScanState = 'idle' | 'running' | 'done' | 'error';
 
-function getGradeBadgeStyle(grade: string) {
-  const g = grade.toUpperCase();
-  if (g.startsWith('A')) {
-    return { bg: '#ecfdf5', text: '#059669', border: 'rgba(5, 150, 105, 0.25)' };
-  }
-  if (g.startsWith('B')) {
-    return { bg: '#eff6ff', text: '#1e40af', border: 'rgba(30, 64, 175, 0.25)' };
-  }
-  if (g.startsWith('C') || g.startsWith('D')) {
-    return { bg: '#fffbeb', text: '#d97706', border: 'rgba(217, 119, 6, 0.25)' };
-  }
-  return { bg: '#fef2f2', text: '#dc2626', border: 'rgba(220, 38, 38, 0.25)' };
+function getGradeBadgeStyle(_grade: string) {
+  return { bg: 'rgba(0, 0, 0, 0.04)', text: '#000000', border: 'rgba(0, 0, 0, 0.12)' };
 }
 
 export default function SecurityChecker() {

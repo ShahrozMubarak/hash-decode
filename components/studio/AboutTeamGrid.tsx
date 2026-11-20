@@ -1,107 +1,63 @@
 'use client';
 
-import { useState } from 'react';
 import type { Founder } from '@/lib/studio-data';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 
-function FounderAvatar({ name, image }: { name: string; image?: string }) {
-  const [imgError, setImgError] = useState(false);
-
-  const getInitials = (n: string) =>
-    n
-      .split(' ')
-      .filter(Boolean)
-      .map((part) => part[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase();
-
-  if (!image || image.endsWith('.svg') || imgError) {
-    return (
-      <div className="about-monogram-avatar" aria-label={`Monogram avatar for ${name}`}>
-        <span className="about-monogram-initials">{getInitials(name)}</span>
-      </div>
-    );
-  }
+export default function AboutTeamGrid({ founders }: { founders?: Founder[] }) {
+  if (!founders || founders.length === 0) return null;
 
   return (
-    <div className="about-avatar-container">
-      <img
-        src={image}
-        alt={name}
-        width={96}
-        height={96}
-        loading="lazy"
-        className="about-avatar-image"
-        onError={() => setImgError(true)}
-      />
-    </div>
-  );
-}
-
-function FounderGridCard({ founder, index }: { founder: Founder; index: number }) {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <article
-      className="about-founder-card hd-card"
-      data-reveal="up"
-      data-reveal-delay={index * 90}
+    <div
+      className="about-founders-grid"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+        gap: 'var(--s-6)',
+        marginTop: 'var(--s-5)',
+      }}
     >
-      <div className="card-glare" aria-hidden="true" />
-      <div className="about-card-top">
-        <FounderAvatar name={founder.name} image={founder.image} />
-        <div className="about-card-header">
-          <h3 className="about-founder-name">{founder.name}</h3>
-          <span className="about-founder-role">{founder.role}</span>
-        </div>
-      </div>
-
-      {founder.quote && (
-        <blockquote className="about-founder-quote">
-          <p>{founder.quote}</p>
-        </blockquote>
-      )}
-
-      {founder.bio && (
-        <div className="about-founder-bio-wrap">
-          <div className={`about-bio-accordion ${expanded ? 'is-expanded' : 'is-clamped'}`}>
-            <p className="about-bio-text">{founder.bio}</p>
+      {founders.map((founder) => (
+        <article
+          key={founder.id || founder.name}
+          className="about-founder-card"
+          style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+        >
+          <div
+            style={{
+              width: '100%',
+              aspectRatio: '4 / 5',
+              borderRadius: '28px',
+              overflow: 'hidden',
+              background: 'rgba(0,0,0,0.04)',
+              border: '1px solid rgba(0,0,0,0.08)',
+            }}
+          >
+            <img
+              src={founder.image}
+              alt={founder.name}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
-          {founder.bio.length > 160 && (
-            <button
-              type="button"
-              className="about-bio-toggle-btn"
-              onClick={() => setExpanded(!expanded)}
-              aria-expanded={expanded}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0, color: '#000000' }}>
+              {founder.name}
+            </h3>
+            <p style={{ fontSize: '14px', fontWeight: 600, margin: 0, color: '#000000' }}>
+              {founder.role}
+            </p>
+            <p
+              style={{
+                fontSize: '15px',
+                fontWeight: 400,
+                lineHeight: 1.5,
+                margin: '8px 0 0',
+                color: '#000000',
+              }}
             >
-              <span>{expanded ? 'Read less' : 'Read more'}</span>
-              {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-            </button>
-          )}
-        </div>
-      )}
-
-      {founder.skills && founder.skills.length > 0 && (
-        <div className="about-card-skills">
-          {founder.skills.map((skill) => (
-            <span key={skill} className="about-skill-pill">
-              {skill}
-            </span>
-          ))}
-        </div>
-      )}
-    </article>
-  );
-}
-
-export default function AboutTeamGrid({ founders }: { founders: Founder[] }) {
-  return (
-    <div className="about-team-grid" data-stagger>
-      {founders.map((f, idx) => (
-        <FounderGridCard key={f.id || f.name} founder={f} index={idx} />
+              {founder.bio}
+            </p>
+          </div>
+        </article>
       ))}
     </div>
   );
 }
-

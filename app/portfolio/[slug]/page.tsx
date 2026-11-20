@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { listProjects } from '@/lib/studio-data';
 import { Artwork } from '@/components/studio/Work';
 import { meta } from '@/lib/meta';
+import BottomCta from '@/components/studio/BottomCta';
 import { ArrowUpRight, ArrowLeft } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -29,30 +30,35 @@ export default async function Case({ params }: Props) {
     <article className="wrap interior page-case-content">
       {/* Back to index link */}
       <div className="case-top-nav" data-reveal="fade">
-        <a className="hd-text-link case-back-link" href="/portfolio">
+        <a className="case-back-link" href="/portfolio">
           <ArrowLeft size={16} aria-hidden="true" />
-          <span>Back to index</span>
+          <span>Back to portfolio</span>
         </a>
       </div>
 
-      {/* Header & Meta Row */}
+      {/* Centered Header & Meta */}
       <header className="page-intro" data-reveal="fade">
-        <div className="case-meta-row">
-          <span className="concept-status-badge">Concept</span>
-          <span className="case-meta-tag">{p.category}</span>
-          {p.tech && <span className="case-meta-tag">{p.tech}</span>}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+          <span style={{ fontSize: '13px', fontWeight: 600, padding: '4px 12px', borderRadius: '9999px', background: 'rgba(0,0,0,0.06)', color: '#000000' }}>
+            {p.category || 'Platform'}
+          </span>
+          {p.tech && (
+            <span style={{ fontSize: '13px', fontWeight: 600, padding: '4px 12px', borderRadius: '9999px', background: 'rgba(0,0,0,0.06)', color: '#000000' }}>
+              {p.tech}
+            </span>
+          )}
         </div>
 
         <h1 className="inner-hero-h1">
           {p.title}.
         </h1>
 
-        <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
+        <p className="section-rule-lead">
           {p.summary}
         </p>
 
         {(p.url || demo) && (
-          <div className="case-hero-action" style={{ marginTop: '1.5rem' }}>
+          <div style={{ marginTop: 'var(--s-4)' }}>
             <a
               className="hd-btn-primary"
               href={p.url || demo}
@@ -76,15 +82,13 @@ export default async function Case({ params }: Props) {
       </header>
 
       {/* Large Preview */}
-      <div className="case-large-preview hd-card" data-reveal="up">
-        <div className="card-glare" aria-hidden="true" />
+      <div className="case-large-preview" data-reveal="up" style={{ padding: 'var(--s-4)', margin: 'var(--s-6) 0' }}>
         {p.url ? (
           <a
             href={p.url}
             target="_blank"
             rel="noopener noreferrer"
             title={`Visit ${p.title} live website`}
-            className="case-preview-anchor"
             style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}
           >
             <Artwork project={p} />
@@ -103,32 +107,35 @@ export default async function Case({ params }: Props) {
         ]
           .filter(([v]) => Boolean(v))
           .map(([v, t, lead]) => (
-            <section key={t} className="case-detail-card hd-card" data-reveal="up">
-              <div className="card-glare" aria-hidden="true" />
-              <span className="section-rule-label">{t}</span>
-              <h2 className="case-detail-heading">{t}</h2>
-              <p className="case-detail-lead">{lead}</p>
-              <p className="case-detail-text">{v}</p>
+            <section key={t} className="case-detail-card" data-reveal="up">
+              <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: '8px' }}>
+                {t}
+              </span>
+              <h2 style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 6px 0' }}>{t}</h2>
+              <p style={{ fontSize: '14px', fontWeight: 500, margin: '0 0 12px 0' }}>{lead}</p>
+              <p style={{ fontSize: '15px', lineHeight: 1.55, margin: 0 }}>{v}</p>
             </section>
           ))}
       </div>
 
       {/* Next Project Link */}
       {next && (
-        <div className="case-next-container" data-reveal="up">
-          <a className="case-next-card hd-card" href={'/portfolio/' + next.slug}>
-            <div className="card-glare" aria-hidden="true" />
+        <div style={{ marginTop: 'var(--s-6)' }} data-reveal="up">
+          <a className="case-next-card" href={'/portfolio/' + next.slug}>
             <div>
-              <span className="section-rule-label">Next release</span>
-              <h3 className="case-next-title">{next.title}</h3>
-              <p className="case-next-summary">{next.summary}</p>
+              <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: '4px' }}>
+                Next release
+              </span>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 4px 0' }}>{next.title}</h3>
+              <p style={{ fontSize: '14px', margin: 0 }}>{next.summary}</p>
             </div>
-            <span className="card-arrow-circle" aria-hidden="true">
-              <ArrowUpRight size={20} />
-            </span>
+            <ArrowUpRight size={20} />
           </a>
         </div>
       )}
+
+      {/* Single Wide Ink CTA Card */}
+      <BottomCta />
     </article>
   );
 }

@@ -2,6 +2,7 @@ import { entries } from '@/lib/cms';
 import { meta, origin } from '@/lib/meta';
 import { notFound } from 'next/navigation';
 import ReadingProgressBar from '@/components/studio/ReadingProgressBar';
+import BottomCta from '@/components/studio/BottomCta';
 import { ArrowLeft, ArrowUpRight, Calendar, Clock, Tag } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -72,7 +73,7 @@ export default async function Post({ params }: Props) {
     ...(p.updated ? { dateModified: new Date(p.updated).toISOString() } : {}),
   };
 
-  // Parse body text into structured blocks (code blocks, headings, paragraphs)
+  // Parse body text into structured blocks
   const rawBlocks = p.body.split(/\n\s*\n/).filter(Boolean);
 
   return (
@@ -83,7 +84,7 @@ export default async function Post({ params }: Props) {
       />
       <ReadingProgressBar />
 
-      {/* Navigation breadcrumb */}
+      {/* Navigation back link */}
       <div className="article-top-nav">
         <a className="article-back-link" href="/blog">
           <ArrowLeft size={16} aria-hidden="true" />
@@ -91,42 +92,43 @@ export default async function Post({ params }: Props) {
         </a>
       </div>
 
-      {/* Article Header */}
-      <header className="article-header" data-reveal="fade">
-        <div className="article-meta-row">
-          <span className="article-tag-badge">
+      {/* Centered Article Header */}
+      <header className="page-intro" data-reveal="fade">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+          <span style={{ fontSize: '13px', fontWeight: 600, padding: '4px 12px', borderRadius: '9999px', background: 'rgba(0,0,0,0.06)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
             <Tag size={12} aria-hidden="true" />
             <span>{p.label || 'Engineering'}</span>
           </span>
-          <span className="article-meta-item">
+          <span style={{ fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
             <Calendar size={13} aria-hidden="true" />
             <span>{dateStr}</span>
           </span>
-          <span className="article-meta-item">
+          <span style={{ fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
             <Clock size={13} aria-hidden="true" />
             <span>{readTime}</span>
           </span>
         </div>
 
-        <h1 className="article-main-title">{p.title}</h1>
+        <h1 className="inner-hero-h1">
+          {p.title}.
+        </h1>
       </header>
 
       {/* Optional Featured Image */}
       {p.image && (
-        <div className="article-featured-image-wrap hd-card" data-reveal="up">
-          <div className="card-glare" aria-hidden="true" />
+        <div style={{ maxWidth: '900px', margin: '0 auto var(--s-6)', borderRadius: '24px', overflow: 'hidden' }} data-reveal="up">
           <img
             width={1200}
             height={640}
             loading="lazy"
             alt={p.title}
             src={p.image}
-            className="article-featured-image"
+            style={{ width: '100%', height: 'auto', display: 'block' }}
           />
         </div>
       )}
 
-      {/* Article Body Copy */}
+      {/* Article Body Copy: 680px Reading Column */}
       <div className="article-prose-container" data-reveal="up">
         {rawBlocks.map((block, idx) => {
           const trimmed = block.trim();
@@ -142,7 +144,7 @@ export default async function Post({ params }: Props) {
             );
           }
 
-          // Section heading (short string under 80 chars, not starting with list bullet)
+          // Section heading
           if (trimmed.length < 80 && !trimmed.includes('.') && !trimmed.startsWith('-')) {
             return (
               <h2 key={idx} className="article-section-heading">
@@ -159,8 +161,8 @@ export default async function Post({ params }: Props) {
         })}
 
         {p.url && (
-          <p className="article-source-row">
-            <a href={p.url} target="_blank" rel="noopener noreferrer" className="article-source-link">
+          <p style={{ marginTop: 'var(--s-4)', fontSize: '14px', fontWeight: 600 }}>
+            <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', textDecoration: 'none', color: '#000000' }}>
               <span>External source / reference</span>
               <ArrowUpRight size={14} aria-hidden="true" />
             </a>
@@ -168,69 +170,38 @@ export default async function Post({ params }: Props) {
         )}
       </div>
 
-      {/* Article Closing Discussion Card */}
-      <div className="article-cta-box hd-card" data-reveal="up">
-        <div className="card-glare" aria-hidden="true" />
-        <div className="article-cta-content">
-          <span className="section-rule-label">Have questions?</span>
-          <h3 className="article-cta-heading">Need help applying this to your stack?</h3>
-          <p className="article-cta-sub">
-            Our founding engineers can review your architecture, run a security check, or help plan a release.
-          </p>
-        </div>
-        <div className="article-cta-action">
-          <a className="hd-btn-primary" href="/contact">
-            <span className="btn-label">Discuss your project</span>
-            <span className="btn-arrow-circle" aria-hidden="true">
-              <span className="btn-arrow-track">
-                <span className="btn-arrow-icon btn-arrow-primary">
-                  <ArrowUpRight size={15} />
-                </span>
-                <span className="btn-arrow-icon btn-arrow-clone">
-                  <ArrowUpRight size={15} />
-                </span>
-              </span>
-            </span>
-          </a>
-        </div>
-      </div>
-
-      {/* Related Posts: Render ONLY if they exist */}
+      {/* Related Posts */}
       {relatedPosts.length > 0 && (
-        <section className="article-related-section" data-reveal="up">
+        <section style={{ margin: 'var(--s-8) 0' }} data-reveal="up">
           <div className="section-head-rule">
             <span className="section-rule-label">Keep reading</span>
             <h2 className="section-rule-heading">
-              Related <span className="highlight-word">notes.</span>
+              Related notes.
             </h2>
           </div>
-          <div className="article-related-grid" data-stagger>
+          <div className="blog-cards-grid" data-stagger>
             {relatedPosts.map((rp) => (
-              <article key={rp.id} className="blog-card hd-card" data-reveal="up">
-                <div className="card-glare" aria-hidden="true" />
-                <a href={`/blog/${rp.id}`} className="blog-card-link-wrapper">
-                  <div className="blog-card-content">
-                    <div className="blog-card-meta">
-                      <span className="blog-tag-badge">{rp.label || 'Engineering'}</span>
-                      <span className="blog-meta-item">
-                        <Clock size={13} aria-hidden="true" />
-                        <span>{calculateReadTime(rp.body)}</span>
-                      </span>
-                    </div>
-                    <h3 className="blog-card-title">{rp.title}</h3>
-                    <p className="blog-card-excerpt">
-                      {rp.body.replace(/\s+/g, ' ').slice(0, 110)}...
-                    </p>
-                    <div className="blog-card-footer">
-                      <span className="blog-card-date">
-                        <Calendar size={13} aria-hidden="true" />
-                        <span>{formatDate(rp.updated)}</span>
-                      </span>
-                      <span className="blog-read-link">
-                        <span>Read note</span>
-                        <ArrowUpRight size={15} aria-hidden="true" />
-                      </span>
-                    </div>
+              <article key={rp.id} className="blog-card" data-reveal="up">
+                <a href={`/blog/${rp.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', height: '100%', padding: 'var(--s-4)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px', background: 'rgba(0,0,0,0.06)' }}>
+                      {rp.label || 'Engineering'}
+                    </span>
+                    <span style={{ fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Clock size={13} aria-hidden="true" />
+                      <span>{calculateReadTime(rp.body)}</span>
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 8px 0' }}>{rp.title}</h3>
+                  <p style={{ fontSize: '14px', lineHeight: 1.5, margin: '0 0 16px 0', flexGrow: 1 }}>
+                    {rp.body.replace(/\s+/g, ' ').slice(0, 110)}...
+                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: '12px', fontSize: '13px', fontWeight: 600 }}>
+                    <span>{formatDate(rp.updated)}</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <span>Read note</span>
+                      <ArrowUpRight size={15} aria-hidden="true" />
+                    </span>
                   </div>
                 </a>
               </article>
@@ -238,6 +209,9 @@ export default async function Post({ params }: Props) {
           </div>
         </section>
       )}
+
+      {/* Single Wide Ink CTA Card */}
+      <BottomCta />
     </article>
   );
 }

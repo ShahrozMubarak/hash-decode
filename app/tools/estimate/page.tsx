@@ -1,5 +1,6 @@
 import { Estimator } from '@/components/studio/Tools';
 import { meta } from '@/lib/meta';
+import BottomCta from '@/components/studio/BottomCta';
 import { ArrowLeft } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -27,16 +28,19 @@ export default function Page() {
         <h1 className="inner-hero-h1">
           Project cost estimator.
         </h1>
-        <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
+        <p className="section-rule-lead">
           Select your product foundation, configure optional features, and specify operational complexity.
           Results calculate in real time using our studio formula.
         </p>
       </header>
 
       {/* Interactive Stepper */}
-      <div className="tool-interactive-area" data-reveal="up">
+      <div className="tool-interactive-area" data-reveal="up" style={{ marginBottom: 'var(--s-8)' }}>
         <Estimator />
       </div>
+
+      {/* Single Wide Ink CTA Card */}
+      <BottomCta />
     </div>
   );
 }

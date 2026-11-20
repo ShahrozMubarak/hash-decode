@@ -1,5 +1,6 @@
 import { Checker } from '@/components/studio/Tools';
 import { meta } from '@/lib/meta';
+import BottomCta from '@/components/studio/BottomCta';
 import { ArrowLeft } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -27,16 +28,19 @@ export default function Page() {
         <h1 className="inner-hero-h1">
           Website security check.
         </h1>
-        <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
+        <p className="section-rule-lead">
           Inspect your public domain&apos;s browser-facing security configuration. Checks Content-Security-Policy,
           HSTS, frame guards, and transport protections before commissioning a deeper penetration audit.
         </p>
       </header>
 
       {/* Interactive Scanner */}
-      <div className="tool-interactive-area" data-reveal="up">
+      <div className="tool-interactive-area" data-reveal="up" style={{ marginBottom: 'var(--s-8)' }}>
         <Checker />
       </div>
+
+      {/* Single Wide Ink CTA Card */}
+      <BottomCta />
     </div>
   );
 }
