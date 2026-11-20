@@ -7,7 +7,6 @@ import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js';
 import {cubeCells,sceneBudget} from './scene-settings';
 import type {PosterModel} from '@/components/studio/ModelPoster';
-import {createHoodedRobot} from './hooded-robot';
 
 // In-memory ArrayBuffer cache to make model loads instant (< 20ms) after initial fetch
 const modelBufferCache = new Map<string, Promise<ArrayBuffer>>();
@@ -175,7 +174,6 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   roughness:0.2
  });
 
- let hoodedRobot: ReturnType<typeof createHoodedRobot> | undefined;
  let corePointLight:THREE.PointLight|undefined;
  let coralGlowSprite:THREE.Sprite|undefined;
  let contactShadowMesh:THREE.Mesh|undefined;
@@ -222,9 +220,9 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    composer.addPass(new RenderPass(scene,camera));
    bloomPass=new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth,window.innerHeight),
-    0.75, // strength
-    0.55, // radius
-    0.82  // threshold
+    0.55, // strength
+    0.6,  // radius
+    0.85  // threshold
    );
    composer.addPass(bloomPass);
    composer.addPass(new OutputPass());
@@ -393,21 +391,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
     userDragRotY*=0.92;
    }
 
-   if(hoodedRobot){
-    hoodedRobot.update(elapsed, currentMouseYaw, currentMousePitch);
-    if(prefersReducedMotion){
-     object.scale.setScalar(1.0);
-     object.position.set(0,0,0);
-     object.rotation.set(0,0,0);
-    }else{
-     const scrollScale=1.0-scrollClamped*0.15;
-     const scrollY=-scrollClamped*0.25;
-     object.scale.setScalar(scrollScale);
-     object.position.set(0,scrollY,0);
-     object.rotation.y=userDragRotY;
-     object.rotation.x=userDragRotX;
-    }
-   }else if(model==='eva'||model==='fixer'){
+   if(model==='eva'||model==='fixer'){
     if(prefersReducedMotion){
      // Static posed robot facing camera
      object.scale.setScalar(1.0);
@@ -495,17 +479,6 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   if(!w||!h)return;
   camera.aspect=w/h;
   const isMob=w<=640||(typeof window!=='undefined'&&window.innerWidth<=850);
-  if(model==='eva'){
-   if(isMob){
-    camera.position.set(0, 0.08, 4.3);
-    camera.lookAt(0, 0.12, 0);
-   }else{
-    camera.position.set(0, 0.18, 3.85);
-    camera.lookAt(0, 0.12, 0);
-   }
-   camera.updateProjectionMatrix();
-   return;
-  }
   if(isMob){
    // Mathematical robot fit from bounding sphere:
    // Decreased by another 20% on mobile as requested (occupying ~35% canvas width, centered)
@@ -592,7 +565,6 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
   canvas.removeEventListener('webglcontextlost',lost);
   canvas.removeEventListener('webglcontextrestored',restore);
   if(happyTouchTimer)clearTimeout(happyTouchTimer);
-  hoodedRobot?.dispose();hoodedRobot=undefined;
   cleanGeometry();
   instances?.dispose();
   mixer?.stopAllAction();mixer=undefined;
@@ -631,25 +603,6 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
    const cell=new RoundedBoxGeometry(.63,.63,.63,lite?1:2,.065);
    instances=new THREE.InstancedMesh(cell,surface,26);instances.frustumCulled=false;
    object.add(instances,new THREE.Mesh(cell,coreFallback));
-  }else if(model==='eva'){
-   hoodedRobot=createHoodedRobot();
-   object.add(hoodedRobot.group);
-   scene.add(hoodedRobot.particles);
-
-   // Dramatic sci-fi teal lighting & rim from ai_studio_code.html
-   const tealKey=new THREE.DirectionalLight(0x8be9f5, 2.6);
-   tealKey.position.set(3.2, 3.6, 3.8);
-   tealKey.castShadow=true;
-   scene.add(tealKey);
-
-   const tealRim=new THREE.SpotLight(0x28d6e8, 16, 12, Math.PI / 3, 0.6);
-   tealRim.position.set(-3.2, 2.2, -2.5);
-   scene.add(tealRim);
-
-   const tealFill=new THREE.HemisphereLight(0x3a8c9c, 0x06151c, 0.85);
-   scene.add(tealFill);
-
-   robotRadius=1.35;
   }else{
    const deadline=typeof AbortSignal.any==="function"?AbortSignal.any([signal,AbortSignal.timeout(8000)]):signal;
    const modelUrl=model==='fixer'?'/models/fixer_robot.glb':'/models/eva_robot.glb';
