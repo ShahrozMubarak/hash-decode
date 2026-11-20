@@ -13,6 +13,7 @@ import './globals.css';
 import './motion-ui.css';
 import './motion.css';
 import './refinements.css';
+import './liquid.css';
 export const dynamic = 'force-dynamic';
 import { Header, Footer } from '@/components/studio/Shell';
 import { origin } from '@/lib/meta';

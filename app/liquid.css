@@ -1,0 +1,355 @@
+/* ==========================================================================
+   LIQUID CARDS & PALETTES (V2 REDESIGN - SECTION 3.4, 3.8, 3.9, 3.10)
+   ========================================================================== */
+
+/* 1. Base WideCard layout */
+.wide-card {
+  position: relative;
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  border-radius: var(--radius-card);
+  padding: var(--card-pad);
+  overflow: hidden;
+  border: none !important;
+  box-shadow: none !important;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--s-7);
+  box-sizing: border-box;
+  contain: paint;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wide-card:hover {
+  transform: scale(1.01);
+}
+
+.wide-card:hover .wide-card__visual .visual-panel {
+  transform: translateY(-4px);
+}
+
+/* Alternate reverse */
+.wide-card--reverse {
+  direction: rtl;
+}
+.wide-card--reverse > * {
+  direction: ltr;
+}
+
+/* Card columns */
+.wide-card__text {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-4);
+  max-width: 520px;
+}
+
+.wide-card__step-num {
+  font-family: var(--font-sans);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: var(--s-2);
+}
+
+.wide-card__title {
+  font-family: var(--font-sans);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.wide-card__desc {
+  font-family: var(--font-sans);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.wide-card__visual {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 2. Liquid effect: Blobs */
+.liquid {
+  position: relative;
+}
+
+.liquid__blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  contain: paint;
+  will-change: transform;
+  filter: blur(60px);
+  opacity: 0.65;
+  animation-play-state: paused;
+}
+
+/* When intersecting, blobs play */
+.wide-card.is-visible .liquid__blob,
+.liquid.is-visible .liquid__blob {
+  animation-play-state: running;
+}
+
+.liquid__blob--a {
+  width: 65%;
+  height: 65%;
+  top: -10%;
+  left: -5%;
+  animation: drift-a 22s ease-in-out infinite alternate;
+}
+
+.liquid__blob--b {
+  width: 60%;
+  height: 60%;
+  bottom: -10%;
+  right: -5%;
+  animation: drift-b 26s ease-in-out infinite alternate;
+  animation-delay: -7s;
+}
+
+@keyframes drift-a {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(18%, 15%, 0) scale(1.12);
+  }
+  100% {
+    transform: translate3d(-10%, 25%, 0) scale(0.95);
+  }
+}
+
+@keyframes drift-b {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-20%, -18%, 0) scale(1.15);
+  }
+  100% {
+    transform: translate3d(15%, -22%, 0) scale(0.9);
+  }
+}
+
+/* Reduced motion stops all blob animation */
+@media (prefers-reduced-motion: reduce) {
+  .liquid__blob {
+    animation: none !important;
+  }
+}
+
+/* Mobile responsive layout */
+@media (max-width: 800px) {
+  .liquid__blob {
+    filter: blur(40px);
+  }
+  .wide-card {
+    grid-template-columns: 1fr !important;
+    direction: ltr !important;
+    border-radius: var(--radius-card-sm) !important;
+    padding: 28px !important;
+    gap: var(--s-5) !important;
+  }
+  .wide-card--reverse {
+    direction: ltr !important;
+  }
+  .wide-card__text {
+    max-width: 100% !important;
+  }
+}
+
+/* 3. The 9 Card Palettes (Section 3.4) */
+/* Cloud: Light, black text, base #e6f0ff, blob A #b9d4ff, blob B #dcd0ff */
+.liquid--cloud {
+  background-color: #e6f0ff !important;
+  color: #000000 !important;
+}
+.liquid--cloud .liquid__blob--a {
+  background-color: #b9d4ff;
+}
+.liquid--cloud .liquid__blob--b {
+  background-color: #dcd0ff;
+}
+
+/* Mint: Light, black text, base #e3f7ee, blob A #b5ecd2, blob B #c9e6ff */
+.liquid--mint {
+  background-color: #e3f7ee !important;
+  color: #000000 !important;
+}
+.liquid--mint .liquid__blob--a {
+  background-color: #b5ecd2;
+}
+.liquid--mint .liquid__blob--b {
+  background-color: #c9e6ff;
+}
+
+/* Peach: Light, black text, base #fff0e6, blob A #ffd2b5, blob B #ffe0f0 */
+.liquid--peach {
+  background-color: #fff0e6 !important;
+  color: #000000 !important;
+}
+.liquid--peach .liquid__blob--a {
+  background-color: #ffd2b5;
+}
+.liquid--peach .liquid__blob--b {
+  background-color: #ffe0f0;
+}
+
+/* Lilac: Light, black text, base #f0eaff, blob A #d5c6ff, blob B #c4dcff */
+.liquid--lilac {
+  background-color: #f0eaff !important;
+  color: #000000 !important;
+}
+.liquid--lilac .liquid__blob--a {
+  background-color: #d5c6ff;
+}
+.liquid--lilac .liquid__blob--b {
+  background-color: #c4dcff;
+}
+
+/* White: Light, black text, base #ffffff, blob A #eef0f5, blob B #f6f6f9 */
+.liquid--white {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+.liquid--white .liquid__blob--a {
+  background-color: #eef0f5;
+}
+.liquid--white .liquid__blob--b {
+  background-color: #f6f6f9;
+}
+
+/* Ink: Dark, white text, base #161618, blob A #1d2a4a, blob B #2a1d4a */
+.liquid--ink {
+  background-color: #161618 !important;
+  color: #ffffff !important;
+}
+.liquid--ink .liquid__blob--a {
+  background-color: #1d2a4a;
+}
+.liquid--ink .liquid__blob--b {
+  background-color: #2a1d4a;
+}
+
+/* Midnight: Dark, white text, base #0b1f3f, blob A #1b4b91, blob B #3b2f8f */
+.liquid--midnight {
+  background-color: #0b1f3f !important;
+  color: #ffffff !important;
+}
+.liquid--midnight .liquid__blob--a {
+  background-color: #1b4b91;
+}
+.liquid--midnight .liquid__blob--b {
+  background-color: #3b2f8f;
+}
+
+/* Violet: Dark, white text, base #1b1140, blob A #4b2fb0, blob B #7a3fd0 */
+.liquid--violet {
+  background-color: #1b1140 !important;
+  color: #ffffff !important;
+}
+.liquid--violet .liquid__blob--a {
+  background-color: #4b2fb0;
+}
+.liquid--violet .liquid__blob--b {
+  background-color: #7a3fd0;
+}
+
+/* Teal: Dark, white text, base #062c33, blob A #0f6b73, blob B #1c4f8f */
+.liquid--teal {
+  background-color: #062c33 !important;
+  color: #ffffff !important;
+}
+.liquid--teal .liquid__blob--a {
+  background-color: #0f6b73;
+}
+.liquid--teal .liquid__blob--b {
+  background-color: #1c4f8f;
+}
+
+/* 4. Visual Panels General Styling (Section 3.10) */
+.visual-panel {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  min-height: 240px;
+  border-radius: var(--radius-panel);
+  padding: 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-mode="light"] .visual-panel,
+.liquid--cloud .visual-panel,
+.liquid--mint .visual-panel,
+.liquid--peach .visual-panel,
+.liquid--lilac .visual-panel,
+.liquid--white .visual-panel {
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--hairline-light);
+  color: #000000;
+}
+
+[data-mode="dark"] .visual-panel,
+.liquid--ink .visual-panel,
+.liquid--midnight .visual-panel,
+.liquid--violet .visual-panel,
+.liquid--teal .visual-panel {
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--hairline-dark);
+  color: #ffffff;
+}
+
+/* 5. Scroll reveal animation (Section 3.11) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal].is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.wide-card[data-reveal].is-in .wide-card__visual {
+  animation: visual-reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 120ms forwards;
+}
+
+@keyframes visual-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
