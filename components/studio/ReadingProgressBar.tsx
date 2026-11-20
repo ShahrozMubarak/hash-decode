@@ -43,7 +43,7 @@ export default function ReadingProgressBar() {
         width: '100%',
         height: '3px',
         zIndex: 100,
-        backgroundColor: 'rgba(11, 31, 58, 0.08)',
+        backgroundColor: 'rgba(0, 0, 0, 0.08)',
         pointerEvents: 'none',
       }}
     >
@@ -51,7 +51,7 @@ export default function ReadingProgressBar() {
         className="reading-progress-bar"
         style={{
           height: '100%',
-          backgroundColor: '#1E40AF',
+          backgroundColor: '#000000',
           width: `${(progress * 100).toFixed(1)}%`,
           transition: 'width 80ms ease-out',
         }}

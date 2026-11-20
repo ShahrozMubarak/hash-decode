@@ -64,8 +64,8 @@ export default function NavigationProgressBar() {
         style={{
           height: '100%',
           width: `${progress}%`,
-          backgroundColor: '#1E40AF',
-          boxShadow: '0 0 10px rgba(30, 64, 175, 0.5)',
+          backgroundColor: '#000000',
+          boxShadow: 'none',
           transition: progress === 100 ? 'width 150ms ease-out, opacity 150ms ease-out' : 'width 300ms ease-out',
         }}
       />

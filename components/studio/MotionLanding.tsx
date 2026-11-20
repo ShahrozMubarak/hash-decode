@@ -83,7 +83,7 @@ export default function MotionLanding({
           <div className="wrap hero-centered-column">
             <p className="hero-eyebrow">Secure software studio</p>
             <h1 className="hero-h1" aria-label="Build it. Break it. Secure.">
-              Build it. Break it. <span className="highlight-word">Secure.</span>
+              Build it. Break it. Secure.
             </h1>
             <p className="hero-subtext">
               Custom software and security testing for businesses.
@@ -116,7 +116,7 @@ export default function MotionLanding({
               Capabilities
             </span>
             <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Built to <span className="highlight-word">perform.</span>
+              Built to perform.
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
               Custom software, web platforms, and secure APIs, built around how your business works.
@@ -163,7 +163,7 @@ export default function MotionLanding({
               Security assurance
             </span>
             <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Tested before <span className="highlight-word">launch.</span>
+              Tested before launch.
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
               Penetration testing, code review, and a clear security sign-off.
@@ -203,7 +203,7 @@ export default function MotionLanding({
               Projects
             </span>
             <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Studio <span className="highlight-word">concepts.</span>
+              Studio concepts.
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
               Working products and tools we have designed and built.
@@ -233,7 +233,7 @@ export default function MotionLanding({
               Delivery lifecycle
             </span>
             <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              From brief to <span className="highlight-word">handover.</span>
+              From brief to handover.
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
               A direct engineering process with transparent weekly increments and full client ownership.
@@ -260,7 +260,7 @@ export default function MotionLanding({
               Team
             </span>
             <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Meet the <span className="highlight-word">team.</span>
+              Meet the team.
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
               Developers, marketers, and builders working as one studio.
@@ -287,7 +287,7 @@ export default function MotionLanding({
               Common questions
             </span>
             <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Everything you need to <span className="highlight-word">know.</span>
+              Everything you need to know.
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
               Transparent pricing, clear timelines, code ownership, and post-launch support.
@@ -319,7 +319,7 @@ export default function MotionLanding({
               data-reveal-delay="80"
               style={{ margin: '0.6rem 0 1rem' }}
             >
-              What are you <span className="highlight-word cta-highlight">working on?</span>
+              What are you working on?
             </h2>
             <p
               className="section-rule-lead cta-lead"

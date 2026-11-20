@@ -16,7 +16,7 @@ export default function Tools() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Studio utilities</p>
         <h1 className="inner-hero-h1">
-          Engineering <span style={{ color: '#1E40AF' }}>tools.</span>
+          Engineering tools.
         </h1>
         <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
           Free interactive utilities designed by our team. Model a project budget with our cost estimator

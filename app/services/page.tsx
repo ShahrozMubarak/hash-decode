@@ -141,7 +141,7 @@ export default function Services() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Services</p>
         <h1 className="inner-hero-h1">
-          Services &amp; <span style={{ color: '#1E40AF' }}>Solutions.</span>
+          Services &amp; Solutions.
         </h1>
         <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
           Software designed for the people who use it, and practical security reviews for the teams who maintain it.

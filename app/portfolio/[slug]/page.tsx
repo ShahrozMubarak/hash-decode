@@ -44,8 +44,7 @@ export default async function Case({ params }: Props) {
         </div>
 
         <h1 className="inner-hero-h1">
-          {p.title}
-          <span style={{ color: '#1E40AF' }}>.</span>
+          {p.title}.
         </h1>
 
         <p className="section-rule-lead" style={{ maxWidth: '640px' }}>

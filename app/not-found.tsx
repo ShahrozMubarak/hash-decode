@@ -23,20 +23,20 @@ export default function NotFound() {
             xmlns="http://www.w3.org/2000/svg"
             className="error-robot-svg"
           >
-            <rect x="14" y="20" width="44" height="36" rx="10" stroke="#0B1F3A" strokeWidth="2.5" fill="#f8fafc" />
-            <circle cx="28" cy="36" r="3.5" fill="#1E40AF" />
-            <circle cx="44" cy="36" r="3.5" fill="#1E40AF" />
-            <path d="M30 46H42" stroke="#0B1F3A" strokeWidth="2.5" strokeLinecap="round" />
-            <path d="M36 12V20" stroke="#0B1F3A" strokeWidth="2.5" strokeLinecap="round" />
-            <circle cx="36" cy="10" r="3" fill="#D93A2F" />
-            <line x1="8" y1="36" x2="14" y2="36" stroke="#0B1F3A" strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="58" y1="36" x2="64" y2="36" stroke="#0B1F3A" strokeWidth="2.5" strokeLinecap="round" />
+            <rect x="14" y="20" width="44" height="36" rx="10" stroke="#000000" strokeWidth="2.5" fill="#f8fafc" />
+            <circle cx="28" cy="36" r="3.5" fill="#000000" />
+            <circle cx="44" cy="36" r="3.5" fill="#000000" />
+            <path d="M30 46H42" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
+            <path d="M36 12V20" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
+            <circle cx="36" cy="10" r="3" fill="#000000" />
+            <line x1="8" y1="36" x2="14" y2="36" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1="58" y1="36" x2="64" y2="36" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
         </div>
 
         <span className="section-rule-label">404 Error</span>
         <h1 className="error-main-title">
-          Page <span style={{ color: '#1E40AF' }}>not found.</span>
+          Page not found.
         </h1>
         <p className="error-lead-text">
           The link you followed may be outdated, or this page has been moved or retired.

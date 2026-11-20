@@ -16,7 +16,7 @@ export default function Privacy() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Studio policy</p>
         <h1 className="inner-hero-h1">
-          Privacy <span style={{ color: '#1E40AF' }}>notice.</span>
+          Privacy notice.
         </h1>
         <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
           Honest data practices. No advertising cookies, no behavioural profiling, and complete client ownership over your project information.

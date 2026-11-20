@@ -25,7 +25,7 @@ export default function Page() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Studio utility / 01</p>
         <h1 className="inner-hero-h1">
-          Project cost <span style={{ color: '#1E40AF' }}>estimator.</span>
+          Project cost estimator.
         </h1>
         <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
           Select your product foundation, configure optional features, and specify operational complexity.

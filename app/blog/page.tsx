@@ -38,7 +38,7 @@ export default async function Blog() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Studio journal</p>
         <h1 className="inner-hero-h1">
-          Engineering <span style={{ color: '#1E40AF' }}>notes.</span>
+          Engineering notes.
         </h1>
         <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
           Practical notes on web development, software handovers, system performance, and application security.

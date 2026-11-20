@@ -25,7 +25,7 @@ export default function Page() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Studio utility / 02</p>
         <h1 className="inner-hero-h1">
-          Website security <span style={{ color: '#1E40AF' }}>check.</span>
+          Website security check.
         </h1>
         <p className="section-rule-lead" style={{ maxWidth: '640px' }}>
           Inspect your public domain&apos;s browser-facing security configuration. Checks Content-Security-Policy,

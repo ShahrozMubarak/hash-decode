@@ -29,7 +29,7 @@ export default function Recovery({ reset }: { reset: () => void }) {
 
         <span className="section-rule-label">System Notice</span>
         <h1 className="error-main-title">
-          Something went <span style={{ color: '#1E40AF' }}>wrong.</span>
+          Something went wrong.
         </h1>
         <p className="error-lead-text">
           An unexpected application issue interrupted this request. You can retry safely.
