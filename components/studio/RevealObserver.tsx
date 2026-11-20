@@ -9,21 +9,35 @@ export default function RevealObserver() {
   useEffect(() => {
     if (typeof document === 'undefined') return;
 
-    // 1. Mark document as JS-enabled
+    // Mark document as JS-enabled
     document.documentElement.classList.add('js');
 
-    const revealAll = () => {
-      const elements = document.querySelectorAll<HTMLElement>('[data-reveal]');
-      elements.forEach((el) => {
+    // Check prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
         el.classList.add('is-in');
       });
-    };
+      return;
+    }
 
-    // Reveal immediately
-    revealAll();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px',
+      }
+    );
 
-    // 2. Setup stagger delays for parents with data-stagger
-    const setupStagger = () => {
+    const observeElements = () => {
+      // Setup stagger delays for parents with data-stagger (60-80ms)
       const staggeredParents = document.querySelectorAll<HTMLElement>('[data-stagger]');
       staggeredParents.forEach((parent) => {
         const children = Array.from(parent.children) as HTMLElement[];
@@ -31,21 +45,28 @@ export default function RevealObserver() {
           if (!child.hasAttribute('data-reveal')) {
             child.setAttribute('data-reveal', 'up');
           }
-          child.classList.add('is-in');
           if (!child.hasAttribute('data-reveal-delay') && !child.style.transitionDelay) {
             const step = Math.min(index, 7);
             child.style.transitionDelay = `${step * 70}ms`;
           }
         });
       });
+
+      const elements = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)');
+      elements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add('is-in');
+        } else {
+          observer.observe(el);
+        }
+      });
     };
 
-    setupStagger();
+    observeElements();
 
-    // 3. MutationObserver to handle streamed React server components or client navigation
     const mutationObserver = new MutationObserver(() => {
-      revealAll();
-      setupStagger();
+      observeElements();
     });
 
     if (document.body) {
@@ -55,16 +76,19 @@ export default function RevealObserver() {
       });
     }
 
-    // Safety intervals to guarantee zero blank elements
-    const t1 = setTimeout(revealAll, 50);
-    const t2 = setTimeout(revealAll, 300);
-    const t3 = setTimeout(revealAll, 1000);
+    const safetyTimer = setTimeout(() => {
+      document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)').forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 100) {
+          el.classList.add('is-in');
+        }
+      });
+    }, 2000);
 
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
+      observer.disconnect();
       mutationObserver.disconnect();
+      clearTimeout(safetyTimer);
     };
   }, [pathname]);
 

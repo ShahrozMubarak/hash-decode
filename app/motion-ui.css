@@ -1,23 +1,20 @@
 /* Motion UI Utility System
-   Content is guaranteed visible at all times across all rendering modes
+   Apple-style subtle motion with full graceful fallbacks
 */
 
-/* Always visible states: eliminate any opacity: 0 hiding */
-[data-reveal],
-html.js [data-reveal],
-html.js [data-reveal="up"],
-html.js [data-reveal="fade"],
-html.js [data-reveal="scale"],
-html.js [data-reveal="mask"],
-html.js [data-reveal="left"],
-html.js [data-reveal="right"] {
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-  clip-path: none !important;
-  transition-property: opacity, transform;
-  transition-duration: var(--duration-700, 700ms);
-  transition-timing-function: var(--ease-out, cubic-bezier(.2, .8, .2, 1));
+/* Unrevealed state on JS-enabled clients: fade + translateY(24px -> 0), 0.8s, cubic-bezier(0.28, 0.11, 0.32, 1) */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.28, 0.11, 0.32, 1), transform 0.8s cubic-bezier(0.28, 0.11, 0.32, 1);
+  will-change: opacity, transform;
+}
+
+html.js [data-reveal="fade"] {
+  opacity: 0;
+  transform: none;
+  transition: opacity 0.8s cubic-bezier(0.28, 0.11, 0.32, 1);
+  will-change: opacity;
 }
 
 /* Revealed active states */
@@ -29,32 +26,61 @@ html.js [data-reveal].is-in {
   clip-path: none !important;
 }
 
-/* Explicit delay classes/attributes */
+/* Fallback for no-js clients */
+html:not(.js) [data-reveal] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* Explicit delay classes/attributes (60-80ms steps) */
 html.js [data-reveal-delay="80"] { transition-delay: 80ms; }
 html.js [data-reveal-delay="120"] { transition-delay: 120ms; }
 html.js [data-reveal-delay="200"] { transition-delay: 200ms; }
 html.js [data-reveal-delay="320"] { transition-delay: 320ms; }
 html.js [data-reveal-delay="440"] { transition-delay: 440ms; }
 
-/* Order for "late-coming" content inside a section */
+/* Role-based delays inside sections */
 html.js [data-reveal-role="eyebrow"] { transition-delay: 0ms; }
 html.js [data-reveal-role="heading"] { transition-delay: 80ms; }
 html.js [data-reveal-role="sentence"] { transition-delay: 200ms; }
 html.js [data-reveal-role="content"] { transition-delay: 320ms; }
 html.js [data-reveal-role="button"] { transition-delay: 440ms; }
 
-/* Accessibility: prefers-reduced-motion */
+/* Card hover: very subtle transform: scale(1.01), no shadow */
+.hd-card,
+.service-tri-card,
+.work-card,
+.team-strip-card,
+.faq-card,
+.form-card {
+  transition: transform 0.25s cubic-bezier(0.28, 0.11, 0.32, 1) !important;
+}
+
+.hd-card:hover,
+.service-tri-card:hover,
+.work-card:hover,
+.team-strip-card:hover,
+.faq-card:hover {
+  transform: scale(1.01) !important;
+  box-shadow: none !important;
+}
+
+/* Accessibility: prefers-reduced-motion (no animation at all) */
 @media (prefers-reduced-motion: reduce) {
+  *,
+  [data-reveal],
   html.js [data-reveal],
-  html.js [data-reveal="up"],
-  html.js [data-reveal="scale"],
-  html.js [data-reveal="left"],
-  html.js [data-reveal="right"],
-  html.js [data-reveal="mask"] {
+  [data-reveal].is-in,
+  .hd-card,
+  .service-tri-card,
+  .work-card,
+  .team-strip-card,
+  .faq-card,
+  .form-card {
+    animation: none !important;
+    transition: none !important;
     transform: none !important;
-    clip-path: none !important;
-    transition-property: opacity !important;
-    transition-duration: 150ms !important;
-    transition-delay: 0ms !important;
+    opacity: 1 !important;
   }
 }
