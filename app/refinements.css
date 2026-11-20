@@ -386,22 +386,22 @@ html:not(.js) [data-reveal],
 }
 
 .preloader-brand .brand-h {
-  color: #0B1F3A;
+  color: #000000;
 }
 
 .preloader-brand .brand-d {
-  color: #1E40AF;
+  color: #000000;
 }
 
 /* Pure Glowing Lazy Line */
 .preloader-lazy-line-track {
   width: min(260px, 72vw);
   height: 3px;
-  background: rgba(11, 31, 58, 0.12);
+  background: rgba(0, 0, 0, 0.08);
   border-radius: 999px;
   overflow: hidden;
   position: relative;
-  box-shadow: inset 0 1px 2px rgba(11, 31, 58, 0.15);
+  box-shadow: none;
 }
 
 .preloader-lazy-line-fill {
@@ -409,22 +409,11 @@ html:not(.js) [data-reveal],
   top: 0;
   left: 0;
   height: 100%;
-  background: linear-gradient(90deg, #0071e3 0%, #2997ff 50%, #0071e3 100%);
-  background-size: 200% 100%;
+  background: #000000;
   border-radius: 999px;
-  box-shadow: 0 0 14px rgba(0, 113, 227, 0.4);
-  animation: lazyLineSweep 1.6s ease-in-out infinite;
+  box-shadow: none;
   transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: width, background-position;
-}
-
-@keyframes lazyLineSweep {
-  0% {
-    background-position: 100% 0;
-  }
-  100% {
-    background-position: -100% 0;
-  }
+  will-change: width;
 }
 
 /* Status Text */
@@ -432,10 +421,10 @@ html:not(.js) [data-reveal],
   font-family: var(--font-mono), monospace;
   font-size: 11px;
   font-weight: 600;
-  color: rgba(11, 31, 58, 0.65);
+  color: #000000;
+  opacity: 0.6;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  animation: preloaderTextPulse 1.8s ease-in-out infinite;
 }
 
 @keyframes preloaderTextPulse {
@@ -798,9 +787,9 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 }
 
 .studio-contact-pill.is-whatsapp:hover {
-  border-color: #25D366;
-  color: #128C7E;
-  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.2);
+  border-color: #000000;
+  color: #000000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .studio-whatsapp-badge {
@@ -2103,7 +2092,8 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 .footer-subscribe-error {
   font-family: var(--font-sans) !important;
   font-size: 12px !important;
-  color: #d32f2f !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
   margin-top: 6px !important;
 }
 

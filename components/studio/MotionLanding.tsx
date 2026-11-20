@@ -7,7 +7,6 @@ import SceneSurface from './SceneSurface';
 import TeleportBot from './TeleportBot';
 import HeroParallaxManager from './HeroParallaxManager';
 import FAQAccordion from './FAQAccordion';
-import ProcessTimeline from './ProcessTimeline';
 import Section from './Section';
 import Container from './Container';
 import SectionHeader from './SectionHeader';
@@ -242,34 +241,7 @@ export default function MotionLanding({
         </Container>
       </Section>
 
-      {/* 4. PROCESS (4-STEP HORIZONTAL TIMELINE: Brief, Design, Build, Handover) */}
-      <section className="section-rule-block" id="process" data-station="Process">
-        <div className="wrap">
-          <div className="section-head-rule">
-            <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
-              Delivery lifecycle
-            </span>
-            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              From brief to handover.
-            </h2>
-            <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-              A direct engineering process with transparent weekly increments and full client ownership.
-            </p>
-          </div>
-
-          <div data-reveal="up" data-reveal-delay="320">
-            <ProcessTimeline />
-          </div>
-
-          <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
-            <a className="hd-btn-primary" href="/about">
-              <span className="btn-label">How we work</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. TEAM (white section, 4 alternating widecards with 4:5 rounded rectangle photos) */}
+      {/* 4. TEAM (white section, 4 alternating widecards with 4:5 rounded rectangle photos) */}
       <Section id="team" bg="white" pad="regular" data-station="Team">
         <Container>
           <SectionHeader
