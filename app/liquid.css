@@ -371,3 +371,25 @@
   }
 }
 
+/* Ensure hero robot container is completely transparent with no white background */
+.hero-stage-card,
+.hero-stage-card.liquid,
+.hero-stage-card.liquid--cloud,
+.hero-stage-card__inner,
+.hero-stage-card__content,
+.hero-robot-wrapper,
+.hero-stage-card .specimen-visual,
+.hero-stage-card .scene-surface,
+.hero-stage-card canvas {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.hero-stage-card .liquid__blob {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+

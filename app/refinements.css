@@ -3613,7 +3613,9 @@ html[data-motion=on] .hero-sheet {
    TASK B: HERO STAGE CARD (Transparent immersion for the hooded cyber mech)
    ========================================================================== */
 
-.hero-stage-card {
+.hero-stage-card,
+.hero-stage-card.liquid,
+.hero-stage-card.liquid--cloud {
   position: relative !important;
   width: 100% !important;
   max-width: 1120px !important;

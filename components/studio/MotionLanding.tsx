@@ -63,11 +63,9 @@ export default function MotionLanding({
               </a>
             </div>
 
-            {/* HERO STAGE CARD: Liquid Crystal Cloud-to-Lilac Stage */}
-            <div className="hero-stage-card liquid liquid--cloud is-visible" aria-label="Autonomous Studio Agent Stage">
+            {/* HERO STAGE: Transparent robot container */}
+            <div className="hero-stage-card is-visible" aria-label="Autonomous Studio Agent Stage">
               <div className="hero-stage-card__inner">
-                <span className="liquid__blob liquid__blob--a" aria-hidden="true" />
-                <span className="liquid__blob liquid__blob--b" aria-hidden="true" />
                 <div className="hero-stage-card__content">
                   <figure className="hero-robot-wrapper">
                     <div className="specimen-visual" id="hero-model-anchor">

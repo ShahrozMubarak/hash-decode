@@ -50,9 +50,6 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const {lite}=sceneBudget(innerWidth,navigator.hardwareConcurrency,(navigator as Navigator&{deviceMemory?:number}).deviceMemory||0,devicePixelRatio);
  const fps=60;
- const css=getComputedStyle(document.documentElement);
- const shade=(key:string)=>new THREE.Color(css.getPropertyValue(key).trim()||'#0B1F3A');
- const navy=shade('--ink');
 
  // 7.1 Renderer
  const renderer=new THREE.WebGLRenderer({
@@ -64,7 +61,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  });
  const initialDpr = Math.min(devicePixelRatio || 1, 2);
  renderer.setPixelRatio(initialDpr);
- renderer.setClearColor(navy,0);
+ renderer.setClearColor(0x000000, 0);
  renderer.toneMapping=THREE.ACESFilmicToneMapping;
  renderer.toneMappingExposure=1.1;
  renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -211,7 +208,7 @@ export async function mountScene(canvas:HTMLCanvasElement,model:PosterModel,sign
  // Post-processing Bloom setup (strength .55, radius .6, threshold .85)
  let composer:EffectComposer|undefined;
  let bloomPass:UnrealBloomPass|undefined;
- let useBloom=!isMobile&&!lite;
+ let useBloom=false; // Keep canvas alpha 100% transparent so CSS background shows cleanly behind model
 
  if(useBloom){
   try{
