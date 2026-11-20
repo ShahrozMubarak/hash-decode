@@ -23,7 +23,7 @@ import HeaderScannerMock from './visuals/HeaderScannerMock';
 export default function MotionLanding({
   projects: _projects,
   founders: _founders,
-  links,
+  links: _links,
   intro: _intro,
   availability: _availability,
 }: {
@@ -427,142 +427,90 @@ export default function MotionLanding({
         </div>
       </section>
 
-      {/* 7. FINAL CALL TO ACTION (Clean two-column contact section on white) */}
-      <section className="section-rule-block final-cta-section" id="brief" data-station="Contact">
-        <div className="wrap contact-grid">
-          <div>
-            <span className="section-rule-label cta-eyebrow" data-reveal="fade" data-reveal-delay="0">
-              Project brief
-            </span>
-            <h2
-              className="section-rule-heading cta-heading"
-              data-reveal="fade"
-              data-reveal-delay="80"
-              style={{ margin: '0.6rem 0 1rem' }}
-            >
-              What are you working on?
-            </h2>
-            <p
-              className="section-rule-lead cta-lead"
-              data-reveal="up"
-              data-reveal-delay="200"
-              style={{ maxWidth: '42ch', marginBottom: '1.5rem' }}
-            >
-              Tell us what you need, who it is for, and when you want it done.
-            </p>
-            <div className="cta-direct-contacts" data-reveal="up" data-reveal-delay="250">
-              <div className="cta-contact-row">
-                <span className="cta-direct-label">Email:</span>
-                <a href="mailto:hashdecodeofficial@gmail.com" className="hd-text-link">hashdecodeofficial@gmail.com</a>
-              </div>
-              <div className="cta-contact-row">
-                <span className="cta-direct-label">WhatsApp:</span>
-                <a href="https://wa.me/923001237124" target="_blank" rel="noopener noreferrer" className="hd-text-link">0300 1237124</a>
-                <span className="cta-sep"> · </span>
-                <a href="https://wa.me/923214866916" target="_blank" rel="noopener noreferrer" className="hd-text-link">0321 4866916</a>
-              </div>
-              <div className="cta-contact-row">
-                <span className="cta-direct-label">HQ:</span>
-                <span className="cta-direct-val">Johar Town, Lahore, Pakistan</span>
-              </div>
-            </div>
-            <div className="contact-links" data-reveal="up" data-reveal-delay="320">
-              <a
-                href="https://wa.me/923001237124"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hd-text-link"
-                aria-label="WhatsApp 0300 1237124"
-              >
-                <span>WhatsApp 0300 1237124 ›</span>
-              </a>
-              <a
-                href="https://wa.me/923214866916"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hd-text-link"
-                aria-label="WhatsApp 0321 4866916"
-              >
-                <span>WhatsApp 0321 4866916 ›</span>
-              </a>
-              {links.instagram && (
-                <a
-                  href={links.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hd-text-link"
-                  aria-label="Instagram"
-                >
-                  <span>Instagram ›</span>
-                </a>
-              )}
-              {links.facebook && (
-                <a
-                  href={links.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hd-text-link"
-                  aria-label="Facebook"
-                >
-                  <span>Facebook ›</span>
-                </a>
-              )}
-              {links.youtube && (
-                <a
-                  href={links.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hd-text-link"
-                  aria-label="YouTube"
-                >
-                  <span>YouTube ›</span>
-                </a>
-              )}
-              {links.tiktok && (
-                <a
-                  href={links.tiktok}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hd-text-link"
-                  aria-label="TikTok"
-                >
-                  <span>TikTok ›</span>
-                </a>
-              )}
-              {links.linkedin && (
-                <a
-                  href={links.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hd-text-link"
-                  aria-label="LinkedIn"
-                >
-                  <span>LinkedIn ›</span>
-                </a>
-              )}
-              {links.booking && (
-                <a
-                  href={links.booking}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hd-text-link"
-                  aria-label="Booking"
-                >
-                  <span>Book a conversation ›</span>
-                </a>
-              )}
-              <a className="hd-text-link cta-link" href="/contact">
-                <span>Contact page ›</span>
-              </a>
-            </div>
-            <TeleportBot />
-          </div>
+      {/* 7. CONTACT SECTION (Clean two-column contact section on white) */}
+      <Section id="brief" bg="white" pad="regular" data-station="Contact">
+        <Container>
+          <div className="contact-two-col">
+            {/* Left Column: Direct Info */}
+            <div className="contact-col-left">
+              <p className="hd-section-eyebrow">Contact</p>
+              <h2 className="contact-title">Start a conversation.</h2>
+              <p className="contact-sub">Tell us what you&apos;re building. We&apos;ll tell you how we can help.</p>
 
-          <div data-reveal="up" data-reveal-delay="320">
-            <ContactForm />
+              <div className="contact-info-stack">
+                {/* Email */}
+                <div className="contact-info-item">
+                  <span className="contact-info-label">Direct email</span>
+                  <a href="mailto:contact@hashdecode.com" className="hd-text-link contact-email-link">
+                    <span>contact@hashdecode.com ›</span>
+                  </a>
+                </div>
+
+                {/* Office */}
+                <div className="contact-info-item">
+                  <span className="contact-info-label">Office address</span>
+                  <p className="contact-info-val">Lahore, Pakistan</p>
+                </div>
+
+                {/* WhatsApp numbers - BOTH rendered clearly stacked with 12px gap, NO truncation */}
+                <div className="contact-info-item">
+                  <span className="contact-info-label">WhatsApp</span>
+                  <div className="contact-whatsapp-stack">
+                    <a
+                      href="https://wa.me/923214452588"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hd-text-link whatsapp-link"
+                    >
+                      <span>🇵🇰 Pakistan: +92 321 4452588 ›</span>
+                    </a>
+                    <a
+                      href="https://wa.me/447943008688"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hd-text-link whatsapp-link"
+                    >
+                      <span>🇬🇧 United Kingdom: +44 7943 008688 ›</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Social links */}
+                <div className="contact-info-item">
+                  <span className="contact-info-label">Social</span>
+                  <div className="contact-social-row">
+                    <a href="https://github.com/hashdecode" target="_blank" rel="noopener noreferrer" className="hd-text-link">
+                      <span>GitHub ›</span>
+                    </a>
+                    <a href="https://linkedin.com/company/hash-decode" target="_blank" rel="noopener noreferrer" className="hd-text-link">
+                      <span>LinkedIn ›</span>
+                    </a>
+                    <a href="https://x.com/hashdecode" target="_blank" rel="noopener noreferrer" className="hd-text-link">
+                      <span>X ›</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* TeleportBot bubble with 48px clearance */}
+              <div style={{ marginTop: '32px', marginBottom: '48px' }}>
+                <TeleportBot />
+              </div>
+            </div>
+
+            {/* Right Column: ContactForm inside Cloud Liquid card */}
+            <div className="contact-col-right">
+              <div className="contact-form-card liquid liquid--cloud is-visible">
+                <span className="liquid__blob liquid__blob--a" aria-hidden="true" />
+                <span className="liquid__blob liquid__blob--b" aria-hidden="true" />
+                <div style={{ position: 'relative', zIndex: 2 }}>
+                  <ContactForm />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 }

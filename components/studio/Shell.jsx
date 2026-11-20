@@ -148,80 +148,62 @@ export function Footer(){
   const path = usePathname();
   if (path && (path.startsWith('/shahroz') || path.startsWith('/admin') || path.startsWith('/portal'))) return null;
 
-  const scrollToTop = () => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="site-footer" id="site-footer">
-      <div className="wrap footer-columns-grid">
-        {/* Column 1: Capabilities */}
-        <div className="footer-col footer-col-capabilities">
-          <span className="footer-col-title">Capabilities</span>
-          <ul className="footer-links-list">
-            <li><a href="/services" className="footer-link">Custom Web Platforms</a></li>
-            <li><a href="/services" className="footer-link">Internal Tools &amp; APIs</a></li>
-            <li><a href="/services" className="footer-link">Security Audits &amp; Hardening</a></li>
-            <li><a href="/tools" className="footer-link">Project Cost Estimator</a></li>
-            <li><a href="/tools" className="footer-link">Security Header Scanner</a></li>
-          </ul>
-        </div>
-
-        {/* Column 2: Studio */}
-        <div className="footer-col footer-col-studio">
-          <span className="footer-col-title">Studio</span>
-          <ul className="footer-links-list">
-            <li><a href="/about" className="footer-link">About Hash Decode</a></li>
-            <li><a href="/portfolio" className="footer-link">Selected Concepts</a></li>
-            <li><a href="/blog" className="footer-link">Engineering Dispatch</a></li>
-          </ul>
-        </div>
-
-        {/* Column 3: Contact */}
-        <div className="footer-col footer-col-contact">
-          <span className="footer-col-title">Contact</span>
-          <p className="footer-contact-note">Software engineering and digital resilience for critical releases.</p>
-          <div className="footer-contact-actions">
-            <a
-              href="https://wa.me/923001237124"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hd-text-link footer-contact-link"
-            >
-              <span>WhatsApp the studio ›</span>
-            </a>
-            <a href="/contact" className="hd-text-link footer-contact-link">
-              <span>Start a project ›</span>
-            </a>
+      <div className="wrap site-footer__container">
+        {/* Top row: Brand + Newsletter */}
+        <div className="site-footer__top">
+          <div className="site-footer__brand-block">
+            <span className="site-footer__wordmark">HASH DECODE</span>
+            <p className="site-footer__tagline">Secure software studio.</p>
           </div>
-          <div className="footer-newsletter-block">
+          <div className="site-footer__subscribe-block">
             <FooterSubscribe />
           </div>
         </div>
-      </div>
 
-      {/* Small Bottom Row */}
-      <div className="wrap footer-bottom-row">
-        <div className="footer-bottom-brand">
-          <Brand showText={false} />
-          <span className="footer-copyright">
-            &copy; {new Date().getFullYear()} Hash Decode. Developed by <strong>Shahroz Dogar</strong>
-          </span>
+        {/* Middle row: 3 columns of links */}
+        <div className="site-footer__middle">
+          <div className="site-footer__col">
+            <span className="site-footer__col-heading">Studio</span>
+            <ul className="site-footer__list">
+              <li><a href="/about" className="site-footer__link">About</a></li>
+              <li><a href="/services" className="site-footer__link">Services</a></li>
+              <li><a href="/portfolio" className="site-footer__link">Portfolio</a></li>
+              <li><a href="/tools" className="site-footer__link">Tools</a></li>
+              <li><a href="/blog" className="site-footer__link">Blog</a></li>
+            </ul>
+          </div>
+
+          <div className="site-footer__col">
+            <span className="site-footer__col-heading">Security</span>
+            <ul className="site-footer__list">
+              <li><a href="/services#security" className="site-footer__link">Security Services</a></li>
+              <li><a href="/tools/security-check" className="site-footer__link">Security Check</a></li>
+              <li><a href="/.well-known/security.txt" className="site-footer__link">Security.txt</a></li>
+            </ul>
+          </div>
+
+          <div className="site-footer__col">
+            <span className="site-footer__col-heading">Legal &amp; Social</span>
+            <ul className="site-footer__list">
+              <li><a href="/privacy" className="site-footer__link">Privacy Policy</a></li>
+              <li><a href="https://github.com/hashdecode" target="_blank" rel="noopener noreferrer" className="site-footer__link">GitHub</a></li>
+              <li><a href="https://linkedin.com/company/hash-decode" target="_blank" rel="noopener noreferrer" className="site-footer__link">LinkedIn</a></li>
+              <li><a href="https://x.com/hashdecode" target="_blank" rel="noopener noreferrer" className="site-footer__link">X (Twitter)</a></li>
+            </ul>
+          </div>
         </div>
-        <div className="footer-bottom-actions">
-          <a href="/privacy" className="footer-legal-link">Privacy &amp; Security</a>
-          <button
-            type="button"
-            className="footer-back-to-top"
-            onClick={scrollToTop}
-            aria-label="Scroll back to top"
-          >
-            <span>Back to top</span>
-          </button>
+
+        {/* Bottom row: Copyright + Location */}
+        <div className="site-footer__bottom">
+          <p className="site-footer__copyright">
+            &copy; {currentYear} Hash Decode. All rights reserved.
+          </p>
+          <span className="site-footer__badge">Lahore &amp; Global</span>
         </div>
-        
       </div>
     </footer>
   );
