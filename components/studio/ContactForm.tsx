@@ -3,40 +3,23 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import {
   AlertCircle,
-  Check,
   ShieldCheck,
-  Sparkles,
-  ArrowUpRight,
-  Clock,
-  Building,
-  User,
-  Mail,
-  FileText,
-  DollarSign
+  ArrowUpRight
 } from 'lucide-react';
 import { showToast } from './ToastManager';
 
 export const scopeOptions = [
-  'Web Platform & SSR',
-  'SaaS / Digital Product',
-  'Internal Tooling & Automation',
-  'Security Audit & Hardening',
-  'Architecture Advisory',
-];
-
-export const timelineOptions = [
-  '< 1 month (Expedited)',
-  '1–3 months',
-  '3–6 months',
-  'Flexible / Exploring',
+  'Web Platform',
+  'Custom Software',
+  'Security Review',
+  'Architecture & Cloud',
 ];
 
 export const budgetOptions = [
-  'Under PKR 1.5M (< $5k)',
-  'PKR 1.5M – 4M ($5k–$15k)',
-  'PKR 4M – 10M ($15k–$35k)',
-  'PKR 10M+ ($35k+)',
-  'Flexible / Still exploring',
+  '< $5,000',
+  '$5,000 – $15,000',
+  '$15,000+',
+  'Flexible',
 ];
 
 interface ContactFormProps {
@@ -62,7 +45,6 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
   const [selectedScope, setSelectedScope] = useState<string>(
     scopeOptions.find((s) => s.toLowerCase().includes(initial.toLowerCase())) || scopeOptions[0]
   );
-  const [selectedTimeline, setSelectedTimeline] = useState<string>(timelineOptions[1]);
   const [selectedBudget, setSelectedBudget] = useState<string>(budgetOptions[1]);
   const [ndaChecked, setNdaChecked] = useState<boolean>(true);
   const [briefText, setBriefText] = useState<string>(initialBrief);
@@ -75,7 +57,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
       return 'This field is required.';
     }
     if (name === 'name' && value.trim().length < 2) {
-      return 'Please enter your full name (at least 2 characters).';
+      return 'Please enter your name.';
     }
     if (name === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -83,8 +65,8 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         return 'Please enter a valid email address.';
       }
     }
-    if (name === 'brief' && value.trim().length < 12) {
-      return 'Please provide a little more detail (at least 12 characters).';
+    if (name === 'brief' && value.trim().length < 10) {
+      return 'Please provide a little detail about your project (at least 10 characters).';
     }
     return '';
   }, []);
@@ -136,7 +118,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         </div>
         <h2>Thanks for the brief.</h2>
         <p className="confirmation-copy">
-          Your inquiry is in the studio inbox. We will review your requirements and follow up with practical technical advice and milestone estimates within 24 hours.
+          Your inquiry is in our studio inbox. A senior architect will review your requirements and follow up within 24 hours.
         </p>
         <div className="confirmation-action" style={{ marginTop: '1.5rem' }}>
           <a className="hd-btn-primary" href="/portfolio">
@@ -162,7 +144,6 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         const formData = new FormData(form);
         const nameVal = String(formData.get('name') || '').trim();
         const emailVal = String(formData.get('email') || '').trim();
-        const companyVal = String(formData.get('company') || '').trim();
         const briefRaw = String(formData.get('brief') || '').trim();
 
         // Client validation on submit
@@ -184,14 +165,11 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
           return;
         }
 
-        // Structure detailed brief incorporating all user selections
         const fullBrief = [
           briefRaw,
-          companyVal ? `Company / Organization: ${companyVal}` : '',
-          `Project Scope: ${selectedScope}`,
-          `Target Timeline: ${selectedTimeline}`,
-          `Budget Allocation: ${selectedBudget}`,
-          `Mutual NDA Required: ${ndaChecked ? 'Yes (NDA Requested)' : 'Standard Studio Confidentiality'}`,
+          `Service: ${selectedScope}`,
+          `Budget: ${selectedBudget}`,
+          `Mutual NDA: ${ndaChecked ? 'Yes' : 'No'}`,
         ]
           .filter(Boolean)
           .join('\n\n');
@@ -228,8 +206,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
               topic: selectedScope,
               budget: selectedBudget,
               brief: fullBrief,
-              company: companyVal,
-              timeline: selectedTimeline,
+              timeline: 'Flexible',
               nda: ndaChecked,
               startedAt: clientTimestamp,
               submissionId,
@@ -271,7 +248,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
             );
           }
         } catch {
-          const msg = 'We could not reach the server right now. Your details are preserved. You can retry or email hashdecodeofficial@gmail.com directly.';
+          const msg = 'We could not reach the server right now. You can retry or email hashdecodeofficial@gmail.com directly.';
           setError(msg);
           showToast({
             type: 'error',
@@ -289,93 +266,62 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         }
       }}
     >
-      {/* SECTION 01: IDENTITY */}
-      <div className="form-section-group">
-        <div className="form-section-header">
-          <span className="form-step-num">01</span>
-          <div className="form-step-meta">
-            <h3 className="form-step-title">Your Identity</h3>
-            <span className="form-step-desc">Direct engineer contact details</span>
-          </div>
-        </div>
+      <div className="simple-form-head">
+        <h3 className="simple-form-title">Start a project</h3>
+        <p className="simple-form-sub">Tell us what you are building. We will review and respond within 24 hours.</p>
+      </div>
 
-        <div className="form-row">
-          <label className="form-field-label">
-            <span className="field-label-text">
-              <User size={13} aria-hidden="true" />
-              <span>Full Name</span>
-            </span>
-            <input
-              name="name"
-              autoComplete="name"
-              placeholder="e.g. Alex Sterling"
-              minLength={2}
-              maxLength={100}
-              required
-              className={`form-input ${fieldErrors.name ? 'is-invalid' : ''}`}
-              aria-invalid={Boolean(fieldErrors.name)}
-              aria-describedby={fieldErrors.name ? 'name-error' : undefined}
-              onBlur={handleBlur}
-            />
-            {fieldErrors.name && (
-              <span id="name-error" className="field-error-msg" role="alert">
-                <AlertCircle size={13} aria-hidden="true" />
-                {fieldErrors.name}
-              </span>
-            )}
-          </label>
-
-          <label className="form-field-label">
-            <span className="field-label-text">
-              <Mail size={13} aria-hidden="true" />
-              <span>Work Email</span>
-            </span>
-            <input
-              name="email"
-              type="email"
-              autoComplete="email"
-              placeholder="you@company.com"
-              maxLength={254}
-              required
-              className={`form-input ${fieldErrors.email ? 'is-invalid' : ''}`}
-              aria-invalid={Boolean(fieldErrors.email)}
-              aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-              onBlur={handleBlur}
-            />
-            {fieldErrors.email && (
-              <span id="email-error" className="field-error-msg" role="alert">
-                <AlertCircle size={13} aria-hidden="true" />
-                {fieldErrors.email}
-              </span>
-            )}
-          </label>
-        </div>
-
-        <label className="form-field-label" style={{ marginTop: '0.85rem' }}>
-          <span className="field-label-text">
-            <Building size={13} aria-hidden="true" />
-            <span>Company or Brand (Optional)</span>
-          </span>
+      {/* Row 1: Name and Email */}
+      <div className="form-row">
+        <label className="simple-field-label">
+          <span className="simple-field-name">Your Name *</span>
           <input
-            name="company"
-            placeholder="e.g. Acme Corp / Stealth Startup"
+            name="name"
+            autoComplete="name"
+            placeholder="e.g. Alex Sterling"
+            minLength={2}
             maxLength={100}
-            className="form-input"
+            required
+            className={`form-input ${fieldErrors.name ? 'is-invalid' : ''}`}
+            aria-invalid={Boolean(fieldErrors.name)}
+            aria-describedby={fieldErrors.name ? 'name-error' : undefined}
+            onBlur={handleBlur}
           />
+          {fieldErrors.name && (
+            <span id="name-error" className="field-error-msg" role="alert">
+              <AlertCircle size={13} aria-hidden="true" />
+              {fieldErrors.name}
+            </span>
+          )}
+        </label>
+
+        <label className="simple-field-label">
+          <span className="simple-field-name">Work Email *</span>
+          <input
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="alex@company.com"
+            maxLength={254}
+            required
+            className={`form-input ${fieldErrors.email ? 'is-invalid' : ''}`}
+            aria-invalid={Boolean(fieldErrors.email)}
+            aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+            onBlur={handleBlur}
+          />
+          {fieldErrors.email && (
+            <span id="email-error" className="field-error-msg" role="alert">
+              <AlertCircle size={13} aria-hidden="true" />
+              {fieldErrors.email}
+            </span>
+          )}
         </label>
       </div>
 
-      {/* SECTION 02: PROJECT SCOPE */}
-      <div className="form-section-group" style={{ marginTop: '1.75rem' }}>
-        <div className="form-section-header">
-          <span className="form-step-num">02</span>
-          <div className="form-step-meta">
-            <h3 className="form-step-title">Project Scope</h3>
-            <span className="form-step-desc">Select the primary capability you need</span>
-          </div>
-        </div>
-
-        <div className="form-chips-grid" role="radiogroup" aria-label="Project Scope Selection">
+      {/* Row 2: Service Focus (Clean horizontal pills) */}
+      <div className="simple-field-group">
+        <span className="simple-field-name">Service Needed</span>
+        <div className="simple-pills-row" role="radiogroup" aria-label="Service Selection">
           {scopeOptions.map((opt) => {
             const isSelected = selectedScope === opt;
             return (
@@ -384,106 +330,50 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
                 type="button"
                 role="radio"
                 aria-checked={isSelected}
-                className={`form-scope-chip ${isSelected ? 'is-selected' : ''}`}
+                className={`simple-pill-btn ${isSelected ? 'is-selected' : ''}`}
                 onClick={() => setSelectedScope(opt)}
               >
-                <span className="chip-indicator" aria-hidden="true">
-                  {isSelected ? <Check size={13} /> : null}
-                </span>
-                <span className="chip-label">{opt}</span>
+                {opt}
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* SECTION 03: TIMELINE & BUDGET */}
-      <div className="form-section-group" style={{ marginTop: '1.75rem' }}>
-        <div className="form-section-header">
-          <span className="form-step-num">03</span>
-          <div className="form-step-meta">
-            <h3 className="form-step-title">Timeline &amp; Investment</h3>
-            <span className="form-step-desc">Align schedules and milestone expectations</span>
-          </div>
-        </div>
-
-        <div className="form-segmented-group">
-          <span className="form-sub-label">
-            <Clock size={13} aria-hidden="true" />
-            <span>Target Launch Window</span>
-          </span>
-          <div className="form-segmented-row" role="radiogroup" aria-label="Target Timeline">
-            {timelineOptions.map((t) => {
-              const isSelected = selectedTimeline === t;
-              return (
-                <button
-                  key={t}
-                  type="button"
-                  role="radio"
-                  aria-checked={isSelected}
-                  className={`form-segment-item ${isSelected ? 'is-selected' : ''}`}
-                  onClick={() => setSelectedTimeline(t)}
-                >
-                  {t}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="form-segmented-group" style={{ marginTop: '1rem' }}>
-          <span className="form-sub-label">
-            <DollarSign size={13} aria-hidden="true" />
-            <span>Budget Allocation</span>
-          </span>
-          <div className="form-segmented-row" role="radiogroup" aria-label="Budget Allocation">
-            {budgetOptions.map((b) => {
-              const isSelected = selectedBudget === b;
-              return (
-                <button
-                  key={b}
-                  type="button"
-                  role="radio"
-                  aria-checked={isSelected}
-                  className={`form-segment-item ${isSelected ? 'is-selected' : ''}`}
-                  onClick={() => setSelectedBudget(b)}
-                >
-                  {b}
-                </button>
-              );
-            })}
-          </div>
+      {/* Row 3: Budget Range (Clean horizontal pills) */}
+      <div className="simple-field-group">
+        <span className="simple-field-name">Approximate Budget</span>
+        <div className="simple-pills-row" role="radiogroup" aria-label="Budget Selection">
+          {budgetOptions.map((b) => {
+            const isSelected = selectedBudget === b;
+            return (
+              <button
+                key={b}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                className={`simple-pill-btn ${isSelected ? 'is-selected' : ''}`}
+                onClick={() => setSelectedBudget(b)}
+              >
+                {b}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* SECTION 04: SPECIFICATION & PROTECTIONS */}
-      <div className="form-section-group" style={{ marginTop: '1.75rem' }}>
-        <div className="form-section-header">
-          <span className="form-step-num">04</span>
-          <div className="form-step-meta">
-            <h3 className="form-step-title">Specification</h3>
-            <span className="form-step-desc">Who is it for, and what should it accomplish?</span>
-          </div>
-        </div>
-
-        <label className="form-field-label">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="field-label-text">
-              <FileText size={13} aria-hidden="true" />
-              <span>Project Requirements &amp; Goals</span>
-            </span>
-            <span className="char-counter" style={{ fontSize: '11px', opacity: 0.6 }}>
-              {briefText.length} / 3000
-            </span>
-          </div>
+      {/* Row 4: Project Details */}
+      <div className="simple-field-group">
+        <label className="simple-field-label">
+          <span className="simple-field-name">Project Details *</span>
           <textarea
             value={briefText}
             onChange={(e) => setBriefText(e.target.value)}
             name="brief"
-            placeholder="Describe your user workflow, technical requirements, current stack if any, and any critical security or compliance considerations..."
-            minLength={12}
+            placeholder="Tell us what you're building, key goals, timeline, or any technical requirements..."
+            minLength={10}
             maxLength={3000}
-            rows={5}
+            rows={4}
             required
             className={`form-textarea ${fieldErrors.brief ? 'is-invalid' : ''}`}
             aria-invalid={Boolean(fieldErrors.brief)}
@@ -497,35 +387,21 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
             </span>
           )}
         </label>
-
-        {/* Mutual NDA Protection Toggle */}
-        <div
-          className="nda-toggle-box"
-          onClick={() => setNdaChecked(!ndaChecked)}
-          role="checkbox"
-          aria-checked={ndaChecked}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === ' ' || e.key === 'Enter') {
-              e.preventDefault();
-              setNdaChecked(!ndaChecked);
-            }
-          }}
-        >
-          <div className={`nda-checkbox-indicator ${ndaChecked ? 'is-checked' : ''}`} aria-hidden="true">
-            {ndaChecked && <Check size={14} />}
-          </div>
-          <div className="nda-text-wrap">
-            <div className="nda-title-row">
-              <ShieldCheck size={14} className="nda-shield-icon" aria-hidden="true" />
-              <strong>Require Mutual NDA prior to deep technical review</strong>
-            </div>
-            <p className="nda-desc">
-              Your architectural code, proprietary workflows, and customer data remain 100% confidential under mutual non-disclosure.
-            </p>
-          </div>
-        </div>
       </div>
+
+      {/* Row 5: Sleek NDA assurance checkbox */}
+      <label className="simple-checkbox-label">
+        <input
+          type="checkbox"
+          checked={ndaChecked}
+          onChange={(e) => setNdaChecked(e.target.checked)}
+          className="simple-checkbox-input"
+        />
+        <span className="simple-checkbox-text">
+          <ShieldCheck size={14} className="simple-shield-icon" aria-hidden="true" />
+          <span>Require mutual NDA prior to technical discussion</span>
+        </span>
+      </label>
 
       {/* Honeypot field */}
       <label className="honeypot" aria-hidden="true">
@@ -534,14 +410,14 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
       </label>
 
       {error && (
-        <div className="form-inline-alert" role="alert" style={{ marginTop: '1.25rem' }}>
+        <div className="form-inline-alert" role="alert" style={{ marginTop: '1rem' }}>
           <AlertCircle size={15} />
           <span>{error}</span>
         </div>
       )}
 
-      {/* Submit Button in Signature Coral Red */}
-      <div className="form-submit-row" style={{ marginTop: '1.75rem' }}>
+      {/* Row 6: Submit Button */}
+      <div className="form-submit-row">
         <button
           id="send-brief-btn"
           className={`hd-btn-primary send-brief-btn ${busy ? 'is-loading' : ''}`}
@@ -549,7 +425,6 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
           aria-busy={busy}
           type="submit"
         >
-          <Sparkles size={16} aria-hidden="true" />
           <span className="btn-label">{busy ? 'Sending brief…' : 'Send project brief'}</span>
           <ArrowUpRight size={16} aria-hidden="true" />
           <span className="btn-spinner" aria-hidden="true" />
@@ -557,7 +432,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
 
         <span className="form-sla-guarantee">
           <ShieldCheck size={14} aria-hidden="true" />
-          <span>Direct senior engineer response within 24 hours</span>
+          <span>Direct response from senior architects within 24 hours</span>
         </span>
       </div>
     </form>
