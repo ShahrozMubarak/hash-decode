@@ -1,14 +1,14 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import {usePathname} from 'next/navigation';
-import {ArrowUp,Menu,X,Pause,Play,Briefcase,Cpu,Users,Mail,ShieldCheck,Search,ShoppingBag,Terminal} from 'lucide-react';
+import {ArrowUp,X,Pause,Play} from 'lucide-react';
 import FooterSubscribe from './FooterSubscribe';
 
 const links=[
-  {name:'Work',url:'/portfolio',icon:Briefcase},
-  {name:'Services',url:'/services',icon:Cpu},
-  {name:'About',url:'/about',icon:Users},
-  {name:'Contact',url:'/contact',icon:Mail}
+  {name:'Work',url:'/portfolio'},
+  {name:'Services',url:'/services'},
+  {name:'About',url:'/about'},
+  {name:'Contact',url:'/contact'}
 ];
 
 export function Brand({ showText = true } = {}){
@@ -20,7 +20,7 @@ export function Brand({ showText = true } = {}){
   const frames=['D3C0D3','DEC0DE','DECODE'];let i=0;
   timer.current=setInterval(()=>{setWord(frames[i++]);if(i===frames.length){clearInterval(timer.current);timer.current=null;}},55);
  }
- return <a className="brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}><img src="/logo.png" alt="Hash Decode" className="brand-logo" width="34" height="34" />{showText && <strong>HASH<span>{word}</span></strong>}</a>;
+ return <a className="brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}><img src="/logo.png" alt="Hash Decode" className="brand-logo" width="26" height="26" />{showText && <strong>HASH<span>{word}</span></strong>}</a>;
 }
 export function Header(){
  const [open,setOpen]=useState(false),[paused,setPaused]=useState(false),toggle=useRef(null),menu=useRef(null);
@@ -73,19 +73,17 @@ export function Header(){
           <Brand/>
         </div>
         <div className="site-links ronin-links">
-          {links.map(({name,url,icon:Icon})=>(
+          {links.map(({name,url})=>(
             <a href={url} aria-current={path===url?'page':undefined} key={url} className="ronin-nav-item" onClick={()=>setOpen(false)}>
-              <Icon size={15} className="ronin-nav-icon" aria-hidden="true" />
-              <strong className="ronin-nav-text">{name}</strong>
+              <span className="ronin-nav-text">{name}</span>
             </a>
           ))}
         </div>
         <div className="nav-actions ronin-actions">
           <button type="button" className="icon-btn motion-toggle ronin-icon-btn" onClick={pause} aria-pressed={paused} title={paused?'Resume motion':'Pause motion'} aria-label={paused?'Resume motion':'Pause motion'}>
-            {paused?<Play size={15}/>:<Pause size={15}/>}
+            {paused?<Play size={12}/>:<Pause size={12}/>}
           </button>
           <a className="nav-contact ronin-cta-pill" href="/contact">
-            <Terminal size={14} aria-hidden="true" />
             <span>Get in touch</span>
           </a>
           <button
@@ -117,11 +115,11 @@ export function Header(){
         <div className="menu-top">
           <span className="menu-brand-kicker">HASH DECODE</span>
           <button className="hd-icon-btn menu-close-btn" onClick={closeMenu} aria-label="Close menu">
-            <X size={22}/>
+            <X size={18}/>
           </button>
         </div>
         <nav aria-label="Studio navigation" className="mobile-nav-list">
-          {links.map(({name,url,icon:Icon},i)=>(
+          {links.map(({name,url},i)=>(
             <a
               href={url}
               key={url}
@@ -130,7 +128,6 @@ export function Header(){
               style={{ animationDelay: `${(i + 1) * 70}ms` }}
               onClick={closeMenu}
             >
-              <span className="mobile-nav-link-num">0{i+1}</span>
               <span className="mobile-nav-link-title">{name}</span>
               <span className="mobile-nav-link-arrow" aria-hidden="true">›</span>
             </a>
