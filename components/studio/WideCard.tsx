@@ -13,6 +13,8 @@ export interface WideCardProps extends HTMLAttributes<HTMLElement> {
   desc?: string;
   linkText?: string;
   linkHref?: string;
+  ctaText?: string;
+  ctaHref?: string;
   visual?: ReactNode;
   children?: ReactNode;
   minHeight?: number | string;
@@ -28,6 +30,8 @@ export default function WideCard({
   desc,
   linkText,
   linkHref,
+  ctaText,
+  ctaHref,
   visual,
   children,
   minHeight,
@@ -88,6 +92,11 @@ export default function WideCard({
             {linkText && linkHref && (
               <a href={linkHref} className="hd-text-link">
                 <span>{linkText}</span>
+              </a>
+            )}
+            {ctaText && ctaHref && (
+              <a href={ctaHref} className="hd-btn-primary">
+                <span className="btn-label">{ctaText}</span>
               </a>
             )}
           </div>

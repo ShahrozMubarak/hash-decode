@@ -1,7 +1,6 @@
 import JourneyControl from './JourneyControl';
 import type { Project, Founder } from '@/lib/studio-data';
 import type { SocialLinks } from '@/lib/cms';
-import { WorkCard } from './Work';
 import ContactForm from './ContactForm';
 import ResponsiveStage from './ResponsiveStage';
 import SceneSurface from './SceneSurface';
@@ -19,9 +18,11 @@ import TerminalMock from './visuals/TerminalMock';
 import ScanReportMock from './visuals/ScanReportMock';
 import ScopeMapMock from './visuals/ScopeMapMock';
 import ChecklistMock from './visuals/ChecklistMock';
+import CostEstimatorMock from './visuals/CostEstimatorMock';
+import HeaderScannerMock from './visuals/HeaderScannerMock';
 
 export default function MotionLanding({
-  projects,
+  projects: _projects,
   founders,
   links,
   intro: _intro,
@@ -170,35 +171,77 @@ export default function MotionLanding({
         </Container>
       </Section>
 
-      {/* 3. WORK (STUDIO CONCEPTS - 1 DRAMATIC CARD ON BLACK) */}
-      <section className="section-rule-block" id="work" data-station="Work">
-        <div className="wrap">
-          <div className="section-head-rule">
-            <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
-              Projects
-            </span>
-            <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
-              Studio concepts.
-            </h2>
-            <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-              Working products and tools we have designed and built.
-            </p>
+      {/* 3. WORK / PROJECTS (black section, 3 dark widecards) */}
+      <Section id="work" bg="black" pad="regular" data-station="Work">
+        <Container>
+          <SectionHeader
+            eyebrow="Projects"
+            title="Studio concepts."
+            sub="Working products and tools we have designed and built."
+          />
+
+          <div className="wide-cards-stack">
+            <WideCard
+              palette="midnight"
+              reverse={false}
+              eyebrow="E-commerce & identity"
+              title="Foolish Arc"
+              desc="Full e-commerce platform with custom checkout, inventory synchronization, and bespoke brand aesthetics."
+              ctaText="View project"
+              ctaHref="/portfolio/foolish-arc"
+              visual={
+                <div className="visual-panel browser-mock" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '12px', borderBottom: '1px solid currentColor', opacity: 0.85 }}>
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'currentColor', opacity: 0.4 }} />
+                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'currentColor', opacity: 0.4 }} />
+                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'currentColor', opacity: 0.4 }} />
+                    </div>
+                    <div style={{ marginLeft: 'auto', padding: '2px 12px', borderRadius: '980px', fontSize: '11px', fontFamily: 'var(--font-sans)', border: '1px solid currentColor', opacity: 0.6 }}>
+                      foolisharc.com
+                    </div>
+                  </div>
+                  <div style={{ marginTop: '12px', borderRadius: '12px', overflow: 'hidden', flex: 1, minHeight: '180px' }}>
+                    <img
+                      src="/team/foolisharc.jpeg"
+                      alt="Foolish Arc e-commerce platform"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                  </div>
+                </div>
+              }
+            />
+
+            <WideCard
+              palette="violet"
+              reverse={true}
+              eyebrow="Internal tooling"
+              title="Cloud Cost Estimator"
+              desc="Real-time multi-cloud price modeling tool that helps engineering teams forecast and reduce AWS/GCP spend."
+              ctaText="Try the estimator"
+              ctaHref="/tools/estimate"
+              visual={<CostEstimatorMock />}
+            />
+
+            <WideCard
+              palette="teal"
+              reverse={false}
+              eyebrow="Security tool"
+              title="Header Security Scanner"
+              desc="Instant HTTP response header analyzer grading websites against OWASP, HSTS, and CSP security baselines."
+              ctaText="Run a scan"
+              ctaHref="/tools/security-check"
+              visual={<HeaderScannerMock />}
+            />
           </div>
 
-          <div className="work-duo-grid" data-stagger data-reveal="up" data-reveal-delay="320">
-            {projects.length === 0 && <p className="empty-content">Portfolio updates are on their way.</p>}
-            {projects.slice(0, 1).map((project, index) => (
-              <WorkCard key={project.slug} project={project} index={index} />
-            ))}
-          </div>
-
-          <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
-            <a className="hd-text-link" href="/portfolio">
-              <span>Project index ›</span>
+          <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
+            <a className="hd-btn-primary" href="/portfolio">
+              <span className="btn-label">View all projects</span>
             </a>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* 4. PROCESS (4-STEP HORIZONTAL TIMELINE: Brief, Design, Build, Handover) */}
       <section className="section-rule-block" id="process" data-station="Process">
