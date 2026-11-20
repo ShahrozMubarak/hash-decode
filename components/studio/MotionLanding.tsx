@@ -39,17 +39,10 @@ export default function MotionLanding({
       <JourneyControl />
       <ResponsiveStage />
 
-      {/* HERO RUNWAY (Liquid Crystal) */}
+      {/* HERO RUNWAY */}
       <section className="hero-runway" id="overview" data-station="Overview">
         <div className="hero-sheet">
           <HeroParallaxManager />
-
-          {/* Luminous Liquid Crystal Shimmer Blobs */}
-          <div className="hero-crystal-blobs-layer" aria-hidden="true">
-            <span className="hero-crystal-blob hero-crystal-blob--azure" />
-            <span className="hero-crystal-blob hero-crystal-blob--lilac" />
-            <span className="hero-crystal-blob hero-crystal-blob--teal" />
-          </div>
 
           {/* Hero Centered Content (Apple-Style) */}
           <div className="wrap hero-centered-column">
@@ -70,9 +63,11 @@ export default function MotionLanding({
               </a>
             </div>
 
-            {/* HERO STAGE (model only, no backing panel) */}
-            <div className="hero-stage-card" aria-label="Autonomous Studio Agent Stage">
+            {/* HERO STAGE CARD: Liquid Crystal Cloud-to-Lilac Stage */}
+            <div className="hero-stage-card liquid liquid--cloud is-visible" aria-label="Autonomous Studio Agent Stage">
               <div className="hero-stage-card__inner">
+                <span className="liquid__blob liquid__blob--a" aria-hidden="true" />
+                <span className="liquid__blob liquid__blob--b" aria-hidden="true" />
                 <div className="hero-stage-card__content">
                   <figure className="hero-robot-wrapper">
                     <div className="specimen-visual" id="hero-model-anchor">

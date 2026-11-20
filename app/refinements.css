@@ -927,17 +927,12 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
    STAGE 2: APPLE REDESIGN SECTION MAP & TEXT CONTRAST SYSTEM
    ========================================================================== */
 
-/* 1. HERO (#overview) - Liquid Crystal runway */
+/* 1. HERO (#overview) - Crisp Clean White Runway */
 #overview,
 .hero-runway,
 .original-composition .hero-runway,
 .original-composition .hero-sheet {
-  background:
-    radial-gradient(circle at 18% 22%, rgba(56, 189, 248, 0.35) 0%, transparent 48%),
-    radial-gradient(circle at 82% 28%, rgba(192, 132, 252, 0.30) 0%, transparent 46%),
-    radial-gradient(circle at 48% 85%, rgba(45, 212, 191, 0.28) 0%, transparent 52%),
-    radial-gradient(ellipse at 50% 12%, rgba(255, 255, 255, 0.9) 0%, transparent 60%),
-    linear-gradient(150deg, #f0f8ff 0%, #e6f3ff 35%, #edfdfb 68%, #f5f0ff 100%) !important;
+  background: #ffffff !important;
   color: var(--black) !important;
   position: relative !important;
 }
@@ -3377,18 +3372,13 @@ a.hd-btn-azure:hover,
    STAGE 4 (V2): Apple-Style Centered Hero (keep the robot)
    ========================================================================== */
 
-/* Hero runway & sheet: luminous liquid crystal mesh */
+/* Hero runway & sheet: Clean, crisp Apple white */
 #overview,
 .hero-runway,
 .original-composition .hero-runway,
 .hero-sheet,
 .original-composition .hero-sheet {
-  background:
-    radial-gradient(circle at 18% 22%, rgba(56, 189, 248, 0.35) 0%, transparent 48%),
-    radial-gradient(circle at 82% 28%, rgba(192, 132, 252, 0.30) 0%, transparent 46%),
-    radial-gradient(circle at 48% 85%, rgba(45, 212, 191, 0.28) 0%, transparent 52%),
-    radial-gradient(ellipse at 50% 12%, rgba(255, 255, 255, 0.95) 0%, transparent 60%),
-    linear-gradient(150deg, #f0f8ff 0%, #e6f3ff 35%, #edfdfb 68%, #f5f0ff 100%) !important;
+  background: #ffffff !important;
   color: var(--black) !important;
   border-bottom: none !important;
   min-height: auto !important;
@@ -3396,7 +3386,7 @@ a.hd-btn-azure:hover,
   padding: 0 !important;
   margin-top: 0 !important;
   position: relative !important;
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
 html[data-motion=on] .hero-runway {
@@ -3600,17 +3590,17 @@ html[data-motion=on] .hero-sheet {
   width: 100% !important;
   max-width: 1120px !important;
   margin: 32px auto 0 auto !important;
-  border-radius: 0 !important;
+  border-radius: 40px !important;
   min-height: clamp(480px, 62vh, 640px) !important;
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #e6f0ff !important;
+  background-color: #e6f0ff !important;
   border: none !important;
   box-shadow: none !important;
-  overflow: visible !important;
+  overflow: hidden !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  contain: none !important;
+  contain: paint !important;
 }
 
 /* 2. Inner overflow-hidden layer for liquid effect blobs */
@@ -3619,10 +3609,10 @@ html[data-motion=on] .hero-sheet {
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  overflow: visible !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  background-color: transparent !important;
+  overflow: hidden !important;
+  border-radius: 40px !important;
+  background: #e6f0ff !important;
+  background-color: #e6f0ff !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -3637,6 +3627,7 @@ html[data-motion=on] .hero-sheet {
   filter: blur(60px) !important;
   opacity: 0.65 !important;
   will-change: transform !important;
+  display: block !important;
 }
 
 .hero-stage-card .liquid__blob--a {
@@ -7491,76 +7482,8 @@ html[data-motion=on] .hero-sheet {
 }
 
 /* ==========================================================================
-   LUMINOUS LIQUID CRYSTAL BLOBS & SHUFFLED ANIMATIONS SUITE
+   SHUFFLED ANIMATIONS SUITE (Device Mockups, Word Tiles, Cards, Buttons)
    ========================================================================== */
-
-/* 1. Luminous Liquid Crystal Shimmer Blobs in Hero */
-.hero-crystal-blobs-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.hero-crystal-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.55;
-  will-change: transform;
-}
-
-.hero-crystal-blob--azure {
-  width: clamp(260px, 35vw, 440px);
-  height: clamp(260px, 35vw, 440px);
-  background: radial-gradient(circle, #38bdf8 0%, rgba(56, 189, 248, 0) 70%);
-  top: 8%;
-  left: 10%;
-  animation: hdLiquidCrystalA 22s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-}
-
-.hero-crystal-blob--lilac {
-  width: clamp(280px, 38vw, 460px);
-  height: clamp(280px, 38vw, 460px);
-  background: radial-gradient(circle, #c084fc 0%, rgba(192, 132, 252, 0) 70%);
-  top: 22%;
-  right: 8%;
-  animation: hdLiquidCrystalB 26s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-}
-
-.hero-crystal-blob--teal {
-  width: clamp(300px, 40vw, 480px);
-  height: clamp(300px, 40vw, 480px);
-  background: radial-gradient(circle, #2dd4bf 0%, rgba(45, 212, 191, 0) 70%);
-  bottom: 8%;
-  left: 32%;
-  animation: hdLiquidCrystalC 19s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-}
-
-@keyframes hdLiquidCrystalA {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(60px, 40px) scale(1.12); }
-  100% { transform: translate(-40px, 70px) scale(0.95); }
-}
-
-@keyframes hdLiquidCrystalB {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-50px, -35px) scale(1.08); }
-  100% { transform: translate(45px, 60px) scale(0.92); }
-}
-
-@keyframes hdLiquidCrystalC {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-30px, -50px) scale(1.15); }
-  100% { transform: translate(50px, -20px) scale(1.02); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-crystal-blob {
-    animation: none !important;
-  }
-}
 
 /* 2. Shuffled Live Traffic Wave in Phone Mockup Histogram */
 .psp-hist-bar {
