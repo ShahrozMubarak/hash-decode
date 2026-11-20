@@ -195,24 +195,24 @@ export default function MotionLanding({
         </div>
       </section>
 
-      {/* 3. WORK (2 CONCEPT CARDS + PROJECT INDEX LINK) */}
+      {/* 3. WORK (STUDIO CONCEPTS - 1 DRAMATIC CARD ON BLACK) */}
       <section className="section-rule-block" id="work" data-station="Work">
         <div className="wrap">
           <div className="section-head-rule">
             <span className="section-rule-label" data-reveal="fade" data-reveal-delay="0">
-              Selected concepts
+              Projects
             </span>
             <h2 className="section-rule-heading" data-reveal="fade" data-reveal-delay="80">
               Studio <span className="highlight-word">concepts.</span>
             </h2>
             <p className="section-rule-lead" data-reveal="up" data-reveal-delay="200">
-              Explore working architectures, reactive tools, and real-time operational interfaces.
+              Working products and tools we have designed and built.
             </p>
           </div>
 
           <div className="work-duo-grid" data-stagger data-reveal="up" data-reveal-delay="320">
             {projects.length === 0 && <p className="empty-content">Portfolio updates are on their way.</p>}
-            {projects.slice(0, 2).map((project, index) => (
+            {projects.slice(0, 1).map((project, index) => (
               <WorkCard key={project.slug} project={project} index={index} />
             ))}
           </div>

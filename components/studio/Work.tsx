@@ -32,8 +32,6 @@ export function Artwork({ project: p }: { project: Project }) {
           height="570"
           className="work-preview-img"
         />
-        <div className="work-img-gradient-scrim" aria-hidden="true" />
-        <span className="work-img-pill">{p.category || 'Featured'}</span>
       </div>
     );
   }
@@ -79,45 +77,28 @@ export function Artwork({ project: p }: { project: Project }) {
 }
 
 export function WorkCard({ project: p }: { project: Project; index?: number }) {
-  const techList = p.tech
-    ? p.tech
-        .split(',')
-        .map((t) => t.trim())
-        .filter(Boolean)
-    : [];
+  const isFoolishArc = p.slug === 'foolish-arc';
+  const displayTitle = isFoolishArc ? 'Foolish Arc' : p.title;
+  const displaySummary = isFoolishArc ? 'Online storefront for a clothing brand.' : p.summary;
+  const displayTags = isFoolishArc
+    ? 'Client project · Clothing'
+    : `${p.kind || 'Client project'} · ${p.category || 'Platform'}`;
 
   return (
     <a
-      className="work-card hd-card work-tilt-card"
+      className="work-card hd-card"
       href={'/portfolio/' + p.slug}
       data-reveal="up"
     >
-      <div className="card-glare" aria-hidden="true" />
       <div className="work-card-content">
+        <p className="work-meta-tags">{displayTags}</p>
+        <h3 className="work-title">{displayTitle}</h3>
+        <p className="work-summary">{displaySummary}</p>
+        <div className="work-view-action" aria-hidden="true">
+          <span>View project ›</span>
+        </div>
         <div className="work-preview-container">
           <Artwork project={p} />
-        </div>
-        <div className="work-caption">
-          <div className="work-meta-row">
-            <span className="concept-status-badge">{p.kind || 'Client project'}</span>
-            <span className="work-cat-tag">{p.category}</span>
-          </div>
-          <h3 className="work-title">{p.title}</h3>
-          <p className="work-summary">{p.summary}</p>
-          
-          {techList.length > 0 && (
-            <div className="work-tech-pills">
-              {techList.slice(0, 4).map((tech, i) => (
-                <span key={i} className="work-tech-chip">
-                  {tech}
-                </span>
-              ))}
-            </div>
-          )}
-
-          <div className="work-view-action" aria-hidden="true">
-            <span>Explore project ›</span>
-          </div>
         </div>
       </div>
     </a>
