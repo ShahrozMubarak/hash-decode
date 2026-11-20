@@ -26,7 +26,7 @@ const inter = Inter({
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
 
 export const viewport: Viewport = {
-  themeColor: '#acb0b0',
+  themeColor: '#ffffff',
   width: 'device-width',
   initialScale: 1,
 };

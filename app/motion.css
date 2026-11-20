@@ -61,7 +61,7 @@ html[data-motion=off] .stack-set[aria-hidden=true]{display:none}html[data-motion
 
 /* Original composition: open narrative scenes, a full-width specimen and a crossing trail. */
 .original-composition{isolation:isolate}
-.story-backdrop{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;background:#acb0b0!important;pointer-events:none!important;z-index:0!important}
+.story-backdrop{display:none!important;visibility:hidden!important;background:none!important}
 .systems-story p,.craft-story p{max-width:48ch}.systems-story h2{margin-bottom:.35em}.craft-story{padding-block:3rem;text-align:center}.craft-story p{margin:1.5rem auto}.craft-story h2{font-size:clamp(2.5rem,6vw,7rem)}
 
 .original-composition #services{min-height:auto;padding-block:clamp(28px, 4vw, 54px);padding-inline:0;display:flex;align-items:center;justify-content:center;background:transparent!important;color:var(--ink,#0B1F3A)!important;position:relative;z-index:5;width:100%;max-width:100%;margin:0}
@@ -70,9 +70,9 @@ html[data-motion=off] .stack-set[aria-hidden=true]{display:none}html[data-motion
 .systems-story p{color:var(--ink-soft,#1d3350)!important;font-size:1.05rem;line-height:1.6;max-width:54ch;margin:0}
 
 @media(min-width:851px){
- .original-composition .story-backdrop{position:fixed!important;inset:0!important;background:#acb0b0!important;background-image:linear-gradient(rgba(11,31,58,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(11,31,58,0.035) 1px,transparent 1px)!important;background-size:90px 45px!important}
+ .original-composition .story-backdrop{display:none!important;visibility:hidden!important;background:none!important}
  .original-composition .hero-runway{margin-top:calc(-1 * var(--header));padding-top:0;background:transparent!important;border:0;position:relative;overflow:clip}
- .original-composition .hero-sheet{position:relative;min-height:100svh;padding-top:var(--header);display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(ellipse 80% 60% at 55% 42%, #d3d7d7 0%, #b9bdbd 35%, #a1a5a5 70%, #8d9191 100%)!important;overflow:clip;isolation:isolate;animation:heroBaseFadeIn 600ms ease-out forwards}
+ .original-composition .hero-sheet{position:relative;min-height:100svh;padding-top:var(--header);display:flex;flex-direction:column;justify-content:space-between;background:var(--bg)!important;overflow:clip;isolation:isolate}
  .original-composition .hero-sheet::before,
  .original-composition .hero-sheet::after{display:none!important}
 
@@ -82,7 +82,7 @@ html[data-motion=off] .stack-set[aria-hidden=true]{display:none}html[data-motion
  @keyframes spotlightSway{0%{transform:rotate(-3deg)}100%{transform:rotate(3deg)}}
 
  /* L3 Perspective grid floor */
- .hero-grid-floor{position:absolute;left:-20%;right:-20%;bottom:-8%;height:55%;transform:perspective(700px) rotateX(64deg);transform-origin:50% 100%;translate:var(--floor-px, 0px) calc(var(--floor-py, 0px) - var(--floor-scroll-y, 0px));background-image:linear-gradient(rgba(11,31,58,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(11,31,58,.10) 1px, transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to top, #000 0%, transparent 85%);-webkit-mask-image:linear-gradient(to top, #000 0%, transparent 85%);pointer-events:none;animation:floorScrollForward 12s linear infinite, floorRiseIntro 1000ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;z-index:2}
+ .hero-grid-floor{display:none!important}
  @keyframes floorScrollForward{0%{background-position:0 0}100%{background-position:0 64px}}
  @keyframes floorRiseIntro{from{opacity:0;margin-bottom:-40px}to{opacity:1;margin-bottom:0}}
  .hero-sheet.hero-offscreen .hero-grid-floor{animation-play-state:paused!important}

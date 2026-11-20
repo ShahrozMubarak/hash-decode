@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'An independent software studio for web platforms, digital products and business tools.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#dfe3e3',
-    theme_color: '#acb0b0',
+    background_color: '#ffffff',
+    theme_color: '#ffffff',
     icons: [
       {
         src: '/favicon.svg',
