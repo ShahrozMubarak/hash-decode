@@ -5,7 +5,6 @@ import { WorkCard } from './Work';
 import ContactForm from './ContactForm';
 import ResponsiveStage from './ResponsiveStage';
 import SceneSurface from './SceneSurface';
-import TypingSecure from './TypingSecure';
 import TeleportBot from './TeleportBot';
 import HeroParallaxManager from './HeroParallaxManager';
 import FAQAccordion from './FAQAccordion';
@@ -63,8 +62,8 @@ export default function MotionLanding({
   projects,
   founders,
   links,
-  intro,
-  availability,
+  intro: _intro,
+  availability: _availability,
 }: {
   projects: Project[];
   founders?: Founder[];
@@ -83,50 +82,31 @@ export default function MotionLanding({
         <div className="hero-sheet">
           <HeroParallaxManager />
 
-          {/* Hero Foreground Content */}
-          <div className="wrap hero-grid">
-            <div className="hero-heading-block">
-              <div className="hero-pill-badge">
-                Secure software studio
-              </div>
-              {availability && <p className="availability-note">{availability}</p>}
-              <h1 aria-label="Build it. Break it. Secure.">
-                <span className="hero-h1-mask">
-                  <span className="hero-h1-line hero-h1-line-1">Build it.</span>
-                </span>
-                <span className="hero-h1-mask">
-                  <span className="hero-h1-line hero-h1-line-2">Break it.</span>
-                </span>
-                <span className="hero-h1-mask">
-                  <span className="hero-h1-line hero-h1-line-3">
-                    <TypingSecure />
-                  </span>
-                </span>
-              </h1>
-            </div>
+          {/* Hero Centered Content (Apple-Style) */}
+          <div className="wrap hero-centered-column">
+            <p className="hero-eyebrow">Secure software studio</p>
+            <h1 className="hero-h1" aria-label="Build it. Break it. Secure.">
+              Build it. Break it. <span className="highlight-word">Secure.</span>
+            </h1>
+            <p className="hero-subtext">
+              Custom software and security testing for businesses.
+            </p>
 
-            <figure className="hero-object">
+            <figure className="hero-robot-wrapper">
               <div className="specimen-visual" id="hero-model-anchor">
                 <SceneSurface model="eva" autoMobile={true} />
               </div>
+              <div className="hero-ground-shadow" aria-hidden="true" />
             </figure>
 
-            <div className="hero-cta-block">
-              <p className="hero-cta-subtext">
-                {intro}
-              </p>
-              <div className="actions">
-                <a className="hd-btn-primary hero-start-cta cta-magnetic" href="#brief">
-                  <span className="btn-label">Start a project</span>
-                </a>
-              </div>
+            <div className="hero-actions">
+              <a className="hd-btn-primary hero-start-cta cta-magnetic" href="#brief">
+                <span className="btn-label">Start a project</span>
+              </a>
+              <a href="#services" className="hd-text-link hero-explore-link">
+                <span>Explore the studio ›</span>
+              </a>
             </div>
-          </div>
-
-          <div className="wrap hero-baseline">
-            <a href="#services" className="hd-text-link hero-explore-link">
-              <span>Explore the studio ›</span>
-            </a>
           </div>
         </div>
       </section>

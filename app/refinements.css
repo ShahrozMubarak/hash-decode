@@ -1829,3 +1829,201 @@ html.header-compressed .ronin-nav {
   width: 100% !important;
 }
 
+/* ==========================================================================
+   STAGE 6: Apple-Style Centered Hero (keep the robot)
+   ========================================================================== */
+
+/* Hero runway & sheet: white with subtle radial gradient of --bg-alt behind robot */
+.hero-runway,
+.original-composition .hero-runway,
+.hero-sheet,
+.original-composition .hero-sheet {
+  background: radial-gradient(circle at 50% 55%, var(--bg-alt) 0%, var(--bg) 65%) !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--hairline) !important;
+  min-height: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+html[data-motion=on] .hero-runway {
+  height: auto !important;
+  min-height: auto !important;
+}
+
+html[data-motion=on] .hero-sheet {
+  position: relative !important;
+  top: auto !important;
+}
+
+/* Centered Column Layout */
+.hero-centered-column {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding-top: clamp(48px, 7vw, 84px) !important;
+  padding-bottom: clamp(56px, 9vw, 96px) !important;
+  max-width: var(--container) !important;
+  margin: 0 auto !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* 1. Eyebrow: plain grey text, no pill, no border */
+.hero-eyebrow {
+  font-family: var(--font-sans) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: var(--text-2) !important;
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.hero-eyebrow::before,
+.hero-eyebrow::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* 2. H1: clamp(2.5rem, 6vw, 5rem), weight 600, line-height 1.05, letter-spacing -0.03em */
+.hero-h1 {
+  font-family: var(--font-sans) !important;
+  font-size: clamp(2.5rem, 6vw, 5rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.03em !important;
+  color: var(--text) !important;
+  margin: 0 0 16px 0 !important;
+  max-width: 18ch !important;
+  text-align: center !important;
+}
+
+.hero-h1 .highlight-word {
+  color: var(--accent) !important;
+}
+
+/* 3. Sub line: 17-20px, 400, 1.47, -0.01em, --text-2, centered, max-width 640px */
+.hero-subtext {
+  font-family: var(--font-sans) !important;
+  font-size: clamp(17px, 2vw, 20px) !important;
+  font-weight: 400 !important;
+  line-height: 1.47 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text-2) !important;
+  max-width: 640px !important;
+  margin: 0 auto 24px auto !important;
+  text-align: center !important;
+}
+
+/* 4. Robot Wrapper: centered below text, height about 50vh (desktop), 42vh (mobile) */
+.hero-robot-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 600px !important;
+  height: clamp(320px, 50vh, 500px) !important;
+  margin: 0 auto 16px auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.hero-robot-wrapper .specimen-visual,
+.hero-robot-wrapper .scene-surface,
+.hero-robot-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+/* Soft ground shadow under the robot: radial-gradient ellipse rgba(0,0,0,0.12) blurred */
+.hero-ground-shadow {
+  position: absolute !important;
+  bottom: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: clamp(200px, 38vw, 360px) !important;
+  height: 24px !important;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.04) 45%, transparent 70%) !important;
+  border-radius: 50% !important;
+  filter: blur(8px) !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+/* 5. Buttons: centered primary button below the robot, with text link next to it */
+.hero-actions {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 20px !important;
+  margin: 12px 0 0 0 !important;
+  z-index: 10 !important;
+}
+
+.hero-actions .hero-start-cta {
+  min-height: 44px !important;
+  padding: 12px 24px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  border-radius: var(--radius-pill) !important;
+}
+
+.hero-actions .hero-explore-link {
+  font-size: 15px !important;
+  color: var(--accent) !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.hero-actions .hero-explore-link:hover {
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+}
+
+/* Reset old absolute position hero blocks */
+.hero-grid,
+.hero-heading-block,
+.hero-cta-block,
+.hero-baseline {
+  position: static !important;
+}
+
+/* Mobile: height about 42vh, h1 scales down */
+@media (max-width: 850px) {
+  .hero-centered-column {
+    padding-top: clamp(28px, 6vw, 44px) !important;
+    padding-bottom: clamp(44px, 8vw, 60px) !important;
+  }
+  .hero-h1 {
+    font-size: clamp(2.2rem, 8vw, 3.2rem) !important;
+  }
+  .hero-robot-wrapper {
+    height: clamp(260px, 42vh, 360px) !important;
+  }
+  .hero-actions {
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: 280px !important;
+  }
+  .hero-actions .hero-start-cta {
+    width: 100% !important;
+  }
+}
+
