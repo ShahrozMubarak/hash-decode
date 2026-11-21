@@ -1,6 +1,6 @@
 'use client';
 
-import type { Project } from '@/lib/studio-data';
+import type { Project } from '@/lib/studio-defaults';
 import { normalizeImagePath } from '@/lib/content-models';
 
 const isImage = (url?: string) =>

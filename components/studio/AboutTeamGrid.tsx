@@ -1,6 +1,6 @@
 'use client';
 
-import { defaultFounders, type Founder } from '@/lib/studio-data';
+import { defaultFounders, type Founder } from '@/lib/studio-defaults';
 import WideCard from './WideCard';
 import type { LiquidPalette } from './Liquid';
 

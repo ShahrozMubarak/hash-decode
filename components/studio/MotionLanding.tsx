@@ -1,5 +1,5 @@
 import JourneyControl from './JourneyControl';
-import { defaultFounders, type Project, type Founder } from '@/lib/studio-data';
+import { defaultFounders, type Project, type Founder } from '@/lib/studio-defaults';
 import type { SocialLinks } from '@/lib/cms';
 import type { LiquidPalette } from './Liquid';
 import ContactForm from './ContactForm';
