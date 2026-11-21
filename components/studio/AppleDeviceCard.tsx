@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode, HTMLAttributes } from 'react';
+import { useRef, useEffect, type ReactNode, type HTMLAttributes } from 'react';
 import type { LiquidPalette } from './Liquid';
 import { getPaletteMode } from './Liquid';
 import PhoneMockup, { type PhoneMockupVariant } from './visuals/PhoneMockup';
@@ -38,10 +38,32 @@ export default function AppleDeviceCard({
   className = '',
   ...props
 }: AppleDeviceCardProps) {
+  const cardRef = useRef<HTMLElement>(null);
   const mode = getPaletteMode(palette);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            el.classList.add('is-visible');
+            el.classList.add('is-in');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <article
+      ref={cardRef}
       className={`apple-device-card liquid liquid--${palette} ${className}`.trim()}
       data-mode={mode}
       {...props}

@@ -373,7 +373,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
             placeholder="Tell us what you're building, key goals, timeline, or any technical requirements..."
             minLength={10}
             maxLength={3000}
-            rows={4}
+            rows={2}
             required
             className={`form-textarea ${fieldErrors.brief ? 'is-invalid' : ''}`}
             aria-invalid={Boolean(fieldErrors.brief)}

@@ -176,6 +176,8 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
  let coralGlowSprite:THREE.Sprite|undefined;
  let winterAccessories:ReturnType<typeof createWinterAccessories>|undefined;
  let contactShadowMesh:THREE.Mesh|undefined;
+ let chestLogoTexture:THREE.Texture|undefined;
+ let chestLogoMat:THREE.Material|undefined;
  let eyeLeft:THREE.Object3D|undefined;
  let eyeRight:THREE.Object3D|undefined;
  let baseLeftEyeX=-0.27,baseRightEyeX=0.27,baseEyeY=3.08;
@@ -571,6 +573,8 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
     canvas.removeEventListener('webglcontextrestored', restore);
     if (happyTouchTimer) clearTimeout(happyTouchTimer);
     winterAccessories?.dispose(); winterAccessories = undefined;
+    chestLogoTexture?.dispose(); chestLogoTexture = undefined;
+    chestLogoMat?.dispose(); chestLogoMat = undefined;
     cleanGeometry();
     instances?.dispose();
     mixer?.stopAllAction(); mixer = undefined;
@@ -654,6 +658,19 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
         coralGlowSprite.position.set(0, 0, -0.02);
         coreGroup.add(coralGlowSprite);
       }
+
+      // Hash Decode Official Studio Chest Insignia / Decal
+      chestLogoTexture = new THREE.TextureLoader().load('/logo.png');
+      chestLogoTexture.colorSpace = THREE.SRGBColorSpace;
+      chestLogoMat = new THREE.MeshBasicMaterial({
+        map: chestLogoTexture,
+        transparent: true,
+        opacity: 0.96,
+        depthWrite: false,
+      });
+      const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.24, 0.24), chestLogoMat);
+      logoMesh.position.set(0, 0, 0.046);
+      coreGroup.add(logoMesh);
 
       coreGroup.position.set(0, 2.05, 0.88);
       robot.add(coreGroup);

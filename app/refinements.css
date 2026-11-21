@@ -4621,93 +4621,35 @@ html[data-motion=on] .hero-sheet {
    ========================================================================== */
 
 /* 2. Studio Manifesto Pre-Footer Section */
+/* 2. Studio Manifesto Pre-Footer Section: Simple un-carded long text, small & not bold */
 .studio-manifesto-section {
-  padding: var(--s-9) 0 var(--s-5) !important;
+  padding: var(--s-6) 0 var(--s-3) !important;
   width: 100% !important;
   display: flex !important;
   justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .studio-manifesto-wrap {
-  max-width: 1140px !important;
+  max-width: 980px !important;
   width: 100% !important;
   padding-inline: var(--gutter, 24px) !important;
+  margin: 0 auto !important;
 }
 
-.studio-manifesto-card {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.88) 0%,
-    rgba(242, 247, 255, 0.72) 40%,
-    rgba(255, 246, 252, 0.72) 75%,
-    rgba(255, 255, 255, 0.92) 100%
-  ) !important;
-  backdrop-filter: blur(28px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
-  border-radius: 36px !important;
-  border: 1px solid rgba(255, 255, 255, 0.92) !important;
-  box-shadow:
-    0 24px 60px -12px rgba(3, 27, 56, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.85) inset,
-    0 1px 3px 0 rgba(147, 197, 253, 0.3) inset !important;
-  padding: clamp(32px, 5vw, 64px) !important;
-}
-
-.manifesto-top-meta {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  flex-wrap: wrap !important;
-  gap: 12px !important;
-  margin-bottom: var(--s-4) !important;
-}
-
-.manifesto-badge {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  padding: 6px 14px !important;
-  border-radius: 9999px !important;
-  background: #000000 !important;
-  color: #ffffff !important;
-  font-size: 11.5px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.06em !important;
-}
-
-.manifesto-badge-icon {
-  color: #ffffff !important;
-}
-
-.manifesto-badge * {
-  color: #ffffff !important;
-}
-
-.manifesto-kicker {
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.08em !important;
-  color: #000000 !important;
-  opacity: 0.65 !important;
-}
-
-.manifesto-title {
+.manifesto-simple-text {
   font-family: var(--font-sans) !important;
-  font-size: clamp(1.35rem, 2.2vw, 1.85rem) !important;
-  font-weight: 600 !important;
-  line-height: 1.25 !important;
-  letter-spacing: -0.02em !important;
-  color: #000000 !important;
-  margin: 0 0 var(--s-3) 0 !important;
-}
-
-.manifesto-paragraph {
-  font-family: var(--font-sans) !important;
-  font-size: 15.5px !important;
+  font-size: 13.5px !important;
   font-weight: 400 !important;
   line-height: 1.75 !important;
   letter-spacing: -0.005em !important;
-  color: rgba(0, 0, 0, 0.75) !important;
+  color: rgba(0, 0, 0, 0.62) !important;
+  text-align: left !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
   max-width: 820px !important;
   margin: 0 0 var(--s-5) 0 !important;
 }
@@ -4758,49 +4700,49 @@ html[data-motion=on] .hero-sheet {
   background: #000000 !important;
 }
 
-/* 2. Simplified Clean Studio Contact Form */
+/* 2. Simplified Clean Studio Contact Form (Compact & Sleek Height) */
 .premium-studio-form {
   background: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  border-radius: 28px !important;
-  padding: clamp(24px, 4vw, 44px) !important;
+  border-radius: 24px !important;
+  padding: clamp(16px, 2.8vw, 26px) !important;
   box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04) !important;
 }
 
 .simple-form-head {
-  margin-bottom: 22px !important;
+  margin-bottom: 12px !important;
 }
 
 .simple-form-title {
   font-family: var(--font-sans) !important;
-  font-size: 22px !important;
+  font-size: 19px !important;
   font-weight: 700 !important;
   letter-spacing: -0.02em !important;
   color: #000000 !important;
-  margin: 0 0 6px 0 !important;
+  margin: 0 0 3px 0 !important;
   line-height: 1.2 !important;
 }
 
 .simple-form-sub {
   font-family: var(--font-sans) !important;
-  font-size: 14px !important;
-  color: rgba(0, 0, 0, 0.6) !important;
+  font-size: 13px !important;
+  color: rgba(0, 0, 0, 0.58) !important;
   margin: 0 !important;
-  line-height: 1.5 !important;
+  line-height: 1.35 !important;
 }
 
 .simple-field-label,
 .simple-field-group {
   display: flex !important;
   flex-direction: column !important;
-  gap: 8px !important;
-  margin-bottom: 18px !important;
+  gap: 4px !important;
+  margin-bottom: 10px !important;
   width: 100% !important;
 }
 
 .simple-field-name {
   font-family: var(--font-sans) !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   color: #000000 !important;
   letter-spacing: -0.01em !important;
@@ -4809,20 +4751,20 @@ html[data-motion=on] .hero-sheet {
 .simple-pills-row {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 8px !important;
+  gap: 6px !important;
 }
 
 .simple-pill-btn {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 8px 18px !important;
+  padding: 5px 14px !important;
   border-radius: 9999px !important;
   background: #f8fafc !important;
   border: 1.5px solid rgba(0, 0, 0, 0.09) !important;
   color: #000000 !important;
   font-family: var(--font-sans) !important;
-  font-size: 13.5px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
   cursor: pointer !important;
   transition: all 0.18s ease !important;
@@ -4839,20 +4781,35 @@ html[data-motion=on] .hero-sheet {
   border-color: #0A3568 !important;
   color: #ffffff !important;
   font-weight: 600 !important;
-  box-shadow: 0 4px 14px rgba(2, 27, 56, 0.28) !important;
+  box-shadow: 0 3px 10px rgba(2, 27, 56, 0.24) !important;
 }
 
 .simple-pill-btn.is-selected * {
   color: #ffffff !important;
 }
 
-.premium-studio-form .form-input,
+.premium-studio-form .form-input {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 10px !important;
+  padding: 7px 12px !important;
+  height: 38px !important;
+  font-size: 13.5px !important;
+  font-family: var(--font-sans) !important;
+  color: #000000 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
 .premium-studio-form .form-textarea {
   background: #ffffff !important;
   border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
-  border-radius: 12px !important;
-  padding: 12px 16px !important;
-  font-size: 14.5px !important;
+  border-radius: 10px !important;
+  padding: 7px 12px !important;
+  min-height: 54px !important;
+  max-height: 90px !important;
+  font-size: 13.5px !important;
   font-family: var(--font-sans) !important;
   color: #000000 !important;
   width: 100% !important;
@@ -4873,9 +4830,11 @@ html[data-motion=on] .hero-sheet {
   gap: 8px !important;
   cursor: pointer !important;
   font-family: var(--font-sans) !important;
-  font-size: 13px !important;
-  color: rgba(0, 0, 0, 0.75) !important;
-  margin-top: 4px !important;
+  font-size: 12px !important;
+  color: rgba(0, 0, 0, 0.72) !important;
+  margin-top: 2px !important;
+  margin-bottom: 6px !important;
+}
   margin-bottom: 8px !important;
 }
 
@@ -5061,13 +5020,24 @@ html[data-motion=on] .hero-sheet {
   display: none !important;
 }
 
-.premium-studio-form .form-input,
+.premium-studio-form .form-input {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.18) !important;
+  border-radius: 10px !important;
+  padding: 7px 12px !important;
+  height: 38px !important;
+  font-size: 13.5px !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease !important;
+}
+
 .premium-studio-form .form-textarea {
   background: #ffffff !important;
   border: 1.5px solid rgba(0, 0, 0, 0.18) !important;
   border-radius: 10px !important;
-  padding: 12px 14px !important;
-  font-size: 14px !important;
+  padding: 7px 12px !important;
+  min-height: 54px !important;
+  max-height: 90px !important;
+  font-size: 13.5px !important;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease !important;
 }
 
@@ -5087,8 +5057,9 @@ html[data-motion=on] .hero-sheet {
 .premium-studio-form .simple-pill-btn {
   background: transparent !important;
   border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
-  border-radius: 8px !important;
-  padding: 8px 14px !important;
+  border-radius: 9999px !important;
+  padding: 5px 12px !important;
+  font-size: 12px !important;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
@@ -7601,33 +7572,115 @@ html[data-motion=on] .hero-sheet {
   transform: translateY(-7px) rotate(-1.5deg) scale(1.08);
 }
 
-/* 5. Shuffled Card Hover Micro-Interactions */
-.wide-cards-stack > :nth-child(1) .phone-device-frame {
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.wide-cards-stack > :nth-child(1):hover .phone-device-frame {
-  transform: translateY(-7px) rotate(-1.2deg) scale(1.015);
+/* 5. Automatic Scroll Motions & Floating Life for Mockups and Cards */
+@keyframes autoFloatMobileA {
+  0% {
+    transform: translateY(0px) rotate(-1.2deg);
+  }
+  50% {
+    transform: translateY(-11px) rotate(-0.3deg);
+  }
+  100% {
+    transform: translateY(-4px) rotate(-1.5deg);
+  }
 }
 
-.wide-cards-stack > :nth-child(2) .laptop-device-wrapper {
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+@keyframes autoFloatLaptopSync {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-9px) scale(1.018);
+  }
+  100% {
+    transform: translateY(-3px) scale(1.006);
+  }
+}
+
+@keyframes autoFloatMobileB {
+  0% {
+    transform: translateY(0px) rotate(1.2deg);
+  }
+  50% {
+    transform: translateY(-11px) rotate(0.3deg);
+  }
+  100% {
+    transform: translateY(-4px) rotate(1.5deg);
+  }
+}
+
+@keyframes autoFloatShowcaseDevice {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-13px) scale(1.02);
+  }
+  100% {
+    transform: translateY(-5px) scale(1.008);
+  }
+}
+
+/* When wide cards or apple device cards are scrolled into view (.is-in) */
+.wide-card.is-in .wide-card__visual {
+  animation: hdMockupEntrance 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes hdMockupEntrance {
+  from {
+    opacity: 0.35;
+    transform: translateY(28px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Card 1 Phone - Auto floats automatically when in view */
+.wide-card.is-in .wide-cards-stack > :nth-child(1) .phone-device-frame,
+.wide-cards-stack > :nth-child(1).is-in .phone-device-frame,
+.wide-card.is-in .phone-device-frame {
+  animation: autoFloatMobileA 5.6s ease-in-out infinite alternate !important;
+}
+
+/* Card 2 Laptop - Auto floats automatically when in view */
+.wide-card.is-in .wide-cards-stack > :nth-child(2) .laptop-device-wrapper,
+.wide-cards-stack > :nth-child(2).is-in .laptop-device-wrapper,
+.wide-card.is-in .laptop-device-wrapper {
+  animation: autoFloatLaptopSync 6.4s ease-in-out infinite alternate !important;
+}
+
+/* Card 3 Phone - Auto floats automatically when in view */
+.wide-card.is-in .wide-cards-stack > :nth-child(3) .phone-device-frame,
+.wide-cards-stack > :nth-child(3).is-in .phone-device-frame {
+  animation: autoFloatMobileB 5.8s ease-in-out infinite alternate !important;
+}
+
+/* Interactive Device Preview Card - Auto floats automatically when in view */
+.apple-device-card.is-in .phone-device-frame {
+  animation: autoFloatShowcaseDevice 6.2s ease-in-out infinite alternate !important;
+}
+.apple-device-card.is-in .laptop-device-wrapper {
+  animation: autoFloatLaptopSync 6.4s ease-in-out infinite alternate !important;
+}
+
+/* Interactive hover enhancement on top of auto-float */
+.wide-cards-stack > :nth-child(1):hover .phone-device-frame {
+  animation-play-state: paused !important;
+  transform: translateY(-14px) rotate(-1.5deg) scale(1.025) !important;
 }
 .wide-cards-stack > :nth-child(2):hover .laptop-device-wrapper {
-  transform: translateY(-6px) scale(1.025);
-}
-
-.wide-cards-stack > :nth-child(3) .phone-device-frame {
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  animation-play-state: paused !important;
+  transform: translateY(-12px) scale(1.03) !important;
 }
 .wide-cards-stack > :nth-child(3):hover .phone-device-frame {
-  transform: translateY(-7px) rotate(1.2deg) scale(1.015);
-}
-
-.apple-device-card .phone-device-frame {
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  animation-play-state: paused !important;
+  transform: translateY(-14px) rotate(1.5deg) scale(1.025) !important;
 }
 .apple-device-card:hover .phone-device-frame {
-  transform: translateY(-8px) scale(1.02);
+  animation-play-state: paused !important;
+  transform: translateY(-16px) scale(1.035) !important;
 }
 
 /* 6. Shuffled Button Hover Personalities */

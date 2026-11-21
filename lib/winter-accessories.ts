@@ -42,57 +42,75 @@ export function createWinterAccessories(): WinterAccessories {
   });
 
   // --------------------------------------------------------------------------
-  // 1. Robotic Azure Navy Hand Accents & Cyber Gauntlets
+  // 1. Robotic Azure Navy Hand Accents (STRICTLY ON HANDS, NOT ARMS)
   // --------------------------------------------------------------------------
   const handAccents = new THREE.Group();
   handAccents.name = 'AzureNavyHandAccents';
   group.add(handAccents);
 
-  const gauntletGeo = new THREE.CylinderGeometry(0.18, 0.22, 0.24, 24);
-  const ringGlowGeo = new THREE.TorusGeometry(0.20, 0.022, 16, 24);
-  const knuckleGeo = new THREE.BoxGeometry(0.14, 0.06, 0.16);
+  // Dorsal hand plates, knuckle guards, and cyber finger caps (strictly on the hands)
+  const handPlateGeo = new THREE.BoxGeometry(0.13, 0.14, 0.035);
+  const knuckleBarGeo = new THREE.BoxGeometry(0.12, 0.035, 0.045);
+  const palmDiscGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.02, 16);
+  const fingerGeo = new THREE.BoxGeometry(0.022, 0.055, 0.028);
 
-  // Left Hand Gauntlet
-  const leftGauntlet = new THREE.Group();
-  leftGauntlet.position.set(-1.22, 1.38, 0.26);
-  leftGauntlet.rotation.z = -0.15;
-  leftGauntlet.rotation.x = 0.12;
+  // Left Hand (Placed directly over the robot's left palm/hand at y ≈ 1.08, z ≈ 0.38)
+  const leftHand = new THREE.Group();
+  leftHand.position.set(-1.18, 1.08, 0.38);
+  leftHand.rotation.set(0.18, -0.12, -0.22);
 
-  const leftCuff = new THREE.Mesh(gauntletGeo, azureNavyMat);
-  leftCuff.castShadow = true;
-  leftGauntlet.add(leftCuff);
+  // Dorsal hand shield plate in deep Azure Navy
+  const leftPlate = new THREE.Mesh(handPlateGeo, azureNavyMat);
+  leftPlate.castShadow = true;
+  leftHand.add(leftPlate);
 
-  const leftGlowRing = new THREE.Mesh(ringGlowGeo, azureGlowMat);
-  leftGlowRing.rotation.x = Math.PI / 2;
-  leftGauntlet.add(leftGlowRing);
+  // Knuckle guard bar with glowing edge indicator
+  const leftKnuckle = new THREE.Mesh(knuckleBarGeo, azureNavyMat);
+  leftKnuckle.position.set(0, -0.075, 0.01);
+  leftHand.add(leftKnuckle);
 
-  const leftKnuckle = new THREE.Mesh(knuckleGeo, azureNavyMat);
-  leftKnuckle.position.set(0, -0.16, 0.06);
-  leftKnuckle.castShadow = true;
-  leftGauntlet.add(leftKnuckle);
+  const leftPalmDisc = new THREE.Mesh(palmDiscGeo, azureGlowMat);
+  leftPalmDisc.rotation.x = Math.PI / 2;
+  leftPalmDisc.position.set(0, 0, 0.02);
+  leftHand.add(leftPalmDisc);
 
-  handAccents.add(leftGauntlet);
+  // 4 Cyber finger armor segments along the knuckles
+  [-0.042, -0.014, 0.014, 0.042].forEach((xOff) => {
+    const finger = new THREE.Mesh(fingerGeo, azureNavyMat);
+    finger.position.set(xOff, -0.11, 0.01);
+    leftHand.add(finger);
+  });
 
-  // Right Hand Gauntlet
-  const rightGauntlet = new THREE.Group();
-  rightGauntlet.position.set(1.22, 1.38, 0.26);
-  rightGauntlet.rotation.z = 0.15;
-  rightGauntlet.rotation.x = 0.12;
+  handAccents.add(leftHand);
 
-  const rightCuff = new THREE.Mesh(gauntletGeo, azureNavyMat);
-  rightCuff.castShadow = true;
-  rightGauntlet.add(rightCuff);
+  // Right Hand (Placed directly over the robot's right palm/hand at y ≈ 1.08, z ≈ 0.38)
+  const rightHand = new THREE.Group();
+  rightHand.position.set(1.18, 1.08, 0.38);
+  rightHand.rotation.set(0.18, 0.12, 0.22);
 
-  const rightGlowRing = new THREE.Mesh(ringGlowGeo, azureGlowMat);
-  rightGlowRing.rotation.x = Math.PI / 2;
-  rightGauntlet.add(rightGlowRing);
+  // Dorsal hand shield plate in deep Azure Navy
+  const rightPlate = new THREE.Mesh(handPlateGeo, azureNavyMat);
+  rightPlate.castShadow = true;
+  rightHand.add(rightPlate);
 
-  const rightKnuckle = new THREE.Mesh(knuckleGeo, azureNavyMat);
-  rightKnuckle.position.set(0, -0.16, 0.06);
-  rightKnuckle.castShadow = true;
-  rightGauntlet.add(rightKnuckle);
+  // Knuckle guard bar with glowing edge indicator
+  const rightKnuckle = new THREE.Mesh(knuckleBarGeo, azureNavyMat);
+  rightKnuckle.position.set(0, -0.075, 0.01);
+  rightHand.add(rightKnuckle);
 
-  handAccents.add(rightGauntlet);
+  const rightPalmDisc = new THREE.Mesh(palmDiscGeo, azureGlowMat);
+  rightPalmDisc.rotation.x = Math.PI / 2;
+  rightPalmDisc.position.set(0, 0, 0.02);
+  rightHand.add(rightPalmDisc);
+
+  // 4 Cyber finger armor segments along the knuckles
+  [-0.042, -0.014, 0.014, 0.042].forEach((xOff) => {
+    const finger = new THREE.Mesh(fingerGeo, azureNavyMat);
+    finger.position.set(xOff, -0.11, 0.01);
+    rightHand.add(finger);
+  });
+
+  handAccents.add(rightHand);
 
   // --------------------------------------------------------------------------
   // 2. Winter Shawl / Wrapped Scarf (Positioned around neck collar, y ~ 1.95)
@@ -152,14 +170,15 @@ export function createWinterAccessories(): WinterAccessories {
       const pulse = 1.6 + Math.sin(time * 4.0) * 0.4 + (isHovered ? 0.8 : 0);
       azureGlowMat.emissiveIntensity = pulse;
 
-      // Slight reactive hand movement on hover
-      leftGauntlet.position.y = 1.38 + Math.sin(time * 1.8) * 0.02 + (isHovered ? 0.04 : 0);
-      rightGauntlet.position.y = 1.38 + Math.sin(time * 1.8 + 0.4) * 0.02 + (isHovered ? 0.04 : 0);
+      // Slight reactive hand movement on hover (strictly on hands at y ≈ 1.08)
+      leftHand.position.y = 1.08 + Math.sin(time * 1.8) * 0.015 + (isHovered ? 0.025 : 0);
+      rightHand.position.y = 1.08 + Math.sin(time * 1.8 + 0.4) * 0.015 + (isHovered ? 0.025 : 0);
     },
     dispose: () => {
-      gauntletGeo.dispose();
-      ringGlowGeo.dispose();
-      knuckleGeo.dispose();
+      handPlateGeo.dispose();
+      knuckleBarGeo.dispose();
+      palmDiscGeo.dispose();
+      fingerGeo.dispose();
       wrapGeo.dispose();
       wrap2Geo.dispose();
       tailGeo.dispose();
