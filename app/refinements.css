@@ -1215,119 +1215,17 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
   color: var(--accent) !important;
 }
 
-#team .team-strip-grid {
-  display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
-  gap: var(--card-gap, 20px) !important;
-  width: 100% !important;
-  max-width: var(--container, 1080px) !important;
-  margin: 0 auto !important;
-}
-@media (max-width: 1024px) {
-  #team .team-strip-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-}
-@media (max-width: 600px) {
-  #team .team-strip-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-#team .team-strip-card {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  text-align: center !important;
-  justify-content: center !important;
-  border-radius: var(--radius-card, 28px) !important;
-  padding: 32px 24px !important;
-  min-height: 260px !important;
-  border: none !important;
-  box-shadow: none !important;
-  transition: transform 0.25s ease !important;
-}
-#team .team-strip-card:hover {
-  transform: scale(1.01) !important;
-}
-
-/* Photo: 88px circle, object-fit: cover; object-position: center 20%, no border, no shadow, 20px gap below */
-#team .team-avatar-container,
-#team .team-monogram-avatar {
-  width: 88px !important;
-  height: 88px !important;
-  min-width: 88px !important;
-  min-height: 88px !important;
-  border-radius: 50% !important;
-  overflow: hidden !important;
-  margin: 0 auto 20px !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  background: transparent !important;
-}
-#team .team-avatar-image {
-  width: 88px !important;
-  height: 88px !important;
-  border-radius: 50% !important;
-  object-fit: cover !important;
-  object-position: center 20% !important;
-  display: block !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-#team .team-monogram-avatar {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: rgba(0, 0, 0, 0.08) !important;
-}
-#team .team-monogram-initials {
-  font-family: var(--font-sans) !important;
-  font-size: 24px !important;
-  font-weight: 600 !important;
-}
-
-/* Name: 19px / 600 */
-#team .team-member-name {
-  font-family: var(--font-sans) !important;
-  font-size: 19px !important;
-  font-weight: 600 !important;
-  line-height: 1.2 !important;
-  letter-spacing: -0.01em !important;
-  margin: 0 0 6px !important;
-}
-
-/* Role: 14px / 1.4, max 2 lines */
-#team .team-role-tag {
-  font-family: var(--font-sans) !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-  line-height: 1.4 !important;
-  max-width: 200px !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-  background: none !important;
-  border: none !important;
-  padding: 0 !important;
-}
-
 /* Four Surface Colors & text flipping */
-/* 1. Fawad Ahmed: Deep Midnight Sapphire (#0A2540) */
-#team .team-strip-card.team-card-black,
+/* 1. Fawad Feroz: Deep Midnight Sapphire (#0A2540) */
 #team .wide-card[data-palette="teal"],
 .wide-card[data-palette="teal"] {
   background: #0A2540 !important;
   border: 1px solid rgba(14, 165, 233, 0.28) !important;
 }
-#team .team-strip-card.team-card-black .team-member-name,
 #team .wide-card[data-palette="teal"] .wide-card__title,
 .wide-card[data-palette="teal"] .wide-card__title {
   color: #ffffff !important;
 }
-#team .team-strip-card.team-card-black .team-role-tag,
 #team .wide-card[data-palette="teal"] .wide-card__eyebrow,
 .wide-card[data-palette="teal"] .wide-card__eyebrow {
   color: #7dd3fc !important;
@@ -1338,18 +1236,15 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 }
 
 /* 2. Junaid Tariq: Muted Sage Mist (#edf7f2) */
-#team .team-strip-card.team-card-white,
 #team .wide-card[data-palette="mint"],
 .wide-card[data-palette="mint"] {
   background: #edf7f2 !important;
   border: 1px solid rgba(16, 185, 129, 0.24) !important;
 }
-#team .team-strip-card.team-card-white .team-member-name,
 #team .wide-card[data-palette="mint"] .wide-card__title,
 .wide-card[data-palette="mint"] .wide-card__title {
   color: #064e3b !important;
 }
-#team .team-strip-card.team-card-white .team-role-tag,
 #team .wide-card[data-palette="mint"] .wide-card__eyebrow,
 .wide-card[data-palette="mint"] .wide-card__eyebrow {
   color: #047857 !important;
@@ -1360,18 +1255,15 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 }
 
 /* 3. Shahmeer Khan: Warm Amber Sand (#fffbeb) */
-#team .team-strip-card.team-card-tint,
 #team .wide-card[data-palette="peach"],
 .wide-card[data-palette="peach"] {
   background: #fffbeb !important;
   border: 1px solid rgba(245, 158, 11, 0.26) !important;
 }
-#team .team-strip-card.team-card-tint .team-member-name,
 #team .wide-card[data-palette="peach"] .wide-card__title,
 .wide-card[data-palette="peach"] .wide-card__title {
   color: #78350f !important;
 }
-#team .team-strip-card.team-card-tint .team-role-tag,
 #team .wide-card[data-palette="peach"] .wide-card__eyebrow,
 .wide-card[data-palette="peach"] .wide-card__eyebrow {
   color: #b45309 !important;
@@ -1379,21 +1271,6 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 #team .wide-card[data-palette="peach"] .wide-card__desc,
 .wide-card[data-palette="peach"] .wide-card__desc {
   color: #92400e !important;
-}
-
-/* 4. Shahroz Mubarak: --card-navy (#0b1f3f) */
-#team .team-strip-card.team-card-navy {
-  background: var(--card-navy, #0b1f3f) !important;
-}
-#team .team-strip-card.team-card-navy .team-member-name {
-  color: var(--text-on-dark, #f5f5f7) !important;
-}
-#team .team-strip-card.team-card-navy .team-role-tag {
-  color: var(--text-2-on-dark, #a1a1a6) !important;
-}
-#team .team-strip-card.team-card-navy .team-monogram-avatar {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: var(--text-on-dark) !important;
 }
 
 /* Bottom Action: centered primary pill */

@@ -4,7 +4,6 @@ import {listProjects,listFounders,studioCopy} from '@/lib/studio-data';
 import {studioSchema,safeJson} from '@/lib/structured';
 import {runtime} from '@/lib/abuse';
 import {meta,origin} from '@/lib/meta';
-import './motion.css';
 export const revalidate=300;
 export const metadata=meta('Custom Software & Web Security','Custom software, web platforms and security reviews for teams building their next release.','/');
 export default async function Home(){
