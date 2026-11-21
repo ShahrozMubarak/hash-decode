@@ -44,6 +44,7 @@ export function Header(){
    };
  },[open]);
 
+ function openMenu(){menu.current?.showModal();setOpen(true);}
  function closeMenu(){menu.current?.close();setOpen(false);toggle.current?.focus();}
 
  useEffect(()=>{
@@ -87,6 +88,21 @@ export function Header(){
           <Link className="nav-contact ronin-cta-pill" href="/contact">
             <span>Get in touch</span>
           </Link>
+          <button
+            type="button"
+            className={`icon-btn nav-toggle ronin-icon-btn ${open ? 'is-active' : ''}`}
+            ref={toggle}
+            aria-label={open ? 'Close navigation' : 'Open navigation'}
+            aria-expanded={open}
+            aria-controls="studio-menu"
+            onClick={open ? closeMenu : openMenu}
+          >
+            <span className="nav-toggle-burger" aria-hidden="true">
+              <span className="burger-bar bar-1" />
+              <span className="burger-bar bar-2" />
+              <span className="burger-bar bar-3" />
+            </span>
+          </button>
         </div>
       </nav>
     </div>

@@ -2846,25 +2846,87 @@ html.header-compressed .site-header,
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Nav links breakpoint: keep desktop links visible on laptop/desktop */
-/* Nav links: visible across mobile and desktop without hamburger */
-.nav-toggle,
-.ronin-icon-btn.nav-toggle {
-  display: none !important;
-}
-
-@media (max-width: 768px) {
+/* Mobile responsive hamburger menu & founder cards */
+@media (max-width: 850px) {
   .site-links,
   .ronin-links {
-    display: flex !important;
+    display: none !important;
+  }
+  .nav-toggle,
+  .ronin-icon-btn.nav-toggle {
+    display: inline-flex !important;
     align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+@media (min-width: 851px) {
+  .nav-toggle,
+  .ronin-icon-btn.nav-toggle {
+    display: none !important;
+  }
+}
+
+@media (max-width: 800px) {
+  /* On phone, in founder cards: PICTURE SHOWS FIRST, THEN DATA */
+  #team .wide-card,
+  .about-founders-wide-stack .wide-card {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 24px 18px !important;
+    gap: 18px !important;
+  }
+  #team .wide-card .wide-card__visual,
+  .about-founders-wide-stack .wide-card .wide-card__visual {
+    order: 1 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  #team .wide-card .wide-card__visual > div,
+  .about-founders-wide-stack .wide-card .wide-card__visual > div {
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  #team .wide-card .wide-card__visual img,
+  .about-founders-wide-stack .wide-card .wide-card__visual img {
+    max-width: 240px !important;
+    width: 100% !important;
+    aspect-ratio: 4 / 5 !important;
+    margin: 0 auto !important;
+  }
+  #team .wide-card .wide-card__text,
+  .about-founders-wide-stack .wide-card .wide-card__text {
+    order: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
     gap: 8px !important;
   }
-  .site-links a,
-  .ronin-links a {
+  #team .wide-card .wide-card__title,
+  .about-founders-wide-stack .wide-card .wide-card__title {
+    font-size: 24px !important;
+    line-height: 1.15 !important;
+  }
+  #team .wide-card .wide-card__eyebrow,
+  .about-founders-wide-stack .wide-card .wide-card__eyebrow {
     font-size: 13px !important;
-    padding: 4px 6px !important;
-    min-height: 36px !important;
+  }
+  #team .wide-card .wide-card__desc,
+  .about-founders-wide-stack .wide-card .wide-card__desc {
+    font-size: 14.5px !important;
+    line-height: 1.55 !important;
+  }
+  /* Remove excessive text/quote on mobile so card is concise */
+  .desktop-only-quote {
+    display: none !important;
   }
 }
 
@@ -4530,9 +4592,10 @@ html[data-motion=on] .hero-sheet {
 
 .studio-manifesto-wrap {
   max-width: 1440px !important;
-  width: calc(100% - 32px) !important;
+  width: 100% !important;
   padding-inline: clamp(16px, 3vw, 40px) !important;
   margin: 0 auto !important;
+  box-sizing: border-box !important;
 }
 
 .manifesto-white-card {
@@ -4544,64 +4607,47 @@ html[data-motion=on] .hero-sheet {
   display: flex !important;
   flex-direction: column !important;
   gap: 24px !important;
-}
-
-.manifesto-header {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 8px !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
-  padding-bottom: 20px !important;
-}
-
-.manifesto-badge {
-  display: inline-block !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
-  color: #0071e3 !important;
-}
-
-.manifesto-heading {
-  font-size: clamp(20px, 3vw, 28px) !important;
-  font-weight: 700 !important;
-  color: #0B1F3A !important;
-  margin: 0 !important;
-  letter-spacing: -0.02em !important;
-  line-height: 1.3 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .manifesto-body {
   display: flex !important;
   flex-direction: column !important;
-  gap: 22px !important;
-}
-
-.manifesto-policy-block {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-}
-
-.manifesto-policy-title {
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  color: #0B1F3A !important;
-  margin: 0 !important;
+  gap: 20px !important;
+  width: 100% !important;
 }
 
 .manifesto-simple-text {
   font-family: var(--font-sans) !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   font-weight: 400 !important;
   line-height: 1.8 !important;
   letter-spacing: -0.005em !important;
-  color: rgba(11, 31, 58, 0.8) !important;
+  color: rgba(11, 31, 58, 0.85) !important;
   text-align: left !important;
   margin: 0 !important;
   border: none !important;
   background: transparent !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .studio-manifesto-section {
+    padding: 0 16px !important;
+    margin-top: 36px !important;
+    margin-bottom: 24px !important;
+  }
+  .manifesto-white-card {
+    padding: 24px 18px !important;
+    border-radius: 18px !important;
+  }
+  .manifesto-simple-text {
+    font-size: 13.5px !important;
+    line-height: 1.65 !important;
+    word-break: break-word !important;
+  }
 }
 
 .manifesto-footer {

@@ -10,7 +10,7 @@ export interface WideCardProps extends Omit<HTMLAttributes<HTMLElement>, 'title'
   stepNumber?: string | number;
   eyebrow?: string;
   title?: ReactNode;
-  desc?: string;
+  desc?: ReactNode;
   linkText?: string;
   linkHref?: string;
   ctaText?: string;
@@ -91,7 +91,7 @@ export default function WideCard({
             )}
             {eyebrow && <p className="wide-card__eyebrow">{eyebrow}</p>}
             {title && <h3 className="wide-card__title">{title}</h3>}
-            {desc && <p className="wide-card__desc">{desc}</p>}
+            {desc && <div className="wide-card__desc">{desc}</div>}
             {linkText && linkHref && (
               <a href={linkHref} className="hd-text-link">
                 <span>{linkText}</span>

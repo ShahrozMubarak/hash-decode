@@ -304,7 +304,16 @@ export default function MotionLanding({
                   reverse={idx % 2 === 1}
                   eyebrow={founder.role}
                   title={founder.name}
-                  desc={founder.quote ? `${founder.bio} — “${founder.quote}”` : founder.bio}
+                  desc={
+                    <>
+                      <p style={{ margin: 0 }}>{founder.bio}</p>
+                      {founder.quote && (
+                        <p className="desktop-only-quote" style={{ margin: '8px 0 0', fontStyle: 'italic', opacity: 0.85 }}>
+                          “{founder.quote}”
+                        </p>
+                      )}
+                    </>
+                  }
                   linkText="Connect on LinkedIn ›"
                   linkHref={founder.url || 'https://linkedin.com/company/hash-decode'}
                   visual={
