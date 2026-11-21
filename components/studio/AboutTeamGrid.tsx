@@ -60,13 +60,15 @@ export default function AboutTeamGrid({ founders }: { founders?: Founder[] }) {
                   <img
                     src={founder.image}
                     alt={founder.name}
+                    width={300}
+                    height={375}
                     style={{
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover',
                       display: 'block',
                     }}
-                    loading="eager"
+                    loading="lazy"
                   />
                 </div>
               </div>

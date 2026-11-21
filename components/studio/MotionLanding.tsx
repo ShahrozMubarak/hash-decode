@@ -225,6 +225,9 @@ export default function MotionLanding({
                     <img
                       src="/team/foolisharc.jpeg"
                       alt="Foolish Arc e-commerce platform"
+                      width={600}
+                      height={340}
+                      loading="lazy"
                       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                     />
                   </div>
@@ -323,6 +326,8 @@ export default function MotionLanding({
                         <img
                           src={founder.image}
                           alt={founder.name}
+                          width={300}
+                          height={375}
                           style={{
                             width: '100%',
                             height: '100%',
