@@ -33,10 +33,20 @@ export default function PrivacyDocument() {
       setActiveId(sections[0].id);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        handleScroll();
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {

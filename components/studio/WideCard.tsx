@@ -53,6 +53,8 @@ export default function WideCard({
           if (entry.isIntersecting) {
             el.classList.add('is-visible');
             el.classList.add('is-in');
+          } else {
+            el.classList.remove('is-visible');
           }
         });
       },

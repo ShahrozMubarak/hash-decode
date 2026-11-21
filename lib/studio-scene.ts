@@ -48,7 +48,10 @@ if (typeof window !== 'undefined') {
 export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, signal: AbortSignal, ready: () => void, failed: () => void) {
   const getIsMobile = () => (typeof window !== 'undefined' && window.innerWidth <= 850) || (canvas && canvas.clientWidth > 0 && canvas.clientWidth <= 640);
   const isMobile = getIsMobile();
-  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = () => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'off';
+  };
   const { lite } = sceneBudget(innerWidth, navigator.hardwareConcurrency, (navigator as Navigator & { deviceMemory?: number }).deviceMemory || 0, devicePixelRatio);
   const fps = 60;
 
@@ -60,7 +63,7 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
     powerPreference: 'high-performance',
     preserveDrawingBuffer: false
   });
-  const initialDpr = Math.min(devicePixelRatio || 1, 2);
+  const initialDpr = Math.min(devicePixelRatio || 1, isMobile ? 1.5 : 2);
   renderer.setPixelRatio(initialDpr);
   renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -72,7 +75,7 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
   // 7.2 Camera (FOV 32 desktop & mobile, position (0, 0.15, 5.6) / mobile responsive fitted distance)
   // Intro dolly: FOV 40 to target over 1800ms ease-out
   const targetFov = 32;
-  const camera = new THREE.PerspectiveCamera(prefersReducedMotion ? targetFov : 40, 1, 0.1, 50);
+  const camera = new THREE.PerspectiveCamera(prefersReducedMotion() ? targetFov : 40, 1, 0.1, 50);
   camera.position.set(0, isMobile ? 0.0 : 0.15, isMobile ? 2.8 : 5.6);
   camera.lookAt(0, 0, 0);
 
@@ -321,7 +324,7 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
       );
 
       // Camera Intro: quick 350ms settle to targetFov so it's ready immediately
-      if (!prefersReducedMotion && elapsed <= 0.35) {
+      if (!prefersReducedMotion() && elapsed <= 0.35) {
         const dollyT = elapsed / 0.35;
         const dollyEase = 1 - Math.pow(1 - dollyT, 2);
         camera.fov = 34 - (34 - targetFov) * dollyEase;
@@ -399,7 +402,7 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
       }
 
       if (model === 'eva' || model === 'fixer') {
-        if (prefersReducedMotion) {
+        if (prefersReducedMotion()) {
           // Static posed robot facing camera
           object.scale.setScalar(1.0);
           object.position.set(0, 0, 0);
@@ -549,6 +552,19 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
     targetProgress = detail.hero || detail.page || 0;
   };
 
+  const onMotion = () => {
+    if (prefersReducedMotion()) {
+      if (composer && useBloom) {
+        composer.render();
+      } else {
+        renderer.render(scene, camera);
+      }
+      stop();
+    } else {
+      start();
+    }
+  };
+
   function lost(e: Event) { e.preventDefault(); suspended = true; stop(); failed(); }
   function restore() { suspended = false; start(); }
 
@@ -558,6 +574,7 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
     if (disposed) return; disposed = true; stop(); resize.disconnect(); view.disconnect();
     document.removeEventListener('visibilitychange', visibility);
     window.removeEventListener('hd:scroll', onScroll);
+    window.removeEventListener('hd:motion', onMotion);
     window.removeEventListener('pointermove', onPointerMoveWindow);
     if (heroContainer) {
       heroContainer.removeEventListener('pointerenter', onPointerEnter);
@@ -595,6 +612,7 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
     view.observe(canvas);
     document.addEventListener('visibilitychange', visibility);
     window.addEventListener('hd:scroll', onScroll);
+    window.addEventListener('hd:motion', onMotion);
     window.addEventListener('pointermove', onPointerMoveWindow, { passive: true });
     if (heroContainer) {
       heroContainer.addEventListener('pointerenter', onPointerEnter);

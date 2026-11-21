@@ -11,10 +11,17 @@ if (typeof window !== 'undefined') {
 let activeScenes = 0;
 function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
  const mount=useRef<HTMLDivElement>(null),canvas=useRef<HTMLCanvasElement>(null);
- const [near,setNear]=useState(true);
+ const [near,setNear]=useState(false);
  const [status,setStatus]=useState<'loading'|'live'|'failed'|'unavailable'>('loading');
 
  useEffect(()=>{
+  const checkNear = () => {
+   if (!mount.current) return false;
+   const rect = mount.current.getBoundingClientRect();
+   return rect.top < (window.innerHeight + 300) && rect.bottom > -300;
+  };
+  setNear(checkNear());
+
   const observer=new IntersectionObserver(entries=>{
    if(entries[0]) setNear(entries[0].isIntersecting);
   },{rootMargin:'200px 0px'});

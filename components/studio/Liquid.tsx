@@ -1,6 +1,6 @@
 'use client';
 
-import type { HTMLAttributes, ReactNode } from 'react';
+import { useEffect, useRef, type HTMLAttributes, type ReactNode } from 'react';
 
 export type LiquidPalette =
   | 'cloud'
@@ -37,10 +37,31 @@ export default function Liquid({
   className = '',
   ...props
 }: LiquidProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const mode = getPaletteMode(palette);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            el.classList.add('is-visible');
+          } else {
+            el.classList.remove('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
+      ref={containerRef}
       className={`liquid liquid--${palette} ${className}`.trim()}
       data-mode={mode}
       {...props}
