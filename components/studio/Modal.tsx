@@ -87,13 +87,15 @@ export default function Modal({
 
     window.addEventListener('keydown', handleKeyDown);
 
+    const triggerEl = triggerRef?.current;
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = originalOverflow;
       document.body.style.paddingRight = originalPaddingRight;
 
-      if (triggerRef?.current) {
-        triggerRef.current.focus();
+      if (triggerEl) {
+        triggerEl.focus();
       } else if (previouslyFocusedRef.current) {
         previouslyFocusedRef.current.focus();
       }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-const words = ['Secure.', 'Scale.', 'Protect.', 'Deliver.'];
+const words = ['Protect.', 'Secure.', 'Scale.', 'Deliver.'];
 
 export default function TypingSecure() {
   const [wordIdx, setWordIdx] = useState(0);
@@ -38,9 +38,18 @@ export default function TypingSecure() {
   }, [text, isDeleting, wordIdx]);
 
   return (
-    <span className="hero-typing-word" style={{ color: '#2997ff', fontWeight: 800 }}>
+    <span
+      className="hero-typing-word hd-accent-navy hero-tag-last-word"
+      style={{ color: '#0071e3', fontWeight: 800 }}
+    >
       {text}
-      <span className="typewriter-cursor" aria-hidden="true" style={{ color: '#2997ff', fontWeight: 400 }}>|</span>
+      <span
+        className="typewriter-cursor"
+        aria-hidden="true"
+        style={{ color: '#0071e3', fontWeight: 400 }}
+      >
+        |
+      </span>
     </span>
   );
 }

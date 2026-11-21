@@ -939,16 +939,27 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 }
 #overview h1,
 #overview .hero-h1,
-#overview .hero-h1 span,
+#overview .hero-h1 > span.hero-tag-first,
 .hero-heading-block h1,
 .hero-h1-line {
   color: #ffffff !important;
   text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45) !important;
 }
+
+#overview .hero-h1 .hero-tag-last-word,
+#overview .hero-h1 .hero-typing-word,
+#overview .hero-h1 .hero-typing-word span,
+.hero-tag-last-word {
+  color: #0071e3 !important;
+  -webkit-text-fill-color: #0071e3 !important;
+  font-weight: 800 !important;
+}
+
 #overview p,
 #overview .hero-subtext,
 .hero-cta-subtext {
-  color: rgba(200, 235, 240, 0.85) !important;
+  color: rgba(255, 255, 255, 0.76) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.76) !important;
 }
 #overview .hero-eyebrow,
 .hero-pill-badge {
@@ -3542,7 +3553,7 @@ html[data-motion=on] .hero-sheet {
 }
 
 .hero-h1 .highlight-word,
-.hero-h1 span {
+.hero-h1 > span.hero-tag-first {
   color: #ffffff !important;
 }
 
@@ -8056,7 +8067,9 @@ html.js .guarantee-card.is-in {
 }
 
 /* About Founder Cards: Always 100% visible, fully animated and responsive */
-.about-founder-card {
+.about-founder-card,
+.about-founders-wide-stack .wide-card,
+#team .wide-card {
   opacity: 1 !important;
   transform: none !important;
   visibility: visible !important;

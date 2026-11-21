@@ -23,7 +23,7 @@ export default function LaptopMockup({
   ...props
 }: LaptopMockupProps) {
   return (
-    <div className={`laptop-device-wrapper ${className}`.trim()} {...props}>
+    <div className={`laptop-device-wrapper ${className}`.trim()} data-variant={variant} {...props}>
       {/* MacBook Pro Display Lid */}
       <div className="laptop-lid">
         {/* Subtle camera notch at top */}

@@ -31,7 +31,7 @@ export default function Button({
   if ('href' in props && props.href) {
     const { href, ...rest } = props;
     return (
-      <Link href={href} className={classes} {...(rest as any)}>
+      <Link href={href} className={classes} {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
         <span className="btn-label">{children}</span>
       </Link>
     );

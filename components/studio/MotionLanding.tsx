@@ -23,19 +23,15 @@ import HeaderScannerMock from './visuals/HeaderScannerMock';
 import TypingSecure from './TypingSecure';
 
 export default function MotionLanding({
-  projects: _projects,
-  founders: _founders,
-  links: _links,
-  intro: _intro,
-  availability: _availability,
+  founders,
 }: {
-  projects: Project[];
+  projects?: Project[];
   founders?: Founder[];
-  links: SocialLinks;
-  intro: string;
+  links?: SocialLinks;
+  intro?: string;
   availability?: string;
 }) {
-  const founderList = (_founders && _founders.length > 0) ? _founders : defaultFounders;
+  const founderList = (founders && founders.length > 0) ? founders : defaultFounders;
   return (
     <div className="landing original-composition">
       <div className="story-backdrop" aria-hidden="true" />
@@ -49,8 +45,8 @@ export default function MotionLanding({
 
           {/* Hero Centered Content (Apple-Style) */}
           <div className="wrap hero-centered-column">
-            <h1 className="hero-h1" aria-label="Build it. Break it. Secure.">
-              <span style={{ color: '#ffffff' }}>Build it. Break it. </span><TypingSecure />
+            <h1 className="hero-h1" aria-label="Build it. Break it. Protect.">
+              <span className="hero-tag-first" style={{ color: '#ffffff' }}>Build it. Break it. </span><TypingSecure />
             </h1>
             <p className="hero-subtext">
               Custom software engineering, high-throughput cloud architecture, and rigorous offensive security testing built shoulder-to-shoulder with founders to scale and protect mission-critical digital systems.

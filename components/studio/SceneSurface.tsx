@@ -37,7 +37,7 @@ function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
       setStatus(state);
       if (state === 'live' || state === 'failed') {
         if (typeof window !== 'undefined') {
-          (window as any).__hd_model_ready = true;
+          (window as Window & { __hd_model_ready?: boolean }).__hd_model_ready = true;
           window.dispatchEvent(new CustomEvent('hd:model-ready'));
         }
       }
@@ -50,8 +50,7 @@ function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
      await mountScene(node,targetModel,controller.signal,()=>update('live'),()=>update('failed'));
     }
    })
-   .catch((err)=>{
-    console.error('SceneSurface mount error:', err);
+   .catch(()=>{
     update('failed');
    });
   return()=>{controller.abort();activeScenes--;};

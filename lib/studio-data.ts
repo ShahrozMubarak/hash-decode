@@ -39,12 +39,12 @@ export const defaultFounders: Founder[] = [
     position: 3,
   },
   {
-    id: 'fawad-ahmed',
-    name: 'Fawad Ahmed',
-    role: 'Senior DevOps & Security Engineer',
-    bio: 'Engineers containerization pipelines, automated CI/CD releases, and zero-trust edge infrastructure. Guarantees high availability and defensive security.',
-    quote: 'Reliable infrastructure is invisible—it simply works without interruption, day in and day out.',
-    skills: ['Cloud Infrastructure', 'Docker & Kubernetes', 'Edge Computing', 'Automated CI/CD'],
+    id: 'fawad-feroz',
+    name: 'Fawad Feroz',
+    role: 'Founder and Sales Head',
+    bio: 'Leads enterprise client partnerships, technical sales strategy, and strategic growth across US and global markets. Ensures seamless onboarding, scope transparency, and long-term client value for every studio engagement.',
+    quote: 'Transparent partnerships and technical honesty are the foundation of systems that scale.',
+    skills: ['Enterprise Sales', 'Client Partnerships', 'Growth Strategy', 'Technical Scoping'],
     image: '/team/fawad.jpeg',
     url: 'https://hashdecode.com',
     position: 4,
@@ -121,7 +121,7 @@ export const defaultProjects: Project[] = [
 // In-memory high-speed cache for public queries to avoid repeated roundtrips to remote Atlas
 let cachedProjects: { data: Project[]; timestamp: number } | null = null;
 let cachedFounders: { data: Founder[]; timestamp: number } | null = null;
-let cachedCopy: { data: any; timestamp: number } | null = null;
+let cachedCopy: { data: { intro: string; about: string; availability: string }; timestamp: number } | null = null;
 const CACHE_TTL_MS = 60 * 1000;
 
 export async function listProjects(all = false): Promise<Project[]> {

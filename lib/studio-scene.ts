@@ -31,7 +31,7 @@ function fetchModelBuffer(url: string, fallbackUrl: string, signal?: AbortSignal
   return promise;
 }
 
-let gltfLoaderModulePromise: Promise<any> | null = null;
+let gltfLoaderModulePromise: Promise<typeof import('three/examples/jsm/loaders/GLTFLoader.js')> | null = null;
 function getGLTFLoaderModule() {
   if (!gltfLoaderModulePromise) {
     gltfLoaderModulePromise = import('three/examples/jsm/loaders/GLTFLoader.js');

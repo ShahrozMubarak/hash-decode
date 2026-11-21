@@ -44,7 +44,6 @@ export function Header(){
    };
  },[open]);
 
- function openMenu(){menu.current?.showModal();setOpen(true);}
  function closeMenu(){menu.current?.close();setOpen(false);toggle.current?.focus();}
 
  useEffect(()=>{

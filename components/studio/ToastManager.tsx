@@ -96,10 +96,11 @@ export default function ToastManager() {
       }, duration);
     };
 
+    const timeouts = timeoutsRef.current;
     window.addEventListener('hd:toast', handleToastEvent);
     return () => {
       window.removeEventListener('hd:toast', handleToastEvent);
-      Object.values(timeoutsRef.current).forEach(clearTimeout);
+      Object.values(timeouts).forEach(clearTimeout);
     };
   }, [removeToast]);
 

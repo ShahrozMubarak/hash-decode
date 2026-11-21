@@ -26,7 +26,8 @@ type Scan = {
 
 type ScanState = 'idle' | 'running' | 'done' | 'error';
 
-function getGradeBadgeStyle(_grade: string) {
+function getGradeBadgeStyle(_grade?: string) {
+  void _grade;
   return { bg: 'rgba(0, 0, 0, 0.04)', text: '#000000', border: 'rgba(0, 0, 0, 0.12)' };
 }
 

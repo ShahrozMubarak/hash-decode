@@ -2,13 +2,16 @@
 
 import { useEffect, useState } from 'react';
 
+type CustomWindow = Window & { __hd_site_loaded?: boolean; __hd_model_ready?: boolean };
+
 export default function SitePreloader() {
   // Check if site has already been loaded in this browser session
   const [hidden, setHidden] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
+        const win = window as CustomWindow;
         return Boolean(
-          (window as any).__hd_site_loaded ||
+          win.__hd_site_loaded ||
           sessionStorage.getItem('hd_site_loaded')
         );
       } catch {
@@ -25,7 +28,8 @@ export default function SitePreloader() {
     // If already loaded once in this session, never show again
     if (typeof window !== 'undefined') {
       try {
-        if (sessionStorage.getItem('hd_site_loaded') || (window as any).__hd_site_loaded) {
+        const win = window as CustomWindow;
+        if (sessionStorage.getItem('hd_site_loaded') || win.__hd_site_loaded) {
           setHidden(true);
           return;
         }
@@ -52,7 +56,7 @@ export default function SitePreloader() {
 
       try {
         sessionStorage.setItem('hd_site_loaded', '1');
-        (window as any).__hd_site_loaded = true;
+        (window as CustomWindow).__hd_site_loaded = true;
       } catch {}
 
       // Fast, smooth dissolve
@@ -71,7 +75,7 @@ export default function SitePreloader() {
     window.addEventListener('hd:model-ready', onModelReady, { once: true });
 
     // If model is already ready or DOM is complete, finish right away
-    if (typeof window !== 'undefined' && Boolean((window as any).__hd_model_ready)) {
+    if (typeof window !== 'undefined' && Boolean((window as CustomWindow).__hd_model_ready)) {
       finishWhenReady();
     } else if (document.readyState === 'complete') {
       // Allow a brief moment for model initialisation

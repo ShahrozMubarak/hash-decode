@@ -1,6 +1,4 @@
 // Helper utilities, parsers, and specification constants for 3D Models & Design E2E Tests
-import fs from 'node:fs';
-import path from 'node:path';
 
 // Canonical AERUM Specification Constants from authoritative source
 export const AERUM_SPEC = {
