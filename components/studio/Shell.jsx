@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
+import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 import {X,Pause,Play,ArrowUpRight} from 'lucide-react';
 import FooterSubscribe from './FooterSubscribe';
@@ -21,7 +22,7 @@ export function Brand({ showText = true } = {}){
   const frames=['D3C0D3','DEC0DE','DECODE'];let i=0;
   timer.current=setInterval(()=>{setWord(frames[i++]);if(i===frames.length){clearInterval(timer.current);timer.current=null;}},55);
  }
- return <a className="brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}><img src="/logo.png" alt="Hash Decode" className="brand-logo" width="26" height="26" />{showText && <strong>HASH<span>{word}</span></strong>}</a>;
+ return <Link className="brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}><img src="/logo.png" alt="Hash Decode" className="brand-logo" width="26" height="26" />{showText && <strong>HASH<span>{word}</span></strong>}</Link>;
 }
 export function Header(){
  const [open,setOpen]=useState(false),[paused,setPaused]=useState(false),toggle=useRef(null),menu=useRef(null);
@@ -75,18 +76,18 @@ export function Header(){
         </div>
         <div className="site-links ronin-links">
           {links.map(({name,url})=>(
-            <a href={url} aria-current={path===url?'page':undefined} key={url} className="ronin-nav-item" onClick={()=>setOpen(false)}>
+            <Link href={url} aria-current={path===url?'page':undefined} key={url} className="ronin-nav-item" onClick={()=>setOpen(false)}>
               <span className="ronin-nav-text">{name}</span>
-            </a>
+            </Link>
           ))}
         </div>
         <div className="nav-actions ronin-actions">
           <button type="button" className="icon-btn motion-toggle ronin-icon-btn" onClick={pause} aria-pressed={paused} title={paused?'Resume motion':'Pause motion'} aria-label={paused?'Resume motion':'Pause motion'}>
             {paused?<Play size={12}/>:<Pause size={12}/>}
           </button>
-          <a className="nav-contact ronin-cta-pill" href="/contact">
+          <Link className="nav-contact ronin-cta-pill" href="/contact">
             <span>Get in touch</span>
-          </a>
+          </Link>
           <button
             className={`icon-btn nav-toggle ronin-icon-btn ${open ? 'is-active' : ''}`}
             ref={toggle}
@@ -121,7 +122,7 @@ export function Header(){
         </div>
         <nav aria-label="Studio navigation" className="mobile-nav-list">
           {links.map(({name,url},i)=>(
-            <a
+            <Link
               href={url}
               key={url}
               aria-current={path===url?'page':undefined}
@@ -132,14 +133,14 @@ export function Header(){
               <span className="mobile-nav-link-num">0{i+1}</span>
               <span className="mobile-nav-link-title">{name}</span>
               <ArrowUpRight size={20} className="mobile-nav-link-arrow" aria-hidden="true" />
-            </a>
+            </Link>
           ))}
         </nav>
         <div className="menu-bottom">
           <p className="menu-subtext">Software engineering &amp; digital resilience.</p>
-          <a className="hd-btn-primary" href="/contact" onClick={closeMenu}>
+          <Link className="hd-btn-primary" href="/contact" onClick={closeMenu}>
             <span className="btn-label">Start a project</span>
-          </a>
+          </Link>
         </div>
       </div>
     </dialog>
@@ -173,19 +174,19 @@ export function Footer(){
           <div className="site-footer__col">
             <span className="site-footer__col-heading">Studio</span>
             <ul className="site-footer__list">
-              <li><a href="/about" className="site-footer__link">About</a></li>
-              <li><a href="/services" className="site-footer__link">Services</a></li>
-              <li><a href="/portfolio" className="site-footer__link">Portfolio</a></li>
-              <li><a href="/tools" className="site-footer__link">Tools</a></li>
-              <li><a href="/blog" className="site-footer__link">Blog</a></li>
+              <li><Link href="/about" className="site-footer__link">About</Link></li>
+              <li><Link href="/services" className="site-footer__link">Services</Link></li>
+              <li><Link href="/portfolio" className="site-footer__link">Portfolio</Link></li>
+              <li><Link href="/tools" className="site-footer__link">Tools</Link></li>
+              <li><Link href="/blog" className="site-footer__link">Blog</Link></li>
             </ul>
           </div>
 
           <div className="site-footer__col">
             <span className="site-footer__col-heading">Security</span>
             <ul className="site-footer__list">
-              <li><a href="/services#security" className="site-footer__link">Security Services</a></li>
-              <li><a href="/tools/security-check" className="site-footer__link">Security Check</a></li>
+              <li><Link href="/services#security" className="site-footer__link">Security Services</Link></li>
+              <li><Link href="/tools/security-check" className="site-footer__link">Security Check</Link></li>
               <li><a href="/.well-known/security.txt" className="site-footer__link">Security.txt</a></li>
             </ul>
           </div>
@@ -193,7 +194,7 @@ export function Footer(){
           <div className="site-footer__col">
             <span className="site-footer__col-heading">Legal &amp; Social</span>
             <ul className="site-footer__list">
-              <li><a href="/privacy" className="site-footer__link">Privacy Policy</a></li>
+              <li><Link href="/privacy" className="site-footer__link">Privacy Policy</Link></li>
               <li><a href="https://github.com/hashdecode" target="_blank" rel="noopener noreferrer" className="site-footer__link">GitHub</a></li>
               <li><a href="https://linkedin.com/company/hash-decode" target="_blank" rel="noopener noreferrer" className="site-footer__link">LinkedIn</a></li>
               <li><a href="https://x.com/hashdecode" target="_blank" rel="noopener noreferrer" className="site-footer__link">X (Twitter)</a></li>

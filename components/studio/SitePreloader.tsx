@@ -1,29 +1,48 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 
 export default function SitePreloader() {
-  const pathname = usePathname();
-  const [progress, setProgress] = useState(15);
+  // Check if site has already been loaded in this browser session
+  const [hidden, setHidden] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return Boolean(
+          (window as any).__hd_site_loaded ||
+          sessionStorage.getItem('hd_site_loaded')
+        );
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  });
+
+  const [progress, setProgress] = useState(30);
   const [fadingOut, setFadingOut] = useState(false);
-  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
+    // If already loaded once in this session, never show again
+    if (typeof window !== 'undefined') {
+      try {
+        if (sessionStorage.getItem('hd_site_loaded') || (window as any).__hd_site_loaded) {
+          setHidden(true);
+          return;
+        }
+      } catch {}
+    }
 
-    let isDomReady = typeof document !== 'undefined' && (document.readyState === 'interactive' || document.readyState === 'complete');
-    let isModelLoaded = typeof window !== 'undefined' && Boolean((window as any).__hd_model_ready);
     let isDone = false;
 
-    // Fast, responsive progress ticks (completes well within ~400-600ms)
+    // Ultra-fast progress ticks for initial model load
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
-        if (prev < 50) return prev + 20;
-        if (prev < 85) return prev + 15;
+        if (prev < 65) return prev + 25;
+        if (prev < 90) return prev + 15;
         if (prev < 98) return prev + 8;
         return 98;
       });
-    }, 45);
+    }, 30);
 
     const finishWhenReady = () => {
       if (isDone) return;
@@ -31,53 +50,52 @@ export default function SitePreloader() {
       clearInterval(progressInterval);
       setProgress(100);
 
-      // Fast, smooth dissolve without artificial lag
+      try {
+        sessionStorage.setItem('hd_site_loaded', '1');
+        (window as any).__hd_site_loaded = true;
+      } catch {}
+
+      // Fast, smooth dissolve
       setTimeout(() => {
         setFadingOut(true);
         setTimeout(() => {
           setHidden(true);
-        }, 220);
-      }, 50);
-    };
-
-    const checkComplete = () => {
-      if (isModelLoaded || isDomReady) {
-        finishWhenReady();
-      }
-    };
-
-    const onDomReady = () => {
-      isDomReady = true;
-      checkComplete();
+        }, 160);
+      }, 40);
     };
 
     const onModelReady = () => {
-      isModelLoaded = true;
       finishWhenReady();
     };
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', onDomReady, { once: true });
-      window.addEventListener('load', onDomReady, { once: true });
-    } else {
-      isDomReady = true;
-      checkComplete();
-    }
     window.addEventListener('hd:model-ready', onModelReady, { once: true });
 
-    // Strict safety cap: never let the preloader hold screen longer than 850ms
+    // If model is already ready or DOM is complete, finish right away
+    if (typeof window !== 'undefined' && Boolean((window as any).__hd_model_ready)) {
+      finishWhenReady();
+    } else if (document.readyState === 'complete') {
+      // Allow a brief moment for model initialisation
+      const quickCheck = setTimeout(() => {
+        finishWhenReady();
+      }, 350);
+      return () => {
+        clearInterval(progressInterval);
+        clearTimeout(quickCheck);
+        window.removeEventListener('hd:model-ready', onModelReady);
+      };
+    }
+
+    // Safety timeout: never block longer than 600ms on first load
     const maxSafetyTimer = setTimeout(() => {
       finishWhenReady();
-    }, 850);
+    }, 600);
 
     return () => {
       clearInterval(progressInterval);
       clearTimeout(maxSafetyTimer);
-      document.removeEventListener('DOMContentLoaded', onDomReady);
-      window.removeEventListener('load', onDomReady);
       window.removeEventListener('hd:model-ready', onModelReady);
     };
-  }, [pathname]);
+  }, []); // Empty dependency array: runs ONLY ONCE on site open, NEVER on route changes!
 
   if (hidden) return null;
 
@@ -98,7 +116,7 @@ export default function SitePreloader() {
           <span className="brand-d">DECODE</span>
         </div>
 
-        {/* High-tech Glowing Lazy Line only - no dots */}
+        {/* High-tech Glowing Lazy Line */}
         <div className="preloader-lazy-line-track">
           <div
             className="preloader-lazy-line-fill"
@@ -106,7 +124,7 @@ export default function SitePreloader() {
           />
         </div>
 
-        {/* Subtle dynamic status text */}
+        {/* Dynamic status text */}
         <span className="preloader-status-text">
           {progress >= 100 ? 'READY' : 'INITIALIZING SYSTEMS'}
         </span>

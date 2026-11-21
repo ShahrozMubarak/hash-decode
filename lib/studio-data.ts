@@ -118,12 +118,22 @@ export const defaultProjects: Project[] = [
   },
 ];
 
+// In-memory high-speed cache for public queries to avoid repeated roundtrips to remote Atlas
+let cachedProjects: { data: Project[]; timestamp: number } | null = null;
+let cachedFounders: { data: Founder[]; timestamp: number } | null = null;
+let cachedCopy: { data: any; timestamp: number } | null = null;
+const CACHE_TTL_MS = 60 * 1000;
+
 export async function listProjects(all = false): Promise<Project[]> {
   try {
     if (all) await requireOwner();
+    if (!all && cachedProjects && Date.now() - cachedProjects.timestamp < CACHE_TTL_MS) {
+      return cachedProjects.data;
+    }
     const rows = await (await getDb()).collection<ProjectRecord>('projects').find(all ? { status: { $in: ['draft', 'published'] } } : { status: 'published' }, { projection: { _id: 0 } }).sort({ position: 1, title: 1 }).toArray();
-    if (rows && rows.length > 0) return rows;
-    return all ? [] : defaultProjects;
+    const result = (rows && rows.length > 0) ? rows : (all ? [] : defaultProjects);
+    if (!all) cachedProjects = { data: result, timestamp: Date.now() };
+    return result;
   } catch (err) {
     if (all) throw err;
     console.error('listProjects error:', err);
@@ -133,9 +143,13 @@ export async function listProjects(all = false): Promise<Project[]> {
 export async function listFounders(all = false): Promise<Founder[]> {
   try {
     if (all) await requireOwner();
+    if (!all && cachedFounders && Date.now() - cachedFounders.timestamp < CACHE_TTL_MS) {
+      return cachedFounders.data;
+    }
     const rows = await (await getDb()).collection<FounderRecord>('founders').find(all ? { status: { $in: ['draft', 'published'] } } : { status: 'published' }, { projection: { _id: 0 } }).sort({ position: 1 }).toArray();
-    if (rows && rows.length > 0) return rows;
-    return all ? [] : defaultFounders;
+    const result = (rows && rows.length > 0) ? rows : (all ? [] : defaultFounders);
+    if (!all) cachedFounders = { data: result, timestamp: Date.now() };
+    return result;
   } catch (err) {
     if (all) throw err;
     console.error('listFounders error:', err);
@@ -144,8 +158,13 @@ export async function listFounders(all = false): Promise<Founder[]> {
 }
 export async function studioCopy() {
   try {
+    if (cachedCopy && Date.now() - cachedCopy.timestamp < CACHE_TTL_MS) {
+      return cachedCopy.data;
+    }
     const row = await (await getDb()).collection('settings').findOne({ id: 'site' });
-    return { intro: typeof row?.intro === 'string' ? row.intro : '', about: typeof row?.about === 'string' ? row.about : '', availability: typeof row?.availability === 'string' ? row.availability : '' };
+    const result = { intro: typeof row?.intro === 'string' ? row.intro : '', about: typeof row?.about === 'string' ? row.about : '', availability: typeof row?.availability === 'string' ? row.availability : '' };
+    cachedCopy = { data: result, timestamp: Date.now() };
+    return result;
   } catch (err) {
     console.error('studioCopy error:', err);
     return { intro: 'Custom software, web platforms and security reviews for teams building their next release.', about: 'Hash Decode is a software and web-security studio.', availability: 'Taking new projects' };

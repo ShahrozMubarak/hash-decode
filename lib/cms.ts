@@ -38,13 +38,20 @@ export const defaultPosts: Entry[] = [
   },
 ];
 
+let cachedPosts: { data: Entry[]; timestamp: number } | null = null;
+const POSTS_CACHE_TTL_MS = 60 * 1000;
+
 export async function entries(kind = 'post', all = false): Promise<Entry[]> {
   try {
     if (all) await requireOwner();
     if (kind !== 'post') return [];
+    if (!all && cachedPosts && Date.now() - cachedPosts.timestamp < POSTS_CACHE_TTL_MS) {
+      return cachedPosts.data;
+    }
     const rows = await (await getDb()).collection<Entry>('posts').find(all ? { status: { $ne: 'deleted' } } : { status: 'published', $or: [{ publishAt: { $lte: new Date() } }, { publishAt: null }] }, { projection: { _id: 0 } }).sort({ updated: -1 }).toArray();
-    if (rows && rows.length > 0) return rows;
-    return all ? [] : defaultPosts;
+    const result = (rows && rows.length > 0) ? rows : (all ? [] : defaultPosts);
+    if (!all) cachedPosts = { data: result, timestamp: Date.now() };
+    return result;
   } catch (err) {
     if (all) throw err;
     console.error('entries error:', err);

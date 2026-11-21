@@ -4623,38 +4623,46 @@ html[data-motion=on] .hero-sheet {
    V2 ENHANCEMENTS: STUDIO MANIFESTO, PREMIUM FORM & VIBRANT ACCENTS
    ========================================================================== */
 
-/* 2. Studio Manifesto Pre-Footer Section */
-/* 2. Studio Manifesto Pre-Footer Section: Simple un-carded long text, small & not bold */
+/* 2. Studio Manifesto Pre-Footer Section: Pure White Background & Extended Text */
 .studio-manifesto-section {
-  padding: var(--s-6) 0 var(--s-3) !important;
+  padding: clamp(36px, 5vw, 60px) 0 clamp(28px, 4vw, 48px) !important;
   width: 100% !important;
   display: flex !important;
   justify-content: center !important;
-  background: transparent !important;
-  border: none !important;
+  background: #ffffff !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 
 .studio-manifesto-wrap {
-  max-width: 980px !important;
+  max-width: 1080px !important;
   width: 100% !important;
   padding-inline: var(--gutter, 24px) !important;
   margin: 0 auto !important;
+}
+
+.manifesto-white-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  padding: clamp(24px, 4vw, 36px) clamp(20px, 4vw, 44px) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+  border: 1px solid rgba(0, 0, 0, 0.07) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
 }
 
 .manifesto-simple-text {
   font-family: var(--font-sans) !important;
   font-size: 13.5px !important;
   font-weight: 400 !important;
-  line-height: 1.75 !important;
+  line-height: 1.8 !important;
   letter-spacing: -0.005em !important;
-  color: rgba(0, 0, 0, 0.62) !important;
+  color: rgba(0, 0, 0, 0.65) !important;
   text-align: left !important;
   margin: 0 !important;
   border: none !important;
   background: transparent !important;
-}
-  max-width: 820px !important;
-  margin: 0 0 var(--s-5) 0 !important;
 }
 
 .manifesto-footer {
