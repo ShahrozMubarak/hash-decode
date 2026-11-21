@@ -30,7 +30,7 @@ export default function AboutTeamGrid({ founders }: { founders?: Founder[] }) {
             reverse={idx % 2 === 1}
             eyebrow={founder.role}
             title={founder.name}
-            desc={founder.bio}
+            desc={founder.quote ? `${founder.bio} — “${founder.quote}”` : founder.bio}
             linkText={founder.url ? 'Connect on LinkedIn ›' : undefined}
             linkHref={founder.url || 'https://linkedin.com/company/hash-decode'}
             visual={
