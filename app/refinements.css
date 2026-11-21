@@ -3540,17 +3540,18 @@ html[data-motion=on] .hero-sheet {
   color: #ffffff !important;
 }
 
-/* 3. Subtext: 20-22px / weight 400 / line-height 1.45 / max-width 640px, 32px gap to buttons */
+/* 3. Subtext: reduced 2x in font size (11.5px–13px) / weight 400 / line-height 1.65 / max-width 720px */
 .hero-subtext {
   font-family: var(--font-sans) !important;
-  font-size: clamp(20px, 2.2vw, 22px) !important;
+  font-size: clamp(11.5px, 1.15vw, 13px) !important;
   font-weight: 400 !important;
-  line-height: 1.45 !important;
-  letter-spacing: -0.01em !important;
+  line-height: 1.65 !important;
+  letter-spacing: 0.01em !important;
   color: rgba(200, 235, 240, 0.85) !important;
-  max-width: 640px !important;
-  margin: 0 auto 32px auto !important;
+  max-width: 720px !important;
+  margin: 0 auto 24px auto !important;
   text-align: center !important;
+  padding-inline: 16px !important;
 }
 
 /* 4. Buttons: 17-18px / weight 600, height 52px, padding 0 28px, 16px gap between buttons */
@@ -3558,9 +3559,11 @@ html[data-motion=on] .hero-sheet {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  flex-wrap: wrap !important;
   gap: 16px !important;
   margin: 0 auto !important;
   z-index: 10 !important;
+  max-width: 100% !important;
 }
 
 .hero-actions .hero-start-cta {
@@ -5120,13 +5123,27 @@ html[data-motion=on] .hero-sheet {
 }
 
 /* ==========================================================================
-   HERO FIRST WORD ACCENT: azure navy only, all other text stays black
+   IMPORTANT WORD ACCENT: azure navy across site (start, mid, end)
    ========================================================================== */
-.hero-h1 .hero-word-build {
+.hero-h1 .hero-word-build,
+.hd-accent-navy,
+.accent-navy-word {
   color: #0071e3 !important;
   -webkit-text-fill-color: #0071e3 !important;
   background: none !important;
   filter: none !important;
+  font-weight: inherit !important;
+  display: inline !important;
+}
+
+.wide-card[data-mode="light"] .hd-accent-navy,
+.hd-section--white .hd-accent-navy,
+.page-about-content .hd-accent-navy,
+.page-services-content .hd-accent-navy,
+.page-contact-content .hd-accent-navy,
+.hd-section--grey .hd-accent-navy {
+  color: #0066cc !important;
+  -webkit-text-fill-color: #0066cc !important;
 }
 
 /* ==========================================================================
@@ -7683,31 +7700,204 @@ html[data-motion=on] .hero-sheet {
   transform: translateY(-16px) scale(1.035) !important;
 }
 
-/* 6. Shuffled Button Hover Personalities */
-.hd-btn-coral {
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, opacity 0.2s ease !important;
-}
-.hd-btn-coral:hover {
-  transform: translateY(-2px) scale(1.02) !important;
-  box-shadow: 0 8px 24px rgba(217, 58, 47, 0.35) !important;
-}
-
-.hd-btn-azure {
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, opacity 0.2s ease !important;
-}
-.hd-btn-azure:hover {
-  transform: translateY(-2px) scale(1.02) !important;
-  box-shadow: 0 8px 24px rgba(2, 27, 56, 0.32) !important;
-}
-
+/* 6. Button Interactive Animations & Spring States Across Site */
 .hd-btn-primary,
-.hd-btn-dark {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease !important;
+.hd-btn-coral,
+.hd-btn-azure,
+.hd-btn-secondary,
+.hd-btn-dark,
+.hd-btn-white,
+.hero-start-cta,
+.hero-explore-btn,
+.send-brief-btn,
+.nav-cta-btn {
+  position: relative !important;
+  overflow: hidden !important;
+  transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.24s ease,
+              background-color 0.2s ease,
+              color 0.2s ease,
+              border-color 0.2s ease !important;
+  will-change: transform, box-shadow !important;
 }
+
+/* Subtle continuous ambient breathing pulse on primary call-to-actions */
+.hero-start-cta,
+.send-brief-btn {
+  animation: hdBtnPulse 4.2s ease-in-out infinite alternate !important;
+}
+
+@keyframes hdBtnPulse {
+  0% {
+    box-shadow: 0 4px 14px rgba(217, 58, 47, 0.22);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(217, 58, 47, 0.42);
+  }
+  100% {
+    box-shadow: 0 4px 14px rgba(217, 58, 47, 0.22);
+  }
+}
+
+/* Interactive Hover Elevation & Spring Lift */
 .hd-btn-primary:hover,
-.hd-btn-dark:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+.hd-btn-coral:hover,
+.hero-start-cta:hover,
+.send-brief-btn:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 10px 28px rgba(217, 58, 47, 0.42) !important;
+}
+
+.hd-btn-azure:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 10px 28px rgba(2, 27, 56, 0.36) !important;
+}
+
+.hd-btn-dark:hover,
+.hero-explore-btn:hover {
+  transform: translateY(-2.5px) scale(1.015) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24) !important;
+}
+
+.hd-btn-white:hover {
+  transform: translateY(-2.5px) scale(1.015) !important;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Active Press / Click Depth */
+.hd-btn-primary:active,
+.hd-btn-coral:active,
+.hd-btn-azure:active,
+.hd-btn-dark:active,
+.hd-btn-white:active,
+.hero-start-cta:active,
+.hero-explore-btn:active,
+.send-brief-btn:active {
+  transform: translateY(1px) scale(0.98) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18) !important;
+  transition-duration: 0.08s !important;
+}
+
+/* Arrow / Icon Glide on Hover */
+.hd-btn-primary:hover svg,
+.hd-btn-azure:hover svg,
+.hd-btn-coral:hover svg,
+.hero-explore-btn:hover svg,
+.send-brief-btn:hover svg {
+  transform: translate(3px, -2px) !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.hero-explore-btn svg,
+.hd-btn-primary svg,
+.hd-btn-azure svg,
+.send-brief-btn svg {
+  transition: transform 0.2s ease !important;
+}
+
+/* Subtle Shimmer Sheen Layer across button */
+.hd-btn-primary::before,
+.hd-btn-azure::before,
+.hero-start-cta::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent) !important;
+  transition: left 0.6s ease !important;
+  pointer-events: none !important;
+}
+
+.hd-btn-primary:hover::before,
+.hd-btn-azure:hover::before,
+.hero-start-cta:hover::before {
+  left: 100% !important;
+}
+
+/* ==========================================================================
+   FULL RESPONSIVENESS (MOBILE 320PX-480PX, TABLET 768PX-1024PX, DESKTOP)
+   ========================================================================== */
+html,
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+#overview,
+.hero-sheet,
+.hero-runway,
+.landing {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+@media (max-width: 640px) {
+  .hero-h1 {
+    font-size: clamp(2.1rem, 9vw, 3.2rem) !important;
+    line-height: 1.15 !important;
+  }
+
+  .hero-subtext {
+    font-size: 12px !important;
+    padding-inline: 12px !important;
+    line-height: 1.6 !important;
+  }
+
+  .hero-actions {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .hero-actions .hero-start-cta,
+  .hero-actions .hero-explore-btn {
+    width: 100% !important;
+    max-width: 280px !important;
+  }
+
+  .hero-stage-card {
+    height: 380px !important;
+    max-width: 100% !important;
+  }
+
+  .phone-device-frame {
+    width: clamp(240px, 82vw, 290px) !important;
+    height: clamp(480px, 65vh, 560px) !important;
+  }
+
+  .laptop-device-wrapper {
+    width: clamp(260px, 92vw, 480px) !important;
+  }
+
+  .wide-card {
+    padding: 24px 18px !important;
+    border-radius: 24px !important;
+  }
+
+  .process-grid-4 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .contact-main-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .steps-row-3 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hero-stage-card {
+    height: 440px !important;
+  }
+
+  .process-grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

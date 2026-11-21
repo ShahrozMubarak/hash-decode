@@ -58,7 +58,7 @@ export default function Portfolio() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Our work</p>
         <h1 className="inner-hero-h1">
-          <span style={{ color: '#0B1F3A' }}>Our</span> Selected Work.
+          Our Selected <span className="hd-accent-navy">Work</span>.
         </h1>
         <p className="section-rule-lead">
           Explore real systems, web platforms, and security audits built by Hash Decode.
@@ -80,7 +80,7 @@ export default function Portfolio() {
             Client Platforms
           </span>
           <h2 style={{ color: '#ffffff', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, margin: '8px 0 0 0' }}>
-            <span style={{ color: '#93c5fd' }}>Systems</span> in production.
+            <span className="hd-accent-navy">Systems</span> in <span className="hd-accent-navy">production</span>.
           </h2>
         </div>
 
@@ -117,7 +117,7 @@ export default function Portfolio() {
             Interactive Utilities
           </span>
           <h2 style={{ color: '#000000', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, margin: '8px 0 0 0' }}>
-            <span style={{ color: '#0B1F3A' }}>Calculators</span> & Security Tools.
+            <span className="hd-accent-navy">Calculators</span> &amp; <span className="hd-accent-navy">Security</span> Tools.
           </h2>
           <p style={{ maxWidth: '640px', margin: '12px auto 0', color: 'rgba(0, 0, 0, 0.7)', fontSize: '16px' }}>
             Standalone public utilities engineered to help technical founders forecast infrastructure spend and verify cryptographic compliance.

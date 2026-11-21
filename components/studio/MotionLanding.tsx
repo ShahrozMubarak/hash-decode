@@ -47,12 +47,12 @@ export default function MotionLanding({
 
           {/* Hero Centered Content (Apple-Style) */}
           <div className="wrap hero-centered-column">
-            <p className="hero-eyebrow">Secure software studio</p>
+            <p className="hero-eyebrow">Hash Decode Studio</p>
             <h1 className="hero-h1" aria-label="Build it. Break it. Secure.">
-              <span className="hero-word-build">Build</span> it. Break it. <TypingSecure />
+              <span className="hero-word-build">Build</span> it. <span className="hd-accent-navy">Break</span> it. <TypingSecure />
             </h1>
             <p className="hero-subtext">
-              Custom software and security testing for businesses.
+              Custom software engineering, high-throughput cloud architecture, and rigorous offensive security testing built shoulder-to-shoulder with founders to scale and protect mission-critical digital systems.
             </p>
 
             <div className="hero-actions">
@@ -86,7 +86,7 @@ export default function MotionLanding({
         <Container>
           <SectionHeader
             eyebrow="Capabilities"
-            title="Built to perform."
+            title={<><span className="hd-accent-navy">Built</span> to <span className="hd-accent-navy">perform</span>.</>}
             sub="Custom software, web platforms, and secure APIs, built around how your business works."
           />
 
@@ -96,7 +96,7 @@ export default function MotionLanding({
               reverse={false}
               visual={<PhoneMockup variant="web" />}
               eyebrow="Web platforms"
-              title="Fast, resilient, accessible."
+              title={<>Fast, <span className="hd-accent-navy">resilient</span>, accessible.</>}
               desc="Full-stack web applications built with modern frameworks, clean APIs, and rigorous performance standards."
               linkText="Explore web services ›"
               linkHref="/services#web"
@@ -106,7 +106,7 @@ export default function MotionLanding({
               reverse={true}
               visual={<LaptopMockup variant="cloud" />}
               eyebrow="API & cloud systems"
-              title="Architecture that scales without friction."
+              title={<><span className="hd-accent-navy">Architecture</span> that <span className="hd-accent-navy">scales</span> without friction.</>}
               desc="Backend services designed for reliability, high throughput, and straightforward maintenance."
               linkText="Explore cloud services ›"
               linkHref="/services#cloud"
@@ -116,7 +116,7 @@ export default function MotionLanding({
               reverse={false}
               visual={<PhoneMockup variant="security" />}
               eyebrow="Security testing"
-              title="Break it before attackers do."
+              title={<><span className="hd-accent-navy">Break</span> it before attackers do.</>}
               desc="Comprehensive vulnerability assessments, penetration testing, and code reviews that leave no stone unturned."
               linkText="Explore security services ›"
               linkHref="/services#security"
@@ -126,7 +126,7 @@ export default function MotionLanding({
             <AppleDeviceCard
               palette="peach"
               eyebrow="Interactive Device Preview"
-              title="Engineered for real-world devices."
+              title={<><span className="hd-accent-navy">Engineered</span> for real-world <span className="hd-accent-navy">devices</span>.</>}
               highlightWords={['S O L U T I O N S']}
               deviceType="phone"
               serviceVariant="web"
@@ -151,7 +151,7 @@ export default function MotionLanding({
         <Container>
           <SectionHeader
             eyebrow="Security process"
-            title="How we break and fix systems."
+            title={<>How we <span className="hd-accent-navy">break</span> and <span className="hd-accent-navy">fix</span> systems.</>}
             sub="A disciplined approach to finding what others miss."
           />
 
@@ -162,7 +162,7 @@ export default function MotionLanding({
               visual={<ScopeMapMock />}
               stepNumber="01"
               eyebrow="Scoping & reconnaissance"
-              title="Map every entry point."
+              title={<><span className="hd-accent-navy">Map</span> every entry point.</>}
               desc="We discover assets, map the attack surface, and build a precise testing plan tailored to your architecture."
             />
             <WideCard
@@ -171,7 +171,7 @@ export default function MotionLanding({
               visual={<TerminalMock />}
               stepNumber="02"
               eyebrow="Vulnerability analysis"
-              title="Uncover the critical flaws."
+              title={<><span className="hd-accent-navy">Uncover</span> the critical flaws.</>}
               desc="Deep manual penetration testing and automated scanning to identify logic errors, injection flaws, and misconfigurations."
             />
             <WideCard
@@ -180,7 +180,7 @@ export default function MotionLanding({
               visual={<ChecklistMock />}
               stepNumber="03"
               eyebrow="Remediation & verification"
-              title="Fix fast. Retest thoroughly."
+              title={<><span className="hd-accent-navy">Fix</span> fast. <span className="hd-accent-navy">Retest</span> thoroughly.</>}
               desc="Actionable reports with proof-of-concept steps, remediation guidance, and a complimentary retest to verify every fix."
             />
           </div>
@@ -198,7 +198,7 @@ export default function MotionLanding({
         <Container>
           <SectionHeader
             eyebrow="Projects"
-            title="Studio concepts."
+            title={<><span className="hd-accent-navy">Studio</span> concepts.</>}
             sub="Working products and tools we have designed and built."
           />
 
@@ -286,7 +286,7 @@ export default function MotionLanding({
         <Container>
           <SectionHeader
             eyebrow="Leadership"
-            title="The team behind the studio."
+            title={<>The <span className="hd-accent-navy">team</span> behind the <span className="hd-accent-navy">studio</span>.</>}
             sub="Engineers and designers building resilient software."
           />
 
@@ -446,7 +446,7 @@ export default function MotionLanding({
             {/* Left Column: Direct Info */}
             <div className="contact-col-left">
               <p className="hd-section-eyebrow">Contact</p>
-              <h2 className="contact-title">Start a conversation.</h2>
+              <h2 className="contact-title"><span className="hd-accent-navy">Start</span> a conversation.</h2>
               <p className="contact-sub">Tell us what you&apos;re building. We&apos;ll tell you how we can help.</p>
 
               <div className="contact-info-stack">

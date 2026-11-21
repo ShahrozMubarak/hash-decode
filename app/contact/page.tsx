@@ -35,7 +35,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
           <header className="page-intro compact">
             <p className="section-rule-label">Direct inquiry</p>
             <h1 className="inner-hero-h1">
-              <span style={{ color: '#0B1F3A' }}>Start</span> A Project.
+              <span className="hd-accent-navy">Start</span> a <span className="hd-accent-navy">Project</span>.
             </h1>
             <p className="section-rule-lead">
               Tell us about the people using your software and the problem you want to solve.
@@ -138,7 +138,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
         <div className="section-head-rule">
           <span className="section-rule-label">Next steps</span>
           <h2 className="section-rule-heading">
-            What happens <span className="highlight-word">after you reach out?</span>
+            What happens <span className="hd-accent-navy">after you reach out?</span>
           </h2>
           <p className="section-rule-lead">A direct, human engineering onboarding process.</p>
         </div>
@@ -148,7 +148,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
             <div className="step-icon-tile" aria-hidden="true">
               <Search size={22} />
             </div>
-            <h3>Brief review</h3>
+            <h3>Brief <span className="hd-accent-navy">review</span></h3>
             <p>We read your inquiry carefully. A senior engineer analyzes technical feasibility and prepares initial recommendations.</p>
           </div>
           <div className="step-card hd-card" data-reveal="up">
@@ -156,7 +156,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
             <div className="step-icon-tile" aria-hidden="true">
               <MessageSquare size={22} />
             </div>
-            <h3>Discovery conversation</h3>
+            <h3>Discovery <span className="hd-accent-navy">conversation</span></h3>
             <p>We align on workflows, critical milestones, and your desired launch timeline over WhatsApp or video call.</p>
           </div>
           <div className="step-card hd-card" data-reveal="up">
@@ -164,7 +164,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
             <div className="step-icon-tile" aria-hidden="true">
               <FileCheck size={22} />
             </div>
-            <h3>Clear proposal &amp; quote</h3>
+            <h3>Clear <span className="hd-accent-navy">proposal</span> &amp; quote</h3>
             <p>You receive a written architecture outline with fixed milestone pricing and an exact delivery schedule. No surprise fees.</p>
           </div>
         </div>
@@ -175,7 +175,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
         <div className="section-head-rule">
           <span className="section-rule-label">Common questions</span>
           <h2 className="section-rule-heading">
-            Frequently asked <span className="highlight-word">questions.</span>
+            Frequently asked <span className="hd-accent-navy">questions</span>.
           </h2>
           <p className="section-rule-lead">Everything you need to know about pricing, delivery, and code ownership.</p>
         </div>

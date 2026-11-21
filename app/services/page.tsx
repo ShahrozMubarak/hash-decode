@@ -18,7 +18,7 @@ export default function Services() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">Services</p>
         <h1 className="inner-hero-h1">
-          <span style={{ color: '#0B1F3A' }}>Services</span> &amp; Solutions.
+          <span className="hd-accent-navy">Services</span> &amp; <span className="hd-accent-navy">Solutions</span>.
         </h1>
         <p className="section-rule-lead">
           Software designed for the people who use it, and practical security reviews for the teams who maintain it.
@@ -31,7 +31,7 @@ export default function Services() {
         <div className="section-head-rule" data-reveal="fade">
           <span className="section-rule-label">Core capabilities</span>
           <h2 className="section-rule-heading">
-            <span style={{ color: '#0B1F3A' }}>What</span> we specialise in.
+            What we <span className="hd-accent-navy">specialise</span> in.
           </h2>
         </div>
 
@@ -86,7 +86,7 @@ export default function Services() {
         <div className="section-head-rule">
           <span className="section-rule-label">Transparent delivery</span>
           <h2 className="section-rule-heading">
-            How we build together.
+            How we <span className="hd-accent-navy">build</span> together.
           </h2>
           <p className="section-rule-lead">From brief to live release with full transparency.</p>
         </div>
@@ -95,7 +95,7 @@ export default function Services() {
             <span style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
               01
             </span>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}>Listen &amp; scope</h3>
+            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}><span className="hd-accent-navy">Listen</span> &amp; scope</h3>
             <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
               We review your goals in plain words. We agree on features, timeline, and a fixed, fair quote with zero hidden fees.
             </p>
@@ -104,7 +104,7 @@ export default function Services() {
             <span style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
               02
             </span>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}>Clickable prototype</h3>
+            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}><span className="hd-accent-navy">Clickable</span> prototype</h3>
             <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
               Within 7 business days, you test a working interactive prototype. You see exactly how the software works before full code is written.
             </p>
@@ -113,7 +113,7 @@ export default function Services() {
             <span style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
               03
             </span>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}>Production build</h3>
+            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}><span className="hd-accent-navy">Production</span> build</h3>
             <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
               We write clean, tested TypeScript code. Regular progress reviews keep you in the loop as every feature comes to life.
             </p>
@@ -122,7 +122,7 @@ export default function Services() {
             <span style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
               04
             </span>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}>Launch &amp; handover</h3>
+            <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0' }}><span className="hd-accent-navy">Launch</span> &amp; handover</h3>
             <p style={{ margin: 0, fontSize: '15px', lineHeight: 1.5 }}>
               We deploy to your cloud, verify security, and transfer the repository and credentials with the agreed handover documentation.
             </p>
@@ -135,7 +135,7 @@ export default function Services() {
         <div className="section-head-rule">
           <span className="section-rule-label">The studio difference</span>
           <h2 className="section-rule-heading">
-            Why teams choose us.
+            Why teams <span className="hd-accent-navy">choose</span> us.
           </h2>
         </div>
         <div className="comparison-table-wrapper">

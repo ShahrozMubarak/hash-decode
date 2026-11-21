@@ -62,7 +62,7 @@ export default async function About() {
       <header className="page-intro" data-reveal="fade">
         <p className="section-rule-label">About Hash Decode</p>
         <h1 className="inner-hero-h1">
-          <span style={{ color: '#0B1F3A' }}>About</span> Hash Decode.
+          About <span className="hd-accent-navy">Hash Decode</span>.
         </h1>
         <p className="section-rule-lead">
           {copy.about ||
@@ -75,7 +75,7 @@ export default async function About() {
         <div className="section-head-rule">
           <span className="section-rule-label">Leadership</span>
           <h2 className="section-rule-heading">
-            <span style={{ color: '#0B1F3A' }}>The</span> team behind the studio.
+            The <span className="hd-accent-navy">team</span> behind the <span className="hd-accent-navy">studio</span>.
           </h2>
           <p className="section-rule-lead">
             Independent architects, product designers, and penetration testers who take pride in crafting resilient software.
@@ -90,7 +90,7 @@ export default async function About() {
         <div className="section-head-rule">
           <span className="section-rule-label">Core values</span>
           <h2 className="section-rule-heading">
-            <span style={{ color: '#0B1F3A' }}>How</span> we operate.
+            How we <span className="hd-accent-navy">operate</span>.
           </h2>
           <p className="section-rule-lead">Clear expectations, direct engineering, and zero technical debt.</p>
         </div>
@@ -99,7 +99,7 @@ export default async function About() {
           <WideCard
             palette="lilac"
             eyebrow="01 · Clarity"
-            title="Clarity over complexity."
+            title={<><span className="hd-accent-navy">Clarity</span> over complexity.</>}
             desc="We speak plain English, not confusing technical jargon. We start with the actual user workflow so the software is intuitive and easy to use."
             visual={<PhoneMockup variant="web" />}
           />
@@ -107,14 +107,14 @@ export default async function About() {
             palette="mint"
             reverse
             eyebrow="02 · Security"
-            title="Security by design."
+            title={<><span className="hd-accent-navy">Security</span> by design.</>}
             desc="Security is not an afterthought. Every form, API, and database query is audited against vulnerabilities before it ever goes live."
             visual={<PhoneMockup variant="security" />}
           />
           <WideCard
             palette="peach"
             eyebrow="03 · Ownership"
-            title="Client ownership."
+            title={<>Client <span className="hd-accent-navy">ownership</span>.</>}
             desc="You own every line of code, every repository, and every cloud credential. We never lock you in, and we provide clean documentation so any engineer can continue our work."
             visual={<LaptopMockup variant="cloud" />}
           />
@@ -122,7 +122,7 @@ export default async function About() {
             palette="cloud"
             reverse
             eyebrow="04 · Direct"
-            title="Direct engineering."
+            title={<><span className="hd-accent-navy">Direct</span> engineering.</>}
             desc="You work directly with the senior engineers designing and building your product. No account managers, no lost translations, no wasted time."
             visual={<PhoneMockup variant="tools" />}
           />
@@ -134,7 +134,7 @@ export default async function About() {
         <div className="section-head-rule">
           <span className="section-rule-label">Tools of the craft</span>
           <h2 className="section-rule-heading">
-            <span style={{ color: '#0B1F3A' }}>Our</span> technology stack.
+            Our <span className="hd-accent-navy">technology</span> stack.
           </h2>
           <p className="section-rule-lead">Modern, battle-tested technologies chosen for speed, reliability, and security.</p>
         </div>

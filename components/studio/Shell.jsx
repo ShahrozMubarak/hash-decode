@@ -161,7 +161,7 @@ export function Footer(){
         <div className="site-footer__top">
           <div className="site-footer__brand-block">
             <span className="site-footer__wordmark">HASH DECODE</span>
-            <p className="site-footer__tagline">Secure software studio.</p>
+            <p className="site-footer__tagline">Hash Decode Studio.</p>
           </div>
           <div className="site-footer__subscribe-block">
             <FooterSubscribe />

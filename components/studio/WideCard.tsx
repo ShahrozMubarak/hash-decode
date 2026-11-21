@@ -4,12 +4,12 @@ import { useEffect, useRef, type ReactNode, type HTMLAttributes } from 'react';
 import type { LiquidPalette } from './Liquid';
 import { getPaletteMode } from './Liquid';
 
-export interface WideCardProps extends HTMLAttributes<HTMLElement> {
+export interface WideCardProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   palette?: LiquidPalette;
   reverse?: boolean;
   stepNumber?: string | number;
   eyebrow?: string;
-  title?: string;
+  title?: ReactNode;
   desc?: string;
   linkText?: string;
   linkHref?: string;

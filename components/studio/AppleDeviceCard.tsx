@@ -6,10 +6,10 @@ import { getPaletteMode } from './Liquid';
 import PhoneMockup, { type PhoneMockupVariant } from './visuals/PhoneMockup';
 import LaptopMockup from './visuals/LaptopMockup';
 
-export interface AppleDeviceCardProps extends HTMLAttributes<HTMLElement> {
+export interface AppleDeviceCardProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   palette?: LiquidPalette;
   eyebrow?: string;
-  title?: string;
+  title?: ReactNode;
   highlightWords?: string[];
   sub?: string;
   deviceType?: 'phone' | 'laptop';
