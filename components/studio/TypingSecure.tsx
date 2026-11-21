@@ -38,9 +38,9 @@ export default function TypingSecure() {
   }, [text, isDeleting, wordIdx]);
 
   return (
-    <span className="hero-typing-word" style={{ color: '#0B1F3A', fontWeight: 800 }}>
+    <span className="hero-typing-word" style={{ color: '#2997ff', fontWeight: 800 }}>
       {text}
-      <span className="typewriter-cursor" aria-hidden="true" style={{ color: '#0B1F3A', fontWeight: 400 }}>|</span>
+      <span className="typewriter-cursor" aria-hidden="true" style={{ color: '#2997ff', fontWeight: 400 }}>|</span>
     </span>
   );
 }

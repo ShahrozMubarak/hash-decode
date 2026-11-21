@@ -1,6 +1,7 @@
 import JourneyControl from './JourneyControl';
-import type { Project, Founder } from '@/lib/studio-data';
+import { defaultFounders, type Project, type Founder } from '@/lib/studio-data';
 import type { SocialLinks } from '@/lib/cms';
+import type { LiquidPalette } from './Liquid';
 import ContactForm from './ContactForm';
 import ResponsiveStage from './ResponsiveStage';
 import SceneSurface from './SceneSurface';
@@ -34,6 +35,7 @@ export default function MotionLanding({
   intro: string;
   availability?: string;
 }) {
+  const founderList = (_founders && _founders.length > 0) ? _founders : defaultFounders;
   return (
     <div className="landing original-composition">
       <div className="story-backdrop" aria-hidden="true" />
@@ -47,9 +49,8 @@ export default function MotionLanding({
 
           {/* Hero Centered Content (Apple-Style) */}
           <div className="wrap hero-centered-column">
-            <p className="hero-eyebrow">Hash Decode Studio</p>
             <h1 className="hero-h1" aria-label="Build it. Break it. Secure.">
-              <span className="hero-word-build">Build</span> it. <span className="hd-accent-navy">Break</span> it. <TypingSecure />
+              <span style={{ color: '#ffffff' }}>Build it. Break it. </span><TypingSecure />
             </h1>
             <p className="hero-subtext">
               Custom software engineering, high-throughput cloud architecture, and rigorous offensive security testing built shoulder-to-shoulder with founders to scale and protect mission-critical digital systems.
@@ -59,7 +60,7 @@ export default function MotionLanding({
               <a className="hd-btn-primary hero-start-cta" href="#brief">
                 <span className="btn-label">Start a project</span>
               </a>
-              <a href="#services" className="hero-explore-btn">
+              <a href="#services" className="hero-explore-link">
                 <span className="btn-label">Explore the studio ›</span>
               </a>
             </div>
@@ -236,47 +237,48 @@ export default function MotionLanding({
             />
           </div>
 
-          {/* Separate section for Calculators & Tools */}
-          <div style={{ marginTop: 'var(--s-7)' }}>
-            <div style={{ marginBottom: 'var(--s-4)', textAlign: 'center' }}>
-              <span style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: '13px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                Engineering Utilities
-              </span>
-              <h3 style={{ color: '#ffffff', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 700, margin: '8px 0 0 0' }}>
-                Interactive Calculators &amp; Scanners.
-              </h3>
-            </div>
-            <div className="wide-cards-stack">
-              <WideCard
-                palette="violet"
-                reverse={true}
-                eyebrow="Internal tooling"
-                title="Cloud Cost Estimator"
-                desc="Real-time multi-cloud price modeling tool that helps engineering teams forecast and reduce AWS/GCP spend."
-                ctaText="Try the estimator"
-                ctaHref="/tools/estimate"
-                ctaVariant="azure"
-                visual={<CostEstimatorMock />}
-              />
-
-              <WideCard
-                palette="teal"
-                reverse={false}
-                eyebrow="Security tool"
-                title="Header Security Scanner"
-                desc="Instant HTTP response header analyzer grading websites against OWASP, HSTS, and CSP security baselines."
-                ctaText="Run a scan"
-                ctaHref="/tools/security-check"
-                ctaVariant="coral"
-                visual={<HeaderScannerMock />}
-              />
-            </div>
-          </div>
-
+          {/* Work Action Button */}
           <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
             <a className="hd-btn-secondary" href="/portfolio">
               <span className="btn-label">View all projects</span>
             </a>
+          </div>
+        </Container>
+      </Section>
+
+      {/* 3B. INTERACTIVE UTILITIES & CALCULATORS (standalone section separate from projects) */}
+      <Section id="tools" bg="grey" pad="regular" data-station="Tools">
+        <Container>
+          <SectionHeader
+            eyebrow="Interactive Utilities"
+            title={<>Engineering <span className="hd-accent-navy">calculators</span> &amp; <span className="hd-accent-navy">scanners</span>.</>}
+            sub="Standalone public tools engineered to forecast cloud infrastructure spend and verify cryptographic compliance."
+          />
+
+          <div className="wide-cards-stack">
+            <WideCard
+              palette="violet"
+              reverse={true}
+              eyebrow="Internal tooling"
+              title="Cloud Cost Estimator"
+              desc="Real-time multi-cloud price modeling tool that helps engineering teams forecast and reduce AWS/GCP spend."
+              ctaText="Try the estimator"
+              ctaHref="/tools/estimate"
+              ctaVariant="azure"
+              visual={<CostEstimatorMock />}
+            />
+
+            <WideCard
+              palette="teal"
+              reverse={false}
+              eyebrow="Security tool"
+              title="Header Security Scanner"
+              desc="Instant HTTP response header analyzer grading websites against OWASP, HSTS, and CSP security baselines."
+              ctaText="Run a scan"
+              ctaHref="/tools/security-check"
+              ctaVariant="coral"
+              visual={<HeaderScannerMock />}
+            />
           </div>
         </Container>
       </Section>
@@ -291,117 +293,54 @@ export default function MotionLanding({
           />
 
           <div className="wide-cards-stack">
-            {/* 1. Fawad Ahmed: Deep Obsidian Teal */}
-            <WideCard
-              palette="teal"
-              reverse={false}
-              eyebrow="Co-Founder & Head of Security"
-              title="Fawad Ahmed"
-              desc="Engineers containerization pipelines, automated CI/CD releases, and zero-trust edge infrastructure. Guarantees high availability and defensive security."
-              linkText="Connect on LinkedIn ›"
-              linkHref="https://linkedin.com/company/hash-decode"
-              visual={
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
-                  <img
-                    src="/team/fawad.jpeg"
-                    alt="Fawad Ahmed"
-                    style={{
-                      width: '100%',
-                      maxWidth: '300px',
-                      aspectRatio: '4 / 5',
-                      objectFit: 'cover',
-                      borderRadius: '28px',
-                      border: '1px solid rgba(255, 255, 255, 0.12)',
-                      display: 'block',
-                    }}
-                  />
-                </div>
-              }
-            />
+            {founderList.map((founder, idx) => {
+              const palettes: LiquidPalette[] = ['midnight', 'mint', 'peach', 'teal'];
+              const palette = palettes[idx % palettes.length];
+              const isDark = palette === 'midnight' || palette === 'teal';
 
-            {/* 2. Junaid Tariq: Muted Sage Mist */}
-            <WideCard
-              palette="mint"
-              reverse={true}
-              eyebrow="Co-Founder & Head of Engineering"
-              title="Junaid Tariq"
-              desc="Brings precision to full-stack web applications, real-time architectures, and reactive user interfaces. Focused on sub-second loads and clean, maintainable systems."
-              linkText="Connect on LinkedIn ›"
-              linkHref="https://linkedin.com/company/hash-decode"
-              visual={
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
-                  <img
-                    src="/team/junaid.jpeg"
-                    alt="Junaid Tariq"
-                    style={{
-                      width: '100%',
-                      maxWidth: '300px',
-                      aspectRatio: '4 / 5',
-                      objectFit: 'cover',
-                      borderRadius: '28px',
-                      border: '1px solid rgba(0, 0, 0, 0.08)',
-                      display: 'block',
-                    }}
-                  />
-                </div>
-              }
-            />
-
-            {/* 3. Shahmeer Khan: Warm Amber Sand */}
-            <WideCard
-              palette="peach"
-              reverse={false}
-              eyebrow="Lead Product Designer"
-              title="Shahmeer Khan"
-              desc="Shapes intuitive interaction models, real-time 3D visualizations, and precision design systems. Bridges aesthetic elegance with tactile, latency-free digital response."
-              linkText="Connect on LinkedIn ›"
-              linkHref="https://linkedin.com/company/hash-decode"
-              visual={
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
-                  <img
-                    src="/team/shahmeer.jpeg"
-                    alt="Shahmeer Khan"
-                    style={{
-                      width: '100%',
-                      maxWidth: '300px',
-                      aspectRatio: '4 / 5',
-                      objectFit: 'cover',
-                      borderRadius: '28px',
-                      border: '1px solid rgba(0, 0, 0, 0.08)',
-                      display: 'block',
-                    }}
-                  />
-                </div>
-              }
-            />
-
-            {/* 4. Shahroz Dogar */}
-            <WideCard
-              palette="midnight"
-              reverse={true}
-              eyebrow="Founder & CEO"
-              title="Shahroz Dogar"
-              desc="Oversees distributed systems architecture, high-concurrency cloud deployments, and zero-trust security frameworks. Leads technical direction and end-to-end delivery for all enterprise platforms."
-              linkText="Connect on LinkedIn ›"
-              linkHref="https://linkedin.com/company/hash-decode"
-              visual={
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
-                  <img
-                    src="/team/shahroz.jpeg"
-                    alt="Shahroz Dogar"
-                    style={{
-                      width: '100%',
-                      maxWidth: '300px',
-                      aspectRatio: '4 / 5',
-                      objectFit: 'cover',
-                      borderRadius: '28px',
-                      border: '1px solid rgba(255, 255, 255, 0.12)',
-                      display: 'block',
-                    }}
-                  />
-                </div>
-              }
-            />
+              return (
+                <WideCard
+                  key={founder.id || founder.name}
+                  palette={palette}
+                  reverse={idx % 2 === 1}
+                  eyebrow={founder.role}
+                  title={founder.name}
+                  desc={founder.bio}
+                  linkText="Connect on LinkedIn ›"
+                  linkHref={founder.url || 'https://linkedin.com/company/hash-decode'}
+                  visual={
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
+                      <div
+                        style={{
+                          width: '100%',
+                          maxWidth: '300px',
+                          aspectRatio: '4 / 5',
+                          borderRadius: '28px',
+                          overflow: 'hidden',
+                          background: 'rgba(0,0,0,0.06)',
+                          border: isDark
+                            ? '1px solid rgba(255, 255, 255, 0.12)'
+                            : '1px solid rgba(0, 0, 0, 0.08)',
+                          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.18)',
+                        }}
+                      >
+                        <img
+                          src={founder.image}
+                          alt={founder.name}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            display: 'block',
+                          }}
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  }
+                />
+              );
+            })}
           </div>
 
           <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>

@@ -79,8 +79,8 @@ export default function Portfolio() {
           <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '13px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
             Client Platforms
           </span>
-          <h2 style={{ color: '#ffffff', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, margin: '8px 0 0 0' }}>
-            <span className="hd-accent-navy">Systems</span> in <span className="hd-accent-navy">production</span>.
+          <h2 style={{ color: '#ffffff', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, margin: '8px 0 0 0', letterSpacing: '-0.02em' }}>
+            Systems in production.
           </h2>
         </div>
 
