@@ -1206,7 +1206,7 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 
 #team .team-strip-grid {
   display: grid !important;
-  gr.  n b bn.   id-template-columns: repeat(4, 1fr) !important;
+  grid-template-columns: repeat(4, 1fr) !important;
   gap: var(--card-gap, 20px) !important;
   width: 100% !important;
   max-width: var(--container, 1080px) !important;
@@ -2959,14 +2959,24 @@ html.header-compressed .site-header,
 }
 
 /* Nav links breakpoint: keep desktop links visible on laptop/desktop */
+/* Nav links: visible across mobile and desktop without hamburger */
+.nav-toggle,
+.ronin-icon-btn.nav-toggle {
+  display: none !important;
+}
+
 @media (max-width: 768px) {
   .site-links,
   .ronin-links {
-    display: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
   }
-  .nav-toggle,
-  .ronin-icon-btn.nav-toggle {
-    display: inline-flex !important;
+  .site-links a,
+  .ronin-links a {
+    font-size: 13px !important;
+    padding: 4px 6px !important;
+    min-height: 36px !important;
   }
 }
 
@@ -2974,10 +2984,6 @@ html.header-compressed .site-header,
   .site-links,
   .ronin-links {
     display: flex !important;
-  }
-  .nav-toggle,
-  .ronin-icon-btn.nav-toggle {
-    display: none !important;
   }
 }
 
@@ -4891,8 +4897,6 @@ html[data-motion=on] .hero-sheet {
   margin-top: 2px !important;
   margin-bottom: 6px !important;
 }
-  margin-bottom: 8px !important;
-}
 
 .simple-checkbox-input {
   width: 16px !important;
@@ -4959,6 +4963,8 @@ html[data-motion=on] .hero-sheet {
   font-weight: 500 !important;
   color: rgba(0, 0, 0, 0.6) !important;
 }
+
+.send-brief-btn {
   border-radius: 9999px !important;
   font-size: 16px !important;
   font-weight: 600 !important;
@@ -5008,22 +5014,9 @@ html[data-motion=on] .hero-sheet {
 
 .hd-text-link:hover,
 .hero-explore-link:hover {
-  color: #004bb0 !important;
+  color: #0071e3 !important;
   text-decoration: underline !important;
   opacity: 1 !important;
-}
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  font-weight: 600 !important;
-  transition: opacity 0.2s ease !important;
-}
-
-.hd-text-link:hover,
-.hero-explore-link:hover {
-  color: #000000 !important;
-  text-decoration: underline !important;
-  text-underline-offset: 4px !important;
 }
 
 .hd-text-link *,
