@@ -5,8 +5,8 @@ export class ConfigurationError extends Error {}
 const state = globalThis as typeof globalThis & { hdMongo?: { key: string; promise: Promise<Db> } };
 const clientOptions: MongoClientOptions = {
   maxPoolSize: 5,
-  serverSelectionTimeoutMS: 6000,
-  connectTimeoutMS: 6000,
+  serverSelectionTimeoutMS: 1500,
+  connectTimeoutMS: 1500,
   retryWrites: true,
   writeConcern: { w: 'majority' },
 };

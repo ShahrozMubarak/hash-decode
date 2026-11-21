@@ -7996,7 +7996,6 @@ body:has(#overview),
 html.js [data-reveal="up"],
 html.js [data-reveal="fade"],
 html.js .wide-card,
-html.js .about-founder-card,
 html.js .guarantee-card {
   opacity: 0;
   transform: translateY(36px);
@@ -8013,10 +8012,23 @@ html.js [data-reveal="fade"].is-in,
 html.js [data-reveal].is-in,
 html.js .wide-card.is-visible,
 html.js .wide-card.is-in,
-html.js .about-founder-card.is-in,
 html.js .guarantee-card.is-in {
   opacity: 1 !important;
   transform: translateY(0) !important;
+}
+
+/* About Founder Cards: Always 100% visible, fully animated and responsive */
+.about-founder-card {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+  display: flex !important;
+  transition: transform 0.28s ease, box-shadow 0.28s ease !important;
+}
+
+.about-founder-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.12) !important;
 }
 
 /* Typewriter cursor blinking animation */

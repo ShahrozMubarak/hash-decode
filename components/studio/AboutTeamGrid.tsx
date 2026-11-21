@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { Founder } from '@/lib/studio-data';
+import { defaultFounders, type Founder } from '@/lib/studio-data';
 
 function TypewriterText({ text, speed = 28 }: { text: string; speed?: number }) {
   const [displayed, setDisplayed] = useState('');
@@ -58,19 +58,20 @@ const cardThemes = [
 ];
 
 export default function AboutTeamGrid({ founders }: { founders?: Founder[] }) {
-  if (!founders || founders.length === 0) return null;
+  const list = (founders && founders.length > 0) ? founders : defaultFounders;
 
   return (
     <div
       className="about-founders-grid"
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
         gap: 'var(--s-6)',
         marginTop: 'var(--s-6)',
+        width: '100%',
       }}
     >
-      {founders.map((founder, idx) => {
+      {list.map((founder, idx) => {
         const theme = cardThemes[idx % cardThemes.length];
         return (
           <article
@@ -103,6 +104,7 @@ export default function AboutTeamGrid({ founders }: { founders?: Founder[] }) {
                 src={founder.image}
                 alt={founder.name}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                loading="eager"
               />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
