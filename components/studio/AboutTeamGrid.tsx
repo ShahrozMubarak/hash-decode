@@ -32,28 +32,28 @@ function TypewriterText({ text, speed = 28 }: { text: string; speed?: number }) 
 
 const cardThemes = [
   {
-    bg: '#051821',
+    bg: '#0A2540', // Founder 1: Deep Midnight Sapphire
     text: '#ffffff',
-    subText: 'rgba(255, 255, 255, 0.75)',
-    border: '1px solid rgba(255, 255, 255, 0.12)',
+    subText: 'rgba(255, 255, 255, 0.8)',
+    border: '1px solid rgba(14, 165, 233, 0.28)',
   },
   {
-    bg: '#fdf3eb', // Member 2: Warm Terracotta Peach
-    text: '#1a1a1a',
-    subText: '#7c2d12',
-    border: '1px solid rgba(225, 91, 62, 0.22)',
+    bg: '#edf7f2', // Founder 2: Muted Sage Mist
+    text: '#064e3b',
+    subText: '#047857',
+    border: '1px solid rgba(16, 185, 129, 0.24)',
   },
   {
-    bg: '#f2ecfc', // Member 3: Soft Lavender
-    text: '#1e1b4b',
-    subText: '#4338ca',
-    border: '1px solid rgba(139, 92, 246, 0.22)',
+    bg: '#fffbeb', // Founder 3: Warm Amber Sand
+    text: '#78350f',
+    subText: '#b45309',
+    border: '1px solid rgba(245, 158, 11, 0.26)',
   },
   {
-    bg: '#0b1f3f', // Member 4: Deep Azure Navy
+    bg: '#0B1F3A', // Founder 4: Deep Azure Navy
     text: '#ffffff',
-    subText: 'rgba(255, 255, 255, 0.75)',
-    border: '1px solid rgba(255, 255, 255, 0.14)',
+    subText: 'rgba(255, 255, 255, 0.8)',
+    border: '1px solid rgba(37, 99, 235, 0.28)',
   },
 ];
 

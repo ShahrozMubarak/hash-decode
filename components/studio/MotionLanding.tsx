@@ -19,6 +19,7 @@ import ScopeMapMock from './visuals/ScopeMapMock';
 import ChecklistMock from './visuals/ChecklistMock';
 import CostEstimatorMock from './visuals/CostEstimatorMock';
 import HeaderScannerMock from './visuals/HeaderScannerMock';
+import TypingSecure from './TypingSecure';
 
 export default function MotionLanding({
   projects: _projects,
@@ -48,7 +49,7 @@ export default function MotionLanding({
           <div className="wrap hero-centered-column">
             <p className="hero-eyebrow">Secure software studio</p>
             <h1 className="hero-h1" aria-label="Build it. Break it. Secure.">
-              <span className="hero-word-build">Build</span> it. Break it. Secure.
+              <span className="hero-word-build">Build</span> it. Break it. <TypingSecure />
             </h1>
             <p className="hero-subtext">
               Custom software and security testing for businesses.
@@ -290,9 +291,9 @@ export default function MotionLanding({
           />
 
           <div className="wide-cards-stack">
-            {/* 1. Fawad Ahmed */}
+            {/* 1. Fawad Ahmed: Deep Obsidian Teal */}
             <WideCard
-              palette="ink"
+              palette="teal"
               reverse={false}
               eyebrow="Co-Founder & Head of Security"
               title="Fawad Ahmed"
@@ -318,9 +319,9 @@ export default function MotionLanding({
               }
             />
 
-            {/* 2. Junaid Tariq */}
+            {/* 2. Junaid Tariq: Muted Sage Mist */}
             <WideCard
-              palette="peach"
+              palette="mint"
               reverse={true}
               eyebrow="Co-Founder & Head of Engineering"
               title="Junaid Tariq"
@@ -346,9 +347,9 @@ export default function MotionLanding({
               }
             />
 
-            {/* 3. Shahmeer Khan */}
+            {/* 3. Shahmeer Khan: Warm Amber Sand */}
             <WideCard
-              palette="lilac"
+              palette="peach"
               reverse={false}
               eyebrow="Lead Product Designer"
               title="Shahmeer Khan"

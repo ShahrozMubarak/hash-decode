@@ -1304,63 +1304,70 @@ html[data-motion=off] .hero-tech-track{animation:none!important}
 }
 
 /* Four Surface Colors & text flipping */
-/* 1. Fawad Feroz: #000000 */
-#team .team-strip-card.team-card-black {
-  background: #000000 !important;
+/* 1. Fawad Ahmed: Deep Midnight Sapphire (#0A2540) */
+#team .team-strip-card.team-card-black,
+#team .wide-card[data-palette="teal"],
+.wide-card[data-palette="teal"] {
+  background: #0A2540 !important;
+  border: 1px solid rgba(14, 165, 233, 0.28) !important;
 }
-#team .team-strip-card.team-card-black .team-member-name {
-  color: var(--text-on-dark, #f5f5f7) !important;
+#team .team-strip-card.team-card-black .team-member-name,
+#team .wide-card[data-palette="teal"] .wide-card__title,
+.wide-card[data-palette="teal"] .wide-card__title {
+  color: #ffffff !important;
 }
-#team .team-strip-card.team-card-black .team-role-tag {
-  color: var(--text-2-on-dark, #a1a1a6) !important;
+#team .team-strip-card.team-card-black .team-role-tag,
+#team .wide-card[data-palette="teal"] .wide-card__eyebrow,
+.wide-card[data-palette="teal"] .wide-card__eyebrow {
+  color: #7dd3fc !important;
 }
-#team .team-strip-card.team-card-black .team-monogram-avatar {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: var(--text-on-dark) !important;
+#team .wide-card[data-palette="teal"] .wide-card__desc,
+.wide-card[data-palette="teal"] .wide-card__desc {
+  color: rgba(255, 255, 255, 0.85) !important;
 }
 
-/* 2. Junaid Tariq: Warm Terracotta Peach (#fdf3eb) */
+/* 2. Junaid Tariq: Muted Sage Mist (#edf7f2) */
 #team .team-strip-card.team-card-white,
-#team .wide-card[data-palette="peach"],
-.wide-card[data-palette="peach"] {
-  background: #fdf3eb !important;
-  border: 1px solid rgba(225, 91, 62, 0.22) !important;
+#team .wide-card[data-palette="mint"],
+.wide-card[data-palette="mint"] {
+  background: #edf7f2 !important;
+  border: 1px solid rgba(16, 185, 129, 0.24) !important;
 }
 #team .team-strip-card.team-card-white .team-member-name,
-#team .wide-card[data-palette="peach"] .wide-card__title,
-.wide-card[data-palette="peach"] .wide-card__title {
-  color: #1a1a1a !important;
+#team .wide-card[data-palette="mint"] .wide-card__title,
+.wide-card[data-palette="mint"] .wide-card__title {
+  color: #064e3b !important;
 }
 #team .team-strip-card.team-card-white .team-role-tag,
+#team .wide-card[data-palette="mint"] .wide-card__eyebrow,
+.wide-card[data-palette="mint"] .wide-card__eyebrow {
+  color: #047857 !important;
+}
+#team .wide-card[data-palette="mint"] .wide-card__desc,
+.wide-card[data-palette="mint"] .wide-card__desc {
+  color: #065f46 !important;
+}
+
+/* 3. Shahmeer Khan: Warm Amber Sand (#fffbeb) */
+#team .team-strip-card.team-card-tint,
+#team .wide-card[data-palette="peach"],
+.wide-card[data-palette="peach"] {
+  background: #fffbeb !important;
+  border: 1px solid rgba(245, 158, 11, 0.26) !important;
+}
+#team .team-strip-card.team-card-tint .team-member-name,
+#team .wide-card[data-palette="peach"] .wide-card__title,
+.wide-card[data-palette="peach"] .wide-card__title {
+  color: #78350f !important;
+}
+#team .team-strip-card.team-card-tint .team-role-tag,
 #team .wide-card[data-palette="peach"] .wide-card__eyebrow,
 .wide-card[data-palette="peach"] .wide-card__eyebrow {
-  color: #7c2d12 !important;
+  color: #b45309 !important;
 }
 #team .wide-card[data-palette="peach"] .wide-card__desc,
 .wide-card[data-palette="peach"] .wide-card__desc {
-  color: #292524 !important;
-}
-
-/* 3. Shahmeer Khan: Soft Lavender (#f2ecfc) */
-#team .team-strip-card.team-card-tint,
-#team .wide-card[data-palette="lilac"],
-.wide-card[data-palette="lilac"] {
-  background: #f2ecfc !important;
-  border: 1px solid rgba(139, 92, 246, 0.22) !important;
-}
-#team .team-strip-card.team-card-tint .team-member-name,
-#team .wide-card[data-palette="lilac"] .wide-card__title,
-.wide-card[data-palette="lilac"] .wide-card__title {
-  color: #1e1b4b !important;
-}
-#team .team-strip-card.team-card-tint .team-role-tag,
-#team .wide-card[data-palette="lilac"] .wide-card__eyebrow,
-.wide-card[data-palette="lilac"] .wide-card__eyebrow {
-  color: #4338ca !important;
-}
-#team .wide-card[data-palette="lilac"] .wide-card__desc,
-.wide-card[data-palette="lilac"] .wide-card__desc {
-  color: #312e81 !important;
+  color: #92400e !important;
 }
 
 /* 4. Shahroz Mubarak: --card-navy (#0b1f3f) */
@@ -7661,13 +7668,34 @@ html[data-motion=on] .hero-sheet {
 }
 
 /* ==========================================================================
+   ELIMINATE TOP WHITE SPACE & ENSURE FULL-BLEED SEAMLESS HERO
+   ========================================================================== */
+html:has(#overview),
+body:has(#overview),
+.landing,
+.original-composition,
+.original-composition .hero-sheet,
+.original-composition .hero-runway,
+#overview {
+  background-color: #051821 !important;
+  background: radial-gradient(circle at 52% 45%, #165e6b 0%, #0b3944 45%, #051821 100%) !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+#main {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* ==========================================================================
    SCROLL TRANSITIONS & DYNAMIC REVEALS
    ========================================================================== */
 
 /* Hero section scroll transition exit */
 .hero-runway {
   position: relative !important;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease !important;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease !important;
 }
 
 #overview::after {
@@ -7676,8 +7704,8 @@ html[data-motion=on] .hero-sheet {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, transparent, rgba(5, 24, 33, 0.98));
+  height: 140px;
+  background: linear-gradient(to bottom, transparent, rgba(5, 24, 33, 0.95) 75%, #051821 100%);
   pointer-events: none;
   z-index: 5;
 }
@@ -7685,7 +7713,8 @@ html[data-motion=on] .hero-sheet {
 /* Black Work Section transition on entry and exit */
 #work {
   position: relative !important;
-  transition: background-color 0.4s ease !important;
+  background-color: #000000 !important;
+  transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 #work::before {
@@ -7694,8 +7723,8 @@ html[data-motion=on] .hero-sheet {
   top: 0;
   left: 0;
   right: 0;
-  height: 90px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+  height: 110px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), transparent);
   pointer-events: none;
   z-index: 2;
 }
@@ -7706,23 +7735,37 @@ html[data-motion=on] .hero-sheet {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 90px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+  height: 110px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
   pointer-events: none;
   z-index: 2;
 }
 
 /* Scroll late-appear stagger effect */
-[data-reveal="up"] {
+html.js [data-reveal="up"],
+html.js [data-reveal="fade"],
+html.js .wide-card,
+html.js .about-founder-card,
+html.js .guarantee-card {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(36px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
   will-change: opacity, transform;
 }
 
-[data-reveal="up"].is-revealed {
-  opacity: 1;
+html.js [data-reveal="fade"] {
   transform: translateY(0);
+}
+
+html.js [data-reveal="up"].is-in,
+html.js [data-reveal="fade"].is-in,
+html.js [data-reveal].is-in,
+html.js .wide-card.is-visible,
+html.js .wide-card.is-in,
+html.js .about-founder-card.is-in,
+html.js .guarantee-card.is-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 /* Typewriter cursor blinking animation */
@@ -7737,6 +7780,4 @@ html[data-motion=on] .hero-sheet {
 @keyframes typewriterBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
-}
-
 }

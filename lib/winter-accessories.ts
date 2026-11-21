@@ -2,8 +2,8 @@ import * as THREE from 'three';
 
 export interface WinterAccessories {
   group: THREE.Group;
-  cap: THREE.Group;
   shawl: THREE.Group;
+  handAccents: THREE.Group;
   update: (time: number, isHovered: boolean) => void;
   dispose: () => void;
 }
@@ -13,99 +13,97 @@ export function createWinterAccessories(): WinterAccessories {
   group.name = 'WinterAccessories';
 
   // --------------------------------------------------------------------------
-  // Materials: Knitted Wool & Warm Fabric
+  // Materials: Azure Navy Cyber Metal & Warm Woven Fabric
   // --------------------------------------------------------------------------
-  const capWoolMat = new THREE.MeshStandardMaterial({
-    color: 0x9e2424, // Warm crimson red
-    roughness: 0.82,
-    metalness: 0.05,
+  const azureNavyMat = new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#0B1F3A'), // Deep Azure Navy
+    metalness: 0.88,
+    roughness: 0.18,
   });
 
-  const capCuffMat = new THREE.MeshStandardMaterial({
-    color: 0x1b2838, // Deep warm navy ribbed cuff
-    roughness: 0.88,
-    metalness: 0.05,
-  });
-
-  const pompomMat = new THREE.MeshStandardMaterial({
-    color: 0xf4f4f6, // Off-white fuzzy pom-pom
-    roughness: 0.95,
-    metalness: 0.02,
+  const azureGlowMat = new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#1E40AF'),
+    emissive: new THREE.Color('#00f0ff'), // High-tech cyan-azure edge glow
+    emissiveIntensity: 1.8,
+    roughness: 0.1,
+    metalness: 0.2,
   });
 
   const shawlWoolMat = new THREE.MeshStandardMaterial({
-    color: 0x1b2838, // Rich deep navy scarf with subtle warmth
+    color: new THREE.Color('#0B1F3A'), // Deep Azure Navy wool shawl
     roughness: 0.85,
-    metalness: 0.05,
+    metalness: 0.08,
   });
 
   const shawlStripeMat = new THREE.MeshStandardMaterial({
-    color: 0xd93a2f, // Studio coral stripe accent
+    color: new THREE.Color('#d93a2f'), // Studio coral stripe accent
     roughness: 0.82,
     metalness: 0.05,
   });
 
   // --------------------------------------------------------------------------
-  // 1. Winter Beanie Cap (Positioned atop robot cranium, y ~ 3.45)
+  // 1. Robotic Azure Navy Hand Accents & Cyber Gauntlets
   // --------------------------------------------------------------------------
-  const cap = new THREE.Group();
-  cap.name = 'WinterCap';
-  cap.position.set(0, 3.48, 0.04);
-  cap.rotation.x = -0.08; // Slight backward tilt for natural beanie fit
-  group.add(cap);
+  const handAccents = new THREE.Group();
+  handAccents.name = 'AzureNavyHandAccents';
+  group.add(handAccents);
 
-  // Ribbed Cuff around head base
-  const cuffGeo = new THREE.CylinderGeometry(0.74, 0.76, 0.22, 32);
-  const cuffMesh = new THREE.Mesh(cuffGeo, capCuffMat);
-  cuffMesh.castShadow = true;
-  cap.add(cuffMesh);
+  const gauntletGeo = new THREE.CylinderGeometry(0.18, 0.22, 0.24, 24);
+  const ringGlowGeo = new THREE.TorusGeometry(0.20, 0.022, 16, 24);
+  const knuckleGeo = new THREE.BoxGeometry(0.14, 0.06, 0.16);
 
-  // Beanie Dome (Slouch shape)
-  const domeGeo = new THREE.SphereGeometry(0.72, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.58);
-  const dPos = domeGeo.attributes.position;
-  for (let i = 0; i < dPos.count; i++) {
-    const y = dPos.getY(i);
-    let z = dPos.getZ(i);
-    // Slight backward slouch
-    if (y > 0.2) {
-      z -= (y - 0.2) * 0.25;
-      dPos.setZ(i, z);
-    }
-  }
-  domeGeo.computeVertexNormals();
+  // Left Hand Gauntlet
+  const leftGauntlet = new THREE.Group();
+  leftGauntlet.position.set(-1.22, 1.38, 0.26);
+  leftGauntlet.rotation.z = -0.15;
+  leftGauntlet.rotation.x = 0.12;
 
-  const domeMesh = new THREE.Mesh(domeGeo, capWoolMat);
-  domeMesh.position.y = 0.08;
-  domeMesh.castShadow = true;
-  cap.add(domeMesh);
+  const leftCuff = new THREE.Mesh(gauntletGeo, azureNavyMat);
+  leftCuff.castShadow = true;
+  leftGauntlet.add(leftCuff);
 
-  // Top Pom-pom
-  const pompomGeo = new THREE.SphereGeometry(0.18, 16, 16);
-  const pPos = pompomGeo.attributes.position;
-  // Fluff disturbance
-  for (let i = 0; i < pPos.count; i++) {
-    const vx = pPos.getX(i);
-    const vy = pPos.getY(i);
-    const vz = pPos.getZ(i);
-    const noise = (Math.sin(i * 7.5) + Math.cos(i * 3.2)) * 0.016;
-    pPos.setXYZ(i, vx + noise, vy + noise, vz + noise);
-  }
-  pompomGeo.computeVertexNormals();
+  const leftGlowRing = new THREE.Mesh(ringGlowGeo, azureGlowMat);
+  leftGlowRing.rotation.x = Math.PI / 2;
+  leftGauntlet.add(leftGlowRing);
 
-  const pompom = new THREE.Mesh(pompomGeo, pompomMat);
-  pompom.position.set(0, 0.78, -0.12);
-  pompom.castShadow = true;
-  cap.add(pompom);
+  const leftKnuckle = new THREE.Mesh(knuckleGeo, azureNavyMat);
+  leftKnuckle.position.set(0, -0.16, 0.06);
+  leftKnuckle.castShadow = true;
+  leftGauntlet.add(leftKnuckle);
+
+  handAccents.add(leftGauntlet);
+
+  // Right Hand Gauntlet
+  const rightGauntlet = new THREE.Group();
+  rightGauntlet.position.set(1.22, 1.38, 0.26);
+  rightGauntlet.rotation.z = 0.15;
+  rightGauntlet.rotation.x = 0.12;
+
+  const rightCuff = new THREE.Mesh(gauntletGeo, azureNavyMat);
+  rightCuff.castShadow = true;
+  rightGauntlet.add(rightCuff);
+
+  const rightGlowRing = new THREE.Mesh(ringGlowGeo, azureGlowMat);
+  rightGlowRing.rotation.x = Math.PI / 2;
+  rightGauntlet.add(rightGlowRing);
+
+  const rightKnuckle = new THREE.Mesh(knuckleGeo, azureNavyMat);
+  rightKnuckle.position.set(0, -0.16, 0.06);
+  rightKnuckle.castShadow = true;
+  rightGauntlet.add(rightKnuckle);
+
+  handAccents.add(rightGauntlet);
 
   // --------------------------------------------------------------------------
   // 2. Winter Shawl / Wrapped Scarf (Positioned around neck collar, y ~ 1.95)
+  // (Cap removed completely per user request)
   // --------------------------------------------------------------------------
   const shawl = new THREE.Group();
   shawl.name = 'WinterShawl';
   shawl.position.set(0, 1.95, 0.12);
   group.add(shawl);
 
-  // Cozy main neck wrap ring (Torus)
+  // Main Azure Navy neck wrap ring (Torus)
   const wrapGeo = new THREE.TorusGeometry(0.68, 0.14, 16, 36);
   wrapGeo.scale(1.05, 0.85, 0.95);
   const wrapMesh = new THREE.Mesh(wrapGeo, shawlWoolMat);
@@ -123,7 +121,7 @@ export function createWinterAccessories(): WinterAccessories {
   wrap2Mesh.castShadow = true;
   shawl.add(wrap2Mesh);
 
-  // Draped Scarf Tail falling gracefully over the left shoulder/chest
+  // Draped Scarf Tail falling over the left chest
   const tailCurve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(-0.35, -0.02, 0.45),
     new THREE.Vector3(-0.42, -0.25, 0.52),
@@ -143,25 +141,31 @@ export function createWinterAccessories(): WinterAccessories {
 
   return {
     group,
-    cap,
     shawl,
+    handAccents,
     update: (time: number, isHovered: boolean) => {
-      // Subtle organic sway and breathing response
+      // Organic sway
       const sway = Math.sin(time * 2.2) * 0.02;
       tailMesh.rotation.z = sway + (isHovered ? 0.05 : 0);
-      pompom.position.y = 0.78 + Math.sin(time * 3.4) * 0.015;
+
+      // Subtle hand cyber pulse
+      const pulse = 1.6 + Math.sin(time * 4.0) * 0.4 + (isHovered ? 0.8 : 0);
+      azureGlowMat.emissiveIntensity = pulse;
+
+      // Slight reactive hand movement on hover
+      leftGauntlet.position.y = 1.38 + Math.sin(time * 1.8) * 0.02 + (isHovered ? 0.04 : 0);
+      rightGauntlet.position.y = 1.38 + Math.sin(time * 1.8 + 0.4) * 0.02 + (isHovered ? 0.04 : 0);
     },
     dispose: () => {
-      cuffGeo.dispose();
-      domeGeo.dispose();
-      pompomGeo.dispose();
+      gauntletGeo.dispose();
+      ringGlowGeo.dispose();
+      knuckleGeo.dispose();
       wrapGeo.dispose();
       wrap2Geo.dispose();
       tailGeo.dispose();
       fringeGeo.dispose();
-      capWoolMat.dispose();
-      capCuffMat.dispose();
-      pompomMat.dispose();
+      azureNavyMat.dispose();
+      azureGlowMat.dispose();
       shawlWoolMat.dispose();
       shawlStripeMat.dispose();
     },
