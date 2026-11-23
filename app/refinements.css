@@ -343,123 +343,17 @@ html:not(.js) [data-reveal],
 }
 
 /* ==========================================================================
-   Site Opening Preloader & High-Tech Lazy Line (No dots)
+   Site Opening Preloader Completely Disabled
    ========================================================================== */
 .hd-site-preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 999999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg);
-  opacity: 1;
-  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: scale(1);
-  filter: blur(0px);
-  pointer-events: all;
-  user-select: none;
-  animation: hdPreloaderSafetyExit 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.hd-site-preloader.is-fading {
-  opacity: 0 !important;
-  transform: scale(1.02) !important;
-  filter: blur(6px) !important;
-  pointer-events: none !important;
+  display: none !important;
   visibility: hidden !important;
-}
-
-@keyframes hdPreloaderSafetyExit {
-  0%, 75% {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: all;
-  }
-  90% {
-    opacity: 0;
-    transform: scale(1.02);
-    filter: blur(6px);
-    pointer-events: none;
-    visibility: visible;
-  }
-  100% {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    display: none !important;
-  }
-}
-
-.preloader-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.6rem;
-  position: relative;
-  z-index: 2;
-}
-
-/* Brand Wordmark */
-.preloader-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-body), Inter, system-ui, sans-serif;
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-}
-
-.preloader-brand .brand-h {
-  color: #000000;
-}
-
-.preloader-brand .brand-d {
-  color: #000000;
-}
-
-/* Pure Glowing Lazy Line */
-.preloader-lazy-line-track {
-  width: min(260px, 72vw);
-  height: 3px;
-  background: rgba(0, 0, 0, 0.08);
-  border-radius: 999px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: none;
-}
-
-.preloader-lazy-line-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background: #000000;
-  border-radius: 999px;
-  box-shadow: none;
-  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: width;
-}
-
-/* Status Text */
-.preloader-status-text {
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
-  font-weight: 600;
-  color: #000000;
-  opacity: 0.6;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-@keyframes preloaderTextPulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  z-index: -9999 !important;
 }
 
 /* In-place 3D Model Loader (Replaces the static poster picture) */

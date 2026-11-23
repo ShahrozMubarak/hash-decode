@@ -5,7 +5,6 @@ import RevealObserver from '@/components/studio/RevealObserver';
 import CardTiltManager from '@/components/studio/CardTiltManager';
 import ToastManager from '@/components/studio/ToastManager';
 import NavigationProgressBar from '@/components/studio/NavigationProgressBar';
-import SitePreloader from '@/components/studio/SitePreloader';
 import PageTransition from '@/components/studio/PageTransition';
 import ScrollDots from '@/components/studio/ScrollDots';
 import type { Metadata, Viewport } from 'next';
@@ -88,7 +87,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <a href="#main" className="skip-link">Skip to main content</a>
-        <SitePreloader />
         <NavigationProgressBar />
         <RevealObserver />
         <CardTiltManager />
