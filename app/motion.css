@@ -4209,7 +4209,6 @@ select:focus-visible {
 
 .hd-page-transition {
   animation: hdPageEnter 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: opacity, transform;
 }
 
 @media (prefers-reduced-motion: reduce) {

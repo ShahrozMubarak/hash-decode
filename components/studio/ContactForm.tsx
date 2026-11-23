@@ -29,6 +29,9 @@ interface ContactFormProps {
 
 export default function ContactForm({ initial = '', initialBrief = '' }: ContactFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
   const lock = useRef(false);
   const startedAt = useRef('');
   useEffect(() => {
@@ -40,6 +43,10 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
   const [error, setError] = useState('');
   const [receipt, setReceipt] = useState('');
   const [shaking, setShaking] = useState(false);
+
+  // Progressive disclosure: Stage 1 = Email only; Stage 2 = full form
+  const [isExpanded, setIsExpanded] = useState<boolean>(Boolean(initial || initialBrief));
+  const [emailValue, setEmailValue] = useState<string>('');
 
   // Form state
   const [selectedScope, setSelectedScope] = useState<string>(
@@ -62,7 +69,7 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
     if (name === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(value.trim())) {
-        return 'Please enter a valid email address.';
+        return 'Please enter a valid work email address.';
       }
     }
     if (name === 'brief' && value.trim().length < 10) {
@@ -82,6 +89,21 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
   const triggerShake = () => {
     setShaking(true);
     setTimeout(() => setShaking(false), 350);
+  };
+
+  const handleContinue = () => {
+    const emailErr = validateField('email', emailValue, true);
+    if (emailErr) {
+      setFieldErrors((prev) => ({ ...prev, email: emailErr }));
+      triggerShake();
+      emailInputRef.current?.focus();
+      return;
+    }
+    setFieldErrors((prev) => ({ ...prev, email: '' }));
+    setIsExpanded(true);
+    setTimeout(() => {
+      nameInputRef.current?.focus();
+    }, 180);
   };
 
   if (receipt) {
@@ -138,12 +160,19 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
       noValidate
       onSubmit={async (event) => {
         event.preventDefault();
+
+        // If not yet expanded to stage 2, treat submit as continue
+        if (!isExpanded) {
+          handleContinue();
+          return;
+        }
+
         if (lock.current) return;
 
         const form = event.currentTarget;
         const formData = new FormData(form);
         const nameVal = String(formData.get('name') || '').trim();
-        const emailVal = String(formData.get('email') || '').trim();
+        const emailVal = emailValue.trim() || String(formData.get('email') || '').trim();
         const briefRaw = String(formData.get('brief') || '').trim();
 
         // Client validation on submit
@@ -268,47 +297,55 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
     >
       <div className="simple-form-head">
         <h3 className="simple-form-title">Start a project</h3>
-        <p className="simple-form-sub">Tell us what you are building. We will review and respond within 24 hours.</p>
+        <p className="simple-form-sub">
+          {isExpanded
+            ? 'Complete your project specifications below. A senior architect will review and respond within 24 hours.'
+            : 'Enter your work email to get started. We will review your project needs and respond within 24 hours.'}
+        </p>
       </div>
 
-      {/* Row 1: Name and Email */}
-      <div className="form-row">
-        <label className="simple-field-label">
-          <span className="simple-field-name">Your Name *</span>
-          <input
-            name="name"
-            autoComplete="name"
-            placeholder="e.g. Alex Sterling"
-            minLength={2}
-            maxLength={100}
-            required
-            className={`form-input ${fieldErrors.name ? 'is-invalid' : ''}`}
-            aria-invalid={Boolean(fieldErrors.name)}
-            aria-describedby={fieldErrors.name ? 'name-error' : undefined}
-            onBlur={handleBlur}
-          />
-          {fieldErrors.name && (
-            <span id="name-error" className="field-error-msg" role="alert">
-              <AlertCircle size={13} aria-hidden="true" />
-              {fieldErrors.name}
-            </span>
-          )}
-        </label>
-
+      {/* Stage 1: Work Email input (Always visible) */}
+      <div className="stage-email-wrap">
         <label className="simple-field-label">
           <span className="simple-field-name">Work Email *</span>
-          <input
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="alex@company.com"
-            maxLength={254}
-            required
-            className={`form-input ${fieldErrors.email ? 'is-invalid' : ''}`}
-            aria-invalid={Boolean(fieldErrors.email)}
-            aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-            onBlur={handleBlur}
-          />
+          <div className="progressive-email-input-group">
+            <input
+              ref={emailInputRef}
+              name="email"
+              type="email"
+              value={emailValue}
+              onChange={(e) => {
+                setEmailValue(e.target.value);
+                if (fieldErrors.email) {
+                  setFieldErrors((prev) => ({ ...prev, email: '' }));
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !isExpanded) {
+                  e.preventDefault();
+                  handleContinue();
+                }
+              }}
+              autoComplete="email"
+              placeholder="alex@company.com"
+              maxLength={254}
+              required
+              className={`form-input progressive-email-input ${fieldErrors.email ? 'is-invalid' : ''}`}
+              aria-invalid={Boolean(fieldErrors.email)}
+              aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+              onBlur={handleBlur}
+            />
+            {!isExpanded && (
+              <button
+                type="button"
+                className="hd-btn-primary progressive-continue-btn"
+                onClick={handleContinue}
+              >
+                <span>Continue</span>
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </button>
+            )}
+          </div>
           {fieldErrors.email && (
             <span id="email-error" className="field-error-msg" role="alert">
               <AlertCircle size={13} aria-hidden="true" />
@@ -318,122 +355,151 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         </label>
       </div>
 
-      {/* Row 2: Service Focus (Clean horizontal pills) */}
-      <div className="simple-field-group">
-        <span className="simple-field-name">Service Needed</span>
-        <div className="simple-pills-row" role="radiogroup" aria-label="Service Selection">
-          {scopeOptions.map((opt) => {
-            const isSelected = selectedScope === opt;
-            return (
-              <button
-                key={opt}
-                type="button"
-                role="radio"
-                aria-checked={isSelected}
-                className={`simple-pill-btn ${isSelected ? 'is-selected' : ''}`}
-                onClick={() => setSelectedScope(opt)}
-              >
-                {opt}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      {/* Stage 2: Smooth CSS Grid 0fr -> 1fr height expansion */}
+      <div className={`progressive-fields-container ${isExpanded ? 'is-expanded' : ''}`}>
+        <div className="progressive-fields-inner">
+          {/* Your Name */}
+          <label className="simple-field-label">
+            <span className="simple-field-name">Your Name *</span>
+            <input
+              ref={nameInputRef}
+              name="name"
+              autoComplete="name"
+              placeholder="e.g. Alex Sterling"
+              minLength={2}
+              maxLength={100}
+              required={isExpanded}
+              className={`form-input ${fieldErrors.name ? 'is-invalid' : ''}`}
+              aria-invalid={Boolean(fieldErrors.name)}
+              aria-describedby={fieldErrors.name ? 'name-error' : undefined}
+              onBlur={handleBlur}
+            />
+            {fieldErrors.name && (
+              <span id="name-error" className="field-error-msg" role="alert">
+                <AlertCircle size={13} aria-hidden="true" />
+                {fieldErrors.name}
+              </span>
+            )}
+          </label>
 
-      {/* Row 3: Budget Range (Clean horizontal pills) */}
-      <div className="simple-field-group">
-        <span className="simple-field-name">Approximate Budget</span>
-        <div className="simple-pills-row" role="radiogroup" aria-label="Budget Selection">
-          {budgetOptions.map((b) => {
-            const isSelected = selectedBudget === b;
-            return (
-              <button
-                key={b}
-                type="button"
-                role="radio"
-                aria-checked={isSelected}
-                className={`simple-pill-btn ${isSelected ? 'is-selected' : ''}`}
-                onClick={() => setSelectedBudget(b)}
-              >
-                {b}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+          {/* Service Needed */}
+          <div className="simple-field-group">
+            <span className="simple-field-name">Service Needed</span>
+            <div className="simple-pills-row" role="radiogroup" aria-label="Service Selection">
+              {scopeOptions.map((opt) => {
+                const isSelected = selectedScope === opt;
+                return (
+                  <button
+                    key={opt}
+                    type="button"
+                    role="radio"
+                    aria-checked={isSelected}
+                    className={`simple-pill-btn ${isSelected ? 'is-selected' : ''}`}
+                    onClick={() => setSelectedScope(opt)}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-      {/* Row 4: Project Details */}
-      <div className="simple-field-group">
-        <label className="simple-field-label">
-          <span className="simple-field-name">Project Details *</span>
-          <textarea
-            value={briefText}
-            onChange={(e) => setBriefText(e.target.value)}
-            name="brief"
-            placeholder="Tell us what you're building, key goals, timeline, or any technical requirements..."
-            minLength={10}
-            maxLength={3000}
-            rows={2}
-            required
-            className={`form-textarea ${fieldErrors.brief ? 'is-invalid' : ''}`}
-            aria-invalid={Boolean(fieldErrors.brief)}
-            aria-describedby={fieldErrors.brief ? 'brief-error' : undefined}
-            onBlur={handleBlur}
-          />
-          {fieldErrors.brief && (
-            <span id="brief-error" className="field-error-msg" role="alert">
-              <AlertCircle size={13} aria-hidden="true" />
-              {fieldErrors.brief}
+          {/* Budget Range */}
+          <div className="simple-field-group">
+            <span className="simple-field-name">Approximate Budget</span>
+            <div className="simple-pills-row" role="radiogroup" aria-label="Budget Selection">
+              {budgetOptions.map((b) => {
+                const isSelected = selectedBudget === b;
+                return (
+                  <button
+                    key={b}
+                    type="button"
+                    role="radio"
+                    aria-checked={isSelected}
+                    className={`simple-pill-btn ${isSelected ? 'is-selected' : ''}`}
+                    onClick={() => setSelectedBudget(b)}
+                  >
+                    {b}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Project Details */}
+          <div className="simple-field-group">
+            <label className="simple-field-label">
+              <span className="simple-field-name">Project Details *</span>
+              <textarea
+                value={briefText}
+                onChange={(e) => setBriefText(e.target.value)}
+                name="brief"
+                placeholder="Tell us what you're building, key goals, timeline, or any technical requirements..."
+                minLength={10}
+                maxLength={3000}
+                rows={3}
+                required={isExpanded}
+                className={`form-textarea ${fieldErrors.brief ? 'is-invalid' : ''}`}
+                aria-invalid={Boolean(fieldErrors.brief)}
+                aria-describedby={fieldErrors.brief ? 'brief-error' : undefined}
+                onBlur={handleBlur}
+              />
+              {fieldErrors.brief && (
+                <span id="brief-error" className="field-error-msg" role="alert">
+                  <AlertCircle size={13} aria-hidden="true" />
+                  {fieldErrors.brief}
+                </span>
+              )}
+            </label>
+          </div>
+
+          {/* NDA Checkbox */}
+          <label className="simple-checkbox-label">
+            <input
+              type="checkbox"
+              checked={ndaChecked}
+              onChange={(e) => setNdaChecked(e.target.checked)}
+              className="simple-checkbox-input"
+            />
+            <span className="simple-checkbox-text">
+              <ShieldCheck size={14} className="simple-shield-icon" aria-hidden="true" />
+              <span>Require mutual NDA prior to technical discussion</span>
             </span>
+          </label>
+
+          {/* Honeypot field */}
+          <label className="honeypot" aria-hidden="true">
+            Website
+            <input name="website" tabIndex={-1} autoComplete="off" />
+          </label>
+
+          {error && (
+            <div className="form-inline-alert" role="alert" style={{ marginTop: '0.5rem' }}>
+              <AlertCircle size={15} />
+              <span>{error}</span>
+            </div>
           )}
-        </label>
-      </div>
 
-      {/* Row 5: Sleek NDA assurance checkbox */}
-      <label className="simple-checkbox-label">
-        <input
-          type="checkbox"
-          checked={ndaChecked}
-          onChange={(e) => setNdaChecked(e.target.checked)}
-          className="simple-checkbox-input"
-        />
-        <span className="simple-checkbox-text">
-          <ShieldCheck size={14} className="simple-shield-icon" aria-hidden="true" />
-          <span>Require mutual NDA prior to technical discussion</span>
-        </span>
-      </label>
+          {/* Submit Button & SLA */}
+          <div className="form-submit-row">
+            <button
+              id="send-brief-btn"
+              className={`hd-btn-primary send-brief-btn ${busy ? 'is-loading' : ''}`}
+              disabled={busy}
+              aria-busy={busy}
+              type="submit"
+            >
+              <span className="btn-label">{busy ? 'Sending brief…' : 'Send project brief'}</span>
+              <ArrowUpRight size={16} aria-hidden="true" />
+              <span className="btn-spinner" aria-hidden="true" />
+            </button>
 
-      {/* Honeypot field */}
-      <label className="honeypot" aria-hidden="true">
-        Website
-        <input name="website" tabIndex={-1} autoComplete="off" />
-      </label>
-
-      {error && (
-        <div className="form-inline-alert" role="alert" style={{ marginTop: '1rem' }}>
-          <AlertCircle size={15} />
-          <span>{error}</span>
+            <span className="form-sla-guarantee">
+              <ShieldCheck size={14} aria-hidden="true" />
+              <span>Direct response from senior architects within 24 hours</span>
+            </span>
+          </div>
         </div>
-      )}
-
-      {/* Row 6: Submit Button */}
-      <div className="form-submit-row">
-        <button
-          id="send-brief-btn"
-          className={`hd-btn-primary send-brief-btn ${busy ? 'is-loading' : ''}`}
-          disabled={busy}
-          aria-busy={busy}
-          type="submit"
-        >
-          <span className="btn-label">{busy ? 'Sending brief…' : 'Send project brief'}</span>
-          <ArrowUpRight size={16} aria-hidden="true" />
-          <span className="btn-spinner" aria-hidden="true" />
-        </button>
-
-        <span className="form-sla-guarantee">
-          <ShieldCheck size={14} aria-hidden="true" />
-          <span>Direct response from senior architects within 24 hours</span>
-        </span>
       </div>
     </form>
   );

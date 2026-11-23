@@ -32,8 +32,8 @@ function getVisual(slug: string, image?: string) {
           src={image}
           alt="Foolish Arc storefront preview"
           style={{
-            maxWidth: '92%',
-            maxHeight: '92%',
+            width: '100%',
+            height: '100%',
             objectFit: 'cover',
             borderRadius: '14px',
             boxShadow: '0 20px 40px rgba(0,0,0,0.4)',

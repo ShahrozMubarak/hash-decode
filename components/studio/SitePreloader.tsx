@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 type CustomWindow = Window & { __hd_site_loaded?: boolean; __hd_model_ready?: boolean };
 
@@ -24,8 +24,12 @@ export default function SitePreloader() {
   const [progress, setProgress] = useState(30);
   const [fadingOut, setFadingOut] = useState(false);
 
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const isDoneRef = useRef(false);
+
   useEffect(() => {
-    // If already loaded once in this session, never show again
+    // If already loaded once in this session, hide immediately and never show again
     if (typeof window !== 'undefined') {
       try {
         const win = window as CustomWindow;
@@ -36,10 +40,39 @@ export default function SitePreloader() {
       } catch {}
     }
 
-    let isDone = false;
+    const clearAllTimers = () => {
+      timersRef.current.forEach((t) => clearTimeout(t));
+      timersRef.current = [];
+    };
 
-    // Ultra-fast progress ticks for initial model load
-    const progressInterval = setInterval(() => {
+    const finishWhenReady = () => {
+      if (isDoneRef.current) return;
+      isDoneRef.current = true;
+
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setProgress(100);
+
+      try {
+        sessionStorage.setItem('hd_site_loaded', '1');
+        (window as CustomWindow).__hd_site_loaded = true;
+      } catch {}
+
+      // Smooth dissolve matching CSS transition
+      const fadeTimer = setTimeout(() => {
+        setFadingOut(true);
+        const hideTimer = setTimeout(() => {
+          setHidden(true);
+        }, 250);
+        timersRef.current.push(hideTimer);
+      }, 40);
+      timersRef.current.push(fadeTimer);
+    };
+
+    // Fast progress ticks for initial visual feedback
+    intervalRef.current = setInterval(() => {
       setProgress((prev) => {
         if (prev < 65) return prev + 25;
         if (prev < 90) return prev + 15;
@@ -48,64 +81,50 @@ export default function SitePreloader() {
       });
     }, 30);
 
-    const finishWhenReady = () => {
-      if (isDone) return;
-      isDone = true;
-      clearInterval(progressInterval);
-      setProgress(100);
-
-      try {
-        sessionStorage.setItem('hd_site_loaded', '1');
-        (window as CustomWindow).__hd_site_loaded = true;
-      } catch {}
-
-      // Fast, smooth dissolve
-      setTimeout(() => {
-        setFadingOut(true);
-        setTimeout(() => {
-          setHidden(true);
-        }, 160);
-      }, 40);
-    };
-
     const onModelReady = () => {
       finishWhenReady();
     };
 
     window.addEventListener('hd:model-ready', onModelReady, { once: true });
+    window.addEventListener('load', onModelReady, { once: true });
 
-    // If model is already ready or DOM is complete, finish right away
-    if (typeof window !== 'undefined' && Boolean((window as CustomWindow).__hd_model_ready)) {
+    // If model is already ready or document is already complete, finish immediately
+    if (
+      (typeof window !== 'undefined' && Boolean((window as CustomWindow).__hd_model_ready)) ||
+      (typeof document !== 'undefined' && document.readyState === 'complete')
+    ) {
       finishWhenReady();
-    } else if (document.readyState === 'complete') {
-      // Allow a brief moment for model initialisation
-      const quickCheck = setTimeout(() => {
+    } else {
+      // Non-blocking fallback for interior pages (/about, /contact, /work, etc.) where 3D scene is absent
+      const fallbackTimer = setTimeout(() => {
         finishWhenReady();
-      }, 350);
-      return () => {
-        clearInterval(progressInterval);
-        clearTimeout(quickCheck);
-        window.removeEventListener('hd:model-ready', onModelReady);
-      };
+      }, 250);
+      timersRef.current.push(fallbackTimer);
     }
 
-    // Safety timeout: never block longer than 600ms on first load
-    const maxSafetyTimer = setTimeout(() => {
+    // Maximum safety timer: never block screen under any circumstance
+    const safetyTimer = setTimeout(() => {
       finishWhenReady();
-    }, 600);
+    }, 500);
+    timersRef.current.push(safetyTimer);
 
     return () => {
-      clearInterval(progressInterval);
-      clearTimeout(maxSafetyTimer);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      clearAllTimers();
       window.removeEventListener('hd:model-ready', onModelReady);
+      window.removeEventListener('load', onModelReady);
     };
-  }, []); // Empty dependency array: runs ONLY ONCE on site open, NEVER on route changes!
+  }, []); // Runs once on site open
 
   if (hidden) return null;
 
   return (
     <div
       className={`hd-site-preloader ${fadingOut ? 'is-fading' : ''}`}
+      style={{ pointerEvents: fadingOut ? 'none' : 'auto' }}
       aria-hidden="true"
       role="progressbar"
       aria-valuemin={0}

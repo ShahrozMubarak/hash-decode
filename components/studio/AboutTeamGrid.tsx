@@ -49,15 +49,16 @@ export default function AboutTeamGrid({ founders }: { founders?: Founder[] }) {
                   alignItems: 'center',
                   justifyContent: 'center',
                   width: '100%',
-                  padding: '24px',
+                  height: '100%',
+                  padding: '16px',
                 }}
               >
                 <div
                   style={{
                     width: '100%',
-                    maxWidth: '300px',
+                    maxWidth: '460px',
                     aspectRatio: '4 / 5',
-                    borderRadius: '28px',
+                    borderRadius: '24px',
                     overflow: 'hidden',
                     background: 'rgba(0,0,0,0.06)',
                     border: isDark
@@ -69,8 +70,8 @@ export default function AboutTeamGrid({ founders }: { founders?: Founder[] }) {
                   <img
                     src={founder.image}
                     alt={founder.name}
-                    width={300}
-                    height={375}
+                    width={819}
+                    height={1024}
                     style={{
                       width: '100%',
                       height: '100%',

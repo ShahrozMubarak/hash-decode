@@ -1,8 +1,11 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function CardTiltManager() {
+  const pathname = usePathname();
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (window.matchMedia('(hover: none)').matches) return;
@@ -22,13 +25,22 @@ export default function CardTiltManager() {
       let currentTiltX = 0;
       let currentTiltY = 0;
       let isHovered = false;
+      let cachedRect: DOMRect | null = null;
+
+      const onMouseEnter = () => {
+        cachedRect = card.getBoundingClientRect();
+        isHovered = true;
+        loop();
+      };
 
       const onMouseMove = (e: MouseEvent) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
+        if (!cachedRect) {
+          cachedRect = card.getBoundingClientRect();
+        }
+        const x = e.clientX - cachedRect.left;
+        const y = e.clientY - cachedRect.top;
+        const cx = cachedRect.width / 2;
+        const cy = cachedRect.height / 2;
 
         card.style.setProperty('--mx', `${x.toFixed(1)}px`);
         card.style.setProperty('--my', `${y.toFixed(1)}px`);
@@ -40,12 +52,8 @@ export default function CardTiltManager() {
         }
       };
 
-      const onMouseEnter = () => {
-        isHovered = true;
-        loop();
-      };
-
       const onMouseLeave = () => {
+        cachedRect = null;
         isHovered = false;
         targetTiltX = 0;
         targetTiltY = 0;
@@ -66,19 +74,19 @@ export default function CardTiltManager() {
         }
       };
 
-      card.addEventListener('mousemove', onMouseMove, { passive: true });
       card.addEventListener('mouseenter', onMouseEnter);
+      card.addEventListener('mousemove', onMouseMove, { passive: true });
       card.addEventListener('mouseleave', onMouseLeave);
 
       cleanups.push(() => {
         cancelAnimationFrame(rafId);
-        card.removeEventListener('mousemove', onMouseMove);
         card.removeEventListener('mouseenter', onMouseEnter);
+        card.removeEventListener('mousemove', onMouseMove);
         card.removeEventListener('mouseleave', onMouseLeave);
       });
     });
 
-    // 2. Magnetic effect on hero and final CTA primary buttons (90px radius, max 8px pull, lerp .15)
+    // 2. Magnetic effect on hero and final CTA primary buttons scoped directly to button bounds
     const magneticButtons = Array.from(
       document.querySelectorAll<HTMLElement>(
         '.hero-start-cta, .cta-magnetic, #brief .hd-btn-primary, #brief .btn-primary, #brief button[type="submit"], #send-brief-btn'
@@ -92,24 +100,29 @@ export default function CardTiltManager() {
       let currentPullX = 0;
       let currentPullY = 0;
       let isNear = false;
+      let cachedBtnRect: DOMRect | null = null;
 
-      const onWindowMouseMove = (e: MouseEvent) => {
-        const rect = btn.getBoundingClientRect();
-        const btnCenterX = rect.left + rect.width / 2;
-        const btnCenterY = rect.top + rect.height / 2;
-        const dist = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+      const onBtnMouseEnter = () => {
+        cachedBtnRect = btn.getBoundingClientRect();
+        isNear = true;
+        runLoop();
+      };
 
-        if (dist < 90) {
-          isNear = true;
-          const pullRatio = (90 - dist) / 90;
-          targetPullX = ((e.clientX - btnCenterX) / 90) * 8 * pullRatio;
-          targetPullY = ((e.clientY - btnCenterY) / 90) * 8 * pullRatio;
-          runLoop();
-        } else if (isNear) {
-          isNear = false;
-          targetPullX = 0;
-          targetPullY = 0;
+      const onBtnMouseMove = (e: MouseEvent) => {
+        if (!cachedBtnRect) {
+          cachedBtnRect = btn.getBoundingClientRect();
         }
+        const btnCenterX = cachedBtnRect.left + cachedBtnRect.width / 2;
+        const btnCenterY = cachedBtnRect.top + cachedBtnRect.height / 2;
+        targetPullX = Math.max(-8, Math.min(8, (e.clientX - btnCenterX) * 0.25));
+        targetPullY = Math.max(-8, Math.min(8, (e.clientY - btnCenterY) * 0.25));
+      };
+
+      const onBtnMouseLeave = () => {
+        cachedBtnRect = null;
+        isNear = false;
+        targetPullX = 0;
+        targetPullY = 0;
       };
 
       const runLoop = () => {
@@ -127,18 +140,22 @@ export default function CardTiltManager() {
         }
       };
 
-      window.addEventListener('mousemove', onWindowMouseMove, { passive: true });
+      btn.addEventListener('mouseenter', onBtnMouseEnter);
+      btn.addEventListener('mousemove', onBtnMouseMove, { passive: true });
+      btn.addEventListener('mouseleave', onBtnMouseLeave);
 
       cleanups.push(() => {
         cancelAnimationFrame(rafId);
-        window.removeEventListener('mousemove', onWindowMouseMove);
+        btn.removeEventListener('mouseenter', onBtnMouseEnter);
+        btn.removeEventListener('mousemove', onBtnMouseMove);
+        btn.removeEventListener('mouseleave', onBtnMouseLeave);
       });
     });
 
     return () => {
       cleanups.forEach((c) => c());
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }

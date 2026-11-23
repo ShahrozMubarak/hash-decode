@@ -36,58 +36,37 @@ export default function RevealObserver() {
       }
     );
 
-    const observeElements = () => {
-      // Setup stagger delays for parents with data-stagger (60-80ms)
-      const staggeredParents = document.querySelectorAll<HTMLElement>('[data-stagger]');
-      staggeredParents.forEach((parent) => {
-        const children = Array.from(parent.children) as HTMLElement[];
-        children.forEach((child, index) => {
-          if (!child.hasAttribute('data-reveal')) {
-            child.setAttribute('data-reveal', 'up');
-          }
-          if (!child.hasAttribute('data-reveal-delay') && !child.style.transitionDelay) {
-            const step = Math.min(index, 7);
-            child.style.transitionDelay = `${step * 70}ms`;
-          }
-        });
-      });
-
-      const elements = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)');
-      elements.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          el.classList.add('is-in');
-        } else {
-          observer.observe(el);
+    // Setup stagger delays for parents with data-stagger without triggering layout reflows
+    const staggeredParents = document.querySelectorAll<HTMLElement>('[data-stagger]');
+    staggeredParents.forEach((parent) => {
+      const children = Array.from(parent.children) as HTMLElement[];
+      children.forEach((child, index) => {
+        if (!child.hasAttribute('data-reveal')) {
+          child.setAttribute('data-reveal', 'up');
+        }
+        if (!child.hasAttribute('data-reveal-delay') && !child.style.transitionDelay) {
+          const step = Math.min(index, 7);
+          child.style.transitionDelay = `${step * 70}ms`;
         }
       });
-    };
-
-    observeElements();
-
-    const mutationObserver = new MutationObserver(() => {
-      observeElements();
     });
 
-    if (document.body) {
-      mutationObserver.observe(document.body, {
-        childList: true,
-        subtree: true,
-      });
-    }
+    // Observe all unrevealed elements. IntersectionObserver checks initial visibility natively
+    // without requiring synchronous getBoundingClientRect layout thrashing.
+    const elements = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)');
+    elements.forEach((el) => {
+      observer.observe(el);
+    });
 
+    // Safety timeout: ensure all content becomes visible even if observer fails or element is offscreen
     const safetyTimer = setTimeout(() => {
       document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)').forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight + 100) {
-          el.classList.add('is-in');
-        }
+        el.classList.add('is-in');
       });
     }, 2000);
 
     return () => {
       observer.disconnect();
-      mutationObserver.disconnect();
       clearTimeout(safetyTimer);
     };
   }, [pathname]);

@@ -18,40 +18,23 @@ export default function HeroParallaxManager() {
     if (!hero) return;
 
     let isHeroInView = true;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        isHeroInView = entries[0]?.isIntersecting ?? true;
-        if (hero) {
-          hero.classList.toggle('hero-offscreen', !isHeroInView);
-        }
-      },
-      { threshold: 0 }
-    );
-
-    if (runway) {
-      observer.observe(runway);
-    } else {
-      observer.observe(hero);
-    }
-
-    const handlePointerMove = (e: MouseEvent) => {
-      const rect = hero.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      targetX.current = Math.max(-1, Math.min(1, (e.clientX - cx) / (rect.width / 2)));
-      targetY.current = Math.max(-1, Math.min(1, (e.clientY - cy) / (rect.height / 2)));
-    };
-
-    const handlePointerLeave = () => {
-      targetX.current = 0;
-      targetY.current = 0;
-    };
-
-    window.addEventListener('mousemove', handlePointerMove, { passive: true });
-    window.addEventListener('mouseleave', handlePointerLeave);
-
     let rafId = 0;
+    let cachedHeroRect: DOMRect | null = null;
+    let lastMoveTime = 0;
+
+    const updateHeroRect = () => {
+      if (hero) {
+        cachedHeroRect = hero.getBoundingClientRect();
+      }
+    };
+    updateHeroRect();
+
     const update = () => {
+      if (!isHeroInView) {
+        rafId = 0;
+        return;
+      }
+
       // Lerp .08 for smooth pointer tracking
       currentX.current += (targetX.current - currentX.current) * 0.08;
       currentY.current += (targetY.current - currentY.current) * 0.08;
@@ -81,18 +64,85 @@ export default function HeroParallaxManager() {
       // L4 Dust: scroll 0.3x
       hero.style.setProperty('--dust-scroll-y', `${(scrollY * 0.3).toFixed(2)}px`);
 
-      // Header compression after 40px scroll
-      document.documentElement.classList.toggle('header-compressed', scrollY > 40);
-
       rafId = requestAnimationFrame(update);
     };
 
-    rafId = requestAnimationFrame(update);
+    const startLoop = () => {
+      if (!rafId && isHeroInView) {
+        rafId = requestAnimationFrame(update);
+      }
+    };
+
+    const stopLoop = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const inView = entries[0]?.isIntersecting ?? true;
+        isHeroInView = inView;
+        if (hero) {
+          hero.classList.toggle('hero-offscreen', !inView);
+        }
+        if (inView) {
+          updateHeroRect();
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      },
+      { threshold: 0 }
+    );
+
+    if (runway) {
+      observer.observe(runway);
+    } else {
+      observer.observe(hero);
+    }
+
+    const handlePointerMove = (e: MouseEvent) => {
+      if (!isHeroInView) return;
+      const now = performance.now();
+      // Throttle mouse moves to ~60fps
+      if (now - lastMoveTime < 16) return;
+      lastMoveTime = now;
+
+      if (!cachedHeroRect) {
+        cachedHeroRect = hero.getBoundingClientRect();
+      }
+      const cx = cachedHeroRect.left + cachedHeroRect.width / 2;
+      const cy = cachedHeroRect.top + cachedHeroRect.height / 2;
+      targetX.current = Math.max(-1, Math.min(1, (e.clientX - cx) / (cachedHeroRect.width / 2 || 1)));
+      targetY.current = Math.max(-1, Math.min(1, (e.clientY - cy) / (cachedHeroRect.height / 2 || 1)));
+    };
+
+    const handlePointerLeave = () => {
+      targetX.current = 0;
+      targetY.current = 0;
+    };
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      document.documentElement.classList.toggle('header-compressed', scrollY > 40);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', updateHeroRect, { passive: true });
+    window.addEventListener('mousemove', handlePointerMove, { passive: true });
+    window.addEventListener('mouseleave', handlePointerLeave);
+
+    handleScroll();
+    startLoop();
 
     return () => {
-      cancelAnimationFrame(rafId);
+      stopLoop();
       observer.disconnect();
       document.documentElement.classList.remove('header-compressed');
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateHeroRect);
       window.removeEventListener('mousemove', handlePointerMove);
       window.removeEventListener('mouseleave', handlePointerLeave);
     };

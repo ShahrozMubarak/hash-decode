@@ -317,13 +317,13 @@ export default function MotionLanding({
                   linkText="Connect on LinkedIn ›"
                   linkHref={founder.url || 'https://linkedin.com/company/hash-decode'}
                   visual={
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', padding: '16px' }}>
                       <div
                         style={{
                           width: '100%',
-                          maxWidth: '300px',
+                          maxWidth: '460px',
                           aspectRatio: '4 / 5',
-                          borderRadius: '28px',
+                          borderRadius: '24px',
                           overflow: 'hidden',
                           background: 'rgba(0,0,0,0.06)',
                           border: isDark
@@ -335,8 +335,8 @@ export default function MotionLanding({
                         <img
                           src={founder.image}
                           alt={founder.name}
-                          width={300}
-                          height={375}
+                          width={819}
+                          height={1024}
                           style={{
                             width: '100%',
                             height: '100%',
@@ -388,40 +388,98 @@ export default function MotionLanding({
         </div>
       </section>
 
-      {/* 7. CONTACT SECTION (Clean two-column contact section on white) */}
+      {/* 7. CONTACT SECTION (Full-width liquid crystal card with secondary channels relocated below) */}
       <Section id="brief" bg="white" pad="regular" data-station="Contact">
         <Container>
-          <div className="contact-two-col">
-            {/* Left Column: Direct Info */}
-            <div className="contact-col-left">
+          <div className="contact-fullwidth-wrap" style={{ width: '100%', maxWidth: '960px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'var(--s-6)' }}>
               <p className="hd-section-eyebrow">Contact</p>
-              <h2 className="contact-title"><span className="hd-accent-navy">Start</span> a conversation.</h2>
-              <p className="contact-sub">Tell us what you&apos;re building. We&apos;ll tell you how we can help.</p>
+              <h2 className="contact-title" style={{ margin: '8px 0 12px' }}>
+                <span className="hd-accent-navy">Start</span> a conversation.
+              </h2>
+              <p className="contact-sub" style={{ maxWidth: '580px', margin: '0 auto' }}>
+                Tell us what you&apos;re building. Enter your work email below to begin.
+              </p>
+            </div>
 
-              <div className="contact-info-stack">
-                {/* Email */}
-                <div className="contact-info-item">
-                  <span className="contact-info-label">Direct email</span>
-                  <a href="mailto:contact@hashdecode.com" className="hd-text-link contact-email-link">
+            {/* Full-width liquid crystal form card */}
+            <div
+              className="contact-form-card liquid liquid--cloud is-visible"
+              style={{ width: '100%', maxWidth: '960px', margin: '0 auto' }}
+            >
+              <span className="liquid__blob liquid__blob--a" aria-hidden="true" />
+              <span className="liquid__blob liquid__blob--b" aria-hidden="true" />
+              <div style={{ position: 'relative', zIndex: 2 }}>
+                <ContactForm />
+              </div>
+            </div>
+
+            {/* Secondary contact channels relocated cleanly below the form */}
+            <div className="contact-secondary-channels-bar" style={{ marginTop: '48px' }}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                  gap: '20px',
+                  marginBottom: '36px',
+                }}
+              >
+                {/* Direct email card */}
+                <div
+                  className="hd-card"
+                  style={{
+                    padding: '24px',
+                    borderRadius: '20px',
+                    background: 'rgba(11, 31, 58, 0.03)',
+                    border: '1px solid rgba(11, 31, 58, 0.08)',
+                  }}
+                >
+                  <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'rgba(0,0,0,0.5)', display: 'block', marginBottom: '8px' }}>
+                    Direct email
+                  </span>
+                  <a href="mailto:contact@hashdecode.com" className="hd-text-link" style={{ fontSize: '15px', fontWeight: 600, color: '#0B1F3A' }}>
                     <span>contact@hashdecode.com ›</span>
                   </a>
                 </div>
 
-                {/* Office */}
-                <div className="contact-info-item">
-                  <span className="contact-info-label">Office address</span>
-                  <p className="contact-info-val">Lahore, Pakistan</p>
+                {/* Office location card */}
+                <div
+                  className="hd-card"
+                  style={{
+                    padding: '24px',
+                    borderRadius: '20px',
+                    background: 'rgba(11, 31, 58, 0.03)',
+                    border: '1px solid rgba(11, 31, 58, 0.08)',
+                  }}
+                >
+                  <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'rgba(0,0,0,0.5)', display: 'block', marginBottom: '8px' }}>
+                    Office location
+                  </span>
+                  <p style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: '#0B1F3A' }}>
+                    Lahore, Pakistan
+                  </p>
                 </div>
 
-                {/* WhatsApp numbers - BOTH rendered clearly stacked with 12px gap, NO truncation */}
-                <div className="contact-info-item">
-                  <span className="contact-info-label">WhatsApp</span>
-                  <div className="contact-whatsapp-stack">
+                {/* WhatsApp hotline card */}
+                <div
+                  className="hd-card"
+                  style={{
+                    padding: '24px',
+                    borderRadius: '20px',
+                    background: 'rgba(11, 31, 58, 0.03)',
+                    border: '1px solid rgba(11, 31, 58, 0.08)',
+                  }}
+                >
+                  <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'rgba(0,0,0,0.5)', display: 'block', marginBottom: '8px' }}>
+                    WhatsApp hotline
+                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     <a
                       href="https://wa.me/923214452588"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="hd-text-link whatsapp-link"
+                      className="hd-text-link"
+                      style={{ fontSize: '14px', fontWeight: 600, color: '#0B1F3A' }}
                     >
                       <span>🇵🇰 Pakistan: +92 321 4452588 ›</span>
                     </a>
@@ -429,44 +487,31 @@ export default function MotionLanding({
                       href="https://wa.me/447943008688"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="hd-text-link whatsapp-link"
+                      className="hd-text-link"
+                      style={{ fontSize: '14px', fontWeight: 600, color: '#0B1F3A' }}
                     >
-                      <span>🇬🇧 United Kingdom: +44 7943 008688 ›</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Social links */}
-                <div className="contact-info-item">
-                  <span className="contact-info-label">Social</span>
-                  <div className="contact-social-row">
-                    <a href="https://github.com/hashdecode" target="_blank" rel="noopener noreferrer" className="hd-text-link">
-                      <span>GitHub ›</span>
-                    </a>
-                    <a href="https://linkedin.com/company/hash-decode" target="_blank" rel="noopener noreferrer" className="hd-text-link">
-                      <span>LinkedIn ›</span>
-                    </a>
-                    <a href="https://x.com/hashdecode" target="_blank" rel="noopener noreferrer" className="hd-text-link">
-                      <span>X ›</span>
+                      <span>🇬🇧 UK: +44 7943 008688 ›</span>
                     </a>
                   </div>
                 </div>
               </div>
 
-              {/* TeleportBot bubble with 48px clearance */}
-              <div style={{ marginTop: '32px', marginBottom: '48px' }}>
+              {/* Social links row */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '32px' }}>
+                <a href="https://github.com/hashdecode" target="_blank" rel="noopener noreferrer" className="hd-text-link" style={{ fontSize: '14px', fontWeight: 500 }}>
+                  <span>GitHub ›</span>
+                </a>
+                <a href="https://linkedin.com/company/hash-decode" target="_blank" rel="noopener noreferrer" className="hd-text-link" style={{ fontSize: '14px', fontWeight: 500 }}>
+                  <span>LinkedIn ›</span>
+                </a>
+                <a href="https://x.com/hashdecode" target="_blank" rel="noopener noreferrer" className="hd-text-link" style={{ fontSize: '14px', fontWeight: 500 }}>
+                  <span>X ›</span>
+                </a>
+              </div>
+
+              {/* TeleportBot bubble centered */}
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
                 <TeleportBot />
-              </div>
-            </div>
-
-            {/* Right Column: ContactForm inside Cloud Liquid card */}
-            <div className="contact-col-right">
-              <div className="contact-form-card liquid liquid--cloud is-visible">
-                <span className="liquid__blob liquid__blob--a" aria-hidden="true" />
-                <span className="liquid__blob liquid__blob--b" aria-hidden="true" />
-                <div style={{ position: 'relative', zIndex: 2 }}>
-                  <ContactForm />
-                </div>
               </div>
             </div>
           </div>

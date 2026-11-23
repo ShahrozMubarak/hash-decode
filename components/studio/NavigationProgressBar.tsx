@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function NavigationProgressBar() {
@@ -8,40 +8,112 @@ export default function NavigationProgressBar() {
   const [navigating, setNavigating] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const stepTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const completeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const safetyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearAllTimers = useCallback(() => {
+    if (stepTimerRef.current) {
+      clearTimeout(stepTimerRef.current);
+      stepTimerRef.current = null;
+    }
+    if (completeTimerRef.current) {
+      clearTimeout(completeTimerRef.current);
+      completeTimerRef.current = null;
+    }
+    if (safetyTimerRef.current) {
+      clearTimeout(safetyTimerRef.current);
+      safetyTimerRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
     // Route transition completed
+    clearAllTimers();
     setProgress(100);
-    const timer = setTimeout(() => {
+    completeTimerRef.current = setTimeout(() => {
       setNavigating(false);
       setProgress(0);
     }, 200);
 
-    return () => clearTimeout(timer);
-  }, [pathname]);
+    return () => {
+      clearAllTimers();
+    };
+  }, [pathname, clearAllTimers]);
 
   useEffect(() => {
     const handleAnchorClick = (e: MouseEvent) => {
+      // Ignore clicks with modifier keys, right clicks, or already handled events
+      if (
+        e.defaultPrevented ||
+        e.button !== 0 ||
+        e.metaKey ||
+        e.ctrlKey ||
+        e.shiftKey ||
+        e.altKey
+      ) {
+        return;
+      }
+
       const target = (e.target as HTMLElement).closest('a');
       if (!target) return;
+
+      if (target.target && target.target !== '_self') return;
+      if (target.hasAttribute('download')) return;
+
       const href = target.getAttribute('href');
+      if (!href) return;
       if (
-        href &&
-        href.startsWith('/') &&
-        !href.startsWith('/#') &&
-        !href.startsWith('mailto:') &&
-        !href.startsWith('tel:') &&
-        target.target !== '_blank' &&
-        href !== pathname
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:') ||
+        href.startsWith('javascript:') ||
+        href.startsWith('#')
       ) {
+        return;
+      }
+
+      try {
+        const url = new URL(target.href, window.location.href);
+        // Only internal links
+        if (url.origin !== window.location.origin) return;
+
+        const targetPath = url.pathname;
+        const currentPath = window.location.pathname;
+
+        // Skip in-page hash links (e.g. /services#audit while on /services) or query-only updates
+        if (targetPath === currentPath) {
+          return;
+        }
+
+        // Skip if target path matches current pathname
+        if (targetPath === pathname) {
+          return;
+        }
+
+        clearAllTimers();
         setNavigating(true);
         setProgress(35);
-        setTimeout(() => setProgress(75), 150);
+
+        stepTimerRef.current = setTimeout(() => {
+          setProgress(75);
+        }, 150);
+
+        // Safety fallback: auto-reset after 2000ms if navigation stalls or is intercepted
+        safetyTimerRef.current = setTimeout(() => {
+          setNavigating(false);
+          setProgress(0);
+        }, 2000);
+      } catch {
+        // Invalid URL, ignore
       }
     };
 
-    document.addEventListener('click', handleAnchorClick);
-    return () => document.removeEventListener('click', handleAnchorClick);
-  }, [pathname]);
+    document.addEventListener('click', handleAnchorClick, true);
+    return () => {
+      document.removeEventListener('click', handleAnchorClick, true);
+      clearAllTimers();
+    };
+  }, [pathname, clearAllTimers]);
 
   if (!navigating && progress === 0) return null;
 
@@ -72,4 +144,3 @@ export default function NavigationProgressBar() {
     </div>
   );
 }
-
