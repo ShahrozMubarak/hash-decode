@@ -361,13 +361,36 @@ html:not(.js) [data-reveal],
   filter: blur(0px);
   pointer-events: all;
   user-select: none;
+  animation: hdPreloaderSafetyExit 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .hd-site-preloader.is-fading {
-  opacity: 0;
-  transform: scale(1.02);
-  filter: blur(6px);
+  opacity: 0 !important;
+  transform: scale(1.02) !important;
+  filter: blur(6px) !important;
   pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+@keyframes hdPreloaderSafetyExit {
+  0%, 75% {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+  }
+  90% {
+    opacity: 0;
+    transform: scale(1.02);
+    filter: blur(6px);
+    pointer-events: none;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    display: none !important;
+  }
 }
 
 .preloader-content {
@@ -4994,8 +5017,8 @@ html[data-motion=on] .hero-sheet {
 /* Solid Liquid Crystal Contact Card */
 .contact-form-card.liquid {
   position: relative !important;
-  border-radius: var(--radius-card, 32px) !important;
-  padding: clamp(32px, 5vw, 56px) !important;
+  border-radius: clamp(20px, 3vw, 32px) !important;
+  padding: clamp(24px, 4vw, 52px) !important;
   overflow: hidden !important;
   contain: paint !important;
   background: rgba(230, 240, 255, 0.75) !important;
@@ -5004,6 +5027,10 @@ html[data-motion=on] .hero-sheet {
   -webkit-backdrop-filter: blur(28px) !important;
   border: 1px solid rgba(255, 255, 255, 0.85) !important;
   box-shadow: 0 20px 50px -10px rgba(14, 30, 60, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  width: 100% !important;
+  max-width: 1120px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
 }
 
 .contact-form-card .liquid__blob {
@@ -5016,6 +5043,7 @@ html[data-motion=on] .hero-sheet {
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
+  width: 100% !important;
 }
 
 /* Progressive Disclosure Zero-Dependency Height Transition */
@@ -5024,19 +5052,40 @@ html[data-motion=on] .hero-sheet {
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
   opacity: 0;
+  width: 100%;
 }
 
 .progressive-fields-container.is-expanded {
   grid-template-rows: 1fr;
   opacity: 1;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .progressive-fields-inner {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
+  width: 100%;
+}
+
+/* Responsive 2-column row on web desktop */
+.form-responsive-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 20px !important;
+  width: 100% !important;
+}
+
+@media (max-width: 680px) {
+  .form-responsive-row {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+.stage-email-wrap {
+  width: 100%;
 }
 
 .progressive-email-input-group {
@@ -5054,42 +5103,62 @@ html[data-motion=on] .hero-sheet {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  height: 42px;
-  padding: 0 22px;
-  border-radius: 10px;
+  gap: 8px;
+  height: 48px;
+  padding: 0 26px;
+  border-radius: 12px;
   white-space: nowrap;
   flex-shrink: 0;
   cursor: pointer;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@media (max-width: 540px) {
+  .progressive-email-input-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .progressive-continue-btn {
+    width: 100% !important;
+    height: 46px !important;
+  }
 }
 
 .premium-studio-form .form-input {
   background: #ffffff !important;
-  border: 1.5px solid rgba(0, 0, 0, 0.18) !important;
-  border-radius: 10px !important;
-  padding: 7px 12px !important;
-  height: 38px !important;
-  font-size: 13.5px !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.16) !important;
+  border-radius: 12px !important;
+  padding: 10px 16px !important;
+  height: 46px !important;
+  font-size: 14.5px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease !important;
 }
 
 .premium-studio-form .form-textarea {
   background: #ffffff !important;
-  border: 1.5px solid rgba(0, 0, 0, 0.18) !important;
-  border-radius: 10px !important;
-  padding: 7px 12px !important;
-  min-height: 54px !important;
-  max-height: 90px !important;
-  font-size: 13.5px !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.16) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  min-height: 110px !important;
+  max-height: 240px !important;
+  font-size: 14.5px !important;
+  line-height: 1.6 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  resize: vertical !important;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease !important;
 }
 
 .premium-studio-form .form-input:focus,
 .premium-studio-form .form-textarea:focus {
   border-color: #000000 !important;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.07) !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08) !important;
+  outline: none !important;
   transform: translateY(-1px);
 }
 
@@ -5099,13 +5168,44 @@ html[data-motion=on] .hero-sheet {
   box-shadow: 0 0 0 3px rgba(225, 91, 62, 0.12) !important;
 }
 
+/* Responsive Pill Grids on Web Desktop and Mobile */
+.simple-pills-row {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+@media (max-width: 820px) {
+  .simple-pills-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .simple-pills-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+}
+
 .premium-studio-form .simple-pill-btn {
-  background: transparent !important;
-  border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
-  border-radius: 9999px !important;
-  padding: 5px 12px !important;
-  font-size: 12px !important;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.14) !important;
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  min-height: 44px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
 }
 
 .premium-studio-form .simple-pill-btn:hover {

@@ -405,7 +405,7 @@ export default function MotionLanding({
             {/* Full-width liquid crystal form card */}
             <div
               className="contact-form-card liquid liquid--cloud is-visible"
-              style={{ width: '100%', maxWidth: '960px', margin: '0 auto' }}
+              style={{ width: '100%', maxWidth: '1120px', margin: '0 auto' }}
             >
               <span className="liquid__blob liquid__blob--a" aria-hidden="true" />
               <span className="liquid__blob liquid__blob--b" aria-hidden="true" />
@@ -415,7 +415,7 @@ export default function MotionLanding({
             </div>
 
             {/* Secondary contact channels relocated cleanly below the form */}
-            <div className="contact-secondary-channels-bar" style={{ marginTop: '48px' }}>
+            <div className="contact-secondary-channels-bar" style={{ width: '100%', maxWidth: '1120px', margin: '48px auto 0' }}>
               <div
                 style={{
                   display: 'grid',

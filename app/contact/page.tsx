@@ -43,7 +43,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
       {/* Full-Width Solid Liquid Crystal Contact Form Card */}
       <div
         className="contact-form-card liquid liquid--cloud is-visible"
-        style={{ width: '100%', maxWidth: '960px', margin: '0 auto' }}
+        style={{ width: '100%', maxWidth: '1120px', margin: '0 auto' }}
         data-reveal="up"
       >
         <span className="liquid__blob liquid__blob--a" aria-hidden="true" />
@@ -57,7 +57,7 @@ export default async function Contact({ searchParams }: { searchParams: Query })
       </div>
 
       {/* Secondary Contact Channels & Trust Relocated Cleanly Below Form */}
-      <div className="contact-secondary-channels-section" style={{ width: '100%', maxWidth: '960px', margin: '48px auto 0' }} data-reveal="up">
+      <div className="contact-secondary-channels-section" style={{ width: '100%', maxWidth: '1120px', margin: '48px auto 0' }} data-reveal="up">
         {/* Contact Channel Cards Grid */}
         <div
           style={{

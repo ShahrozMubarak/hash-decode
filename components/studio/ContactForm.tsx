@@ -304,38 +304,38 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
         </p>
       </div>
 
-      {/* Stage 1: Work Email input (Always visible) */}
-      <div className="stage-email-wrap">
-        <label className="simple-field-label">
-          <span className="simple-field-name">Work Email *</span>
-          <div className="progressive-email-input-group">
-            <input
-              ref={emailInputRef}
-              name="email"
-              type="email"
-              value={emailValue}
-              onChange={(e) => {
-                setEmailValue(e.target.value);
-                if (fieldErrors.email) {
-                  setFieldErrors((prev) => ({ ...prev, email: '' }));
-                }
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !isExpanded) {
-                  e.preventDefault();
-                  handleContinue();
-                }
-              }}
-              autoComplete="email"
-              placeholder="alex@company.com"
-              maxLength={254}
-              required
-              className={`form-input progressive-email-input ${fieldErrors.email ? 'is-invalid' : ''}`}
-              aria-invalid={Boolean(fieldErrors.email)}
-              aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-              onBlur={handleBlur}
-            />
-            {!isExpanded && (
+      {/* Stage 1: Work Email input (Visible before expansion) */}
+      {!isExpanded ? (
+        <div className="stage-email-wrap">
+          <label className="simple-field-label">
+            <span className="simple-field-name">Work Email *</span>
+            <div className="progressive-email-input-group">
+              <input
+                ref={emailInputRef}
+                name="email"
+                type="email"
+                value={emailValue}
+                onChange={(e) => {
+                  setEmailValue(e.target.value);
+                  if (fieldErrors.email) {
+                    setFieldErrors((prev) => ({ ...prev, email: '' }));
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleContinue();
+                  }
+                }}
+                autoComplete="email"
+                placeholder="alex@company.com"
+                maxLength={254}
+                required
+                className={`form-input progressive-email-input ${fieldErrors.email ? 'is-invalid' : ''}`}
+                aria-invalid={Boolean(fieldErrors.email)}
+                aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+                onBlur={handleBlur}
+              />
               <button
                 type="button"
                 className="hd-btn-primary progressive-continue-btn"
@@ -344,43 +344,72 @@ export default function ContactForm({ initial = '', initialBrief = '' }: Contact
                 <span>Continue</span>
                 <ArrowUpRight size={15} aria-hidden="true" />
               </button>
+            </div>
+            {fieldErrors.email && (
+              <span id="email-error" className="field-error-msg" role="alert">
+                <AlertCircle size={13} aria-hidden="true" />
+                {fieldErrors.email}
+              </span>
             )}
-          </div>
-          {fieldErrors.email && (
-            <span id="email-error" className="field-error-msg" role="alert">
-              <AlertCircle size={13} aria-hidden="true" />
-              {fieldErrors.email}
-            </span>
-          )}
-        </label>
-      </div>
+          </label>
+        </div>
+      ) : null}
 
       {/* Stage 2: Smooth CSS Grid 0fr -> 1fr height expansion */}
       <div className={`progressive-fields-container ${isExpanded ? 'is-expanded' : ''}`}>
         <div className="progressive-fields-inner">
-          {/* Your Name */}
-          <label className="simple-field-label">
-            <span className="simple-field-name">Your Name *</span>
-            <input
-              ref={nameInputRef}
-              name="name"
-              autoComplete="name"
-              placeholder="e.g. Alex Sterling"
-              minLength={2}
-              maxLength={100}
-              required={isExpanded}
-              className={`form-input ${fieldErrors.name ? 'is-invalid' : ''}`}
-              aria-invalid={Boolean(fieldErrors.name)}
-              aria-describedby={fieldErrors.name ? 'name-error' : undefined}
-              onBlur={handleBlur}
-            />
-            {fieldErrors.name && (
-              <span id="name-error" className="field-error-msg" role="alert">
-                <AlertCircle size={13} aria-hidden="true" />
-                {fieldErrors.name}
-              </span>
-            )}
-          </label>
+          {/* Responsive Row 1: Email + Name */}
+          <div className="form-responsive-row">
+            <label className="simple-field-label">
+              <span className="simple-field-name">Work Email *</span>
+              <input
+                name="email"
+                type="email"
+                value={emailValue}
+                onChange={(e) => {
+                  setEmailValue(e.target.value);
+                  if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: '' }));
+                }}
+                autoComplete="email"
+                placeholder="alex@company.com"
+                maxLength={254}
+                required={isExpanded}
+                className={`form-input ${fieldErrors.email ? 'is-invalid' : ''}`}
+                aria-invalid={Boolean(fieldErrors.email)}
+                aria-describedby={fieldErrors.email ? 'email-error-exp' : undefined}
+                onBlur={handleBlur}
+              />
+              {fieldErrors.email && (
+                <span id="email-error-exp" className="field-error-msg" role="alert">
+                  <AlertCircle size={13} aria-hidden="true" />
+                  {fieldErrors.email}
+                </span>
+              )}
+            </label>
+
+            <label className="simple-field-label">
+              <span className="simple-field-name">Your Name *</span>
+              <input
+                ref={nameInputRef}
+                name="name"
+                autoComplete="name"
+                placeholder="e.g. Alex Sterling"
+                minLength={2}
+                maxLength={100}
+                required={isExpanded}
+                className={`form-input ${fieldErrors.name ? 'is-invalid' : ''}`}
+                aria-invalid={Boolean(fieldErrors.name)}
+                aria-describedby={fieldErrors.name ? 'name-error' : undefined}
+                onBlur={handleBlur}
+              />
+              {fieldErrors.name && (
+                <span id="name-error" className="field-error-msg" role="alert">
+                  <AlertCircle size={13} aria-hidden="true" />
+                  {fieldErrors.name}
+                </span>
+              )}
+            </label>
+          </div>
 
           {/* Service Needed */}
           <div className="simple-field-group">

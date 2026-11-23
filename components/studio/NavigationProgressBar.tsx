@@ -98,11 +98,11 @@ export default function NavigationProgressBar() {
           setProgress(75);
         }, 150);
 
-        // Safety fallback: auto-reset after 2000ms if navigation stalls or is intercepted
+        // Safety fallback: auto-reset after 1200ms if navigation stalls or is intercepted
         safetyTimerRef.current = setTimeout(() => {
           setNavigating(false);
           setProgress(0);
-        }, 2000);
+        }, 1200);
       } catch {
         // Invalid URL, ignore
       }
