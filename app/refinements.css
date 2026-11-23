@@ -7876,7 +7876,7 @@ body {
 
 @media (max-width: 640px) {
   .hero-h1 {
-    font-size: clamp(24px, 6.8vw, 38px) !important;
+    font-size: clamp(20px, 5.8vw, 32px) !important;
     line-height: 1.18 !important;
   }
 

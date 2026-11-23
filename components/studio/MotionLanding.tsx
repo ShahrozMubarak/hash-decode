@@ -46,7 +46,7 @@ export default function MotionLanding({
           {/* Hero Centered Content (Apple-Style) */}
           <div className="wrap hero-centered-column">
             <h1 className="hero-h1" aria-label="Build it. Break it. Protect.">
-              <span className="hero-tag-first" style={{ color: '#ffffff' }}>Build it. Break it. </span>
+              <span className="hero-tag-first" style={{ color: '#ffffff', marginRight: '0.28em' }}>Build it. Break it.</span>
               <span className="hero-tag-dynamic"><TypingSecure /></span>
             </h1>
             <p className="hero-subtext">
