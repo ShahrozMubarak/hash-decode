@@ -633,8 +633,8 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
       object.add(instances, new THREE.Mesh(cell, coreFallback));
     } else {
       const deadline = typeof AbortSignal.any === "function" ? AbortSignal.any([signal, AbortSignal.timeout(8000)]) : signal;
-      const modelUrl = model === 'fixer' ? '/models/fixer_robot.glb' : '/models/eva_robot.glb';
-      const fallbackUrl = model === 'fixer' ? '/models/fixer_robot.glb' : '/models/eva.glb';
+      const modelUrl = '/models/eva_robot.glb';
+      const fallbackUrl = '/models/eva.glb';
       const [buffer, { GLTFLoader }] = await Promise.all([
         fetchModelBuffer(modelUrl, fallbackUrl, deadline),
         getGLTFLoaderModule()
