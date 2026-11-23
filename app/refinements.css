@@ -4887,22 +4887,27 @@ html[data-motion=on] .hero-sheet {
 }
 
 /* ==========================================================================
-   TEAM CARDS 2 & 3: ~20% shorter
+   NAVBAR CLEANUP, HERO TAGLINE & FOUNDER CARDS NORMALIZATION
    ========================================================================== */
-#team .wide-cards-stack > .wide-card:nth-child(2),
-#team .wide-cards-stack > .wide-card:nth-child(3) {
-  padding-top: clamp(20px, 2.6vw, 34px) !important;
-  padding-bottom: clamp(20px, 2.6vw, 34px) !important;
+.motion-toggle,
+.ronin-icon-btn.motion-toggle {
+  display: none !important;
 }
 
-#team .wide-cards-stack > .wide-card:nth-child(2) .wide-card__visual > div,
-#team .wide-cards-stack > .wide-card:nth-child(3) .wide-card__visual > div {
-  padding: 10px !important;
+.hero-tag-first {
+  display: inline-block !important;
+  white-space: nowrap !important;
 }
 
-#team .wide-cards-stack > .wide-card:nth-child(2) .wide-card__visual img,
-#team .wide-cards-stack > .wide-card:nth-child(3) .wide-card__visual img {
-  max-width: 240px !important;
+.hero-tag-dynamic {
+  display: inline-block !important;
+  white-space: nowrap !important;
+}
+
+.hero-typing-word {
+  display: inline-block !important;
+  min-width: 7.5ch !important;
+  text-align: left !important;
 }
 
 /* ==========================================================================
@@ -7871,8 +7876,8 @@ body {
 
 @media (max-width: 640px) {
   .hero-h1 {
-    font-size: clamp(2.1rem, 9vw, 3.2rem) !important;
-    line-height: 1.15 !important;
+    font-size: clamp(24px, 6.8vw, 38px) !important;
+    line-height: 1.18 !important;
   }
 
   .hero-subtext {

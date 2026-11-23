@@ -40,7 +40,13 @@ export default function TypingSecure() {
   return (
     <span
       className="hero-typing-word hd-accent-navy hero-tag-last-word"
-      style={{ color: '#0071e3', fontWeight: 800 }}
+      style={{
+        color: '#0071e3',
+        fontWeight: 800,
+        display: 'inline-block',
+        minWidth: '7.5ch',
+        textAlign: 'left',
+      }}
     >
       {text}
       <span

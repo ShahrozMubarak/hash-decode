@@ -2,7 +2,7 @@
 import {useEffect,useRef,useState} from 'react';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
-import {X,Pause,Play,ArrowUpRight} from 'lucide-react';
+import {X,ArrowUpRight} from 'lucide-react';
 import FooterSubscribe from './FooterSubscribe';
 import StudioManifesto from './StudioManifesto';
 
@@ -82,9 +82,6 @@ export function Header(){
           ))}
         </div>
         <div className="nav-actions ronin-actions">
-          <button type="button" className="icon-btn motion-toggle ronin-icon-btn" onClick={pause} aria-pressed={paused} title={paused?'Resume motion':'Pause motion'} aria-label={paused?'Resume motion':'Pause motion'}>
-            {paused?<Play size={12}/>:<Pause size={12}/>}
-          </button>
           <Link className="nav-contact ronin-cta-pill" href="/contact">
             <span>Get in touch</span>
           </Link>
