@@ -7,7 +7,7 @@ import LaptopMockup from '@/components/studio/visuals/LaptopMockup';
 import BottomCta from '@/components/studio/BottomCta';
 import { Terminal, Shield, KeyRound, Award, Code2, Cpu, FileCheck } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 export const metadata = meta(
   'About Hash Decode | Software Design & Security Studio',
   'Learn about Hash Decode, founded by Shahroz Dogar. Independent software engineering, clean code, and authorized security audits.',

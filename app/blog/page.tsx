@@ -3,7 +3,7 @@ import { meta } from '@/lib/meta';
 import BottomCta from '@/components/studio/BottomCta';
 import { ArrowUpRight, BookOpen, Clock, Calendar } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 export const metadata = meta(
   'Engineering Notes | Hash Decode',
   'Practical notes on web development, software handovers, mobile performance and application security.',
@@ -69,6 +69,7 @@ export default async function Blog() {
                           src={p.image}
                           alt={p.title}
                           loading="lazy"
+                        decoding="async"
                           width={480}
                           height={260}
                           className="blog-thumbnail-img"

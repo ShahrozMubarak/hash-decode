@@ -54,9 +54,10 @@ export default function AboutTeamGrid({ founders }: { founders?: Founder[] }) {
                 }}
               >
                 <div
+                  className="founder-photo-frame"
                   style={{
                     width: '100%',
-                    maxWidth: '460px',
+                    maxWidth: '345px',
                     aspectRatio: '4 / 5',
                     borderRadius: '24px',
                     overflow: 'hidden',
@@ -79,6 +80,7 @@ export default function AboutTeamGrid({ founders }: { founders?: Founder[] }) {
                       display: 'block',
                     }}
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>

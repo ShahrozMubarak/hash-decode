@@ -39,7 +39,13 @@ export const defaultPosts: Entry[] = [
 ];
 
 let cachedPosts: { data: Entry[]; timestamp: number } | null = null;
+let cachedLinks: { data: SocialLinks; timestamp: number } | null = null;
 const POSTS_CACHE_TTL_MS = 60 * 1000;
+
+export function clearCmsCache() {
+  cachedPosts = null;
+  cachedLinks = null;
+}
 
 export async function entries(kind = 'post', all = false): Promise<Entry[]> {
   try {
@@ -61,8 +67,11 @@ export async function entries(kind = 'post', all = false): Promise<Entry[]> {
 export interface SocialLinks { whatsapp: string; booking: string; instagram: string; facebook: string; youtube: string; tiktok: string; linkedin: string; }
 export async function getLinks(): Promise<SocialLinks> {
   try {
+    if (cachedLinks && Date.now() - cachedLinks.timestamp < POSTS_CACHE_TTL_MS) {
+      return cachedLinks.data;
+    }
     const row = await (await getDb()).collection('settings').findOne({ id: 'site' });
-    return {
+    const result: SocialLinks = {
       whatsapp: typeof row?.whatsapp === 'string' ? row.whatsapp : '',
       booking: typeof row?.booking === 'string' ? row.booking : '',
       instagram: typeof row?.instagram === 'string' ? row.instagram : '',
@@ -71,6 +80,8 @@ export async function getLinks(): Promise<SocialLinks> {
       tiktok: typeof row?.tiktok === 'string' ? row.tiktok : '',
       linkedin: typeof row?.linkedin === 'string' ? row.linkedin : '',
     };
+    cachedLinks = { data: result, timestamp: Date.now() };
+    return result;
   } catch (err) {
     console.error('getLinks error:', err);
     return { whatsapp: '', booking: '', instagram: '', facebook: '', youtube: '', tiktok: '', linkedin: '' };

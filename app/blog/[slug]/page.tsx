@@ -5,7 +5,7 @@ import ReadingProgressBar from '@/components/studio/ReadingProgressBar';
 import BottomCta from '@/components/studio/BottomCta';
 import { ArrowLeft, ArrowUpRight, Calendar, Clock, Tag } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -121,6 +121,7 @@ export default async function Post({ params }: Props) {
             width={1200}
             height={640}
             loading="lazy"
+          decoding="async"
             alt={p.title}
             src={p.image}
             style={{ width: '100%', height: 'auto', display: 'block' }}

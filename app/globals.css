@@ -21,8 +21,8 @@
   --s-6: 48px; --s-7: 64px; --s-8: 96px; --s-9: 128px;
 
   --section-pad: clamp(80px, 10vw, 128px);
-  --card-gap: 32px;
-  --card-pad: clamp(28px, 5vw, 56px);
+  --card-gap: 24px;
+  --card-pad: clamp(21px, 3.75vw, 42px);
 
   /* backgrounds */
   --bg:            var(--white);

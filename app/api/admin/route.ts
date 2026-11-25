@@ -6,6 +6,8 @@ import { enforceLimit } from '@/lib/abuse';
 import { projectSchema, founderSchema, postSchema, settingsSchema } from '@/lib/content-models';
 import { emailConfigured, mailBrief, sendMail } from '@/lib/notify';
 import { hashPassword, recoveryCodes, sha256, randomToken } from '@/lib/security-crypto.mjs';
+import { clearCmsCache } from '@/lib/cms';
+import { clearStudioDataCache } from '@/lib/studio-data';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 const editable = ['projects', 'founders', 'posts'] as const;
@@ -134,6 +136,8 @@ export async function POST(req: Request) {
       if (!result.matchedCount) throw new HttpError(404, 'NOT_FOUND', 'Record not found.');
       await audit(req, 'archived', collection + ':' + id);
     } else throw new HttpError(400, 'INPUT', 'Unknown action.');
+    clearCmsCache();
+    clearStudioDataCache();
     for (const path of ['/', '/shahroz', '/about', '/portfolio', '/blog', '/contact', '/sitemap.xml']) revalidatePath(path, 'layout');
     return ok({});
   } catch (error) { return failure(error); }

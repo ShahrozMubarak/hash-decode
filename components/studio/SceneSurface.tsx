@@ -3,11 +3,6 @@ import {useEffect,useRef,useState} from 'react';
 import type { PosterModel } from './ModelPoster';
 import SceneBoundary from './SceneBoundary';
 
-// Pre-warm the WebGL studio scene bundle immediately so mount has zero network lag
-if (typeof window !== 'undefined') {
-  import('@/lib/studio-scene').catch(() => {});
-}
-
 let activeScenes = 0;
 function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
  const mount=useRef<HTMLDivElement>(null),canvas=useRef<HTMLCanvasElement>(null);
@@ -51,16 +46,34 @@ function SceneViewport({model}:{model:PosterModel,autoMobile?:boolean}){
     }
   };
   update('loading');
-  import('@/lib/studio-scene')
-   .then(async({mountScene})=>{
-    if(!controller.signal.aborted){
-     await mountScene(node,targetModel,controller.signal,()=>update('live'),()=>update('failed'));
+  let idleId = 0;
+  let timerId: ReturnType<typeof setTimeout> | undefined;
+  const startScene = () => {
+    if (controller.signal.aborted) return;
+    import('@/lib/studio-scene')
+     .then(async({mountScene})=>{
+      if(!controller.signal.aborted){
+       await mountScene(node,targetModel,controller.signal,()=>update('live'),()=>update('failed'));
+      }
+     })
+     .catch(()=>{
+      update('failed');
+     });
+  };
+  // Defer heavy Three.js import until after initial paint & hydration
+  if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+    idleId = (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(startScene, { timeout: 120 });
+  } else {
+    timerId = setTimeout(startScene, 32);
+  }
+  return()=>{
+    if (idleId && typeof window !== 'undefined' && 'cancelIdleCallback' in window) {
+      (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
     }
-   })
-   .catch(()=>{
-    update('failed');
-   });
-  return()=>{controller.abort();activeScenes--;};
+    if (timerId) clearTimeout(timerId);
+    controller.abort();
+    activeScenes--;
+  };
  },[active,targetModel]);
 
  const live=active&&status==='live';

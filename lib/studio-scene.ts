@@ -39,12 +39,6 @@ function getGLTFLoaderModule() {
   return gltfLoaderModulePromise;
 }
 
-// Pre-warm GLTF loader and fetch eva_robot.glb immediately on client
-if (typeof window !== 'undefined') {
-  getGLTFLoaderModule();
-  fetchModelBuffer('/models/eva_robot.glb', '/models/eva.glb').catch(() => { });
-}
-
 export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, signal: AbortSignal, ready: () => void, failed: () => void) {
   const getIsMobile = () => (typeof window !== 'undefined' && window.innerWidth <= 850) || (canvas && canvas.clientWidth > 0 && canvas.clientWidth <= 640);
   const isMobile = getIsMobile();
@@ -59,11 +53,11 @@ export async function mountScene(canvas: HTMLCanvasElement, model: PosterModel, 
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha: true,
-    antialias: true,
-    powerPreference: 'high-performance',
+    antialias: !isMobile,
+    powerPreference: isMobile ? 'default' : 'high-performance',
     preserveDrawingBuffer: false
   });
-  const initialDpr = Math.min(devicePixelRatio || 1, isMobile ? 1.5 : 2);
+  const initialDpr = Math.min(devicePixelRatio || 1, isMobile ? 1.25 : 2);
   renderer.setPixelRatio(initialDpr);
   renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;

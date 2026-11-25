@@ -3,7 +3,7 @@ import { meta } from '@/lib/meta';
 import BottomCta from '@/components/studio/BottomCta';
 import { ArrowLeft } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata = meta(
   'Project Cost Estimator | Hash Decode',

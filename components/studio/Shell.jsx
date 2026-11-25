@@ -22,10 +22,10 @@ export function Brand({ showText = true } = {}){
   const frames=['D3C0D3','DEC0DE','DECODE'];let i=0;
   timer.current=setInterval(()=>{setWord(frames[i++]);if(i===frames.length){clearInterval(timer.current);timer.current=null;}},55);
  }
- return <Link className="brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}><img src="/logo.png" alt="Hash Decode" className="brand-logo" width="26" height="26" />{showText && <strong>HASH<span>{word}</span></strong>}</Link>;
+ return <Link className="brand" href="/" aria-label="HASHDECODE home" onPointerEnter={decode} onFocus={decode}><img src="/logo.png" alt="Hash Decode" className="brand-logo" width="26" height="26" decoding="async" />{showText && <strong>HASH<span>{word}</span></strong>}</Link>;
 }
 export function Header(){
- const [open,setOpen]=useState(false),[paused,setPaused]=useState(false),toggle=useRef(null),menu=useRef(null);
+ const [open,setOpen]=useState(false),toggle=useRef(null),menu=useRef(null);
  const path=usePathname();
 
 
@@ -48,23 +48,8 @@ export function Header(){
  function closeMenu(){menu.current?.close();setOpen(false);toggle.current?.focus();}
 
  useEffect(()=>{
-   const sync=()=>{
-     let saved=false;
-     try{ saved = localStorage.getItem('hd-paused') === '1'; }catch{}
-     document.documentElement.dataset.motion = saved ? 'off' : 'on';
-     setPaused(saved);
-     window.dispatchEvent(new Event('hd:motion'));
-   };
-   sync();
+   document.documentElement.dataset.motion = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : 'on';
  },[]);
- function pause(){
-   const next = !paused;
-   try{ localStorage.setItem('hd-paused', next ? '1' : '0'); }catch{}
-   document.documentElement.dataset.motion = next ? 'off' : 'on';
-   setPaused(next);
-   window.dispatchEvent(new Event('hd:motion'));
-   window.dispatchEvent(new Event('hd:skip'));
- }
  if(path&&(path.startsWith('/shahroz') || path.startsWith('/admin') || path.startsWith('/portal')))return null;
  return (
   <header className="site-header ronin-header" onKeyDown={e=>{if(open&&e.key==='Escape')closeMenu();}}>

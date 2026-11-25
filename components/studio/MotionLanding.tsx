@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import JourneyControl from './JourneyControl';
 import { defaultFounders, type Project, type Founder } from '@/lib/studio-defaults';
 import type { SocialLinks } from '@/lib/cms';
@@ -137,9 +138,9 @@ export default function MotionLanding({
           </div>
 
           <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
-            <a className="hd-btn-azure" href="/services">
+            <Link className="hd-btn-azure" href="/services">
               <span className="btn-label">Explore all services ›</span>
-            </a>
+            </Link>
           </div>
         </Container>
       </Section>
@@ -229,6 +230,7 @@ export default function MotionLanding({
                       width={600}
                       height={340}
                       loading="lazy"
+                      decoding="async"
                       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                     />
                   </div>
@@ -239,9 +241,9 @@ export default function MotionLanding({
 
           {/* Work Action Button */}
           <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
-            <a className="hd-btn-secondary" href="/portfolio">
+            <Link className="hd-btn-secondary" href="/portfolio">
               <span className="btn-label">View all projects</span>
-            </a>
+            </Link>
           </div>
         </Container>
       </Section>
@@ -320,9 +322,10 @@ export default function MotionLanding({
                   visual={
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', padding: '16px' }}>
                       <div
+                        className="founder-photo-frame"
                         style={{
                           width: '100%',
-                          maxWidth: '460px',
+                          maxWidth: '345px',
                           aspectRatio: '4 / 5',
                           borderRadius: '24px',
                           overflow: 'hidden',
@@ -345,6 +348,7 @@ export default function MotionLanding({
                             display: 'block',
                           }}
                           loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     </div>
@@ -355,9 +359,9 @@ export default function MotionLanding({
           </div>
 
           <div className="section-rule-action" style={{ marginTop: 'var(--s-6)', textAlign: 'center' }}>
-            <a className="hd-btn-azure" href="/about">
+            <Link className="hd-btn-azure" href="/about">
               <span className="btn-label">About the founders</span>
-            </a>
+            </Link>
           </div>
         </Container>
       </Section>
@@ -382,9 +386,9 @@ export default function MotionLanding({
           </div>
 
           <div className="section-rule-action" data-reveal="up" data-reveal-delay="440">
-            <a className="hd-btn-primary" href="/tools">
+            <Link className="hd-btn-primary" href="/tools">
               <span className="btn-label">Explore project tools</span>
-            </a>
+            </Link>
           </div>
         </div>
       </section>

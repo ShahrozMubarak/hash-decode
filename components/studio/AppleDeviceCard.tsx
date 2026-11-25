@@ -82,7 +82,7 @@ export default function AppleDeviceCard({
             <div className="apple-word-tiles-row" aria-label={highlightWords.join(' ')}>
               {highlightWords.map((word, wIdx) => (
                 <div key={wIdx} className="apple-word-tile-group">
-                  {word.split('').map((char, cIdx) => (
+                  {word.split('').filter((char) => char.trim().length > 0).map((char, cIdx) => (
                     <span
                       key={cIdx}
                       className="apple-char-tile"

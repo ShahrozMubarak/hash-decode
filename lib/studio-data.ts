@@ -10,6 +10,12 @@ let cachedFounders: { data: Founder[]; timestamp: number } | null = null;
 let cachedCopy: { data: { intro: string; about: string; availability: string }; timestamp: number } | null = null;
 const CACHE_TTL_MS = 60 * 1000;
 
+export function clearStudioDataCache() {
+  cachedProjects = null;
+  cachedFounders = null;
+  cachedCopy = null;
+}
+
 export async function listProjects(all = false): Promise<Project[]> {
   try {
     if (all) await requireOwner();

@@ -2,7 +2,7 @@ import { meta } from '@/lib/meta';
 import PrivacyDocument from '@/components/studio/PrivacyDocument';
 import BottomCta from '@/components/studio/BottomCta';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata = meta(
   'Privacy Notice | Hash Decode',

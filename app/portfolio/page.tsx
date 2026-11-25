@@ -6,7 +6,7 @@ import BottomCta from '@/components/studio/BottomCta';
 import { studioProjects } from '@/lib/studio-projects';
 import { Zap, ShieldCheck, CheckCircle2, Layers } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 export const metadata = meta(
   'Work & Projects | Hash Decode',
   'Explore custom software, web platforms, and cybersecurity reviews built by Hash Decode.',
@@ -31,6 +31,8 @@ function getVisual(slug: string, image?: string) {
         <img
           src={image}
           alt="Foolish Arc storefront preview"
+          loading="lazy"
+          decoding="async"
           style={{
             width: '100%',
             height: '100%',

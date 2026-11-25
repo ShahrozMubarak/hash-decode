@@ -1,6 +1,6 @@
 import {meta} from '@/lib/meta';
 import {notFound} from 'next/navigation';import {OrbitLab,RelayLab} from '@/components/studio/Lab';import {listProjects} from '@/lib/studio-data';
-export const dynamic='force-dynamic';export async function generateMetadata({params}:{params:Promise<{slug:string}>}){
+export const revalidate = 300;export async function generateMetadata({params}:{params:Promise<{slug:string}>}){
  const {slug}=await params;const item=(await listProjects()).find(p=>p.slug===slug);
  return item?{...meta(item.title+' Interactive Study',item.summary,'/lab/'+slug),robots:{index:false,follow:true}}:{title:'Study unavailable',robots:{index:false}};
 }

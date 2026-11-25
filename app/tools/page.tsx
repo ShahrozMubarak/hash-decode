@@ -4,7 +4,7 @@ import CostEstimatorMock from '@/components/studio/visuals/CostEstimatorMock';
 import HeaderScannerMock from '@/components/studio/visuals/HeaderScannerMock';
 import BottomCta from '@/components/studio/BottomCta';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata = meta(
   'Engineering Utilities & Free Tools | Hash Decode',

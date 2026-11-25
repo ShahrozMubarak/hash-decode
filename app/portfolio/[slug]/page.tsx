@@ -5,7 +5,7 @@ import { meta } from '@/lib/meta';
 import BottomCta from '@/components/studio/BottomCta';
 import { ArrowUpRight, ArrowLeft } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 type Props = { params: Promise<{ slug: string }> };
 

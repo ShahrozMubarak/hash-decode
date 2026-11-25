@@ -13,7 +13,6 @@ import './motion-ui.css';
 import './motion.css';
 import './refinements.css';
 import './liquid.css';
-export const dynamic = 'force-dynamic';
 import { Header, Footer } from '@/components/studio/Shell';
 import { origin } from '@/lib/meta';
 
@@ -78,9 +77,6 @@ const organizationJsonLd = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${mono.variable}`}>
-      <head>
-        <link rel="preload" href="/models/eva_robot.glb" as="fetch" crossOrigin="anonymous" />
-      </head>
       <body id="top" className={`${inter.variable} ${mono.variable}`}>
         <script
           type="application/ld+json"

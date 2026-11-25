@@ -14,12 +14,16 @@
   border: none !important;
   box-shadow: none !important;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  gap: var(--s-7);
+  gap: 48px;
   box-sizing: border-box;
   contain: paint;
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wide-card > * {
+  min-width: 0;
 }
 
 .wide-card:hover {
@@ -45,13 +49,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--s-4);
+  gap: 18px;
   max-width: 520px;
 }
 
 .wide-card__step-num {
   font-family: var(--font-sans);
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.04em;
@@ -60,7 +64,7 @@
 
 .wide-card__eyebrow {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   line-height: 1.4;
   letter-spacing: -0.01em;
@@ -78,7 +82,7 @@
 
 .wide-card__title {
   font-family: var(--font-sans);
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-size: clamp(1.6rem, 2.9vw, 2.25rem);
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -87,7 +91,7 @@
 
 .wide-card__desc {
   font-family: var(--font-sans);
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 500;
   line-height: 1.5;
   letter-spacing: -0.01em;
@@ -101,6 +105,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* 2. Liquid effect: Blobs */
@@ -180,17 +186,28 @@
     filter: blur(40px);
   }
   .wide-card {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: minmax(0, 1fr) !important;
     direction: ltr !important;
     border-radius: var(--radius-card-sm) !important;
-    padding: 28px !important;
-    gap: var(--s-5) !important;
+    padding: 21px 16px !important;
+    gap: 16px !important;
   }
   .wide-card--reverse {
     direction: ltr !important;
   }
   .wide-card__text {
     max-width: 100% !important;
+    gap: 12px !important;
+  }
+  .wide-card__title {
+    font-size: clamp(1.3rem, 5.5vw, 1.75rem);
+  }
+  .wide-card__desc {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .wide-card__eyebrow {
+    font-size: 12px;
   }
 }
 
@@ -308,9 +325,9 @@
   position: relative;
   width: 100%;
   max-width: 460px;
-  min-height: 240px;
+  min-height: 180px;
   border-radius: var(--radius-panel);
-  padding: 24px;
+  padding: 18px;
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
@@ -393,3 +410,198 @@
   visibility: hidden !important;
 }
 
+
+/* ==========================================================================
+   RESPONSIVE CARD TUNING (mobile safety, ~25% shorter cards)
+   ========================================================================== */
+
+/* Scale the large device mockups down uniformly so card height drops ~25%
+   without clipping the UI inside the device screens. */
+.phone-device-frame,
+.laptop-device-wrapper {
+  zoom: 0.75;
+}
+
+.phone-mockup-wrapper,
+.laptop-device-wrapper,
+.phone-device-frame {
+  max-width: 100%;
+}
+
+/* Apple-style showcase card: keep every child inside the card on phones */
+.apple-device-card {
+  padding: clamp(27px, 4.5vw, 51px) clamp(15px, 3vw, 36px);
+}
+
+.apple-device-card__inner,
+.apple-device-card__header {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.apple-device-card__header {
+  gap: var(--s-2);
+  margin-bottom: clamp(18px, 3vw, 32px);
+}
+
+.apple-device-card__title {
+  font-size: clamp(1.65rem, 3.4vw, 2.85rem);
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.apple-device-card__footer {
+  margin-top: clamp(18px, 3vw, 30px);
+}
+
+.apple-device-card__sub {
+  font-size: clamp(14px, 1.6vw, 17px);
+}
+
+.apple-word-tiles-row {
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.apple-word-tile-group {
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+}
+
+.apple-char-tile {
+  width: clamp(26px, 6vw, 42px);
+  height: clamp(26px, 6vw, 42px);
+  font-size: clamp(14px, 2vw, 20px);
+}
+
+.apple-device-card__stage,
+.phone-interactive-switcher {
+  max-width: 100%;
+}
+
+.phone-interactive-switcher {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Founder portrait cards: square photo on phones keeps the card concise */
+@media (max-width: 800px) {
+  #team .wide-card,
+  .about-founders-wide-stack .wide-card {
+    padding: 18px 14px !important;
+    gap: 12px !important;
+  }
+
+  #team .wide-card .wide-card__visual .founder-photo-frame,
+  .about-founders-wide-stack .wide-card .wide-card__visual .founder-photo-frame {
+    width: 100% !important;
+    max-width: 270px !important;
+    aspect-ratio: 1 / 1 !important;
+  }
+
+  #team .wide-card .wide-card__visual img,
+  .about-founders-wide-stack .wide-card .wide-card__visual img {
+    aspect-ratio: auto !important;
+    height: 100% !important;
+  }
+}
+
+/* About page: tighten section spacing and remove the old double margins */
+.page-about-content {
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem) !important;
+}
+
+.page-about-content > section {
+  margin-block: 0 !important;
+  padding-block: clamp(24px, 4vw, 44px) !important;
+}
+
+.page-about-content .bottom-cta-wrap {
+  margin-top: clamp(20px, 4vw, 36px) !important;
+}
+
+/* Keep the macOS mockup console UI inside its frame at narrow widths */
+.laptop-main-panel,
+.laptop-kpi-card,
+.laptop-topology-box,
+.laptop-nodes-grid,
+.laptop-node-item {
+  min-width: 0;
+}
+
+.laptop-kpi-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.laptop-kpi-val,
+.laptop-kpi-sub,
+.laptop-node-name,
+.laptop-node-meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Apple showcase card: a little more compact on phones */
+.apple-device-card .phone-device-frame {
+  zoom: 0.7;
+}
+
+@media (max-width: 640px) {
+  .apple-device-card {
+    padding: 20px 14px;
+  }
+
+  .apple-device-card__header {
+    margin-bottom: 14px;
+  }
+
+  .apple-device-card__footer {
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .apple-device-card__sub {
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+
+  .phone-interactive-switcher {
+    gap: 4px;
+    margin-bottom: 10px;
+    padding: 3px;
+  }
+
+  .phone-tab-btn {
+    padding: 5px 9px;
+    font-size: 10.5px;
+  }
+}
+
+/* Lighten decorative motion on phones for smoother scrolling */
+@media (max-width: 800px) {
+  .liquid__blob {
+    animation: none !important;
+    filter: blur(34px);
+  }
+
+  .wide-card.is-in .phone-device-frame,
+  .wide-card.is-in .laptop-device-wrapper,
+  .apple-device-card.is-in .phone-device-frame,
+  .apple-device-card.is-in .laptop-device-wrapper {
+    animation: none !important;
+  }
+}
+
+/* Grid cards must never force a minimum width wider than the phone screen */
+.guarantee-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)) !important;
+}
+
+.blog-cards-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)) !important;
+}
