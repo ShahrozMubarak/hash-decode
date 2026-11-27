@@ -23,7 +23,15 @@ export async function listProjects(all = false): Promise<Project[]> {
       return cachedProjects.data;
     }
     const rows = await (await getDb()).collection<ProjectRecord>('projects').find(all ? { status: { $in: ['draft', 'published'] } } : { status: 'published' }, { projection: { _id: 0 } }).sort({ position: 1, title: 1 }).toArray();
-    const result = (rows && rows.length > 0) ? rows : (all ? [] : defaultProjects);
+    let result: Project[];
+    if (all) {
+      result = rows || [];
+    } else if (rows && rows.length > 0) {
+      const existingSlugs = new Set(rows.map((r) => r.slug));
+      result = [...rows, ...defaultProjects.filter((d) => !existingSlugs.has(d.slug))];
+    } else {
+      result = defaultProjects;
+    }
     if (!all) cachedProjects = { data: result, timestamp: Date.now() };
     return result;
   } catch (err) {

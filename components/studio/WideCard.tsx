@@ -100,6 +100,8 @@ export default function WideCard({
             {ctaText && ctaHref && (
               <a
                 href={ctaHref}
+                target={ctaHref.startsWith('http') ? '_blank' : undefined}
+                rel={ctaHref.startsWith('http') ? 'noopener noreferrer' : undefined}
                 className={
                   ctaVariant === 'azure'
                     ? 'hd-btn-azure'
