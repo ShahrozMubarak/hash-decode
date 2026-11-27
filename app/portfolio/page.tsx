@@ -13,8 +13,8 @@ export const metadata = meta(
   '/portfolio'
 );
 
-function getVisual(slug: string, image?: string) {
-  if (slug === 'foolish-arc' && image) {
+function getVisual(slug: string, title: string, image?: string) {
+  if (image) {
     return (
       <div
         style={{
@@ -30,7 +30,7 @@ function getVisual(slug: string, image?: string) {
       >
         <img
           src={image}
-          alt="Foolish Arc storefront preview"
+          alt={`${title} storefront preview`}
           loading="lazy"
           decoding="async"
           style={{
@@ -51,8 +51,8 @@ function getVisual(slug: string, image?: string) {
 }
 
 export default function Portfolio() {
-  const clientProjects = studioProjects.filter((p) => p.slug === 'foolish-arc');
-  const toolProjects = studioProjects.filter((p) => p.slug !== 'foolish-arc');
+  const clientProjects = studioProjects.filter((p) => !p.isUtility);
+  const toolProjects = studioProjects.filter((p) => p.isUtility);
 
   return (
     <div className="wrap interior page-work-content">
@@ -98,7 +98,7 @@ export default function Portfolio() {
               ctaText={p.ctaText}
               ctaHref={p.ctaHref}
               ctaVariant={p.ctaVariant}
-              visual={getVisual(p.slug, p.image)}
+              visual={getVisual(p.slug, p.title, p.image)}
             />
           ))}
         </div>
@@ -138,7 +138,7 @@ export default function Portfolio() {
               ctaText={p.ctaText}
               ctaHref={p.ctaHref}
               ctaVariant={p.ctaVariant}
-              visual={getVisual(p.slug, p.image)}
+              visual={getVisual(p.slug, p.title, p.image)}
             />
           ))}
         </div>

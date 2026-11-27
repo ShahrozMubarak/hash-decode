@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import JourneyControl from './JourneyControl';
 import { defaultFounders, type Project, type Founder } from '@/lib/studio-defaults';
+import { studioProjects } from '@/lib/studio-projects';
 import type { SocialLinks } from '@/lib/cms';
 import type { LiquidPalette } from './Liquid';
 import ContactForm from './ContactForm';
@@ -202,41 +203,46 @@ export default function MotionLanding({
           />
 
           <div className="wide-cards-stack">
-            <WideCard
-              palette="midnight"
-              reverse={false}
-              eyebrow="E-commerce & identity"
-              title="Foolish Arc"
-              desc="Full e-commerce platform with custom checkout, inventory synchronization, and bespoke brand aesthetics."
-              ctaText="View project"
-              ctaHref="/portfolio/foolish-arc"
-              ctaVariant="coral"
-              visual={
-                <div className="visual-panel browser-mock" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '12px', borderBottom: '1px solid currentColor', opacity: 0.85 }}>
-                    <div style={{ display: 'flex', gap: '6px' }}>
-                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'currentColor', opacity: 0.4 }} />
-                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'currentColor', opacity: 0.4 }} />
-                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'currentColor', opacity: 0.4 }} />
+            {studioProjects
+              .filter((p) => !p.isUtility)
+              .map((project) => (
+                <WideCard
+                  key={project.slug}
+                  palette={project.palette}
+                  reverse={project.reverse}
+                  eyebrow={project.eyebrow}
+                  title={project.title}
+                  desc={project.desc}
+                  ctaText={project.ctaText}
+                  ctaHref={project.ctaHref}
+                  ctaVariant={project.ctaVariant}
+                  visual={
+                    <div className="visual-panel browser-mock" style={{ padding: '16px', display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingBottom: '12px', borderBottom: '1px solid currentColor', opacity: 0.85 }}>
+                        <div style={{ display: 'flex', gap: '6px' }}>
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'currentColor', opacity: 0.4 }} />
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'currentColor', opacity: 0.4 }} />
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'currentColor', opacity: 0.4 }} />
+                        </div>
+                        <div style={{ marginLeft: 'auto', padding: '2px 12px', borderRadius: '980px', fontSize: '11px', fontFamily: 'var(--font-sans)', border: '1px solid currentColor', opacity: 0.6 }}>
+                          {project.domain || project.slug}
+                        </div>
+                      </div>
+                      <div style={{ marginTop: '12px', borderRadius: '12px', overflow: 'hidden', flex: 1, minHeight: '180px' }}>
+                        <img
+                          src={project.image || '/team/foolisharc.jpeg'}
+                          alt={`${project.title} preview`}
+                          width={600}
+                          height={340}
+                          loading="lazy"
+                          decoding="async"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        />
+                      </div>
                     </div>
-                    <div style={{ marginLeft: 'auto', padding: '2px 12px', borderRadius: '980px', fontSize: '11px', fontFamily: 'var(--font-sans)', border: '1px solid currentColor', opacity: 0.6 }}>
-                      foolisharc.com
-                    </div>
-                  </div>
-                  <div style={{ marginTop: '12px', borderRadius: '12px', overflow: 'hidden', flex: 1, minHeight: '180px' }}>
-                    <img
-                      src="/team/foolisharc.jpeg"
-                      alt="Foolish Arc e-commerce platform"
-                      width={600}
-                      height={340}
-                      loading="lazy"
-                      decoding="async"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                    />
-                  </div>
-                </div>
-              }
-            />
+                  }
+                />
+              ))}
           </div>
 
           {/* Work Action Button */}

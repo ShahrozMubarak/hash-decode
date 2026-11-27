@@ -8,7 +8,10 @@ export interface StudioProject {
   ctaHref: string;
   ctaVariant?: 'coral' | 'azure' | 'dark' | 'white';
   image?: string;
+  domain?: string;
+  liveUrl?: string;
   reverse?: boolean;
+  isUtility?: boolean;
 }
 
 export const studioProjects: StudioProject[] = [
@@ -22,7 +25,51 @@ export const studioProjects: StudioProject[] = [
     ctaHref: '/portfolio/foolish-arc',
     ctaVariant: 'coral',
     image: '/team/foolisharc.jpeg',
+    domain: 'foolisharc.com',
+    liveUrl: 'https://foolisharc.com',
     reverse: false,
+  },
+  {
+    slug: 'hashgym',
+    title: 'HashGym',
+    eyebrow: 'Gym management SaaS',
+    desc: 'Multi-tenant gym management SaaS with instant check-ins, automated membership dues ledger, and digital member passes.',
+    palette: 'teal',
+    ctaText: 'View project',
+    ctaHref: '/portfolio/hashgym',
+    ctaVariant: 'coral',
+    image: '/projects/hashgym.jpg',
+    domain: 'hashgym.hashdecode.com',
+    liveUrl: 'https://hashgym.hashdecode.com',
+    reverse: true,
+  },
+  {
+    slug: 'pioneer-salt',
+    title: 'Pioneer Salt',
+    eyebrow: 'E-commerce & retail',
+    desc: 'Direct-to-consumer storefront for pure Khewra Himalayan pink salt, culinary slabs, grinders, and gift sets with order tracking.',
+    palette: 'midnight',
+    ctaText: 'View project',
+    ctaHref: '/portfolio/pioneer-salt',
+    ctaVariant: 'coral',
+    image: '/projects/pioneersalt.jpg',
+    domain: 'pioneersalt.hashdecode.com',
+    liveUrl: 'https://pioneersalt.hashdecode.com',
+    reverse: false,
+  },
+  {
+    slug: 'hash-roofing',
+    title: 'Hash Roofing',
+    eyebrow: 'Construction & client portal',
+    desc: 'Roof installation and repair platform featuring an instant roof price estimator, inspections, and a live client portal.',
+    palette: 'teal',
+    ctaText: 'View project',
+    ctaHref: '/portfolio/hash-roofing',
+    ctaVariant: 'coral',
+    image: '/projects/hashroofing.jpg',
+    domain: 'hashroofing.hashdecode.com',
+    liveUrl: 'https://hashroofing.hashdecode.com',
+    reverse: true,
   },
   {
     slug: 'cost-estimator',
@@ -34,6 +81,7 @@ export const studioProjects: StudioProject[] = [
     ctaHref: '/tools/estimate',
     ctaVariant: 'azure',
     reverse: true,
+    isUtility: true,
   },
   {
     slug: 'security-scanner',
@@ -45,6 +93,6 @@ export const studioProjects: StudioProject[] = [
     ctaHref: '/tools/security-check',
     ctaVariant: 'coral',
     reverse: false,
+    isUtility: true,
   },
 ];
-
